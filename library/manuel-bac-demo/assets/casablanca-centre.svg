@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect id="cc-mer" x="0" y="0" width="100" height="34" fill="#8fb6cf"/>
+  <rect id="cc-terre" x="0" y="34" width="100" height="66" fill="#efe9da"/>
+  <path id="cc-port" d="M14 34 H62 V20 H52 V29 H24 V20 H14 Z" fill="#c0392b" fill-opacity="0.85"/>
+  <path id="cc-medina" d="M14 34 H44 V56 H14 Z" fill="#c9a054"/>
+  <path id="cc-affaires" d="M44 34 H80 V60 H44 Z" fill="#3f7a4e"/>
+  <path id="cc-gare" d="M62 60 H80 V72 H62 Z" fill="#5a5a5a"/>
+  <path d="M0 34 H100" fill="none" stroke="#4a4438" stroke-width="0.9"/>
+  <path id="cc-boulevard" d="M44 34 V100" fill="none" stroke="#4a4438" stroke-width="1.6" stroke-dasharray="4 3"/>
+</svg>

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Jaguar — Guide du cahier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a2238; --ink-soft:#3d4663; --paper:#f4f1ea; --paper2:#ebe6db; --card:#fff;
+  --accent:#8c2f2a; --accent-soft:#b05750; --gold:#c9a054; --slate:#6b7089; --rule:#d8d1c2;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --serif:'Fraunces',Georgia,serif; --mono:'Spline Sans Mono',ui-monospace,Menlo,Consolas,monospace;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 30px rgba(0,0,0,.06);
+}
+html.dark{--ink:#ece7da;--ink-soft:#b6b2a6;--paper:#14161c;--paper2:#1d2029;--card:#1b1e27;--accent:#d2756c;--accent-soft:#dd857c;--gold:#cda05a;--slate:#9095a6;--rule:rgba(255,255,255,.13);--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 34px rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+code,kbd{font-family:var(--mono);font-size:.86em}
+code{background:var(--paper2);padding:1px 6px;border-radius:5px}
+kbd{background:var(--card);border:1px solid var(--rule);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font-size:.8em;white-space:nowrap}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;height:60px;padding:0 20px;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.brand{font-family:var(--serif);font-weight:600;font-size:19px;white-space:nowrap}
+.brand b{color:var(--accent)}
+.top .grow{flex:1}
+.search{position:relative}
+.search input{font-family:var(--sans);font-size:14px;background:var(--card);border:1px solid var(--rule);color:var(--ink);border-radius:9px;padding:9px 12px 9px 34px;width:230px;outline:none}
+.search input:focus{border-color:var(--gold)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--slate)}
+.iconbtn{background:var(--card);border:1px solid var(--rule);color:var(--ink);width:38px;height:38px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.iconbtn:hover{border-color:var(--gold);color:var(--gold)}
+.menubtn{display:none}
+.wrap{display:flex;align-items:flex-start;max-width:1240px;margin:0 auto}
+.side{position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;width:272px;flex:0 0 272px;padding:22px 12px 60px 20px;border-right:1px solid var(--rule)}
+.side h4{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate);margin:20px 10px 7px}
+.side h4:first-child{margin-top:0}
+.side a{display:block;color:var(--ink-soft);font-size:14px;padding:5px 10px;border-radius:7px;border-left:2px solid transparent}
+.side a:hover{background:var(--paper2);text-decoration:none;color:var(--ink)}
+.side a.active{color:var(--accent);border-left-color:var(--accent);background:var(--paper2);font-weight:600}
+.side a.hidden{display:none}
+.main{flex:1;min-width:0;padding:30px 40px 120px;max-width:860px}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:44px;line-height:1.05;margin:.1em 0 .15em}
+.hero p{font-size:18px;color:var(--ink-soft);max-width:62ch}
+section{scroll-margin-top:76px;padding:26px 0;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:0}
+h2{font-family:var(--serif);font-size:29px;margin:.2em 0 .5em;display:flex;align-items:center;gap:10px}
+h2 .pin{font-size:13px;color:var(--gold)}
+h3{font-family:var(--serif);font-size:20px;margin:1.3em 0 .35em}
+p{margin:.6em 0}ul,ol{margin:.5em 0;padding-left:1.4em}li{margin:.3em 0}
+.lead{font-size:17px;color:var(--ink-soft)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:1em 0}
+.steps>li{counter-increment:s;position:relative;padding:2px 0 12px 42px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.steps>li:not(:last-child)::after{content:'';position:absolute;left:13.5px;top:30px;bottom:-2px;width:1px;background:var(--rule)}
+.note,.tip,.warn{border-radius:10px;padding:13px 16px;margin:1.1em 0;border:1px solid var(--rule);background:var(--card);font-size:15px}
+.note{border-left:3px solid var(--slate)}.tip{border-left:3px solid var(--gold)}.warn{border-left:3px solid var(--accent)}
+.note b,.tip b,.warn b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.tip b{color:var(--gold)}.warn b{color:var(--accent)}.note b{color:var(--slate)}
+table{width:100%;border-collapse:collapse;margin:1.1em 0;font-size:14.5px;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);background:var(--paper2)}
+tr:last-child td{border-bottom:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:1em 0}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)}
+.card h4{font-family:var(--serif);font-size:17px;margin:0 0 4px}
+.card p{font-size:13.5px;color:var(--ink-soft);margin:.3em 0}
+.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--rule);color:var(--slate);font-size:13px}
+.svgico{width:1em;height:1em;vertical-align:-.14em}
+@media(max-width:880px){.side{position:fixed;left:0;top:60px;background:var(--paper);z-index:40;transform:translateX(-105%);transition:.25s;box-shadow:var(--shadow)}.side.open{transform:none}.main{padding:24px 20px 100px}.menubtn{display:inline-flex}.search input{width:150px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="iconbtn menubtn" id="menuBtn" aria-label="Menu"><svg class="svgico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <div class="brand">Le <b>Jaguar</b> · Guide du cahier</div>
+  <div class="grow"></div>
+  <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="Rechercher…" autocomplete="off"></label>
+  <button class="iconbtn" id="themeBtn" aria-label="Thème"><svg class="svgico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg></button>
+</header>
+
+<div class="wrap">
+<aside class="side" id="side">
+  <h4>Démarrer</h4>
+  <a href="#intro">Qu’est-ce que c’est</a>
+  <a href="#couverture">La couverture</a>
+  <a href="#organisation">Matières, sections, pages</a>
+  <h4>Écrire</h4>
+  <a href="#editeur">La barre d’écriture</a>
+  <a href="#modeles">Modèles &amp; Séyès</a>
+  <a href="#lignes">Écrire sur les lignes</a>
+  <a href="#modes">Lecture &amp; Écriture</a>
+  <a href="#pages">Continu &amp; Pages</a>
+  <a href="#taille">Taille du texte</a>
+  <h4>Éléments</h4>
+  <a href="#ajouter">Ajouter un élément</a>
+  <a href="#manuel">Importer du manuel</a>
+  <a href="#deplacer">Déplacer &amp; redimensionner</a>
+  <a href="#images">Images</a>
+  <h4>Étudier</h4>
+  <a href="#notes">Notes &amp; surlignages</a>
+  <a href="#dico">Dictionnaire &amp; Wikipédia</a>
+  <h4>Aide</h4>
+  <a href="#raccourcis">Raccourcis</a>
+  <a href="#reglages">Réglages &amp; sauvegarde</a>
+</aside>
+
+<main class="main">
+  <div class="hero">
+    <h1>Guide du cahier</h1>
+    <p class="lead">Ton cahier numérique <b>Le Jaguar</b> : prends des notes matière par matière, écris sur du vrai papier Séyès, importe des passages de tes manuels, surligne, annote, et cherche un mot en un clic.</p>
+  </div>
+
+  <section id="intro"><h2><span class="pin">▍</span>Qu’est-ce que c’est</h2>
+    <p>Le cahier est une application <b>hors-ligne</b> : tout est enregistré automatiquement sur cet ordinateur. Un cahier appartient à un élève et regroupe <b>toutes ses matières</b>. Chaque matière est divisée en sections (Leçons, Exams, Exercices, Plan), et chaque section contient des <b>pages</b> que tu remplis.</p>
+    <div class="tip"><b>Astuce</b> &nbsp;Le cahier fonctionne à côté des <b>manuels</b> compilés dans Book Studio : tu peux importer n’importe quel élément d’un manuel dans tes pages.</div>
+  </section>
+
+  <section id="couverture"><h2><span class="pin">▍</span>La couverture</h2>
+    <p>L’écran d’accueil, avec l’animation « Le Jaguar ». En bas, un bandeau translucide regroupe les actions ; en haut à gauche, ton <b>étiquette</b> (Nom / Prénom / Classe) comme sur un vrai cahier ; en haut à droite, tes <b>badges</b> (série, temps, moyenne).</p>
+    <table><tr><th>Bouton</th><th>Rôle</th></tr>
+      <tr><td>Commencer</td><td>Ouvre le cahier à la dernière page.</td></tr>
+      <tr><td>Réglages</td><td>Titre, sous-titre, couleur d’accent.</td></tr>
+      <tr><td>À propos</td><td>Aide rapide + ce guide.</td></tr>
+      <tr><td>Manuel</td><td>Ouvre un manuel compilé.</td></tr>
+      <tr><td>+ Cahier</td><td>Crée le cahier d’un autre élève.</td></tr>
+    </table>
+  </section>
+
+  <section id="organisation"><h2><span class="pin">▍</span>Matières, sections, pages</h2>
+    <ul>
+      <li><b>Matières</b> — les onglets colorés à droite (étiquettes). Clique pour changer de matière ; l’onglet ouvert ressort sur la page. « <b>+ Matière</b> » en ajoute une.</li>
+      <li><b>Sections</b> — à gauche : <b>Leçons</b>, <b>Exams</b>, <b>Exercices</b>, <b>Plan</b>. Le <b>+</b> à côté d’une section ajoute une page.</li>
+      <li><b>Pages</b> — listées sous chaque section ; clique pour l’ouvrir, le bouton corbeille la supprime.</li>
+      <li><b>Pages officielles</b> (verrouillées) — posées par l’école, en lecture seule (tu peux les <b>surligner &amp; annoter</b>, mais pas modifier le texte).</li>
+    </ul>
+  </section>
+
+  <section id="editeur"><h2><span class="pin">▍</span>La barre d’écriture</h2>
+    <p>En haut : style de paragraphe (Texte, Titre, Titre 1/2, Citation), <b>gras / italique / souligné</b>, couleur du texte, listes (à puces, numérotée, à cocher), alignements, image, <b>Manuel</b> (importer), lien, <b>+ Élément</b>, modèle de page, affichage, mode, et taille du texte.</p>
+    <div class="note"><b>Note</b> &nbsp;Le surlignage ne se fait pas ici : sélectionne du texte pour faire apparaître les <b>surligneurs</b> (voir Notes).</div>
+  </section>
+
+  <section id="modeles"><h2><span class="pin">▍</span>Modèles &amp; Séyès</h2>
+    <p>Chaque page a un <b>modèle</b> (menu déroulant dans la barre) :</p>
+    <div class="cards">
+      <div class="card"><h4>Séyès</h4><p>Le papier de l’école : réglure fine + ligne d’écriture forte + marge rouge. <b>Modèle par défaut.</b></p></div>
+      <div class="card"><h4>Lignes</h4><p>Lignes horizontales simples.</p></div>
+      <div class="card"><h4>Pointillés</h4><p>Lignes en pointillés.</p></div>
+      <div class="card"><h4>Carreaux</h4><p>Quadrillage.</p></div>
+      <div class="card"><h4>Cornell</h4><p>Lignes + colonne de rappel à gauche.</p></div>
+      <div class="card"><h4>Uni</h4><p>Page blanche.</p></div>
+    </div>
+  </section>
+
+  <section id="lignes"><h2><span class="pin">▍</span>Écrire sur les lignes</h2>
+    <p>Le texte est calé sur la réglure. Si tu veux ajuster la position du texte par rapport aux lignes, un seul réglage le contrôle dans le code :</p>
+    <p>Ouvre <code>notebook/app.html</code> et cherche, tout en haut dans <code>:root</code>, la ligne&nbsp;:</p>
+    <pre style="background:#10121a;color:#e7e4da;padding:14px 16px;border-radius:10px;overflow:auto;font-family:var(--mono);font-size:13px">--rule-shift:10px;   /* écriture sur la ligne */</pre>
+    <ul>
+      <li><b>Augmente</b> la valeur (ex. 12–14px) → le texte descend et repose plus bas sur la ligne.</li>
+      <li><b>Diminue</b>-la (ex. 6–8px) → le texte remonte.</li>
+    </ul>
+    <p>L’espacement des lignes lui-même se règle avec <code>--gap</code> (33px par défaut) sur la même zone.</p>
+  </section>
+
+  <section id="modes"><h2><span class="pin">▍</span>Lecture &amp; Écriture</h2>
+    <p>Le bouton <b>Lire / Écrire</b> bascule entre deux modes :</p>
+    <ul>
+      <li><b>Écriture</b> — tu tapes normalement ; <kbd>Ctrl</kbd>+clic ouvre un lien.</li>
+      <li><b>Lecture</b> — page verrouillée, curseur masqué, outils d’écriture estompés ; <b>un simple clic ouvre les liens</b>. Idéal pour réviser et annoter.</li>
+    </ul>
+  </section>
+
+  <section id="pages"><h2><span class="pin">▍</span>Continu &amp; Pages</h2>
+    <p>Le menu <b>Affichage</b> :</p>
+    <ul>
+      <li><b>Continu</b> — une seule longue page qui s’allonge à mesure que tu écris.</li>
+      <li><b>Pages</b> — la page se termine et un <b>espace vide sépare les pages</b> ; en tapant <kbd>Entrée</kbd> en bas d’une page, le texte passe automatiquement à la page suivante (rien ne reste dans l’espace vide).</li>
+    </ul>
+  </section>
+
+  <section id="taille"><h2><span class="pin">▍</span>Taille du texte</h2>
+    <p>Les boutons <b>A−</b> / <b>A+</b> agrandissent ou réduisent le texte (de 80&nbsp;% à 170&nbsp;%). Les lignes de la réglure s’adaptent en même temps, pour que l’écriture reste bien posée sur la ligne. La taille est mémorisée pour le cahier.</p>
+  </section>
+
+  <section id="ajouter"><h2><span class="pin">▍</span>Ajouter un élément</h2>
+    <p>Le bouton <b>+ Élément</b> ouvre une palette :</p>
+    <ul>
+      <li><b>Texte</b> — Paragraphe, Titre, Sous-titre, Repère de section, Citation, Liste, Liste à cocher, Tableau, Séparateur (insérés directement, modifiables).</li>
+      <li><b>Éléments interactifs</b> — Fonction (grapheur), Graphique, Carte, Frise, Équation, Tableau périodique, Simulation, Fiche. Ils s’affichent comme dans les manuels ; le bouton <b>Éditer</b> ouvre leur configuration (JSON).</li>
+      <li><b>Média</b> — Image, ou Depuis le manuel (importer).</li>
+    </ul>
+  </section>
+
+  <section id="manuel"><h2><span class="pin">▍</span>Importer du manuel</h2>
+    <ol class="steps">
+      <li>Clique <b>Manuel</b> dans la barre.</li>
+      <li>Choisis un livre, puis un chapitre.</li>
+      <li>Dans l’aperçu, <b>clique l’élément</b> voulu (frise, graphique, passage…) — plusieurs possibles — ou <b>surligne du texte</b>.</li>
+      <li><b>Insérer</b> : l’élément arrive dans ta page, ton texte s’enroule autour.</li>
+    </ol>
+    <div class="tip"><b>Lien vivant</b> &nbsp;L’élément importé reste <b>lié</b> au manuel : il se recharge à l’ouverture, et « Ouvrir » saute au manuel. Rien n’est copié en dur (ton cahier reste léger).</div>
+  </section>
+
+  <section id="deplacer"><h2><span class="pin">▍</span>Déplacer &amp; redimensionner</h2>
+    <p>Chaque élément importé (et chaque image) a une petite barre et un <b>point rouge</b> en bas à droite :</p>
+    <ul>
+      <li><b>Redimensionner</b> — appuie sur le <b>point rouge</b> et fais glisser. Une fois attrapé, tu peux bouger la souris n’importe où, même sur l’élément.</li>
+      <li><b>Déplacer</b> — attrape la <b>barre</b> du haut et fais glisser : gauche/droite choisit le côté, haut/bas le replace entre les paragraphes. Le texte continue de s’enrouler autour.</li>
+      <li>Le bouton <b>changer de côté</b> réancre l’élément à gauche/droite, et <b>×</b> le retire.</li>
+    </ul>
+  </section>
+
+  <section id="images"><h2><span class="pin">▍</span>Images</h2>
+    <p>Le bouton <b>Image</b> insère une image depuis un fichier. Elle se comporte comme un élément importé : <b>déplaçable</b>, <b>redimensionnable</b>, et le texte s’enroule autour.</p>
+  </section>
+
+  <section id="notes"><h2><span class="pin">▍</span>Notes &amp; surlignages</h2>
+    <p><b>Sélectionne du texte</b> : une barre apparaît avec quatre <b>surligneurs</b> (ambre, rose, menthe, ciel), <b>Note</b>, <b>Dico</b> et <b>Wiki</b>.</p>
+    <ul>
+      <li><b>Surligner</b> — clique une couleur. <b>Clique un surlignage</b> pour changer la couleur, écrire une note, ou le supprimer.</li>
+      <li><b>Le carnet de notes</b> — le bouton <b>Notes</b> (avec le compteur) ouvre un panneau qui rassemble <b>tous tes surlignages du cahier</b> : source (matière · section · page), extrait, note, avec <b>Aller</b>, <b>Partager</b> (image 1080×1080) et <b>Supprimer</b>.</li>
+      <li><b>Exporter</b> — enregistre toutes les notes en Markdown (.md).</li>
+    </ul>
+  </section>
+
+  <section id="dico"><h2><span class="pin">▍</span>Dictionnaire &amp; Wikipédia</h2>
+    <p>Sélectionne un mot, puis <b>Dico</b> ou <b>Wiki</b> : un panneau s’ouvre avec deux onglets — <b>Dictionnaire</b> (définitions du Wiktionnaire français) et <b>Wikipédia</b> (résumé de l’article). Nécessite une connexion internet.</p>
+  </section>
+
+  <section id="raccourcis"><h2><span class="pin">▍</span>Raccourcis</h2>
+    <table><tr><th>Touche</th><th>Action</th></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Enregistrer</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+clic (sur un lien)</td><td>Ouvrir le lien en mode Écriture</td></tr>
+      <tr><td><kbd>Échap</kbd></td><td>Fermer un panneau (notes, dico, import…)</td></tr>
+      <tr><td><kbd>Entrée</kbd> (mode Pages)</td><td>Passe à la page suivante en bas de page</td></tr>
+    </table>
+  </section>
+
+  <section id="reglages"><h2><span class="pin">▍</span>Réglages &amp; sauvegarde</h2>
+    <p>Tout est <b>enregistré automatiquement</b> (et avec <kbd>Ctrl</kbd>+<kbd>S</kbd>). Un cahier vit dans <code>notebooks/&lt;élève&gt;/</code> : <code>notebook.json</code> (le contenu) et <code>assets/</code> (les images). L’affichage (Continu/Pages) et la taille du texte sont mémorisés par cahier.</p>
+    <div class="warn"><b>Attention</b> &nbsp;Les pages officielles (verrouillées) restent en lecture seule : tu peux les annoter mais pas en changer le texte.</div>
+    <p class="foot">Le Jaguar · cahier de l’élève — guide intégré.</p>
+  </section>
+</main>
+</div>
+
+<script>
+// mobile menu + theme + scrollspy + sidebar search
+const side=document.getElementById('side');
+document.getElementById('menuBtn').onclick=()=>side.classList.toggle('open');
+const tb=document.getElementById('themeBtn'); const KEY='nb_manual_theme';
+if(localStorage.getItem(KEY)==='dark')document.documentElement.classList.add('dark');
+tb.onclick=()=>{document.documentElement.classList.toggle('dark');localStorage.setItem(KEY,document.documentElement.classList.contains('dark')?'dark':'light');};
+const links=[...document.querySelectorAll('.side a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy=()=>{let cur=secs[0];for(const s of secs){if(s.getBoundingClientRect().top<120)cur=s;}links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur.id));};
+document.addEventListener('scroll',spy,{passive:true});spy();
+links.forEach(a=>a.onclick=()=>side.classList.remove('open'));
+document.getElementById('q').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();
+  links.forEach(a=>a.classList.toggle('hidden', q && !a.textContent.toLowerCase().includes(q)));
+  if(q){const hit=secs.find(s=>s.textContent.toLowerCase().includes(q));/* no autoscroll */}
+});
+</script>
+</body>
+</html>

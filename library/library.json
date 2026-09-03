@@ -1,0 +1,100 @@
+{
+  "books": [
+    {
+      "dir": "books/manuel-bac-demo",
+      "slug": "manuel-bac-demo",
+      "source": "manuel-bac-demo",
+      "title": "Manuel du Bac — démonstration",
+      "resume": "Cinq chapitres qui font tourner les 102 éléments interactifs du moteur.",
+      "droits": "à nous",
+      "chapters": 8,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "01-mathematiques.md",
+          "title": "Mathématiques",
+          "rendu": "01.html"
+        },
+        {
+          "file": "02-svt.md",
+          "title": "Sciences de la Vie et de la Terre",
+          "rendu": "02.html"
+        },
+        {
+          "file": "03-geographie.md",
+          "title": "Géographie",
+          "rendu": "03.html"
+        },
+        {
+          "file": "04-physique-chimie.md",
+          "title": "Physique — Chimie",
+          "rendu": "04.html"
+        },
+        {
+          "file": "05-francais.md",
+          "title": "Français",
+          "rendu": "05.html"
+        },
+        {
+          "file": "06-tous-niveaux.md",
+          "title": "Du primaire au lycée",
+          "rendu": "06.html"
+        },
+        {
+          "file": "07-nouveaux-elements.md",
+          "title": "Nouveaux éléments",
+          "rendu": "07.html"
+        },
+        {
+          "file": "08-lire-une-carte.md",
+          "title": "Lire une carte",
+          "rendu": "08.html"
+        }
+      ]
+    },
+    {
+      "dir": "books/alice-au-pays-des-merveilles",
+      "slug": "alice-au-pays-des-merveilles",
+      "source": "Alice in wonderland",
+      "title": "Alice’s Adventures in Wonderland",
+      "resume": "Lewis Carroll, 1865. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 1,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "01-map.md",
+          "title": "A map of the world",
+          "rendu": "01.html"
+        }
+      ]
+    },
+    {
+      "dir": "books/moby-dick",
+      "slug": "moby-dick",
+      "source": "moby-dick",
+      "title": "Moby-Dick",
+      "resume": "Herman Melville, 1851. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 3,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "chapter1.md",
+          "title": "chapter1",
+          "rendu": "01.html"
+        },
+        {
+          "file": "03-untitled-chapter.md",
+          "title": "Untitled chapter",
+          "rendu": "02.html"
+        },
+        {
+          "file": "chapter2.md",
+          "title": "chapter2",
+          "rendu": "03.html"
+        }
+      ]
+    }
+  ]
+}

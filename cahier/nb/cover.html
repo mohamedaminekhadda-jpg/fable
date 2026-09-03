@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Couverture</title>
+<style>html,body{margin:0;height:100%;background:#0f1116}</style>
+<script>
+/* Le cahier charge sa couverture dans une iframe, à l'adresse
+   `nb/cover.html?id=…&cover=jaguar`. Le serveur installé lisait la requête et
+   renvoyait le bon fichier ; un hébergement statique ne sait pas choisir un
+   fichier d'après une chaîne de requête, alors cette page le fait — elle lit
+   son propre `?cover=` et se remplace par la bonne couverture.
+
+   Le nom vient de l'URL et ne sert JAMAIS à composer un chemin : il indexe une
+   liste fermée. Concaténer `?cover=` dans un chemin laisserait
+   `?cover=../../quelque-chose` sortir du dossier, et une liste blanche est ici
+   la seule façon sûre de laisser le client nommer un fichier — même règle que
+   le serveur, pour la même raison. */
+(function () {
+  var COUVERTURES = {
+    jaguar: 'jaguar.html',
+    koutoubia: 'koutoubia.html',
+    gazelle: 'la_gazelle.html'
+  };
+  var demandee = new URLSearchParams(location.search).get('cover') || 'jaguar';
+  location.replace('../covers/' + (COUVERTURES[demandee] || COUVERTURES.jaguar));
+})();
+</script>
