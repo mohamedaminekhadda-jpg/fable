@@ -214,33 +214,73 @@
     setTimeout(() => champ.focus(), 30);
   }
 
-  /* ouvert : les liens vers les outils locaux */
+  /* ── les adresses ──────────────────────────────────────────────────────────
+   * Un outil est joignable soit sur cette machine (un port), soit à travers un
+   * tunnel (une adresse complète, du genre `https://studio.exemple.ts.net`).
+   * On garde donc une ADRESSE par outil, pas un port : c'est ce qui permet
+   * d'ouvrir Studio depuis le téléphone sans changer quoi que ce soit au site.
+   * Chacun choisit la sienne, dans son navigateur — rien n'est publié.
+   */
+  const ADRESSES = 'fable-atelier-adresses';
+
+  function adresseDe(o, table) {
+    const v = table[o.id];
+    if (!v) return 'http://localhost:' + o.port + '/';
+    if (/^\d+$/.test(String(v))) return 'http://localhost:' + v + '/';
+    return String(v).replace(/\/*$/, '/');
+  }
+  const courte = (u) => {
+    try { const x = new URL(u); return /^(localhost|127\.0\.0\.1)$/i.test(x.hostname) ? ':' + (x.port || '80') : x.hostname; }
+    catch { return u; }
+  };
+  /* Seuls `http:` et `https:` sont acceptés. Sans ce filtre, une adresse
+     `javascript:…` collée dans le champ deviendrait un lien qui exécute du
+     code au clic — sur sa propre machine, mais c'est une porte qu'on n'ouvre
+     pas par distraction. */
+  const adresseValide = (v) => {
+    if (/^\d+$/.test(v)) { const n = Number(v); return Number.isInteger(n) && n > 0 && n < 65536; }
+    try { const u = new URL(v); return u.protocol === 'http:' || u.protocol === 'https:'; } catch { return false; }
+  };
+
+  /* ouvert : les liens vers les outils */
   function peindreOutils(note) {
-    const g = lire('fable-atelier-ports') || {};
-    const port = (o) => g[o.id] || o.port;
+    const table = lire(ADRESSES) || {};
+    const distant = OUTILS.some((o) => table[o.id] && !/^\d+$/.test(String(table[o.id])));
     corps().innerHTML = '<h2>Atelier</h2>'
       + (note ? '<p>' + note + '</p>' : '')
-      + '<p>Ces outils tournent sur cette machine. Les liens ne servent qu’ici : '
-      + 'ailleurs, ils ouvrent un port vide.</p>'
+      + '<p>' + (distant
+        ? 'Une adresse distante est réglée : elle passe par votre tunnel, qui '
+          + 'authentifie avant d’arriver à la machine.'
+        : 'Ces outils tournent sur cette machine. Les liens ne servent qu’ici : '
+          + 'ailleurs, ils ouvrent un port vide.') + '</p>'
       + '<ul class="at-liste">'
-      + OUTILS.map((o) => '<li><a href="http://localhost:' + port(o) + '/" target="_blank" rel="noopener">'
-        + '<b>' + o.nom + '</b><span>' + o.quoi + '</span>'
-        + '<code>:' + port(o) + '</code></a></li>').join('')
+      + OUTILS.map((o, i) => {
+        const u = adresseDe(o, table);
+        return '<li><a href="' + u.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener"'
+          + ' data-i="' + i + '"><b>' + o.nom + '</b><span>' + o.quoi + '</span>'
+          + '<code>' + courte(u) + '</code></a></li>';
+      }).join('')
       + '</ul>'
-      + '<div class="at-btns"><button id="at-ports">Changer un port…</button>'
+      + '<div class="at-btns"><button id="at-adr">Changer une adresse…</button>'
       + '<button id="at-verrou">Verrouiller</button>'
       + '<button id="at-non">Fermer</button></div>'
-      + '<p class="at-pied">Studio glisse sur 4001, 4002… si 4000 est déjà pris : '
-      + 'son terminal affiche le port retenu au démarrage.</p>';
+      + '<p class="at-pied">Un port (<code>4000</code>) pour cette machine, ou une adresse '
+      + 'complète (<code>https://studio.mon-tailnet.ts.net</code>) pour y arriver d’ailleurs. '
+      + 'Studio glisse sur 4001, 4002… si 4000 est pris : son terminal affiche le port retenu.</p>';
     corps().querySelector('#at-non').onclick = () => dlg.close();
     corps().querySelector('#at-verrou').onclick = () => { sessionStorage.removeItem(OUVERT); peindreEntree(); };
-    corps().querySelector('#at-ports').onclick = () => {
-      const o = OUTILS.find((x) => x.reglable) || OUTILS[0];
-      const v = prompt('Port de ' + o.nom + ' :', String(port(o)));
-      if (v === null) return;
-      const n = Number(v);
-      if (!Number.isInteger(n) || n < 1 || n > 65535) { alert('Ce n’est pas un port.'); return; }
-      g[o.id] = n; ecrire('fable-atelier-ports', g);
+    corps().querySelector('#at-adr').onclick = () => {
+      const noms = OUTILS.map((o, i) => (i + 1) + ' = ' + o.nom).join(', ');
+      const q = prompt('Quel outil ? (' + noms + ')', '1');
+      if (q === null) return;
+      const o = OUTILS[Number(q) - 1];
+      if (!o) { alert('Numéro inconnu.'); return; }
+      const v = (prompt('Adresse de ' + o.nom + ' — un port, ou une URL complète :',
+        String(table[o.id] || o.port)) || '').trim();
+      if (!v) return;
+      if (!adresseValide(v)) { alert('Attendu : un port (4000) ou une URL http(s) complète.'); return; }
+      table[o.id] = /^\d+$/.test(v) ? Number(v) : v;
+      ecrire(ADRESSES, table);
       peindreOutils();
     };
   }
