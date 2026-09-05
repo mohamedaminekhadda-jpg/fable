@@ -1,0 +1,12 @@
+{
+  "id": "comparer-des-fractions",
+  "subject": "maths",
+  "title": "Comparer deux fractions",
+  "summary": "Deux barres de même longueur, découpées différemment. On clique pour colorier, et l’on voit tout de suite laquelle est la plus grande — sans poser une seule opération.",
+  "look": "Deux tiers, c’est plus que la moitié, et cela se voit avant de se calculer. Deux quarts et une moitié tombent exactement au même endroit sur la ligne des nombres.",
+  "vignette": "fractions",
+  "levels": ["primaire", "college"],
+  "tags": ["fractions", "comparaison", "fractions égales", "partage", "ligne des nombres"],
+  "minutes": 15,
+  "variables": ["nombre de parts", "parts coloriées"]
+}

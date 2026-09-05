@@ -1,0 +1,12 @@
+{
+  "id": "les-sommes-de-riemann",
+  "subject": "maths",
+  "title": "Les sommes de Riemann",
+  "summary": "Pousser le nombre de rectangles et voir l’aire se préciser — puis lire, sur un second graphe, ce que coûte cette précision : une droite dont la pente est l’ordre de la méthode.",
+  "look": "Doubler le nombre de rectangles divise l’erreur par deux à gauche, et par quatre au milieu. La pente de la droite en repère logarithmique est mesurée à l’écran, pas recopiée du cours.",
+  "vignette": "rectangles",
+  "levels": ["lycee"],
+  "tags": ["intégrale", "aire", "sommes de Riemann", "trapèzes", "primitive", "convergence", "ordre d’une méthode"],
+  "minutes": 25,
+  "variables": ["la fonction", "a", "b", "nombre de tranches", "la méthode"]
+}

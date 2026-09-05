@@ -1,0 +1,12 @@
+{
+  "id": "le-caryotype",
+  "subject": "svt",
+  "title": "Le caryotype",
+  "summary": "Ranger les chromosomes par paires, compter, et nommer ce qu’on trouve : trisomies, monosomies, anomalies des gonosomes et anomalies de structure.",
+  "look": "Une seule paire en trop ou en moins, et le caryotype porte un nom de syndrome — le 21 est le plus petit autosome, et ce n’est pas un hasard.",
+  "vignette": "caryotype",
+  "levels": ["lycee"],
+  "tags": ["caryotype", "chromosome", "trisomie", "monosomie", "Down", "Turner", "Klinefelter", "délétion"],
+  "minutes": 20,
+  "variables": ["nombre de chromosomes", "paire modifiée", "formule chromosomique"]
+}

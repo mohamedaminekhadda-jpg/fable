@@ -1,0 +1,12 @@
+{
+  "id": "la-tectonique-des-plaques",
+  "subject": "geographie",
+  "title": "La tectonique des plaques, en coupe",
+  "summary": "Trois frontières et trois mesures : le code-barres magnétique d’une dorsale, la distance fosse-volcans d’une subduction, la racine qui porte une chaîne de montagnes. Rien n’est dessiné au jugé.",
+  "look": "Réglez la dorsale à 2,5 cm/an puis à 15 : le code-barres s’étire dans le rapport exact des vitesses. C’est en mesurant ces bandes, en 1963, qu’on a démontré que les fonds océaniques s’écartent.",
+  "levels": ["college", "lycee"],
+  "vignette": "plaques",
+  "tags": ["tectonique", "dorsale", "subduction", "collision", "séisme", "volcan", "isostasie", "inversions magnétiques", "Terre"],
+  "minutes": 25,
+  "variables": ["la frontière", "la vitesse d’écartement", "le pendage", "l’épaisseur de croûte"]
+}

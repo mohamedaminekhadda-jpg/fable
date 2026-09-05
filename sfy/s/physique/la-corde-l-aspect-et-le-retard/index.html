@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La corde : l’aspect et le retard — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>La corde : l’aspect et le retard</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> M refait exactement le geste de la source — mais τ = d ⁄ v plus tard, et sans jamais avancer d’un centimètre.</p>
+<section class="lab-notes"><h4>Les deux graphiques ne racontent pas la même chose</h4><p>C'est toute la difficulté du chapitre, et elle tient en une phrase :</p><ul><li><b>En haut</b>, on photographie la corde entière à un instant donné. L'axe est une <b>distance</b>, en mètres. C'est <i>l'aspect de la corde</i>.</li><li><b>En bas</b>, on filme un seul point, M, pendant que le temps passe. L'axe est un <b>temps</b>, en secondes. C'est <i>l'élongation de M</i>.</li></ul><p>Les deux courbes se ressemblent, et sur une feuille on les confond. Ici elles bougent ensemble : lancez une secousse et regardez-les l'une après l'autre.</p><h4>Le retard</h4><p>Mettez la courbe de la source par-dessus celle de M. Les deux bosses ont exactement la même forme et la même hauteur — M <b>refait le geste de la source</b>. Elle est seulement décalée vers la droite, et ce décalage est le retard :</p><p><code>τ = d / v</code></p><p>C'est la zone teintée sur le graphe du bas. Éloignez M : la zone s'élargit. Tendez la corde : la zone se resserre, parce que l'onde va plus vite.</p><h4>Rien ne voyage, sauf l'énergie</h4><p>Le trait vertical pâle sous M marque tout le chemin qu'il peut parcourir. M monte, redescend, et revient exactement où il était. <b>Il n'avance jamais.</b> C'est ce que dit la définition du cours : propagation d'une perturbation <i>sans transport de matière</i>.</p><h4>La célérité n'est pas réglée à la main</h4><p>On ne choisit pas <code>v</code> : on choisit la corde. La célérité en sort.</p><p><code>v = √(F / µ)</code></p><ul><li>Tirez plus fort (F augmente) → l'onde va plus vite. C'est l'<b>élasticité</b>.</li><li>Prenez une corde plus lourde (µ augmente) → l'onde ralentit. C'est l'<b>inertie</b>.</li></ul><p>Multipliez F par 4 : la célérité ne double-t-elle pas ? Vérifiez-le sur l'affichage plutôt que de me croire.</p><h4>À essayer</h4><ul><li>Placez M à 6 m, notez τ. Placez-le à 3 m. Le retard a-t-il été divisé par deux ?</li><li>Passez en vibration entretenue : la corde entière ondule, mais chaque point attend toujours son tour. Le front avance à la même vitesse.</li><li>Mettez pause juste après le départ, et lisez la longueur de la bosse sur la corde. Comparez-la à <code>v × θ</code>.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"la-corde-l-aspect-et-le-retard","title":"La corde : l’aspect et le retard"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

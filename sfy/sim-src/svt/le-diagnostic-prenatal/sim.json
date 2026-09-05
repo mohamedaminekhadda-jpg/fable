@@ -1,0 +1,12 @@
+{
+  "id": "le-diagnostic-prenatal",
+  "subject": "svt",
+  "title": "Le diagnostic prénatal",
+  "summary": "Placer les examens sur les quarante semaines d’une grossesse : ce que chacun prélève, à quelle date il est possible, ce qu’il permet de voir et ce qu’il coûte en risque.",
+  "look": "Aucun examen n’est disponible tout le temps : chacun a sa fenêtre, et plus il renseigne, plus il coûte.",
+  "vignette": "frise",
+  "levels": ["lycee"],
+  "tags": ["diagnostic prénatal", "échographie", "amniocentèse", "choriocentèse", "cordocentèse", "FISH", "caryotype"],
+  "minutes": 20,
+  "variables": ["semaine de grossesse", "examen choisi", "indications"]
+}

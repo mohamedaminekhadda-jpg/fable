@@ -1,0 +1,12 @@
+{
+  "id": "les-echanges-mondiaux",
+  "subject": "geographie",
+  "title": "Les échanges mondiaux",
+  "summary": "Cinq pôles, leurs flux, et une case à cocher qui retourne la carte : les échanges internes à chaque pôle. Puis les neuf passages par lesquels tout doit tenir, et le commerce extérieur du Maroc en deux colonnes.",
+  "look": "La mondialisation ressemble à un réseau mondial jusqu’à ce qu’on montre les échanges internes : 61 % de ce que l’Europe vend ne quitte pas l’Europe, contre 16 % pour l’Afrique.",
+  "vignette": "globe-flux",
+  "levels": ["lycee"],
+  "tags": ["mondialisation", "commerce mondial", "Triade", "détroits", "Suez", "Malacca", "Tanger Med", "Maroc"],
+  "minutes": 35,
+  "variables": ["flux internes", "passage stratégique", "pôle sélectionné"]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "le-theoreme-de-pythagore",
+  "subject": "maths",
+  "title": "Le théorème de Pythagore : les trois carrés",
+  "summary": "Tirer le point C et regarder les trois carrés construits sur les côtés changer de taille. Les deux petits mis bout à bout font-ils la longueur du grand ? Seulement quand l’angle est droit.",
+  "look": "Le théorème n’est pas toujours vrai — il l’est exactement quand l’angle en C est droit. Et l’ensemble des points où cela arrive dessine un cercle : celui de diamètre [AB].",
+  "vignette": "pythagore",
+  "levels": ["college"],
+  "tags": ["Pythagore", "triangle rectangle", "aire", "carré", "réciproque", "cercle", "géométrie"],
+  "minutes": 20,
+  "variables": ["position de C", "longueur de [AB]"]
+}

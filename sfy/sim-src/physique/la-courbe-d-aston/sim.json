@@ -1,0 +1,12 @@
+{
+  "id": "la-courbe-d-aston",
+  "subject": "physique",
+  "title": "La courbe d’Aston et l’énergie de liaison",
+  "summary": "Prendre un noyau, peser ses nucléons séparément, constater qu’il en manque — et lire dans ce défaut de masse l’énergie qui tient le noyau ensemble, puis porter le tout sur la courbe d’Aston.",
+  "look": "La courbe descend d’un côté et remonte de l’autre : c’est pourquoi les noyaux lourds gagnent à se casser et les légers à s’unir.",
+  "vignette": "vallee",
+  "levels": ["lycee"],
+  "tags": ["noyau", "énergie de liaison", "défaut de masse", "Einstein", "courbe d’Aston", "stabilité"],
+  "minutes": 25,
+  "variables": ["nombre de masse A", "numéro atomique Z", "défaut de masse Δm", "énergie de liaison", "E/A"]
+}

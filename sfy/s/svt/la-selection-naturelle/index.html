@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="svt" data-niveau="college"
+  style="--sub-l:#3f8449;--sub-d:#74c67f">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La sélection naturelle — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/svt" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">SVT</span>
+  <h1>La sélection naturelle</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Mettez la variété initiale à zéro et les mutations à zéro, puis noircissez le tronc. Les papillons sont mangés par centaines et rien ne bouge : sans différences entre les individus, la sélection n’a rien à trier.</p>
+<details class="lab-notes lab-notes-plie"><summary>Comment ça marche ?</summary><h4>Ce que vous devez surveiller</h4><p>Pas les papillons. <b>La population.</b></p><p>Un papillon naît d'une certaine teinte et meurt de cette teinte-là. Il ne s'assombrit pas parce que le tronc s'assombrit, il ne fait aucun effort, il ne « s'adapte » pas. Ce qui se déplace, c'est la <b>moyenne</b> — parce que les plus visibles sont mangés plus souvent et laissent moins de descendants.</p><p>C'est l'erreur que tout le monde fait en apprenant l'évolution : croire que les êtres changent. Ce sont les <b>proportions</b> qui changent.</p><h4>L'histoire vraie</h4><p>C'est celle du <b>phalène du bouleau</b> en Angleterre. Avant 1850, les troncs étaient clairs, couverts de lichens, et la forme claire du papillon dominait. Les fumées du charbon ont tué les lichens et noirci les troncs : en cinquante ans, dans les régions industrielles, la forme sombre est passée de quelques pour cent à plus de 90 %.</p><p>Puis les lois sur l'air propre ont nettoyé les troncs, et la forme claire est revenue. Le même mécanisme, dans les deux sens, en un siècle.</p><p>Faites-le : tronc sombre, cinquante générations. Puis tronc clair de nouveau, et regardez la courbe redescendre.</p><h4>L'expérience qui explique tout</h4><p>Mettez <b>variété initiale = 0</b> et <b>mutations = aucune</b>. Tous les papillons sont exactement identiques. Maintenant noircissez le tronc.</p><p>Ils se font massacrer — la mesure « Mangés » le dit — et <b>la moyenne ne bouge pas d'un millième</b>. La sélection élimine, mais elle n'invente rien : il faut qu'il existe déjà des différences pour qu'elle ait quelque chose à trier.</p><p>&gt; La sélection naturelle ne crée pas la variation. Elle la <b>trie</b>. Ce sont &gt; les mutations qui la créent, et elles sont indifférentes à ce qui serait utile.</p><p>Remettez les mutations à 0,02 et recommencez : la population repart, lentement d'abord, puis de plus en plus vite à mesure que la variété se reconstitue.</p><h4>Les trois curseurs, et ce qu'ils font</h4><table><thead><tr><th></th><th>effet</th></tr></thead><tbody><tr><td><b>Prédation</b></td><td>à zéro, personne n'est mangé et rien n'évolue, quel que soit le contraste. C'est la pression du milieu, et sans elle il n'y a pas de sélection.</td></tr><tr><td><b>Mutations</b></td><td>la source de la variété. Trop peu : la population reste bloquée. Beaucoup : elle suit vite, mais reste toujours un peu floue autour de la bonne teinte.</td></tr><tr><td><b>Effectif</b></td><td>avec 20 individus, la moyenne saute dans tous les sens même sans sélection. C'est la <b>dérive génétique</b> — le hasard des petits nombres.</td></tr></tbody></table><h4>Ce que la variété devient</h4><p>Regardez la mesure <b>« Variété restante »</b> pendant une adaptation. Elle <b>diminue</b> : la sélection consomme la diversité qu'elle trie. Une population parfaitement adaptée est une population appauvrie — et donc mal armée pour le prochain changement.</p><p>C'est exactement l'argument de la conservation des espèces : ce qu'on protège en protégeant la diversité, c'est la capacité à encaisser ce qui n'est pas encore arrivé.</p><h4>À essayer</h4><ul><li>Effectif à 20, prédation à zéro, mutations à 0,02 : personne n'est mangé, et pourtant la moyenne dérive. Rien ne la tire — c'est le hasard seul.</li><li>Placez le tronc à une teinte moyenne (0,50) et regardez où la population se stabilise. Elle ne s'arrête pas <i>sur</i> la valeur : elle oscille autour.</li><li>Prédation au maximum sur un tronc bien contrasté : plus de 90 % de morts à chaque génération. La population survit quand même, parce qu'il suffit de quelques survivants bien assortis. C'est brutal, et c'est efficace.</li></ul></details>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"svt","id":"la-selection-naturelle","title":"La sélection naturelle"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="geographie" data-niveau="college"
+  style="--sub-l:#a8622a;--sub-d:#e2955a">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La tectonique des plaques, en coupe — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/geographie" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Géo</span>
+  <h1>La tectonique des plaques, en coupe</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Réglez la dorsale à 2,5 cm/an puis à 15 : le code-barres s’étire dans le rapport exact des vitesses. C’est en mesurant ces bandes, en 1963, qu’on a démontré que les fonds océaniques s’écartent.</p>
+<details class="lab-notes lab-notes-plie"><summary>Comment ça marche ?</summary><h4>Une dorsale enregistre le temps</h4><p>Le champ magnétique terrestre s'inverse, de façon irrégulière, tous les quelques centaines de milliers d'années. Le basalte qui refroidit à l'axe d'une dorsale garde en mémoire le sens du champ de ce moment-là — et ensuite il s'écarte, en emportant cet enregistrement.</p><p>Il en résulte, de part et d'autre de l'axe, un <b>code-barres symétrique</b>. Les bandes ne sont pas dessinées ici : chacune a pour largeur <i>durée × demi-vitesse</i>. Les dates sont réelles (échelle de Cande &amp; Kent).</p><p><b>Faites la mesure dans les deux sens.</b></p><ul><li>Réglez 2,5 cm/an — l'Atlantique. La bande de Brunhes, la plus récente, fait 9,7 km de large de chaque côté.</li><li>Réglez 15 cm/an — la dorsale est-pacifique. Elle en fait 58.</li><li>Le rapport des largeurs est exactement le rapport des vitesses.</li></ul><p>Et à l'envers : si l'on mesure une bande de 58 km et qu'on sait qu'elle a duré 0,773 million d'années, on obtient 15 cm/an. <b>C'est ainsi qu'on a mesuré la dérive des continents</b> — Vine et Matthews, 1963. Un demi-siècle après Wegener, c'est cette mesure-là qui a emporté la conviction des géologues.</p><p>&gt; Attention à la conversion, elle piège tout le monde : <b>1 cm/an = 10 km par &gt; million d'années</b>. Un centimètre par an paraît dérisoire ; c'est mille &gt; kilomètres en cent millions d'années.</p><h4>Une subduction range ses séismes</h4><p>La plaque océanique, froide et dense, replonge dans le manteau. Elle emporte de l'eau. Vers <b>100 km de profondeur</b>, cette eau s'échappe et fait fondre le manteau au-dessus — d'où une file de volcans, l'<b>arc volcanique</b>.</p><p>Sa position n'est donc pas quelconque :</p><p>&gt; distance fosse → arc = 100 km ÷ tan(pendage)</p><p>Changez le pendage et regardez l'arc se déplacer. À 30°, il est à 173 km de la fosse ; à 60°, à 58 km. C'est vérifiable sur une carte : les volcans du Japon, des Andes, de l'Indonésie se rangent tous à cette distance-là de leur fosse.</p><p>Les points rouges sont les foyers de séismes. Ils dessinent le <b>plan de Wadati-Benioff</b> — et c'est la seule façon de « voir » une plaque plongeante, puisque personne n'ira jamais la regarder. Les séismes les plus profonds du monde atteignent 700 km, et pas un de plus : au-delà, la plaque a fini de se réchauffer et ne casse plus, elle flue.</p><h4>Une montagne flotte</h4><p>Une chaîne de montagnes ne tient pas en l'air. Elle <b>flotte</b> sur le manteau, comme un iceberg sur l'eau, et pour la même raison : la croûte est plus légère (2 800 kg/m³) que le manteau (3 300).</p><p>Une croûte épaissie monte donc plus haut <b>et</b> s'enfonce davantage, dans un rapport fixé par les deux masses volumiques :</p><table><thead><tr><th>épaisseur de croûte</th><th>altitude</th><th>racine sous la plaine</th></tr></thead><tbody><tr><td>35 km (plaine)</td><td>0</td><td>0</td></tr><tr><td>50 km</td><td>2,3 km</td><td>12,7 km</td></tr><tr><td><b>70 km (Himalaya)</b></td><td><b>5,3 km</b></td><td><b>29,7 km</b></td></tr></tbody></table><p>Pour chaque kilomètre de montagne visible, il y a près de <b>six kilomètres</b> de racine invisible. L'Everest culmine à 8,85 km parce qu'il est porté par une croûte d'environ 70 km, deux fois l'épaisseur ordinaire.</p><p>C'est aussi pourquoi une chaîne s'use lentement : à mesure que l'érosion enlève le sommet, la racine remonte et le relief se reforme, jusqu'à épuisement de la racine. La Scandinavie remonte encore aujourd'hui, de près d'un centimètre par an, débarrassée de sa calotte glaciaire il y a dix mille ans.</p><h4>À essayer</h4><ul><li>Sur la dorsale, mettez le point de sondage à 300 km et faites varier la vitesse : à 2,5 cm/an le plancher y a 24 millions d'années, à 15 cm/an il n'en a que 4. Le même endroit, un âge six fois différent.</li><li>Regardez la mesure « depuis la mort de Jules César » : à 2,5 cm/an, l'Atlantique s'est élargi de 52 mètres depuis. À l'échelle d'une vie humaine ce n'est rien ; à l'échelle géologique, c'est un océan.</li><li>Sur la collision, descendez l'épaisseur de 70 à 40 km : l'altitude tombe de 5,3 km à 0,8. Une chaîne n'existe que tant que sa racine existe.</li></ul></details>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"geographie","id":"la-tectonique-des-plaques","title":"La tectonique des plaques, en coupe"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "id": "l-arbre-genealogique",
+  "subject": "svt",
+  "title": "L’arbre généalogique",
+  "summary": "Construire un arbre, marquer qui est atteint, et laisser la déduction se faire : quels modes de transmission restent possibles, lesquels sont exclus et pourquoi, et quel risque court l’enfant à naître.",
+  "look": "Un arbre exclut des modes plus qu’il n’en désigne un — et il en reste presque toujours plus d’un.",
+  "vignette": "arbre",
+  "levels": ["lycee"],
+  "tags": ["génétique", "hérédité", "pedigree", "autosomique", "gonosomique", "dominant", "récessif", "risque"],
+  "minutes": 30,
+  "variables": ["arbre", "mode de transmission", "génotypes", "risque pour l’enfant à naître"]
+}

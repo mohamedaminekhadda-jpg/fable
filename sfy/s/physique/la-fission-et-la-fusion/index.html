@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La fission et la fusion — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>La fission et la fusion</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Un neutron de plus ou de moins par fission, et la chaîne s’éteint ou s’emballe — tout tient dans le facteur k.</p>
+<section class="lab-notes"><h4>Pourquoi un neutron, et pas un proton</h4><p>Le cours le dit en une phrase : « on utilise le neutron dans le bombardement car c’est une particule neutre qui arrive facilement au noyau sans entrer en répulsion avec lui ». Essayez l’autre : passez le projectile sur <b>proton</b>.</p><p>Il approche, ralentit, et fait demi-tour. Il n’atteint jamais le noyau, parce qu’un noyau d’uranium porte 92 charges positives et le repousse de loin. Le neutron, lui, ne sent rien de tout cela : il traverse et se fait capturer.</p><p>C’est la même barrière qui gêne la fusion, vue de l’autre côté.</p><h4>Une fission, en trois temps</h4><ol><li>Le neutron arrive et se fait <b>capturer</b> : l’uranium 235 devient uranium 236.</li><li>Cet U-236 est instable. Il <b>s’allonge</b>, comme une goutte qu’on étire.</li><li>Passé un certain étirement, la répulsion électrique entre les deux moitiés l’emporte sur la cohésion nucléaire : il <b>se pince et se casse</b>. Deux fragments très inégaux partent à grande vitesse, avec deux ou trois neutrons.</li></ol><p>Les 180 MeV libérés ne sont presque pas du rayonnement : c’est surtout de l’<b>énergie cinétique</b> des deux fragments. Dans un réacteur, cette énergie devient de la chaleur en quelques micromètres, et c’est cette chaleur qui fait la vapeur qui fait tourner la turbine.</p><h4>Tout tient dans k</h4><p>Chaque fission relâche deux ou trois neutrons. Tous ne provoquent pas une nouvelle fission : certains s’échappent, d’autres sont absorbés sans casser quoi que ce soit. Le nombre qui en provoque une, c’est <b>k</b>.</p><table><thead><tr><th>k</th><th>ce qui se passe</th><th>à quoi cela correspond</th></tr></thead><tbody><tr><td>k &lt; 1</td><td>chaque génération est plus maigre</td><td>la chaîne s’éteint</td></tr><tr><td>k = 1</td><td>chaque fission en fait exactement une</td><td>un réacteur en marche</td></tr><tr><td>k &gt; 1</td><td>chaque génération est plus nombreuse</td><td>l’emballement</td></tr></tbody></table><p>Poussez k à 1,05 et suivez douze générations : on passe de 1 à moins de deux fissions. Poussez-le à 2 : plus de quatre mille. <b>C’est la même manette</b>, et c’est pourquoi un réacteur passe son temps à la régler, avec des barres qui absorbent les neutrons en excès.</p><p>Un détail qui compte : à k = 1 exactement, rien ne s’emballe et rien ne s’éteint, mais la puissance ne monte pas non plus. Pour démarrer, il faut passer un moment au-dessus de 1, puis revenir.</p><h4>La fusion : la même barrière, dans l’autre sens</h4><p>Deux noyaux sont positifs, donc ils se repoussent. La courbe du bas est leur énergie potentielle : elle <b>monte</b> quand ils se rapprochent — c’est Coulomb — puis <b>plonge</b> brutalement au contact, quand l’interaction nucléaire prend le relais. La bosse entre les deux est la <b>barrière</b>.</p><p><code>V = Z₁Z₂ e² / 4πε₀ r</code>, prise au contact <code>r = 1,2 (A₁^⅓ + A₂^⅓)</code> fm</p><p>La ligne horizontale est l’énergie apportée. Tant qu’elle passe <b>sous</b> la bosse, les deux noyaux rebroussent chemin au point où la courbe la coupe. Dès qu’elle passe au-dessus, ils se touchent et fusionnent.</p><p>Comparez les couples : deutérium + tritium demande 0,44 MeV, carbone + carbone en demande 9,4 — <b>vingt et une fois plus</b>, parce que <code>Z₁Z₂</code> passe de 1 à 36. C’est pour cela que les étoiles brûlent l’hydrogène pendant des milliards d’années avant de toucher au carbone, et qu’il leur faut être bien plus chaudes pour cela.</p><h4>Une réserve honnête sur la température</h4><p>Le relevé « température équivalente » applique <code>E = 3/2 kT</code>. Il donne des milliards de degrés, alors qu’un tokamak vise cent à cent-cinquante millions.</p><p>L’écart est réel et il a deux causes, toutes deux hors programme : dans un gaz chaud, <b>quelques</b> noyaux vont bien plus vite que la moyenne, et la mécanique quantique permet de <b>traverser</b> la barrière sans passer par-dessus. La barrière calculée ici est donc la bonne ; c’est la conclusion « il faut donc telle température » qui est trop sévère.</p><h4>À essayer</h4><ul><li>Mettez k à 0,95, puis 1,00, puis 1,05, en gardant douze générations. Trois mondes différents pour cinq centièmes d’écart.</li><li>Sur la fusion, prenez proton + proton et montez l’énergie : la barrière coûte 0,60 MeV et la réaction n’en rend que 0,42. Le Soleil s’en accommode parce qu’il a beaucoup de temps et énormément de protons.</li><li>Regardez le point de rebroussement se rapprocher du contact à mesure que vous montez l’énergie, puis disparaître d’un coup quand elle dépasse la barrière.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"la-fission-et-la-fusion","title":"La fission et la fusion"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

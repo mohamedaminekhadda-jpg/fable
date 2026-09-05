@@ -1,0 +1,12 @@
+{
+  "id": "les-puissances-comparees",
+  "subject": "geographie",
+  "title": "Les puissances comparées",
+  "summary": "Classer dix puissances sur onze indicateurs, cocher « par habitant » et voir les classements se retourner ; puis mettre deux d’entre elles face à face sur un radar, et suivre quarante-quatre ans de part du PIB mondial.",
+  "look": "Aucun classement ne survit à la case « par habitant » : la Chine est troisième pour le PIB et sixième par tête, première pour le CO₂ et troisième par habitant. La puissance d’un pays et le niveau de vie de ses habitants sont deux questions différentes.",
+  "vignette": "barres",
+  "levels": ["lycee"],
+  "tags": ["puissance", "États-Unis", "Chine", "Union européenne", "Maroc", "PIB", "commerce mondial", "mondialisation"],
+  "minutes": 35,
+  "variables": ["indicateur", "par habitant", "puissances comparées", "année"]
+}

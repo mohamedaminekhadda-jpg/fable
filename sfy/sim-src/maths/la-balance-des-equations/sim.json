@@ -1,0 +1,12 @@
+{
+  "id": "la-balance-des-equations",
+  "subject": "maths",
+  "title": "La balance des équations",
+  "summary": "Résoudre une équation en retirant des poids et des boîtes — à condition de faire la même chose des deux côtés. Les opérations interdites sont proposées aussi : la balance bascule, et l’on voit pourquoi la règle existe.",
+  "look": "Retirez un poids d’un seul côté : le fléau penche. L’égalité n’est pas une phrase à recopier, c’est un équilibre qu’on casse ou qu’on garde.",
+  "vignette": "balance",
+  "levels": ["college"],
+  "tags": ["équation", "égalité", "inconnue", "balance", "résolution", "opérations"],
+  "minutes": 20,
+  "variables": ["l’équation", "les opérations choisies"]
+}

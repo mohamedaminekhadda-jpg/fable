@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="lycee"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les suites récurrentes : l’escalier — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>Les suites récurrentes : l’escalier</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Le rapport de deux écarts successifs tend vers |f’(l)| : c’est ce nombre, et lui seul, qui décide si la suite converge, à quelle vitesse, et en escalier ou en spirale.</p>
+<section class="lab-notes"><h4>Comment lire l’escalier</h4><p>Le tracé se construit toujours de la même façon, et il faut savoir le refaire à la main sur une copie :</p><ol><li>On part de <b>u(0)</b> sur l’axe des abscisses.</li><li>On monte <b>verticalement jusqu’à la courbe</b> : la hauteur atteinte est u(1).</li><li>On va <b>horizontalement jusqu’à la droite y = x</b> : cela reporte u(1) sur l’axe des abscisses.</li><li>On recommence.</li></ol><p>C’est tout. La droite y = x ne sert qu’à une chose : transformer une <b>hauteur</b> en une <b>abscisse</b>, pour pouvoir la réinjecter dans f.</p><h4>Le seul nombre qui compte</h4><p>Appuyez sur <b>« Dérouler »</b> avec la première suite, puis essayez les autres. Vous verrez quatre dessins, et un seul nombre les explique : <b>f’(l)</b>, la pente de la courbe au point fixe.</p><table><thead><tr><th>ce que vous voyez</th><th>ce que vaut f’(l)</th></tr></thead><tbody><tr><td>escalier qui monte vers l</td><td>entre 0 et 1</td></tr><tr><td>spirale qui se resserre</td><td>entre −1 et 0</td></tr><tr><td>spirale qui s’élargit, puis cycle</td><td>inférieur à −1</td></tr><tr><td>escalier qui s’échappe</td><td>supérieur à 1</td></tr></tbody></table><p>Le critère à retenir, et il est au programme : <b>si |f’(l)| &lt; 1, le point fixe attire ; si |f’(l)| &gt; 1, il repousse.</b> Cochez <b>« La tangente au point fixe »</b> : quand cette tangente est moins pentue que la diagonale, ça converge. Quand elle est plus pentue, ça part.</p><p>&gt; Un point fixe n’est <b>pas</b> une limite. C’est un <i>candidat</i>. Le passage &gt; obligé d’une copie — « si u(n) converge vers l, alors l vérifie f(l) = l » — &gt; commence par un <b>si</b>, et la suite 3,2 u(1−u) montre pourquoi : son point fixe &gt; existe, se calcule, et n’est la limite de rien.</p><h4>Le rapport des écarts</h4><p>Regardez la mesure <b>« Rapport des écarts »</b> pendant que la suite se déroule. Elle affiche |u(n+1) − l| ÷ |u(n) − l|, et elle se stabilise sur <b>|f’(l)|</b>.</p><p>C’est la réponse à la question que les élèves posent toujours : <i>à quelle vitesse ?</i></p><ul><li>Pour <b>√(u+2)</b>, f’(2) = 0,25 : chaque pas divise l’écart par quatre. Depuis u(0) = 6, il faut <b>dix pas</b> pour cinq décimales exactes.</li><li>Pour <b>cos</b>, f’(l) ≈ −0,67 : chaque pas ne retire qu’un tiers de l’écart. Il en faut <b>vingt-huit</b> pour la même précision — presque trois fois plus, et le rapport des deux nombres de pas est celui des deux logarithmes de |f’(l)|.</li><li>Pour <b>0,5 u + 3</b>, la dérivée est constante, donc le rapport vaut exactement 0,5 <b>dès le premier pas</b> — c’est le propre des suites arithmético-géométriques, dont la vitesse ne dépend pas du point de départ.</li></ul><h4>Le cas remarquable : u/2 + 1/u</h4><p>Choisissez cette suite et déroulez. Le rapport des écarts ne se stabilise pas : il <b>tend vers zéro</b>. La raison est visible sur le dessin — au point fixe, la courbe est <b>tangente à l’horizontale</b>, donc f’(√2) = 0.</p><p>Conséquence : une fois la suite entrée dans le voisinage de √2, le nombre de décimales exactes <b>double</b> à chaque pas. Depuis u(0) = 5, comptez-les :</p><table><thead><tr><th>pas</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead><tbody><tr><td>décimales exactes</td><td>1</td><td>3</td><td>7</td><td>15</td></tr></tbody></table><p>Six pas, et la calculatrice n’a plus de chiffres à afficher. C’est la méthode de Newton, et c’est ainsi que votre calculatrice extrait les racines carrées.</p><p>Comparez avec les dix pas de √(u+2) et les vingt-huit de cos : <b>f’(l) = 0 n’est pas « un peu mieux », c’est un autre régime.</b></p><h4>Ce que le papier ne peut pas faire</h4><ul><li><b>Tirez u(0)</b> sur la suite u² − 1. Entre les deux points fixes la suite tombe sur le cycle 0 → −1 ; au-delà, elle explose. La frontière entre les deux, vous la trouvez à la main en quelques secondes. Ce que vous venez de délimiter s’appelle un <b>bassin d’attraction</b>.</li><li>Passez de <b>3,2 u(1−u)</b> à <b>3,9 u(1−u)</b>. Même formule, un coefficient à peine changé, et le tracé ne se referme plus jamais. Puis, sur 3,9, décalez u(0) d’un millième : la suite prend un tout autre chemin. Ce n’est pas au programme — mais c’est à deux clics de l’exercice ordinaire, et cela mérite d’être vu.</li></ul><h4>À essayer</h4><ul><li>Sur <b>(u+3)/(u+1)</b>, regardez le graphe de droite : les termes encadrent la limite en alternant au-dessus et au-dessous. Une suite convergente n’est donc <b>pas forcément monotone</b> — et l’encadrement alterné est justement ce qui permet de majorer l’erreur sans connaître la limite.</li><li>Mettez <b>u(0) = 2</b> sur la première suite, puis <b>u(0) = −2</b>. Le point fixe est atteint immédiatement dans un cas : c’est ce qu’on appelle une suite stationnaire, et le tracé se réduit à un point.</li><li>Cherchez, sur <b>cos</b>, la valeur du point fixe affichée : 0,739085… Aucune fonction usuelle ne l’exprime. Elle a été trouvée ici par <b>dichotomie</b>, la même méthode que le théorème des valeurs intermédiaires met en œuvre.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"les-suites-recurrentes","title":"Les suites récurrentes : l’escalier"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

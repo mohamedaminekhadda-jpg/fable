@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="college"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La balance des équations — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>La balance des équations</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Retirez un poids d’un seul côté : le fléau penche. L’égalité n’est pas une phrase à recopier, c’est un équilibre qu’on casse ou qu’on garde.</p>
+<details class="lab-notes lab-notes-plie"><summary>Comment ça marche ?</summary><h4>Ce que représente la balance</h4><p>Une <b>boîte bleue</b> est un x : une quantité qu’on ne connaît pas, mais qui est la <b>même</b> dans toutes les boîtes. Un <b>cube orange</b> vaut 1.</p><p>Le fléau est horizontal : cela veut dire que les deux côtés pèsent pareil. C’est exactement ce que dit le signe <b>=</b>.</p><p>Résoudre l’équation, c’est arriver à <b>une seule boîte d’un côté</b> et <b>des cubes de l’autre</b>. À ce moment-là, on peut lire x directement.</p><h4>La seule règle</h4><p>&gt; Tout ce qu’on fait d’un côté, on doit le faire de l’autre.</p><p>Prenez <b>3x + 4 = 2x + 9</b> et essayez :</p><ol><li><b>− 1 des deux côtés</b>, quatre fois. Il reste 3x = 2x + 5.</li><li><b>− une boîte des deux côtés</b>, deux fois. Il reste x = 5.</li></ol><p>Deux sortes d’opérations, et vous avez fini. La solution est <b>x = 5</b>.</p><h4>Cassez-la exprès</h4><p>Les deux boutons rouges <b>« − 1 à gauche seulement »</b> et <b>« − 1 à droite seulement »</b> sont là pour être utilisés. Faites-le.</p><p>Le fléau penche, l’équation devient fausse, et le message le dit. Vous ne pouvez plus rien faire d’autre qu’<b>annuler</b>.</p><p>C’est là toute la leçon, et elle vaut mieux qu’une règle apprise par cœur : enlever un poids d’un seul côté n’est pas « une faute de calcul », c’est <b>une autre équation</b>, qui n’a plus les mêmes solutions.</p><h4>Pourquoi diviser marche aussi</h4><p>Prenez <b>4x + 2 = 2x + 10</b>, puis appuyez tout de suite sur <b>÷ 2</b>.</p><p>Tout est coupé en deux d’un coup — les boîtes comme les cubes — et l’équilibre tient : 2x + 1 = x + 5. La balance ne bouge pas, parce que <b>diviser les deux côtés par le même nombre garde l’égalité</b>, exactement comme retirer la même chose des deux côtés.</p><p>Remarquez que le bouton <b>÷ 3</b> est éteint ici. Il ne s’allume que si les quatre nombres sont divisibles par 3 : on ne peut pas couper une boîte en trois si le compte ne tombe pas juste.</p><h4>Le compte d’étapes</h4><p>La mesure <b>« Étapes utilisées »</b> compte vos coups. Sur 5x + 3 = 2x + 18, six coups suffisent :</p><p>&gt; 5x + 3 = 2x + 18  →  5x = 2x + 15  →  3x = 15  →  x = 5</p><p>soit <b>− 1</b> trois fois, <b>− une boîte</b> deux fois, puis <b>÷ 3</b>. En tâtonnant on en met bien davantage.</p><p>Cherchez le chemin le plus court. C’est le même réflexe qu’en calcul : <b>regrouper d’abord les boîtes d’un côté et les cubes de l’autre, diviser en dernier.</b></p><h4>À essayer</h4><ul><li>Sur <b>2x = 8</b>, appuyez sur <b>÷ 2</b> : x = 4 en un seul coup. Puis recommencez et faites <b>− une boîte des deux côtés</b> : le bouton est éteint, parce qu’il n’y a aucune boîte à droite. Une opération n’est possible que si les deux côtés peuvent la subir.</li><li>Sur <b>x + 3 = 7</b>, retirez 1 des deux côtés trois fois de suite, lentement. Regardez les cubes disparaître par paires — un à gauche, un à droite.</li><li>Cassez la balance, puis <b>annulez</b>, puis cassez-la de l’autre côté. Le fléau penche dans l’autre sens. Le côté le plus lourd descend, comme une vraie balance.</li></ul></details>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"la-balance-des-equations","title":"La balance des équations"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

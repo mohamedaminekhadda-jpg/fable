@@ -1,0 +1,12 @@
+{
+  "id": "l-union-europeenne",
+  "subject": "geographie",
+  "title": "L’Union européenne : un bloc qui se construit",
+  "summary": "Tirer un curseur de 1957 à aujourd’hui et voir l’Union s’agrandir pays par pays — puis superposer la zone euro, l’espace Schengen et la richesse par habitant, et constater que les trois cartes ne coïncident pas.",
+  "look": "Six pays en 1957, vingt-huit en 2013, vingt-sept après le Brexit : l’Union n’a pas une frontière, elle en a plusieurs, et elles ne se superposent jamais.",
+  "vignette": "cercle-etoiles",
+  "levels": ["lycee"],
+  "tags": ["Union européenne", "élargissement", "euro", "Schengen", "Brexit", "intégration régionale", "développement"],
+  "minutes": 30,
+  "variables": ["année", "couche observée", "population", "PIB par habitant"]
+}

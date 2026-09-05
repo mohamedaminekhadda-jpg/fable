@@ -1,0 +1,12 @@
+{
+  "id": "la-non-disjonction",
+  "subject": "svt",
+  "title": "La non-disjonction",
+  "summary": "Suivre une paire de chromosomes à travers les deux divisions de la méiose, la faire mal se séparer, et voir quels gamètes en sortent — puis quel zygote après fécondation.",
+  "look": "Selon que l’accident a lieu à la première ou à la seconde division, les quatre gamètes sont tous anormaux, ou seulement deux.",
+  "vignette": "division",
+  "levels": ["lycee"],
+  "tags": ["méiose", "non-disjonction", "gamète", "trisomie", "monosomie", "Turner", "Klinefelter", "Down"],
+  "minutes": 20,
+  "variables": ["division où survient l’accident", "paire concernée", "gamètes obtenus", "zygote"]
+}

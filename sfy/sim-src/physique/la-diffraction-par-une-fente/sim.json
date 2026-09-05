@@ -1,0 +1,12 @@
+{
+  "id": "la-diffraction-par-une-fente",
+  "subject": "physique",
+  "title": "La diffraction par une fente",
+  "summary": "Mesurer la tache centrale au curseur pour plusieurs fentes, porter L en fonction de 1/a, et lire la longueur d’onde du laser sur la pente de la droite.",
+  "look": "La tache s’élargit quand la fente se resserre — et les points L = f(1/a) tombent sur une droite qui passe par l’origine, dont la pente vaut 2λD.",
+  "vignette": "diffraction",
+  "levels": ["lycee"],
+  "tags": ["ondes", "lumière", "diffraction", "laser", "longueur d’onde", "écart angulaire"],
+  "minutes": 25,
+  "variables": ["longueur d’onde λ", "largeur de fente a", "distance D", "largeur L", "écart angulaire θ"]
+}

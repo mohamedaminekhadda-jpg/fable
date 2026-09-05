@@ -1,0 +1,12 @@
+{
+  "id": "le-bilan-energetique",
+  "subject": "physique",
+  "title": "Le bilan énergétique d’une réaction nucléaire",
+  "summary": "Choisir une réaction — fission, fusion, α, β — vérifier qu’elle se conserve, peser les deux côtés, et lire l’énergie libérée sur le diagramme énergétique du cours.",
+  "look": "Le système part d’un cran et retombe plus bas : la hauteur de la marche EST l’énergie libérée, et elle vaut exactement Δm c².",
+  "vignette": "niveaux",
+  "levels": ["lycee"],
+  "tags": ["noyau", "fission", "fusion", "radioactivité", "défaut de masse", "diagramme énergétique", "Einstein"],
+  "minutes": 25,
+  "variables": ["réaction", "défaut de masse Δm", "énergie libérée", "énergies de liaison"]
+}

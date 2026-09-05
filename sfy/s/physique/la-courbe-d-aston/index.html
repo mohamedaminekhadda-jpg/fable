@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La courbe d’Aston et l’énergie de liaison — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>La courbe d’Aston et l’énergie de liaison</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> La courbe descend d’un côté et remonte de l’autre : c’est pourquoi les noyaux lourds gagnent à se casser et les légers à s’unir.</p>
+<section class="lab-notes"><h4>La mesure qui dérange</h4><p>Pesez les nucléons d’un noyau séparément, puis pesez le noyau. <b>Il en manque.</b> Passez sur « le défaut de masse de ce noyau » : les deux barres se ressemblent tellement qu’il faut une loupe ×100 pour voir l’écart — c’est exactement la phrase du cours, « ce défaut de masse est faible en valeur relative ».</p><p>Le grossissement est le même pour tous les noyaux, et c’est voulu : on peut donc comparer. Le fer perd relativement <b>plus</b> que l’uranium (0,94 % contre 0,81 %), ce qui est une autre façon de dire qu’il est mieux lié.</p><p>Pour l’hélium 4, il manque 0,030 u sur 4,032, soit <b>0,75 %</b>. Ce n’est pas une erreur de pesée : c’est de l’énergie partie ailleurs quand le noyau s’est formé.</p><p><code>Δm = Z·m_p + (A−Z)·m_n − m_noyau</code>   puis   <code>E_ℓ = Δm·c²</code></p><p>Et 0,030 u valent 28,3 MeV. C’est l’énergie qu’il faudrait <b>fournir</b> pour défaire l’hélium 4 en deux protons et deux neutrons libres.</p><h4>Rien n’est recopié</h4><p>Le fichier de données ne contient <b>aucune énergie de liaison</b> : uniquement des masses atomiques mesurées. Tout le reste — Δm, <code>E_ℓ</code>, <code>E_ℓ/A</code>, la courbe entière — en est déduit. Vous pouvez donc vérifier :</p><table><thead><tr><th>noyau</th><th>ce que donne le calcul</th><th>ce que dit le cours</th></tr></thead><tbody><tr><td>hélium 4</td><td>28,30 MeV</td><td>28,3 MeV</td></tr><tr><td>carbone 12</td><td>92,16 MeV</td><td>92,16 MeV</td></tr><tr><td>fer 56</td><td>492,26 MeV</td><td>492,3 MeV</td></tr><tr><td>uranium 235</td><td>7,591 MeV/nucléon</td><td>7,59 MeV/nucléon</td></tr></tbody></table><h4>Pourquoi le signe moins</h4><p>La courbe d’Aston porte <b>l’opposée</b> de <code>E_ℓ/A</code>. Ce n’est pas une coquetterie : avec le signe moins, la courbe creuse une <b>vallée</b>, et les noyaux les plus stables sont au fond. On voit alors la même chose que pour une bille : tout ce qui est haut sur les bords a intérêt à descendre.</p><ul><li>À gauche, les noyaux légers descendent en <b>s’unissant</b> : c’est la fusion.</li><li>À droite, les noyaux lourds descendent en <b>se cassant</b> : c’est la fission.</li></ul><p>Les deux libèrent de l’énergie, et pour la même raison. Basculez l’axe sur <code>+ E/A</code> : c’est la même information, en bosse au lieu de vallée — et la vallée se raconte mieux.</p><h4>Le fond de la vallée</h4><p>Le maximum de <code>E_ℓ/A</code> n’est pas écrit dans le code : il est <b>cherché dans la table</b>. C’est le <b>nickel 62</b> avec 8,795 MeV/nucléon, talonné par le fer 56 à 8,790. On dit souvent « le fer 56 » — il est en réalité deuxième d’un cheveu, et c’est le genre de détail qu’une table honnête rend visible.</p><p>Au-delà de ce point, ajouter des nucléons ne rend plus le noyau plus solide : la répulsion électrique entre protons, qui agit à longue distance, finit par gagner sur l’attraction nucléaire, qui n’agit qu’entre voisins.</p><h4>L’hélium 4 dépasse</h4><p>Regardez le début de la courbe : elle monte irrégulièrement, et <b>l’hélium 4 fait une pointe</b> bien au-dessus de ses voisins, le lithium 6 comme le lithium 7. Deux protons et deux neutrons forment un assemblage remarquablement solide — c’est pourquoi il est éjecté tel quel dans la radioactivité α, sous le nom de particule α.</p><h4>Cliquer plutôt que chercher</h4><p>Chaque point de la courbe est un noyau, et <b>un clic le sélectionne</b>. Les relevés à droite suivent aussitôt. C’est plus rapide que la liste, et cela permet de comparer deux voisins pour voir ce qui les sépare.</p><h4>À essayer</h4><ul><li>Comparez le deutérium (1,11 MeV/nucléon) et l’hélium 4 (7,07). Quatre nucléons bien assemblés valent bien mieux que deux.</li><li>Cliquez sur l’uranium 238 puis sur le strontium 94 et le xénon 139, ses produits de fission. Passez de 7,57 à environ 8,6 MeV/nucléon : c’est ce gain, multiplié par 235 nucléons, qui fait les ~180 MeV d’une fission.</li><li>Cherchez l’hydrogène 1. Son défaut de masse est nul, et c’est normal : un seul nucléon n’est lié à rien.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"la-courbe-d-aston","title":"La courbe d’Aston et l’énergie de liaison"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

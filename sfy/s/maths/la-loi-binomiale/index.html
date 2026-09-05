@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="lycee"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La loi binomiale, et l’expérience qui la retrouve — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>La loi binomiale, et l’expérience qui la retrouve</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Les traits orange sont ce qu’on a obtenu, les bâtons ce qu’on avait prévu. À mille tirages ils se cherchent encore ; à dix mille ils se confondent. C’est la loi des grands nombres, faite et non racontée.</p>
+<section class="lab-notes"><h4>Faire l’expérience, pas seulement la lire</h4><p>Laissez n = 20 et p = 0,35, puis appuyez sur <b>« + 1 000 tirages »</b>.</p><p>Chaque tirage, c’est vingt épreuves de Bernoulli : la machine tire vingt fois un nombre au hasard, compte combien sont inférieurs à 0,35, et note ce total. Mille tirages donnent mille totaux, dont on fait un histogramme — les <b>traits orange</b>.</p><p>Les <b>bâtons</b> sont la loi théorique, calculée par la formule</p><p>&gt; P(X = k) = C(n, k) p^k (1 − p)^(n−k)</p><p>À mille tirages, les traits sautillent autour des bâtons. Appuyez sur <b>« + 10 000 »</b> deux ou trois fois : ils se couchent dessus. <b>Rien n’a été ajusté</b> — c’est la loi des grands nombres, et vous venez de la faire.</p><h4>Le second cadre : la moyenne qui se range</h4><p>Sous l’histogramme, la courbe orange est la <b>moyenne des tirages effectués</b>, en fonction de leur nombre, sur une échelle horizontale logarithmique. La ligne verte est <b>n p</b>.</p><p>Au début elle part dans tous les sens. Puis elle se resserre, et elle finit par tenir entre les deux traits gris, qui sont à ±2σ. Ce resserrement est en <b>1/√N</b> : pour diviser l’écart par deux, il faut <b>quatre fois</b> plus de tirages. C’est pour cela qu’un sondage sur mille personnes n’est pas deux fois meilleur qu’un sondage sur cinq cents.</p><h4>Une expérience qu’on peut refaire à l’identique</h4><p>Le curseur <b>« Graine du tirage »</b> fixe le point de départ du générateur. La même graine donne <b>exactement</b> la même série de tirages.</p><p>C’est un outil, pas une curiosité :</p><ul><li>Changez la graine sans rien toucher d’autre : l’histogramme observé change, parfois nettement. <b>Une série n’est pas la loi.</b></li><li>Reposez la graine sur sa valeur précédente : la série revient à l’identique. On peut donc discuter un résultat surprenant au lieu de le perdre.</li><li>Faites-le à 10 000 tirages : cette fois les deux graines donnent presque le même histogramme. <b>Ce que la loi prédit, c’est ce vers quoi toutes les séries vont.</b></li></ul><h4>Quatre lectures à savoir faire</h4><ul><li><b>E(X) = n p.</b> Le trait vert traverse l’histogramme à son centre de gravité. Avec n = 20 et p = 0,35, E(X) = 7 : les bâtons sont les plus hauts autour de 7.</li><li><b>V(X) = n p (1 − p)</b>, et σ en est la racine. Poussez p vers 0,5 : la variance est maximale, l’histogramme est le plus étalé. Poussez p vers 0 ou 1 : il se resserre sur un seul bâton. <b>L’incertitude est maximale quand les deux issues sont équiprobables.</b></li><li><b>Le mode n’est pas toujours E(X).</b> La mesure « valeur la plus probable » est cherchée dans la loi, bâton par bâton. Avec n = 20 et p = 0,35, E(X) = 7 et le mode est 7 ; mais essayez p = 0,37 : E(X) = 7,4 et le mode reste 7, parce qu’un mode est un entier et une espérance ne l’est pas.</li><li><b>P(X ≤ k)</b> se lit en cochant l’escalier violet : il monte de 0 à 1, par marches dont la hauteur est P(X = k).</li></ul><h4>À essayer</h4><ul><li>Mettez <b>n = 1</b>. Il ne reste que deux bâtons, de hauteurs 1 − p et p : c’est l’épreuve de Bernoulli, dont la binomiale n’est que la répétition.</li><li>Mettez <b>p = 0,5</b> et <b>n = 100</b>. L’histogramme devient une belle cloche symétrique — c’est l’approximation normale, hors programme, mais l’œil la voit bien avant qu’on la nomme.</li><li>Mettez <b>n = 100</b> et <b>p = 0,02</b>, puis regardez le mode : 2. Les événements rares sur un grand nombre d’essais donnent une loi très dissymétrique, ramassée près de zéro. C’est le régime dit de Poisson.</li><li>Réglez <b>k</b> sur une valeur loin de l’espérance : k = 15 avec n = 20 et p = 0,35. La loi donne P(X = 15) = 2,6 × 10⁻⁴, donc <b>environ trois cas attendus sur dix mille tirages</b>. Lancez-en dix mille et comparez : vous en obtiendrez peut-être 0, peut-être 6. Les deux sont normaux — quand l’attendu est de l’ordre de quelques unités, la fluctuation est du même ordre que la quantité mesurée. C’est pourquoi mesurer un événement rare demande un échantillon énorme : pour connaître cette probabilité à 10 % près, il faudrait environ un million de tirages.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"la-loi-binomiale","title":"La loi binomiale, et l’expérience qui la retrouve"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

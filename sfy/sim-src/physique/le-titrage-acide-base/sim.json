@@ -1,0 +1,12 @@
+{
+  "id": "le-titrage-acide-base",
+  "subject": "physique",
+  "title": "Le titrage acide-base",
+  "summary": "Une burette, un bécher, un pH-mètre. On verse la soude, la courbe se trace là où l’on est passé, et le saut finit par arriver. À vous de dire où il est — et d’en déduire la concentration que personne ne vous a donnée.",
+  "look": "Changez l’acide fort pour un acide faible : le saut est plus court et il ne tombe plus à pH 7 mais vers 8,7. Le bleu de bromothymol vire alors trop tôt, et la phénolphtaléine devient le bon choix.",
+  "levels": ["lycee"],
+  "vignette": "titrage",
+  "tags": ["titrage", "pH", "acide", "base", "équivalence", "indicateur coloré", "dosage", "chimie"],
+  "minutes": 30,
+  "variables": ["l’acide", "sa concentration", "le volume prélevé", "la concentration de la soude", "l’indicateur", "le volume versé"]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "du-noyau-a-la-centrale",
+  "subject": "physique",
+  "title": "Du noyau à la centrale",
+  "summary": "Partir d’une seule fission et remonter, étape par étape, jusqu’au gramme, à la tonne et à l’année — puis comparer un combustible nucléaire à un combustible chimique sur la même échelle.",
+  "look": "Un gramme d’uranium et une tonne et demie de butane libèrent la même énergie : six ordres de grandeur séparent le noyau de la molécule.",
+  "vignette": "centrale",
+  "levels": ["lycee"],
+  "tags": ["fission", "fusion", "centrale nucléaire", "mole", "rendement", "ordres de grandeur"],
+  "minutes": 25,
+  "variables": ["masse de combustible", "énergie libérée", "puissance", "rendement", "durée"]
+}

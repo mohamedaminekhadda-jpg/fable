@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le titrage acide-base — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Le titrage acide-base</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Changez l’acide fort pour un acide faible : le saut est plus court et il ne tombe plus à pH 7 mais vers 8,7. Le bleu de bromothymol vire alors trop tôt, et la phénolphtaléine devient le bon choix.</p>
+<section class="lab-notes"><h4>Ce qu'on cherche</h4><p>Une concentration qu'on ne connaît pas. On la fait apparaître en versant une solution qu'on connaît, jusqu'au moment précis où les deux se sont exactement neutralisées : l'<b>équivalence</b>.</p><p>À ce moment-là, et à ce moment-là seulement :</p><p>&gt; n(base versée) = n(acide présent)   soit   Cb × VE = Ca × Va</p><p>D'où <b>Ca = Cb × VE / Va</b>. Toute la difficulté est de repérer VE — et c'est pour cela qu'on fait un titrage plutôt qu'un calcul.</p><h4>Pourquoi un saut, et pas une pente</h4><p>Loin de l'équivalence, chaque goutte de soude neutralise une petite fraction de ce qui reste : le pH monte doucement. Tout près de l'équivalence, il ne reste presque plus rien à neutraliser — la même goutte fait alors basculer la solution d'un excès d'acide à un excès de base.</p><p>Regardez la mesure <b>« Pente »</b> : elle passe de moins de 1 pH par mL à plusieurs dizaines. Le saut n'est pas un accident de tracé, c'est le phénomène.</p><h4>L'expérience à faire</h4><ol><li>Laissez l'acide chlorhydrique, versez de 1 mL en 1 mL jusqu'à 25 mL.</li><li>Revenez vers 19 mL et avancez de <b>0,05 mL</b>. Le pH change davantage en quatre gouttes qu'il ne l'a fait en dix millilitres.</li><li>Cliquez <b>« Marquer l'équivalence ici »</b> au milieu du saut, et lisez la concentration déduite. L'écart au vrai Ca vous dit si vous avez bien visé.</li></ol><h4>L'acide faible change tout</h4><p>Reprenez avec l'<b>acide éthanoïque</b> :</p><table><thead><tr><th></th><th>acide fort</th><th>acide faible</th></tr></thead><tbody><tr><td>pH de départ</td><td>1,0</td><td>2,9</td></tr><tr><td>à la demi-équivalence</td><td>rien de particulier</td><td><b>pH = pKa</b></td></tr><tr><td>à l'équivalence</td><td>7,0</td><td><b>8,7</b></td></tr><tr><td>hauteur du saut</td><td>≈ 7 unités</td><td>≈ 3 unités</td></tr></tbody></table><p>Deux choses à retenir. D'abord <b>l'équivalence d'un acide faible n'est pas à pH 7</b> : il s'est formé de l'ion éthanoate, qui est une base. Ensuite la <b>demi-équivalence donne le pKa</b> directement — versez 10 mL et lisez : 4,74. C'est la façon la plus simple de mesurer un pKa.</p><h4>Choisir l'indicateur</h4><p>Un indicateur convient si sa zone de virage tombe <b>dans le saut</b>. Le graphe affiche la zone en bandeau : il suffit de regarder si la courbe la traverse verticalement.</p><ul><li>Sur l'acide fort, les trois conviennent : le saut les traverse toutes.</li><li>Sur l'acide éthanoïque, le <b>bleu de bromothymol vire trop tôt</b> — sa zone est franchie avant l'équivalence, et l'on annonce un VE trop petit. La <b>phénolphtaléine</b> est le bon choix.</li><li>L'<b>hélianthine</b> ne convient à aucun des deux acides faibles : elle a déjà viré depuis longtemps.</li></ul><p>Faites l'erreur exprès : dosez l'acide éthanoïque, marquez l'équivalence au virage du BBT, et regardez l'écart. C'est une vraie erreur de manipulation, et elle a une taille.</p><h4>Le détail que les chimistes guettent</h4><p>À chaque goutte, une traînée colorée apparaît là où la goutte tombe puis disparaît : la solution y est localement basique, et l'agitation la ramène. Plus on approche de l'équivalence, <b>plus la traînée met de temps à disparaître</b>. Quand elle persiste, on y est.</p><h4>À essayer</h4><ul><li>Diluez l'acide (Ca = 0,02 mol/L) : le saut se raccourcit par le haut et par le bas, mais <b>VE ne change pas</b>… si Ca change, VE change. Vérifiez lequel des deux : c'est VE qui suit Ca, et c'est bien pour cela qu'on peut remonter à Ca.</li><li>Doublez la concentration de la soude : le volume à verser est divisé par deux, et la concentration déduite ne bouge pas d'un chiffre.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"le-titrage-acide-base","title":"Le titrage acide-base"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

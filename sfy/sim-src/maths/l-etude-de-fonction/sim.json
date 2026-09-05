@@ -1,0 +1,12 @@
+{
+  "id": "l-etude-de-fonction",
+  "subject": "maths",
+  "title": "L’étude de fonction : f, f′ et f″ ensemble",
+  "summary": "Trois courbes empilées sur le même axe et un curseur qui les traverse : la tangente s’incline sur f pendant que le point descend sur f′, et le tableau de variations se dessine tout seul en dessous.",
+  "look": "La tangente devient horizontale exactement quand f′ coupe l’axe, et la courbure se retourne exactement quand f″ le coupe. Le tableau de variations n’est rien d’autre que le signe de f′.",
+  "vignette": "tangente",
+  "levels": ["lycee"],
+  "tags": ["dérivée", "tangente", "variations", "convexité", "point d’inflexion", "extremum", "asymptote", "étude de fonction"],
+  "minutes": 30,
+  "variables": ["la fonction", "x"]
+}

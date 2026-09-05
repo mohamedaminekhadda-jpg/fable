@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Du noyau à la centrale — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Du noyau à la centrale</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Un gramme d’uranium et une tonne et demie de butane libèrent la même énergie : six ordres de grandeur séparent le noyau de la molécule.</p>
+<section class="lab-notes"><h4>La chaîne, et rien que la chaîne</h4><p>Les quatre exercices de la séance posent la même question sous des habits différents, et c’est toujours cette suite-là :</p><p><code>une réaction (MeV)</code> → <code>en joules</code> → <code>× N_A/M pour un gramme</code> → <code>÷ puissance</code> → <code>÷ rendement</code></p><p>Les exercices ne se perdent presque jamais dans la physique. Ils se perdent dans ces conversions — le MeV en joule, le gramme en mole, le rendement à sa place. Chaque maillon est donc écrit, avec ses chiffres.</p><h4>L’exercice 1, du début à la fin</h4><p>Laissez <b>uranium 235</b>, <b>1 g</b>, <b>1 MW</b>, <b>rendement 100 %</b>.</p><ul><li>2,56 × 10²¹ noyaux dans un gramme (<code>N_A / 235</code>)</li><li>179,3 MeV chacun, soit 2,87 × 10⁻¹¹ J</li><li>en tout <b>7,36 × 10¹⁰ J</b></li><li>à 1 MW : <b>20,4 heures</b></li></ul><p>Un gramme. Vingt heures d’un mégawatt. C’est la réponse de l’exercice, et elle n’a rien d’intuitif tant qu’on ne l’a pas posée.</p><h4>L’exercice 4, et le rendement</h4><p>Descendez le rendement à <b>25 %</b> et montez la puissance à <b>900 MW</b>. Le relevé « puissance à fournir » passe à 3 600 MW <b>thermiques</b> : pour 900 MW d’électricité, il faut en produire quatre fois plus, et les trois quarts partent en chaleur dans la rivière ou dans les tours.</p><p>Le relevé « consommation en un an » donne alors la masse d’uranium 235 nécessaire pour tenir l’année. C’est exactement la dernière question de l’exercice 4.</p><h4>Le noyau contre la molécule</h4><p>Passez sur <b>l’échelle des énergies</b>. Elle est logarithmique, et chaque graduation vaut mille fois la précédente.</p><p>Une fission libère 2,9 × 10⁻¹¹ J. Une molécule de butane qui brûle en libère 4,8 × 10⁻¹⁸. <b>Six ordres de grandeur</b> — un million de fois — et c’est tout l’écart entre la chimie et le nucléaire : la première déplace des électrons, le second touche au noyau.</p><p>Le relevé « même énergie en butane » le dit en masse : pour égaler <b>un gramme</b> d’uranium 235, il faut environ <b>une tonne et demie</b> de butane.</p><h4>La fusion, par gramme, bat la fission</h4><p>Changez le combustible pour le mélange deutérium + tritium, à masse égale. 17,6 MeV par réaction contre 179 — dix fois moins — mais 5 g par mole contre 235, soit quarante-sept fois plus de réactions dans un gramme. Au total, environ <b>quatre fois plus d’énergie par gramme</b>.</p><p>C’est pour cela que la fusion intéresse, malgré la barrière de l’autre simulation : le combustible est plus léger, plus abondant, et il rend davantage.</p><h4>Ce que ce compte ne dit pas</h4><p>Il ne dit rien de ce que <b>coûte</b> l’extraction, ni de ce que devient le combustible usé, ni de la difficulté à maintenir une fusion. Un gramme d’uranium 235 n’existe pas tout seul : il faut enrichir de l’uranium naturel qui n’en contient que 0,7 %.</p><p>Un calcul d’énergie répond à « combien », jamais à « à quel prix ». Les deux questions sont bonnes ; celle-ci n’en traite qu’une.</p><h4>À essayer</h4><ul><li>Mettez 1 g de butane et 1 g d’uranium 235 tour à tour, et regardez les deux traits sur l’échelle. Ils ne sont pas dans le même monde.</li><li>Cherchez la masse d’uranium 235 qui alimenterait un logement français pendant un an (15 000 kWh). Descendez la puissance à 1 MW et lisez sur l’échelle : le logement est à peine au-dessus du gramme d’uranium.</li><li>Réglez 1 000 g d’uranium à 1 500 MW : un kilogramme tient un peu moins de quatorze heures. Une centrale en consomme beaucoup plus qu’on ne l’imagine.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"du-noyau-a-la-centrale","title":"Du noyau à la centrale"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

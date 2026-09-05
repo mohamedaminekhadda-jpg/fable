@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le bilan énergétique d’une réaction nucléaire — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Le bilan énergétique d’une réaction nucléaire</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Le système part d’un cran et retombe plus bas : la hauteur de la marche EST l’énergie libérée, et elle vaut exactement Δm c².</p>
+<section class="lab-notes"><h4>Une réaction nucléaire se lit en trois temps</h4><ol><li><b>Elle se conserve.</b> Même A, même Z de part et d’autre — les lois de Soddy. Les deux sommes sont affichées en haut à droite de l’équation ; elles doivent porter une coche, toujours.</li><li><b>Elle perd de la masse.</b> Pesez les deux côtés : <code>Δm = m(avant) − m(après)</code>. Passez sur « la pesée » — à l’échelle, les deux barres sont identiques, et il faut grossir 500 fois pour voir l’écart.</li><li><b>Elle descend.</b> C’est le diagramme du §6-2, et c’est là que tout se noue.</li></ol><p><code>E = Δm·c²</code></p><h4>Lire le diagramme énergétique</h4><p>L’origine des énergies est en haut : l’état où <b>tous les nucléons sont libres et séparés</b>. Un noyau, lui, est en dessous — à l’altitude <code>−E_ℓ</code>. Plus il est lié, plus il est bas.</p><ul><li>La flèche de gauche est ce qu’il <b>faudrait fournir</b> pour défaire les noyaux de départ en nucléons libres : <code>ΣE_ℓ(avant)</code>.</li><li>La flèche de droite est ce que la <b>formation</b> des noyaux d’arrivée restitue : <code>ΣE_ℓ(après)</code>.</li><li>La marche au milieu est la différence, et c’est l’énergie libérée.</li></ul><p><code>E = ΣE_ℓ(après) − ΣE_ℓ(avant)</code></p><p>Une réaction libère de l’énergie <b>quand elle descend</b>, c’est-à-dire quand les noyaux d’arrivée sont mieux liés que ceux de départ. C’est exactement ce que dit la courbe d’Aston, vue autrement.</p><h4>Deux chemins, une seule réponse</h4><p>Le relevé « les deux voies » compare le calcul par les masses et le calcul par les énergies de liaison. Ils tombent d’accord au millionième de MeV près, pour la fission comme pour la fusion comme pour l’α. Ce n’est pas une vérification de l’ordinateur sur lui-même : c’est le §6-1, qui dit que ces deux façons de compter sont la même.</p><h4>Sauf pour la radioactivité β</h4><p>Choisissez le carbone 14 ou le sodium 22. La voie des énergies de liaison affiche <b>« ne s’applique pas ici »</b> — et ce n’est pas une lacune.</p><p>Dans une désintégration β, un neutron se <b>transforme</b> en proton (ou l’inverse). Le nombre de protons et le nombre de neutrons ne sont donc plus les mêmes des deux côtés. Or <code>E_ℓ</code> mesure l’écart à un état de référence fait de <i>ces</i> nucléons-là ; si la référence change, la comparaison n’a plus de sens. Seule la pesée fait foi, et elle donne 0,156 MeV pour le carbone 14, la bonne valeur.</p><p>C’est un cas où appliquer la formule sans réfléchir donnerait un résultat faux avec assurance. Mieux vaut savoir pourquoi elle ne s’applique pas.</p><h4>Le positon coûte deux masses d’électron</h4><p>Pour le sodium 22, <code>Δm</code> se calcule avec les masses des <b>noyaux</b>, et le positon compte pour une masse d’électron de plus. C’est l’erreur classique du β⁺ : on oublie l’une des deux et on trouve 2,8 MeV au lieu de 1,82.</p><p>Ici tout est mené sur les masses de noyaux, obtenues en retranchant les Z électrons aux masses atomiques mesurées — il n’y a donc rien à corriger après coup.</p><h4>À essayer</h4><ul><li>Comparez les deux fissions de l’uranium 235. Elles ne donnent pas les mêmes fragments ni le même nombre de neutrons, et pourtant 179 et 176 MeV : la fission n’a pas un produit unique, mais un ordre de grandeur très stable.</li><li>Regardez la fusion D + T : 17,6 MeV pour <b>cinq</b> nucléons, contre 179 MeV pour <b>236</b>. Par nucléon, la fusion libère près de cinq fois plus.</li><li>Passez sur la fabrication du tritium (lithium 6 + neutron). Un réacteur à fusion doit produire son propre combustible : c’est une réaction du dispositif autant que du cours.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"le-bilan-energetique","title":"Le bilan énergétique d’une réaction nucléaire"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

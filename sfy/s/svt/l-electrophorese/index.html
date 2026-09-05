@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="svt" data-niveau="lycee"
+  style="--sub-l:#3f8449;--sub-d:#74c67f">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’électrophorèse et le profil d’ADN — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/svt" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">SVT</span>
+  <h1>L’électrophorèse et le profil d’ADN</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Le gel ne montre pas des gènes, il montre des longueurs : c’est la position d’une bande qui trahit l’allèle.</p>
+<section class="lab-notes"><h4>Un gel sépare des longueurs, pas des gènes</h4><p>Le cours le dit en une phrase : les molécules d’ADN « migrent car elles sont chargées négativement » et « se séparent suivant leur taille — les plus grandes sont retardées par rapport aux petites ».</p><p>Un gel ne sait donc rien des gènes. Il ne sait mesurer qu’une <b>longueur</b>. Tout le reste — lire un génotype, confondre un suspect — consiste à s’arranger pour qu’une différence intéressante devienne une différence de longueur.</p><p>La migration suit <code>d = a − b·log₁₀(taille)</code>, et c’est pourquoi les graduations du marqueur ne sont pas régulièrement espacées : entre 6 000 et 8 000 paires de bases, l’écart est minuscule ; entre 500 et 1 000, il est large.</p><h4>Comment une mutation devient une bande</h4><p>Passez sur « l’enzyme coupe l’ADN ». L’allèle sain porte <b>trois</b> sites de coupure, dont un au milieu : l’enzyme le découpe en deux fragments, 2 200 et 3 800 paires de bases. La mutation a <b>détruit le site du milieu</b> : l’allèle muté sort d’un seul tenant, 6 000 paires de bases.</p><p>Le gros plan montre le site lui-même. L’enzyme EcoRI reconnaît <b>GAATTC</b> et coupe entre le G et le A, en quinconce sur les deux brins. La séquence se lit de la même façon sur les deux brins — elle est <b>palindromique</b>, comme presque tous les sites de restriction.</p><p>Et la mutation ? <b>Une seule base.</b> Le C final devient un T : la séquence n’est plus GAATTC, l’enzyme passe sans rien voir, et le fragment reste entier. Une base sur six mille, et toute la bande change de place.</p><p>Sur le gel, cela donne :</p><table><thead><tr><th>génotype</th><th>bandes</th><th>lecture</th></tr></thead><tbody><tr><td>N//N</td><td>2 200 et 3 800</td><td>sain, non porteur</td></tr><tr><td>N//m</td><td>2 200, 3 800 <b>et</b> 6 000</td><td>porteur sain</td></tr><tr><td>m//m</td><td>6 000 seule</td><td>atteint</td></tr></tbody></table><p><b>Trois bandes trahissent un hétérozygote.</b> C’est ce qui permet de dire qu’un parent est porteur alors qu’il est en parfaite santé — ce que l’arbre généalogique, seul, ne pouvait pas trancher.</p><h4>L’histoire du cours, jusqu’au bout</h4><p>Le couple II-6 / II-7 attend un enfant et craint de lui avoir transmis la mucoviscidose. Le médecin analyse l’ADN de la famille.</p><p>Réglez le père et la mère sur « porteur sain », l’enfant déjà né sur « atteint ». Le gel montre trois bandes chez chacun des parents : ils sont bien tous deux hétérozygotes, et le risque pour le fœtus est de 1/4 — c’est le calcul de l’autre simulation. Puis réglez le fœtus, et lisez sa piste.</p><p>Le relevé « cohérence avec les parents » veille : donnez au fœtus un génotype que ces deux parents ne peuvent pas produire, et il le dira.</p><h4>La sonde, et pourquoi elle est nécessaire</h4><p>Une digestion de tout le génome humain donne des <b>millions</b> de fragments : le gel serait une traînée continue, illisible. On transfère donc les fragments sur une membrane et on y verse une <b>sonde radioactive</b>, complémentaire du seul fragment qui intéresse. Elle s’y fixe, et seul ce fragment apparaît sur le film.</p><p>Décochez « révéler à la sonde » : le marqueur, qui n’est reconnu par aucune sonde, réapparaît. C’est un rappel utile — sur un film, <b>on ne voit que ce qu’on a cherché</b>. Les tailles portées à gauche sont des annotations, ajoutées à côté de la photographie ; elles restent lisibles même quand les bandes qu’elles désignent se sont effacées.</p><h4>Deux façons de photographier le même gel</h4><p>Le réglage « révélation » bascule entre les deux images que le cours mentionne.</p><ul><li><b>Gel sous ultraviolet</b> : l’ADN marqué brille sur fond noir. C’est ce qu’on voit dans la salle, au moment de la migration.</li><li><b>Film radiographique</b> : l’ADN marqué apparaît « sous forme de bande » sombre sur un film clair. C’est le résultat du Southern blot, celui qu’on range dans le dossier.</li></ul><p>Les bandes n’ont pas de bord net, dans un cas comme dans l’autre : l’ADN diffuse pendant qu’il migre. Une bande d’électrophorèse est une tache, jamais un trait.</p><p>Regardez aussi leur <b>éclat</b> : il suit la masse d’ADN, donc la longueur du fragment. La bande de 6 000 paires de bases brille plus que celle de 2 200 alors qu’il y a autant de molécules — c’est un piège classique, la bande la plus brillante n’est pas la plus abondante, c’est la plus longue.</p><h4>Le profil d’ADN</h4><p>La figure 4 du cours compare le profil d’une tache de sang trouvée sur les lieux d’un crime à celui de sept suspects.</p><p>Le principe est le même, appliqué à des régions très variables d’un individu à l’autre. Regardez bien avant de conclure : plusieurs suspects partagent beaucoup de bandes avec la tache. <b>Il suffit d’une seule bande différente pour écarter quelqu’un</b> — et il faut que toutes concordent pour l’accuser.</p><p>Un seul des sept correspond en tout point.</p><h4>À essayer</h4><ul><li>Mettez les deux parents en « sain, non porteur » et l’enfant en « atteint ». Le relevé de cohérence proteste, et il a raison : deux N//N ne peuvent pas faire un m//m.</li><li>Comparez les positions des bandes 2 200 et 3 800 sur le gel : elles sont bien plus proches l’une de l’autre que 500 et 1 000 sur le marqueur. C’est le logarithme, et c’est aussi pourquoi on choisit une enzyme qui donne des fragments de tailles bien distinctes.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"svt","id":"l-electrophorese","title":"L’électrophorèse et le profil d’ADN"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

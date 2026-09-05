@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les deux microphones — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Les deux microphones</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Les courbes se superposent chaque fois que d avance d’une longueur d’onde — et l’écart entre deux relevés successifs EST λ.</p>
+<section class="lab-notes"><h4>La manipulation, dans l’ordre</h4><ol><li>Laissez M₂ collé à M₁ : <code>d = 0</code>. Les deux courbes se superposent — les micros reçoivent la même chose au même instant. Ils vibrent <b>en phase</b>.</li><li>Éloignez M₂ lentement. La courbe bleue glisse vers la droite : M₂ reçoit la vibration plus tard.</li><li>Continuez jusqu’à ce que les deux courbes se <b>superposent de nouveau</b>. Appuyez sur <b>＋ Relever d</b>.</li><li>Recommencez trois ou quatre fois.</li></ol><p>L’écart entre deux relevés successifs est la longueur d’onde. Avec f = 1000 Hz à 20 °C, vous devriez retrouver la série du cours : environ 34, 68, 102, 136 cm.</p><p>Puis <code>v = λ f</code>. Comparez à la valeur réelle affichée : c’est votre mesure contre la physique.</p><h4>Pourquoi les courbes se superposent tous les λ</h4><p>Les deux micros reçoivent la même vibration, décalée du temps qu’il faut au son pour aller de l’un à l’autre : <code>d / v</code>. Ce décalage ne change rien à l’allure du signal s’il vaut un nombre entier de périodes :</p><p><code>d / v = k T</code>  ⟺  <code>d = k v T</code>  ⟺  <b><code>d = k λ</code></b></p><p>C’est la règle du §3-1, et elle se voit ici plutôt qu’elle ne se récite. À mi-chemin, <code>d = (2k+1) λ/2</code>, une courbe est en haut quand l’autre est en bas : <b>en opposition de phase</b>.</p><h4>Deux erreurs que cette expérience corrige</h4><ul><li><b>« Le décalage des courbes, c’est λ. »</b> Non : l’axe de l’oscilloscope est un <b>temps</b>. Ce qu’on lit dessus est un retard, en millisecondes. λ est une <b>longueur</b>, et on la lit sur le banc, avec une règle.</li><li><b>« Il suffit d’un seul relevé. »</b> Le premier <code>d</code> où les courbes se superposent donne λ, mais une seule mesure n’a pas d’incertitude. Quatre relevés et une moyenne des écarts, c’est une mesure.</li></ul><h4>La célérité n’est pas un nombre à retenir</h4><p>Elle dépend de la température, et le simulateur la calcule :</p><p><code>v = 331,3 + 0,606 θ</code>  (m/s)</p><p>Poussez θ de −10 °C à 40 °C et regardez λ suivre, à fréquence constante. C’est la phrase du cours — « pour les gaz, la célérité du son augmente avec la température » — devenue une manette.</p><h4>À essayer</h4><ul><li>Doublez f. λ est-elle divisée par deux ? Et v, a-t-elle bougé ?</li><li>Réglez <code>d</code> sur une opposition de phase, puis changez la sensibilité horizontale. Le décalage <b>en divisions</b> change ; l’opposition, non.</li><li>Le son est longitudinal : les grains d’air se déplacent <b>le long</b> du banc, jamais en travers. Les zones serrées sont les compressions.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"les-deux-microphones","title":"Les deux microphones"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

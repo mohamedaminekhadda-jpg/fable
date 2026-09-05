@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="lycee"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le plan complexe : déplacer z — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>Le plan complexe : déplacer z</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Sur z ↦ z², faites un tour du cercle unité avec la souris : l’image en fait deux. L’argument double, et cela ne se démontre pas — cela se regarde.</p>
+<section class="lab-notes"><h4>L’expérience à faire en premier</h4><p>Choisissez <b>z ↦ z²</b>, puis promenez la souris <b>le long du cercle unité</b>, en faisant lentement un tour complet.</p><p>Votre point fait <b>un</b> tour. Son image en fait <b>deux</b>.</p><p>C’est toute la règle : sur z², le module est élevé au carré — donc il ne change pas sur le cercle, où il vaut 1 — et l’<b>argument est doublé</b>. Passez à <b>z ↦ z³</b> et refaites le tour : l’image en fait trois.</p><p>Regardez la mesure <b>« Ce qui s’est passé »</b> : elle affiche |z′|/|z| et arg(z′) − arg(z) à chaque instant. Sur z², le premier vaut |z| et le second vaut arg(z), quelle que soit la position. Vous pouvez le vérifier partout.</p><h4>Ce que la trace apprend</h4><p>La trace orange est le chemin de l’image. Une position montre un cas ; la trace montre la <b>loi</b>.</p><ul><li>Sur <b>z ↦ 1/z</b>, promenez le point sur un cercle de rayon 2 : la trace est un cercle de rayon 1/2, parcouru <b>dans l’autre sens</b>. Les points du cercle unité, eux, ne bougent pas de ce cercle : c’est le seul lieu invariant.</li><li>Sur <b>z ↦ z̄</b>, la trace est le reflet exact de votre geste dans l’axe des réels. Les points de cet axe sont fixes.</li><li>Sur <b>z ↦ z²</b>, suivez une <b>droite verticale</b> : la trace est une parabole. Suivre une droite horizontale en donne une autre, tournée. C’est la première fois qu’on voit une identité algébrique produire une courbe.</li></ul><h4>La similitude, et le théorème du chapitre</h4><p>Choisissez <b>z ↦ a z + b</b>. Quatre curseurs apparaissent : le module de a, l’argument de a, et les deux parties de b.</p><p>Faites-les varier un par un, et nommez ce que vous voyez :</p><ol><li><b>arg(a)</b> seul fait <b>tourner</b> autour de l’origine — c’est une rotation.</li><li><b>|a|</b> seul <b>éloigne ou rapproche</b> de l’origine — c’est une homothétie.</li><li><b>b</b> seul <b>translate</b> tout le plan, sans rien tourner.</li></ol><p>D’où le théorème, qu’il faut savoir énoncer : <i>toute similitude directe du plan s’écrit z ↦ az + b, avec |a| pour rapport et arg(a) pour angle.</i> Mettez |a| = 1 : il ne reste qu’une rotation suivie d’une translation, donc une rotation autour d’un autre centre.</p><h4>La somme des racines est nulle, et on la voit</h4><p>Passez à <b>les racines n-ièmes</b>. Les n points se posent sur le cercle, aux sommets d’un polygone régulier, séparés de 2π/n.</p><p>Maintenant l’essentiel. Cochez <b>« Poser les racines bout à bout »</b> : les mêmes n vecteurs sont replacés à la queue les uns des autres, en bas à gauche. <b>Le chemin revient exactement à son point de départ.</b></p><p>C’est la démonstration visuelle de</p><p>&gt; 1 + ω + ω² + … + ω^(n−1) = 0</p><p>que l’on prouve d’ordinaire avec la somme d’une suite géométrique — et qu’on ne voit jamais. La mesure affiche l’écart de fermeture : il est de l’ordre de 10⁻¹⁶, c’est-à-dire nul à la précision de la machine.</p><p>Faites varier n. Le polygone se referme pour <b>tout</b> n ≥ 2. Pour n = 2, les deux racines sont 1 et −1, et la « chaîne » est un aller-retour.</p><h4>À essayer</h4><ul><li>Sur <b>z ↦ z²</b>, posez le point exactement sur <b>i</b> (module 1, argument 90°). L’image tombe sur −1 : c’est i² = −1, et l’argument est passé de 90° à 180°.</li><li>Sur <b>z ↦ 1/z</b>, approchez l’origine. Le module de l’image explose, et la simulation le dit : en z = 0 elle affiche « non défini ». Zéro est le seul complexe sans inverse.</li><li>Avec <b>n = 3</b> dans la seconde vue, lisez la valeur de ω : −0,5 + 0,866 i. Ce 0,866 est √3/2, et ω est donc e^(2iπ/3), la racine cubique de l’unité qui revient dans tous les exercices.</li><li>Toujours en similitude, mettez |a| = 1, arg(a) = 90° et b = 0 : vous obtenez la multiplication par i, donc le quart de tour. <b>Multiplier par i, c’est tourner.</b></li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"le-plan-complexe","title":"Le plan complexe : déplacer z"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "id": "les-deux-microphones",
+  "subject": "physique",
+  "title": "Les deux microphones",
+  "summary": "Faire glisser le second microphone jusqu’à ce que les deux courbes se superposent, relever la distance, et en déduire λ puis la célérité du son.",
+  "look": "Les courbes se superposent chaque fois que d avance d’une longueur d’onde — et l’écart entre deux relevés successifs EST λ.",
+  "vignette": "onde-deux",
+  "levels": ["lycee"],
+  "tags": ["ondes", "son", "longueur d’onde", "phase", "oscilloscope", "célérité"],
+  "minutes": 20,
+  "variables": ["fréquence f", "distance d", "température", "λ", "v"]
+}

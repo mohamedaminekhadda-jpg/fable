@@ -1,0 +1,12 @@
+{
+  "id": "la-transition-demographique",
+  "subject": "geographie",
+  "title": "La transition démographique",
+  "summary": "Baisser la fécondité, allonger la vie, et regarder la pyramide des âges changer de forme — du triangle du Niger à l’urne du Japon, en passant par le Maroc d’hier et d’aujourd’hui.",
+  "look": "La pyramide n’est pas dessinée : elle est calculée à partir de deux chiffres seulement, la fécondité et l’espérance de vie.",
+  "vignette": "transition",
+  "levels": ["lycee"],
+  "tags": ["démographie", "transition démographique", "pyramide des âges", "fécondité", "vieillissement", "Maroc"],
+  "minutes": 25,
+  "variables": ["indice de fécondité", "espérance de vie", "taux de natalité", "taux de mortalité", "rapport de dépendance"]
+}

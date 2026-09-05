@@ -1,0 +1,12 @@
+{
+  "id": "equilibrer-une-reaction",
+  "subject": "physique",
+  "title": "Équilibrer une réaction chimique",
+  "summary": "Neuf réactions que tout le monde devrait connaître — le méthane qui brûle, la photosynthèse, la rouille, l’ammoniac des engrais. Réglez les coefficients : les atomes se comptent tout seuls, en deux rangées face à face.",
+  "look": "Regardez la masse des deux côtés pendant que vous cherchez. Tant que l’équation n’est pas équilibrée, elles diffèrent — et une réaction qui perdrait trente grammes de matière n’existe pas. C’est ça, équilibrer.",
+  "levels": ["college", "lycee"],
+  "vignette": "balance-atomes",
+  "tags": ["réaction chimique", "équation", "coefficients", "conservation", "Lavoisier", "combustion", "photosynthèse", "chimie", "mole"],
+  "minutes": 20,
+  "variables": ["la réaction", "les coefficients"]
+}

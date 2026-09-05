@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="svt" data-niveau="lycee"
+  style="--sub-l:#3f8449;--sub-d:#74c67f">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’arbre généalogique — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/svt" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">SVT</span>
+  <h1>L’arbre généalogique</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Un arbre exclut des modes plus qu’il n’en désigne un — et il en reste presque toujours plus d’un.</p>
+<section class="lab-notes"><h4>Pourquoi un arbre, et pas une expérience</h4><p>Le cours ouvre sur les difficultés de la génétique humaine : on ne dirige pas les mariages, les enfants sont peu nombreux, les générations durent vingt-cinq ans, et il y a 2⁴⁶ combinaisons chromosomiques possibles à chaque œuf. Aucune de ces difficultés ne se contourne.</p><p>L’arbre généalogique est la réponse : <b>puisqu’on ne peut pas provoquer les croisements, on lit ceux qui ont eu lieu</b>. C’est un instrument, pas une illustration — et c’est pourquoi celui-ci se modifie entièrement.</p><h4>Ce que la simulation fait, et refuse de faire</h4><p>Elle ne désigne jamais <b>un</b> mode de transmission. Elle donne la liste de ceux qui restent possibles, et pour chaque mode écarté, <b>la raison</b> — celle du cours, en une phrase.</p><p>Vous verrez presque toujours qu’il en reste <b>plusieurs</b>. Ce n’est pas une faiblesse du programme : c’est la vérité d’un arbre. Prenez le rachitisme vitamino-résistant, le cas le plus caractéristique du cours : un père atteint transmet à toutes ses filles et à aucun de ses fils. C’est le motif du dominant lié à X — mais l’autosomique dominant, l’autosomique récessif et le récessif lié à X passent tous aussi, parce que la mère pourrait être porteuse.</p><p>Les maladies du cours sont tranchées par autre chose : l’énoncé qui l’annonce, ou une statistique — « dix fois plus d’hommes que de femmes daltoniens ». Le relevé « atteints » vous signale d’ailleurs ce déséquilibre quand il apparaît.</p><p>Croire qu’un arbre suffit serait l’erreur la plus commode, et la plus fausse.</p><h4>Les quatre exclusions à connaître</h4><table><thead><tr><th>ce qu’on observe</th><th>ce que cela écarte</th></tr></thead><tbody><tr><td>deux parents sains, un enfant atteint</td><td>tout mode <b>dominant</b></td></tr><tr><td>deux parents atteints, un enfant sain</td><td>tout mode <b>récessif</b></td></tr><tr><td>une fille atteinte, père sain</td><td>récessif <b>lié à X</b></td></tr><tr><td>un père atteint, une fille saine</td><td>dominant <b>lié à X</b></td></tr><tr><td>une femme atteinte</td><td>lié à <b>Y</b></td></tr></tbody></table><p>Les deux dernières tiennent à une seule chose : <b>un père donne son unique X à toutes ses filles, et son Y à tous ses fils</b>. Tout le raisonnement gonosomique sort de là.</p><h4>Deux méthodes, jamais une seule</h4><p>Chaque mode est jugé deux fois : par les règles ci-dessus, qui donnent une phrase ; et par une recherche exhaustive de toutes les répartitions de génotypes compatibles, qui ne suppose rien. Si les deux se contredisaient, la simulation le dirait au lieu de choisir — c’est un contrôle sur son propre raisonnement.</p><h4>Les génotypes, et les points d’interrogation</h4><p>Un génotype n’est écrit sur l’arbre que s’il est <b>le même dans toutes</b> les répartitions possibles. Sinon vous lisez « ? », et c’est la bonne réponse : dans l’arbre de l’hémophilie, une sœur d’un garçon atteint est saine — mais nul ne peut dire, du seul arbre, si elle est conductrice.</p><p>C’est exactement la question que se pose le couple du cours avant de consulter, et c’est pour cela qu’on fait ensuite une analyse d’ADN.</p><h4>Le risque pour l’enfant à naître</h4><p>Choisissez quelqu’un qui a un conjoint : le risque s’affiche pour leur prochain enfant, garçon ou fille.</p><p>Quand l’arbre fixe les génotypes, on retrouve les chiffres du cours — 25 % pour deux porteurs sains, 50 % pour un parent atteint en dominant, 50 % des garçons pour une mère conductrice en récessif lié à X, et <b>0 % des filles</b>.</p><p>Quand il ne les fixe pas, le calcul porte sur toutes les possibilités, pondérées par leur probabilité, et le relevé le dit franchement. La fréquence de l’allèle dans la population entre alors en jeu — c’est le seul moment où elle compte.</p><h4>À essayer</h4><ul><li>Chargez le daltonisme, puis rendez la mère atteinte au lieu de saine. Le récessif lié à X reste-t-il possible ? Et que deviennent ses fils ?</li><li>Chargez le rachitisme et ajoutez au père atteint <b>une fille saine</b>. Le dominant lié à X tombe aussitôt, avec sa raison.</li><li>Partez d’un arbre vide et essayez de construire un arbre où <b>un seul</b> mode survit. C’est plus difficile qu’il n’y paraît, et c’est tout le sujet.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"svt","id":"l-arbre-genealogique","title":"L’arbre généalogique"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

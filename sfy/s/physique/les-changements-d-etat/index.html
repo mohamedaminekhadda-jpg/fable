@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="college"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les changements d’état et leurs paliers — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Les changements d’état et leurs paliers</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Comparez les deux longueurs sur la courbe : amener l’eau de 0 à 100 °C coûte 418 kJ/kg, la faire bouillir en coûte 2 257. Cinq fois plus pour ne pas gagner un seul degré.</p>
+<details class="lab-notes lab-notes-plie"><summary>Comment ça marche ?</summary><h4>Le palier, et ce qu'il cache</h4><p>Chauffez de la glace. La température monte, régulièrement. À 0 °C, elle <b>s'arrête</b> — et elle reste à 0 pendant que vous continuez à chauffer. Puis elle repart, jusqu'à 100 °C, où elle s'arrête de nouveau, bien plus longtemps.</p><p>Pendant un palier, l'énergie apportée ne sert pas à agiter les molécules davantage : elle sert à <b>défaire les liaisons qui les tiennent ensemble</b>. La température mesure l'agitation ; tant qu'on casse des liaisons, l'agitation ne change pas. C'est pour cela qu'un palier est plat, et non « presque plat ».</p><p>Regardez les molécules à gauche pendant la fusion : à mi-palier, la moitié du réseau s'est défaite et glisse, l'autre moitié vibre encore en place. Fondre, c'est exactement cela.</p><h4>Le chiffre que personne n'attend</h4><table><thead><tr><th>pour un kilogramme d'eau</th><th>énergie</th></tr></thead><tbody><tr><td>chauffer de 0 à 100 °C</td><td>418 kJ</td></tr><tr><td><b>le faire bouillir, à 100 °C</b></td><td><b>2 257 kJ</b></td></tr></tbody></table><p><b>Cinq fois et demie plus</b> — pour ne pas gagner un seul degré. C'est mesurable sur la courbe sans lire un chiffre : le palier de vaporisation est cinq fois et demie plus long que toute la montée qui le précède.</p><p>Trois conséquences que vous connaissez déjà sans le savoir :</p><ul><li>Une casserole met une minute à atteindre l'ébullition et dix minutes à se vider. Ce n'est pas la casserole, c'est la physique.</li><li>La transpiration refroidit : chaque gramme d'eau qui s'évapore emporte 2 257 J pris à votre peau.</li><li>Une brûlure à la vapeur à 100 °C est bien pire qu'une brûlure à l'eau à 100 °C : la vapeur rend en plus toute sa chaleur latente en se condensant sur vous.</li></ul><h4>Lire les pentes</h4><p>Entre deux paliers, la pente vaut <b>1/c</b> : plus la capacité thermique est grande, plus la montée est lente. L'eau liquide a la plus grande capacité thermique de tous les corps courants (4 185 J/kg/K) — c'est la raison pour laquelle les océans mettent si longtemps à se réchauffer, et pourquoi le climat des côtes est plus doux que celui de l'intérieur.</p><p>Comparez : passez au <b>plomb</b>. Sa capacité thermique vaut 128 J/kg/K, trente fois moins. La montée est trente fois plus raide.</p><h4>Les métaux ne se comportent pas comme l'eau</h4><p>Passez à l'<b>aluminium</b> :</p><ul><li>fondre ne coûte que 397 kJ/kg, à peine plus que l'eau ;</li><li><b>vaporiser en coûte 10 900</b> — presque cinq fois l'eau.</li></ul><p>C'est pour cela qu'on coule des pièces en aluminium fondu sans difficulté, et que personne n'a jamais vu de vapeur d'aluminium.</p><p>Le <b>plomb</b> fond à 327 °C, ce qu'un feu de bois atteint sans peine : voilà pourquoi c'est un des premiers métaux que l'humanité ait su travailler. Le <b>fer</b> demande 1 538 °C, et il a fallu attendre les fourneaux à soufflet.</p><h4>À essayer</h4><ul><li>Placez le curseur au milieu du palier de fusion et regardez la mesure « Avancement » : la moitié du corps a changé d'état, la température n'a pas bougé d'un dixième.</li><li>Mettez 2 kg au lieu de 0,5 kg. La courbe ne change pas d'un pixel — elle est tracée <b>par kilogramme</b>. Ce qui change, c'est la durée : la mesure « avec une plaque de 2 000 W » est multipliée par quatre.</li><li>Cherchez, sur la courbe de l'eau, l'énergie qu'il faut pour passer de la glace à −20 °C à la vapeur : environ 3 050 kJ/kg. Sur une plaque de 2 000 W, pour un demi-litre, il faut treize minutes — et onze d'entre elles se passent sur les deux paliers.</li></ul></details>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"les-changements-d-etat","title":"Les changements d’état et leurs paliers"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le prisme et la dispersion — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Le prisme et la dispersion</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Les couleurs se séparent parce que l’indice dépend de λ — coupez la dispersion (B = 0) et le spectre se referme en un seul rayon blanc.</p>
+<section class="lab-notes"><h4>Pourquoi les couleurs se séparent</h4><p>Décochez <b>« Le verre disperse »</b>. Le prisme dévie toujours le faisceau, mais il ne le décompose plus : un seul rayon blanc sort. Recochez, le spectre s’ouvre.</p><p>C’est toute l’interprétation du §4-3, et elle tient en une phrase : l’indice dépend de la longueur d’onde. Comme <code>sin i = n sin r</code> à chaque face, un indice différent donne un chemin différent, donc une déviation différente. Le violet, pour qui <code>n</code> est le plus grand, est le plus dévié — le rouge le moins.</p><p>La dispersion n’est pas un pouvoir du prisme. C’est une propriété du <b>verre</b>, que le prisme se contente de rendre visible. Changez de verre : le flint dense étale beaucoup plus que le crown, avec le même angle au sommet.</p><h4>Les quatre relations, vérifiables en direct</h4><p><code>sin i₁ = n sin r₁</code>  ·  <code>r₁ + r₂ = A</code>  ·  <code>n sin r₂ = sin i₂</code>  ·  <code>D = i₁ + i₂ − A</code></p><p>Les relevés <code>r₁</code> et <code>r₂</code> sont affichés séparément : leur somme vaut A quelle que soit l’incidence, et c’est la seule des quatre qui ne se voie pas sur un dessin.</p><h4>La réflexion totale n’est pas un cas à part</h4><p>Montez <code>A</code> vers 75°, ou passez au flint dense. À un moment, plus rien ne sort par la face de sortie. Ce n’est pas un cas particulier programmé : <code>n sin r₂ = sin i₂</code> n’a simplement plus de solution quand <code>n sin r₂ &gt; 1</code>. Le rayon se réfléchit alors à l’intérieur, et le tracé le suit — il ressort en général par la base.</p><h4>Mesurer l’indice, comme au goniomètre</h4><p>C’est la manipulation qui vaut le détour, et elle demande de la méthode.</p><ol><li>Passez sur <b>une seule radiation</b> et choisissez sa longueur d’onde.</li><li>Faites varier <code>i₁</code> et appuyez sur <b>＋ Relever (i₁ , D)</b> à chaque fois. Cherchez à <b>encadrer</b> le plus petit <code>D</code> : il vous faut des points de part et d’autre, sinon vous ne savez pas que vous êtes au minimum.</li><li>Appuyez sur <b>＋ Relever n</b>. La simulation applique la formule du goniomètre</li></ol><p><code>n = sin((A + D_m)/2) / sin(A/2)</code></p><p>qui ne vaut <b>qu’au minimum de déviation</b>, là où <code>r₁ = r₂ = A/2</code>.</p><ol><li>Recommencez pour une deuxième couleur, puis une troisième.</li></ol><p>Regardez le graphe <code>D = f(i₁)</code> : la courbe est <b>plate</b> au voisinage du minimum. C’est ce qui rend la méthode bonne — une erreur de un degré sur <code>i₁</code> ne coûte presque rien sur <code>D</code>, donc presque rien sur <code>n</code>. Un minimum pointu serait impossible à viser.</p><h4>A et B, sans les chercher</h4><p><code>n = A + B/λ²</code> n’est pas une droite en <code>λ</code>, mais <b>c’en est une en <code>1/λ²</code></b>. Le troisième graphe porte vos indices mesurés en fonction de <code>1/λ²</code> : les points s’alignent, l’ordonnée à l’origine est <code>A</code>, la pente est <code>B</code>. Les deux sont affichées à côté de leurs valeurs vraies.</p><p>C’est la question 2 de l’exercice 4, à ceci près que vous avez mesuré les indices au lieu de les lire dans l’énoncé.</p><h4>Ce que ce prisme ne fait pas</h4><p>Il ne montre pas l’intensité. Aux fortes incidences, une bonne part de la lumière est <b>réfléchie</b> au lieu d’être transmise — c’est pourquoi une vitre vue de biais devient un miroir. Les rayons tracés ici ont tous la même épaisseur, quelle que soit l’incidence : la marche est exacte, la brillance ne l’est pas.</p><h4>À essayer</h4><ul><li>Placez-vous au minimum de déviation en lumière blanche. C’est le réglage des spectroscopes : le spectre y est le plus net, et le moins déformé.</li><li>Avec <code>A = 60°</code> et le crown, cherchez à partir de quelle incidence le rayon ne ressort plus. Comparez à l’angle limite <code>r = arcsin(1/n)</code>.</li><li>Prenez trois couleurs très proches (par exemple 480, 500, 520 nm). La droite <code>n = f(1/λ²)</code> tient encore, mais <code>B</code> devient beaucoup plus incertain : un levier court mesure mal une pente.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"le-prisme-et-la-dispersion","title":"Le prisme et la dispersion"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

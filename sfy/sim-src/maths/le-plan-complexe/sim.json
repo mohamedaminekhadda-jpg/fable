@@ -1,0 +1,12 @@
+{
+  "id": "le-plan-complexe",
+  "subject": "maths",
+  "title": "Le plan complexe : déplacer z",
+  "summary": "Tirer le point M(z) à la souris et regarder son image se déplacer : le module s’élève au carré, l’argument double, la trace dessine la loi. Puis les racines n-ièmes de l’unité, et leur somme qui se referme sur zéro.",
+  "look": "Sur z ↦ z², faites un tour du cercle unité avec la souris : l’image en fait deux. L’argument double, et cela ne se démontre pas — cela se regarde.",
+  "vignette": "plan-complexe",
+  "levels": ["lycee"],
+  "tags": ["nombres complexes", "module", "argument", "forme exponentielle", "rotation", "similitude", "racines de l’unité"],
+  "minutes": 30,
+  "variables": ["la transformation", "z", "a et b", "n"]
+}

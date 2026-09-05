@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="lycee"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les sommes de Riemann — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>Les sommes de Riemann</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Doubler le nombre de rectangles divise l’erreur par deux à gauche, et par quatre au milieu. La pente de la droite en repère logarithmique est mesurée à l’écran, pas recopiée du cours.</p>
+<section class="lab-notes"><h4>D’abord le dessin que tout le monde connaît</h4><p>Avec <b>x²</b> entre 0 et 2, poussez le curseur du nombre de tranches. Les rectangles se resserrent, l’escalier épouse la courbe, et la somme approche 8/3.</p><p>Regardez la mesure <b>« Erreur »</b> en même temps. Avec la méthode <b>à gauche</b> :</p><table><thead><tr><th>tranches</th><th>erreur</th></tr></thead><tbody><tr><td>10</td><td>environ 4 × 10⁻¹</td></tr><tr><td>100</td><td>environ 4 × 10⁻²</td></tr><tr><td>500</td><td>environ 8 × 10⁻³</td></tr></tbody></table><p>Dix fois plus de rectangles, dix fois moins d’erreur. C’est déjà une information, et elle est décevante : pour gagner <b>une décimale</b>, il faut <b>dix fois plus de calculs</b>.</p><h4>Puis le graphe que personne ne montre</h4><p>Le second cadre porte l’erreur en fonction de n, avec <b>deux échelles logarithmiques</b>. Dans ce repère, une loi de la forme erreur ≈ C/n^p devient une <b>droite de pente −p</b>, et l’on peut donc lire p à l’œil.</p><p>Les quatre méthodes y sont tracées ensemble, et <b>en général</b> elles se rangent en deux familles :</p><ul><li><b>gauche</b> et <b>droite</b> : pente <b>−1</b>. Erreur divisée par 2 quand on double n.</li><li><b>milieu</b> et <b>trapèzes</b> : pente <b>−2</b>. Erreur divisée par <b>4</b> quand on double n.</li></ul><p>Changez de méthode : la courbe épaisse change, et la pente mesurée s’affiche en haut du cadre. Elle n’est pas écrite dans le programme de la simulation — elle est calculée à chaque image en comparant l’erreur à n = 20 et à n = 200.</p><p>&gt; C’est le fait à retenir, et il n’est pas dans le cours de terminale : les &gt; méthodes ne diffèrent pas d’un peu, elles diffèrent d’un <b>ordre</b>. Avec &gt; 500 tranches sur x², la méthode du milieu est <b>trois mille fois</b> plus précise &gt; que celle de gauche, pour exactement le même nombre d’additions. Sur &gt; 1/(1+x²) le rapport atteint six mille.</p><p>Le mot <b>« en général »</b> ci-dessus est là exprès : deux des huit fonctions ne suivent pas la règle, et ce sont les deux plus instructives. Cherchez-les avant de lire la suite.</p><h4>Pourquoi le milieu est si bon</h4><p>Mettez <b>deux ou trois tranches</b> seulement, et choisissez <b>au milieu</b>. Regardez un rectangle : il dépasse la courbe d’un côté et lui manque de l’autre, et les deux morceaux se compensent presque exactement.</p><p>C’est toute l’explication. Le rectangle à gauche se trompe <b>toujours dans le même sens</b> ; celui du milieu se trompe des deux côtés à la fois. Les trapèzes font pareil, par l’autre bout : ils coupent la corde au lieu de la tangente.</p><p>Sur une fonction <b>affine</b>, essayez : les trapèzes deviennent <b>exacts</b>, et le graphe de l’erreur le dit en disparaissant.</p><h4>Une intégrale n’est pas une aire</h4><p>Choisissez <b>x³ − 2x</b>, puis mettez a = −2 et b = 2.</p><p>La somme vaut <b>zéro</b>. Les rectangles sous l’axe sont dessinés en rouge : ils comptent <b>négativement</b>. Une intégrale est une aire <i>algébrique</i>, et une copie qui répond « l’aire vaut 0 » sans le dire perd le point.</p><p>Pour obtenir l’aire géométrique, il faut découper aux zéros de la fonction et additionner des valeurs absolues — ce que la simulation ne fait pas, exprès.</p><h4>Les deux exceptions</h4><p><b>sin x sur [0, π] : les quatre méthodes ont la même pente −2.</b> Regardez le graphe de l’erreur — les courbes se superposent. Ce n’est pas un défaut du tracé : les trois sommes sont <b>rigoureusement égales</b>, et cela se démontre en une ligne. La somme à droite moins la somme à gauche vaut h·(f(π) − f(0)), et sin(π) = sin(0) = 0. Elles sont donc identiques, et les trapèzes, qui en sont la moyenne, le sont aussi. Vérifiez-le : n = 4 donne 1,8961188979 pour les trois.</p><p>Poussez maintenant b à 2π, ou ramenez-le à 2 : l’égalité se rompt, la méthode de gauche retrouve sa pente −1 et se détache des autres. <b>L’exception venait des bornes, pas de la fonction.</b></p><p><b>√x sur [0, 4] : le milieu et les trapèzes tombent à −1,5.</b> La raison est en x = 0, où la tangente est verticale : f′ n’y est pas bornée, et la majoration d’erreur du cours suppose précisément que f′ ou f″ le soit. Une hypothèse qu’on oublie de vérifier finit toujours par se rappeler à nous — ici, elle coûte un demi-ordre, et le gain du milieu tombe de trois mille à cent quatre-vingt-dix.</p><h4>À essayer</h4><ul><li>Sur <b>1/x</b>, mettez a = 1 et faites glisser b. L’aire affichée <b>est</b> ln b : posez b = e ≈ 2,718 et lisez 1,000. Le logarithme népérien n’est pas une touche de calculatrice, c’est cette aire.</li><li>Sur <b>1 / (1 + x²)</b> entre 0 et 1, l’aire vaut π/4. Avec vingt tranches au milieu vous avez déjà 3,1416 en multipliant par quatre. C’est ainsi qu’on a calculé π pendant trois siècles.</li><li>Sur <b>sin x</b>, poussez b de π à 2π. L’aire monte à 2, puis <b>redescend à 0</b>. La seconde arche annule la première.</li><li>Sur <b>√x</b> entre 0 et 4, la tangente est verticale en 0 : la fonction n’y est pas dérivable, et l’aire vaut pourtant 16/3. <b>Dérivable et intégrable sont deux choses différentes</b>, et c’est le contre-exemple le plus simple.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"les-sommes-de-riemann","title":"Les sommes de Riemann"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

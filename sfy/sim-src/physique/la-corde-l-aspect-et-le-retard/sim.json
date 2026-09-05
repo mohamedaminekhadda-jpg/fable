@@ -1,0 +1,12 @@
+{
+  "id": "la-corde-l-aspect-et-le-retard",
+  "subject": "physique",
+  "title": "La corde : l’aspect et le retard",
+  "summary": "Ébranler une corde tendue, suivre un point M, et lire le retard τ entre ce que fait la source et ce que fait M.",
+  "look": "M refait exactement le geste de la source — mais τ = d ⁄ v plus tard, et sans jamais avancer d’un centimètre.",
+  "vignette": "onde",
+  "levels": ["lycee"],
+  "tags": ["ondes", "onde progressive", "célérité", "retard", "corde"],
+  "minutes": 15,
+  "variables": ["tension F", "masse linéique µ", "célérité v", "retard τ", "durée θ"]
+}

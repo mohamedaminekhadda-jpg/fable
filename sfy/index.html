@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>See for yourself</title>
+<link rel="icon" href="mark.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <!-- rempli par app.js depuis app/brand.js : le bloc-marque n'est écrit qu'une
+       fois, sans quoi l'enseigne du catalogue et celle du banc divergent -->
+  <a class="marque-bloc" id="marque" href="#/"></a>
+  <div class="grow"></div>
+  <div class="find">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+    </svg>
+    <input id="q" type="search" placeholder="Chercher une expérience…" autocomplete="off" spellcheck="false">
+  </div>
+  <button class="icon-btn" id="theme" title="Clair / sombre">◐</button>
+</header>
+
+<main class="wrap" id="view"></main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

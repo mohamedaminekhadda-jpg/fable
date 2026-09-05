@@ -1,0 +1,12 @@
+{
+  "id": "les-changements-d-etat",
+  "subject": "physique",
+  "title": "Les changements d’état et leurs paliers",
+  "summary": "On chauffe sans jamais s’arrêter, et deux fois le thermomètre refuse de monter. Pendant ces paliers, les molécules changent d’état sans changer de température — et c’est là que passe presque toute l’énergie.",
+  "look": "Comparez les deux longueurs sur la courbe : amener l’eau de 0 à 100 °C coûte 418 kJ/kg, la faire bouillir en coûte 2 257. Cinq fois plus pour ne pas gagner un seul degré.",
+  "levels": ["college", "lycee"],
+  "vignette": "palier",
+  "tags": ["changement d’état", "fusion", "vaporisation", "chaleur latente", "température", "énergie", "états de la matière", "chimie"],
+  "minutes": 20,
+  "variables": ["le corps pur", "l’énergie apportée", "la masse"]
+}

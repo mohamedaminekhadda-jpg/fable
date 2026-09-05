@@ -1,0 +1,12 @@
+{
+  "id": "l-electrophorese",
+  "subject": "svt",
+  "title": "L’électrophorèse et le profil d’ADN",
+  "summary": "Couper l’ADN par une enzyme de restriction, faire migrer les fragments sur un gel, révéler ceux qui comptent avec une sonde — et lire un génotype, ou confondre un suspect.",
+  "look": "Le gel ne montre pas des gènes, il montre des longueurs : c’est la position d’une bande qui trahit l’allèle.",
+  "vignette": "gel",
+  "levels": ["lycee"],
+  "tags": ["ADN", "électrophorèse", "enzyme de restriction", "Southern blot", "sonde", "profil génétique", "mucoviscidose"],
+  "minutes": 25,
+  "variables": ["génotypes de la famille", "site de restriction", "taille des fragments"]
+}

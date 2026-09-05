@@ -1,0 +1,12 @@
+{
+  "id": "les-saisons",
+  "subject": "geographie",
+  "title": "Les saisons, et la distance qui n’explique rien",
+  "summary": "Faites défiler l’année : la durée du jour, la hauteur du Soleil et l’énergie reçue se calculent pour la latitude de votre choix. L’orbite est dessinée à l’échelle vraie — c’est-à-dire ronde.",
+  "look": "Le 3 janvier, la Terre est au plus près du Soleil de toute l’année. C’est aussi le cœur de l’hiver au Maroc, en France, au Japon. Regardez la distance et l’énergie reçue varier en sens contraire : l’inclinaison de l’axe fait tout, la distance ne fait rien.",
+  "levels": ["college", "lycee"],
+  "vignette": "saisons",
+  "tags": ["saisons", "inclinaison", "solstice", "équinoxe", "durée du jour", "insolation", "orbite", "Terre", "climat"],
+  "minutes": 25,
+  "variables": ["le jour de l’année", "la latitude"]
+}

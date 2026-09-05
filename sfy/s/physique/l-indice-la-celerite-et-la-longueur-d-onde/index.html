@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’indice, la célérité et la longueur d’onde — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>L’indice, la célérité et la longueur d’onde</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Dans le verre les ondulations se resserrent, mais les deux détecteurs battent exactement au même rythme : λ change, ν non.</p>
+<section class="lab-notes"><h4>La seule question qui compte</h4><p>Quand la lumière entre dans le verre, <b>qu’est-ce qui change ?</b></p><table><thead><tr><th></th><th>dans le vide</th><th>dans le milieu</th></tr></thead><tbody><tr><td>célérité</td><td><code>c</code></td><td><code>v = c/n</code> — <b>plus petite</b></td></tr><tr><td>longueur d’onde</td><td><code>λ₀</code></td><td><code>λ = λ₀/n</code> — <b>plus courte</b></td></tr><tr><td>fréquence</td><td><code>ν = c/λ₀</code></td><td><code>ν</code> — <b>la même</b></td></tr></tbody></table><p>Les deux premières lignes se voient : les ondulations se resserrent dès la frontière. La troisième se voit aussi, mais en bas : les deux détecteurs <code>M₁</code> et <code>M₂</code> battent exactement au même rythme, quel que soit l’indice. Poussez <code>n</code> jusqu’au diamant, les ondulations se serrent de plus en plus — les deux points continuent de monter et descendre ensemble.</p><h4>Pourquoi la fréquence ne peut pas changer</h4><p>Elle est imposée par la <b>source</b>. Les électrons du laser vibrent à leur cadence, et le verre n’a aucun moyen de leur en imposer une autre : à la frontière, il faut bien que ce qui arrive et ce qui repart oscillent au même rythme, sinon la lumière s’accumulerait ou disparaîtrait à l’interface.</p><p>C’est la vraie raison de <code>λ = λ₀/n</code> : puisque <code>ν</code> est fixée et que <code>v</code> diminue, et que <code>λ = v/ν</code>, il ne reste que <code>λ</code> pour absorber le changement.</p><p>C’est aussi pourquoi <b>une radiation ne change pas de couleur</b> en entrant dans l’eau. La couleur, c’est la fréquence. Un laser rouge reste rouge sous l’eau, même si sa longueur d’onde y vaut 475 nm — une valeur qui, dans l’air, serait bleue.</p><h4>Une longueur d’onde est une longueur</h4><p>L’axe porte de vraies micromètres, et la règle est là pour qu’on puisse mesurer. À 633 nm, il entre environ 1,6 ondulation par micromètre dans le vide, et 2,4 dans le verre crown. Le relevé « ondulations dans e » compte combien il en tient dans l’épaisseur traversée : quelques milliers, pour trois millimètres de verre.</p><h4>Le temps, ralenti mille milliards de fois</h4><p>Une période vaut deux femtosecondes. À l’échelle vraie, il n’y aurait rien à voir : ni l’œil ni l’écran ne suivent 5 × 10¹⁴ battements par seconde. L’horloge est donc ralentie d’un facteur 10¹⁵, ce qui est écrit en haut de la figure. <b>Les nombres affichés restent les vrais</b> — c’est l’horloge qu’on ralentit, jamais la physique.</p><h4>L’œil ne voit presque rien</h4><p>Passez sur « où tombe λ₀ dans le spectre ». L’échelle est logarithmique et couvre dix décades, des rayons X aux micro-ondes. Le visible y est une bande étroite, de 400 à 800 nm environ — et c’est tout ce que l’œil capte. En dessous, l’ultraviolet ; au-dessus, l’infrarouge.</p><p>Poussez <code>λ₀</code> sous 400 nm ou au-delà de 780 : le relevé « domaine » le dit, et la couleur s’éteint. La lumière est toujours là, simplement l’œil n’a plus de capteur pour elle.</p><h4>À essayer</h4><ul><li>Mettez <code>n</code> sur le diamant (2,417). <code>v</code> tombe à 41 % de <code>c</code>, et λ à 262 nm pour un laser rouge. La fréquence, elle, n’a pas bougé d’un hertz.</li><li>Comparez « traversée de e » dans le verre et dans le vide. Trois millimètres de crown retardent la lumière de cinq picosecondes. C’est peu, et c’est pourtant tout ce qu’est un indice de réfraction.</li><li>Réglez λ₀ sur 500 nm, puis regardez la longueur d’onde dans l’eau : 375 nm. Dans l’air, 375 nm serait de l’ultraviolet. La couleur perçue n’a pourtant pas changé — encore une fois, parce que la couleur suit ν et non λ.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"l-indice-la-celerite-et-la-longueur-d-onde","title":"L’indice, la célérité et la longueur d’onde"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

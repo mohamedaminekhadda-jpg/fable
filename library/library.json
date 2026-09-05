@@ -1,11 +1,26 @@
 {
   "books": [
     {
+      "cover": "cover.png",
+      "subjects": [
+        "Mathématiques",
+        "Physique-Chimie",
+        "SVT",
+        "Géographie",
+        "Français"
+      ],
+      "level": "Lycée",
       "dir": "books/manuel-bac-demo",
       "slug": "manuel-bac-demo",
       "source": "manuel-bac-demo",
       "title": "Manuel du Bac — démonstration",
-      "resume": "Cinq chapitres qui font tourner les 102 éléments interactifs du moteur.",
+      "author": "",
+      "tagline": "",
+      "lang": "fr",
+      "dir_texte": "ltr",
+      "look": "crisp",
+      "accent": "#8c2f2a",
+      "resume": "Cinq disciplines, un seul livre — et chaque figure se manipule.",
       "droits": "à nous",
       "chapters": 8,
       "built": true,
@@ -53,10 +68,22 @@
       ]
     },
     {
+      "cover": "cover.png",
+      "subjects": [
+        "Littérature",
+        "Anglais"
+      ],
+      "level": "Collège",
       "dir": "books/alice-au-pays-des-merveilles",
       "slug": "alice-au-pays-des-merveilles",
       "source": "Alice in wonderland",
       "title": "Alice’s Adventures in Wonderland",
+      "author": "Lewis Carroll",
+      "tagline": "",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "classic",
+      "accent": "#8c2f2a",
       "resume": "Lewis Carroll, 1865. Domaine public.",
       "droits": "domaine public",
       "chapters": 1,
@@ -70,10 +97,22 @@
       ]
     },
     {
+      "cover": "cover.png",
+      "subjects": [
+        "Littérature",
+        "Anglais"
+      ],
+      "level": "Lycée",
       "dir": "books/moby-dick",
       "slug": "moby-dick",
       "source": "moby-dick",
       "title": "Moby-Dick",
+      "author": "Herman Melville",
+      "tagline": "THE WHALE.",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "classic",
+      "accent": "#8c2f2a",
       "resume": "Herman Melville, 1851. Domaine public.",
       "droits": "domaine public",
       "chapters": 3,

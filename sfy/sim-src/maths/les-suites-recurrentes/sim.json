@@ -1,0 +1,12 @@
+{
+  "id": "les-suites-recurrentes",
+  "subject": "maths",
+  "title": "Les suites récurrentes : l’escalier",
+  "summary": "Tirer u(0) à la souris et voir le tracé de u(n+1) = f(u(n)) monter en escalier, s’enrouler en spirale, tourner en cycle ou partir dans tous les sens — puis lire pourquoi dans |f’(l)|.",
+  "look": "Le rapport de deux écarts successifs tend vers |f’(l)| : c’est ce nombre, et lui seul, qui décide si la suite converge, à quelle vitesse, et en escalier ou en spirale.",
+  "vignette": "escalier",
+  "levels": ["lycee"],
+  "tags": ["suites", "récurrence", "point fixe", "convergence", "monotonie", "dichotomie", "méthode de Newton"],
+  "minutes": 30,
+  "variables": ["la suite", "u(0)", "nombre de pas"]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "le-maroc-defis-du-developpement",
+  "subject": "geographie",
+  "title": "Le Maroc : les défis du développement",
+  "summary": "Poser une à une les couches d’une carte du Maroc — densité, agriculture irriguée, phosphates, industrie, tourisme, ports, barrages — et voir pourquoi elles se superposent toutes au même endroit.",
+  "look": "Presque tout se tient sur une bande atlantique large de deux cents kilomètres : c’est là que sont l’eau, les plaines, les ports et les hommes.",
+  "vignette": "maroc",
+  "levels": ["lycee"],
+  "tags": ["Maroc", "régions", "densité", "agriculture", "phosphates", "industrie", "tourisme", "littoralisation"],
+  "minutes": 30,
+  "variables": ["couche thématique", "région", "densité", "part de la population"]
+}

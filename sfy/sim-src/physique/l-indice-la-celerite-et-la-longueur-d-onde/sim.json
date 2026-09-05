@@ -1,0 +1,12 @@
+{
+  "id": "l-indice-la-celerite-et-la-longueur-d-onde",
+  "subject": "physique",
+  "title": "L’indice, la célérité et la longueur d’onde",
+  "summary": "Faire entrer une onde lumineuse dans le verre et regarder ce qui change — la célérité et la longueur d’onde — et ce qui ne change pas : la fréquence.",
+  "look": "Dans le verre les ondulations se resserrent, mais les deux détecteurs battent exactement au même rythme : λ change, ν non.",
+  "vignette": "onde-refraction",
+  "levels": ["lycee"],
+  "tags": ["lumière", "indice", "célérité", "longueur d’onde", "fréquence", "spectre", "ultraviolet", "infrarouge"],
+  "minutes": 20,
+  "variables": ["indice n", "longueur d’onde λ", "célérité v", "fréquence ν", "épaisseur e"]
+}

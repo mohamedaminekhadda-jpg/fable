@@ -1,0 +1,12 @@
+{
+  "id": "le-prisme-et-la-dispersion",
+  "subject": "physique",
+  "title": "Le prisme et la dispersion",
+  "summary": "Suivre un rayon à travers le prisme, voir la lumière blanche s’ouvrir en spectre, chercher le minimum de déviation et en tirer l’indice du verre puis les constantes A et B de Cauchy.",
+  "look": "Les couleurs se séparent parce que l’indice dépend de λ — coupez la dispersion (B = 0) et le spectre se referme en un seul rayon blanc.",
+  "vignette": "prisme",
+  "levels": ["lycee"],
+  "tags": ["lumière", "réfraction", "dispersion", "prisme", "indice", "Descartes", "spectre"],
+  "minutes": 30,
+  "variables": ["angle au sommet A", "incidence i₁", "indice n", "déviation D", "longueur d’onde λ"]
+}

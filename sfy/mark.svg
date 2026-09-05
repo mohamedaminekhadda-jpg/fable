@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<!-- La marque en favicon : même dessin que marque() dans app/brand.js, au trait
+     plus épais. Dans un onglet de 16 pixels un trait de 1,9 disparaît, et une
+     marque qu'on ne voit pas ne sert à rien. Le trait suit le thème du système. -->
+<style>
+  .t { stroke: #16202b; }
+  .p { fill: #16202b; }
+  @media (prefers-color-scheme: dark) {
+    .t { stroke: #e9eef4; }
+    .p { fill: #e9eef4; }
+  }
+</style>
+<g class="t" fill="none" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/>
+  <path d="M8.5 5.5 21.8 12.8"/>
+  <path d="M8.5 26.5 21.8 19.2"/>
+</g>
+<circle class="p" cx="27.4" cy="16" r="3.1"/>
+</svg>

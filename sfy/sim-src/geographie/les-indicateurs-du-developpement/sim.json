@@ -1,0 +1,12 @@
+{
+  "id": "les-indicateurs-du-developpement",
+  "subject": "geographie",
+  "title": "Les indicateurs du développement",
+  "summary": "Croiser deux indicateurs sur cinquante et un pays, les colorer sur un planisphère, les classer — et regarder ce que chaque représentation montre et ce qu’elle cache.",
+  "look": "Aucun indicateur ne suffit seul : le PIB par habitant classe le Qatar devant la France, l’IDH remet les choses en place.",
+  "vignette": "globe",
+  "levels": ["lycee"],
+  "tags": ["développement", "IDH", "PIB", "Nord-Sud", "indicateurs", "planisphère", "Maroc"],
+  "minutes": 30,
+  "variables": ["indicateur en abscisse", "indicateur en ordonnée", "année", "continent"]
+}

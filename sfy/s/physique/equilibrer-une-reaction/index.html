@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="college"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Équilibrer une réaction chimique — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>Équilibrer une réaction chimique</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> Regardez la masse des deux côtés pendant que vous cherchez. Tant que l’équation n’est pas équilibrée, elles diffèrent — et une réaction qui perdrait trente grammes de matière n’existe pas. C’est ça, équilibrer.</p>
+<details class="lab-notes lab-notes-plie"><summary>Comment ça marche ?</summary><h4>Pourquoi on équilibre</h4><p>Parce qu'un atome ne disparaît pas. Il change de voisin, jamais de nature : le carbone du méthane se retrouve dans le dioxyde de carbone, les hydrogènes dans l'eau. Écrire une équation, c'est faire les comptes de ce déménagement.</p><p>Regardez la mesure <b>« Écart »</b>, en bas du panneau. Elle donne la différence de masse entre les deux côtés. Tant que l'équation n'est pas équilibrée, elle n'est pas nulle — vous êtes en train d'écrire une réaction qui fabrique ou détruit de la matière. C'est cela qui est interdit, pas le fait d'avoir « oublié un 2 ».</p><p>&gt; <b>Ce que Lavoisier a dit</b>, en 1789 : <i>rien ne se perd, rien ne se crée, tout &gt; se transforme.</i> L'équilibrage n'est pas une convention d'écriture. C'est &gt; cette phrase, mise en chiffres.</p><h4>Comment lire la figure</h4><p>Sous la flèche, chaque élément a <b>deux rangées d'atomes face à face</b> : à gauche ce qui entre, à droite ce qui sort. Une équation équilibrée est une figure <b>symétrique</b>. Vous n'avez même pas besoin de lire les nombres — une rangée plus courte que l'autre se voit d'un coup d'œil.</p><h4>La méthode qui marche à tous les coups</h4><ol><li><b>Le plus compliqué d'abord.</b> Commencez par la molécule qui porte le plus d'éléments différents, et laissez-lui le coefficient 1.</li><li><b>Les éléments qui n'apparaissent qu'une fois de chaque côté</b> ensuite : le carbone, puis l'hydrogène.</li><li><b>L'oxygène en dernier</b>, presque toujours : il est partout, et il se règle tout seul une fois le reste posé.</li><li><b>Divisez</b> si tout est pair. La mesure vous dira si votre solution est la plus simple.</li></ol><p>Essayez sur la combustion du méthane : C d'abord (1 CO₂), puis H (4 H à gauche → 2 H₂O), puis O (2 dans CO₂ + 2 dans 2 H₂O = 4, donc 2 O₂). C'est fini.</p><h4>Celle qui résiste</h4><p><b>La combustion du butane.</b> Prenez le temps, la méthode tient encore :</p><ul><li>C : 4 par molécule de butane → 4 CO₂</li><li>H : 10 par molécule → 5 H₂O</li><li>O : 8 + 5 = 13 atomes… soit <b>6,5 O₂</b>, ce qui n'existe pas.</li><li>Donc on double tout : <b>2 C₄H₁₀ + 13 O₂ → 8 CO₂ + 10 H₂O</b>.</li></ul><p>C'est le seul cas de la liste où l'on doit doubler pour tomber sur des entiers, et c'est exactement pour cela qu'il est au programme.</p><h4>Les deux qui vont ensemble</h4><p>La <b>photosynthèse</b> et la <b>respiration cellulaire</b> sont la même équation lue dans les deux sens :</p><p>&gt; 6 CO₂ + 6 H₂O ⇄ C₆H₁₂O₆ + 6 O₂</p><p>La plante range de l'énergie solaire dans le sucre ; l'animal la ressort. Passez de l'une à l'autre dans la liste : les coefficients sont les mêmes, seul le sens de la flèche change. Toute la biosphère tient dans cet aller-retour.</p><h4>À essayer</h4><ul><li>Mettez <b>tous les coefficients à 1</b> sur la photosynthèse et regardez le carbone : 1 à gauche, 6 à droite. Il en manque cinq — c'est ce qu'il faut aller chercher.</li><li>Équilibrez la synthèse de l'eau, puis <b>doublez tous les coefficients</b>. L'équation reste juste, la masse reste conservée, mais la mesure signale qu'elle est simplifiable. Les deux écritures sont vraies ; une seule est la bonne réponse.</li><li>La <b>rouille</b> demande 4 Fe et 3 O₂. Il n'y a aucun moyen d'y arriver avec de petits nombres — et c'est pour ça qu'un portail met des années à rouiller plutôt que des secondes ? Non : la lenteur est une autre question, celle de la vitesse de réaction. L'équation ne dit jamais combien de temps.</li></ul></details>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"equilibrer-une-reaction","title":"Équilibrer une réaction chimique"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

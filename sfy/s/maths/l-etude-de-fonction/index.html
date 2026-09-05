@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="maths" data-niveau="lycee"
+  style="--sub-l:#5b4fa8;--sub-d:#a79ae8">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’étude de fonction : f, f′ et f″ ensemble — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/maths" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Maths</span>
+  <h1>L’étude de fonction : f, f′ et f″ ensemble</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> La tangente devient horizontale exactement quand f′ coupe l’axe, et la courbure se retourne exactement quand f″ le coupe. Le tableau de variations n’est rien d’autre que le signe de f′.</p>
+<section class="lab-notes"><h4>Trois courbes, un seul axe</h4><p>Les trois panneaux partagent l’axe des abscisses, et le curseur les traverse tous les trois <b>à la même valeur de x</b>. C’est là tout l’intérêt : ce qui se passe sur un panneau se lit sur les autres au même endroit.</p><p>Tirez le curseur lentement sur <b>x³ − 3x + 1</b> et vérifiez les trois correspondances. Ce sont les trois seules choses à retenir du chapitre.</p><ol><li><b>La pente de la tangente sur f est l’ordonnée du point sur f′.</b> Quand la tangente monte, le point de f′ est au-dessus de l’axe. Quand elle descend, il est en dessous.</li><li><b>La tangente est horizontale exactement quand f′ coupe l’axe.</b> C’est la définition d’un extremum, et le cercle orange marque l’endroit sur les trois panneaux à la fois.</li><li><b>La courbure se retourne exactement quand f″ coupe l’axe.</b> Avant, la courbe tourne vers le haut ; après, vers le bas. Le losange violet marque le point d’inflexion.</li></ol><h4>Le tableau de variations n’est pas un objet à part</h4><p>La bande sous la courbe de f est <b>verte quand f′ &gt; 0</b> et <b>rouge quand f′ &lt; 0</b>, avec la flèche correspondante. Regardez-la, puis regardez la courbe de f′ juste en dessous : la bande change de couleur précisément là où f′ change de côté.</p><p>Un tableau de variations <b>est</b> le signe de la dérivée, mis en tableau. Rien de plus. Celui que vous voyez ici n’a pas été écrit : il est construit à chaque image en cherchant les zéros de f′, puis en regardant le signe de f′ entre deux zéros consécutifs — exactement la méthode qu’on vous demande d’appliquer.</p><h4>Six pièges, un par fonction</h4><ul><li><b>x e^(−x)</b> — le maximum est en 1, l’inflexion en 2. Ce ne sont <b>pas</b> les mêmes points, et les confondre est l’erreur la plus fréquente de l’épreuve.</li><li><b>(2x+1)/(x−1)</b> — f′ ne s’annule jamais : elle vaut −3/(x−1)², donc elle est strictement négative partout. Pas d’extremum. Et surtout : la fonction est décroissante <b>sur chacun</b> de ses deux intervalles, ce qui ne permet pas de dire qu’elle est décroissante sur leur réunion — les deux branches le montrent d’un coup d’œil.</li><li><b>x + 1/x</b> — il y a un maximum en −1 où f vaut <b>−2</b>, et un minimum en 1 où f vaut <b>+2</b>. Le maximum est donc plus petit que le minimum. « Maximum local » ne veut pas dire « plus grande valeur de la fonction ».</li><li><b>e^x − x − 1</b> — f″ = e^x ne s’annule jamais : la courbe est convexe partout, donc <b>aucun point d’inflexion</b>, quoi qu’en dise l’allure. Le minimum vaut 0, et c’est la démonstration de e^x ≥ x + 1.</li><li><b>x − ln(x)</b> — même chose : f″ = 1/x² est toujours positive. La courbe semble « beaucoup tourner » près de zéro, et pourtant elle ne change jamais de sens de courbure. L’œil se trompe, f″ non.</li><li><b>ln(x)/x</b> — le maximum vaut 1/e en x = e. C’est ce qui prouve que la suite x^(1/x) est maximale en e, et l’inflexion tombe en e^(3/2) ≈ 4,48.</li></ul><h4>Ce que ne fait aucune calculatrice</h4><p>Décochez <b>f′</b> et <b>f″</b>, puis choisissez <b>(2x+1)/(x−1)</b> ou <b>x + 1/x</b>. Regardez la courbe : les deux branches sont <b>séparées</b>, jamais reliées par un trait vertical.</p><p>La plupart des calculatrices graphiques tracent ce trait, parce qu’elles relient deux points successifs sans se demander s’il y a un pôle entre eux. Ce trait n’existe pas : il ferait croire que la fonction prend toutes les valeurs intermédiaires, donc qu’elle est continue là où elle n’est même pas définie. Ici le tracé se coupe dès que le saut dépasse la hauteur du cadre.</p><h4>À essayer</h4><ul><li>Sur <b>(x²−1)/(x²+1)</b>, posez le curseur en 0 : f′(0) = 0 et la tangente est horizontale. La fonction est <b>paire</b>, donc sa dérivée est <b>impaire</b> — et une fonction impaire définie en 0 y vaut nécessairement 0. Le dessin le confirme, mais c’est l’algèbre qui le prouve.</li><li>Cherchez, sur la cubique, le point où f″ = 0 : c’est x = 0, et f y vaut 1. Placez-y le curseur et regardez la tangente : elle <b>traverse</b> la courbe au lieu de rester du même côté. C’est la signature d’un point d’inflexion, et le seul cas où cela arrive.</li><li>Sur <b>x e^(−x)</b>, poussez le curseur vers la droite. f(x) tend vers 0, f′ aussi, f″ aussi : les trois courbes s’aplatissent ensemble sur l’axe. L’asymptote horizontale n’est pas seulement une propriété de f.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"maths","id":"l-etude-de-fonction","title":"L’étude de fonction : f, f′ et f″ ensemble"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

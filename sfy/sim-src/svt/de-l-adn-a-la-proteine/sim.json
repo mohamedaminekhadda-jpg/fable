@@ -1,0 +1,12 @@
+{
+  "id": "de-l-adn-a-la-proteine",
+  "subject": "svt",
+  "title": "De l’ADN à la protéine",
+  "summary": "La double hélice qui tourne, l’ARN polymérase qui la copie, le ribosome qui la lit trois lettres à la fois — sur le vrai gène de la bêta-globine. Et une base qu’on peut changer d’un clic pour voir ce qu’il advient de la protéine.",
+  "look": "Changez la vingtième base en T : le septième codon passe de GAG à GTG, l’acide glutamique devient une valine, et vous venez de fabriquer la drépanocytose. Une lettre.",
+  "levels": ["lycee"],
+  "vignette": "helice",
+  "tags": ["ADN", "double hélice", "transcription", "traduction", "code génétique", "ARN messager", "ribosome", "mutation", "drépanocytose"],
+  "minutes": 30,
+  "variables": ["l’étape", "la séquence d’ADN", "la base changée"]
+}

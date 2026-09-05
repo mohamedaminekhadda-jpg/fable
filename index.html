@@ -1,140 +1,651 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fable — manuels vivants</title>
-<meta name="description" content="Des manuels scolaires interactifs, un cahier d’élève, et des simulations où l’on mesure au lieu de croire.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fable — interactive textbooks</title>
+<meta name="description" content="Interactive school textbooks in French, English and Arabic. Every figure is computed, not drawn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --fond:#faf8f4; --encre:#1a1d24; --doux:#5a6070; --trait:#e2ddd3;
-    --carte:#fff; --or:#b08430; --ombre:0 1px 2px rgba(20,18,14,.05),0 8px 24px rgba(20,18,14,.06);
+/* ─── tokens ──────────────────────────────────────────────── */
+:root{
+  --paper:#faf6ee;      /* page ground */
+  --card:#fffdf8;       /* raised surface */
+  --ink:#211d19;        /* body text */
+  --ink-2:#5c5349;      /* secondary text */
+  --ink-3:#8a8074;      /* meta, captions */
+  --rule:#ded5c6;       /* hairlines */
+  --rule-soft:#eae2d5;
+  --accent:#8c2f2a;     /* oxblood */
+  --accent-ink:#7a2723; /* accent at body-text contrast */
+  --accent-wash:#f3e7e2;
+  --seyes:#9fb0d4;      /* Séyès ruling blue */
+  --focus:#1f5fbf;
+
+  --font-body:"Literata",Georgia,"Times New Roman",serif;
+  --font-ar:"Noto Naskh Arabic","Literata",serif;
+
+  --s1:.25rem; --s2:.5rem; --s3:.75rem; --s4:1rem;
+  --s5:1.5rem; --s6:2rem; --s7:3rem; --s8:4.5rem;
+  --r:3px;
+  --measure:34rem;
+  --shadow:0 1px 2px rgba(33,29,25,.05),0 1px 10px -6px rgba(33,29,25,.18);
+}
+:root[data-theme="dark"]{
+  --paper:#17161a;
+  --card:#1e1d22;
+  --ink:#ece6dc;
+  --ink-2:#b0a99e;
+  --ink-3:#867f75;
+  --rule:#332f36;
+  --rule-soft:#28252c;
+  --accent:#e08d84;
+  --accent-ink:#eda79f;
+  --accent-wash:#2c211f;
+  --seyes:#4e5a78;
+  --focus:#8fb6ff;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 1px 12px -6px rgba(0,0,0,.6);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#17161a; --card:#1e1d22; --ink:#ece6dc; --ink-2:#b0a99e; --ink-3:#867f75;
+    --rule:#332f36; --rule-soft:#28252c; --accent:#e08d84; --accent-ink:#eda79f;
+    --accent-wash:#2c211f; --seyes:#4e5a78; --focus:#8fb6ff;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 1px 12px -6px rgba(0,0,0,.6);
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme=light]){
-      --fond:#0f1116; --encre:#e9ebf0; --doux:#9aa2b4; --trait:#252a35;
-      --carte:#161922; --or:#d4a855; --ombre:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
-    }
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--fond);color:var(--encre);
-    font:16px/1.6 ui-serif,Georgia,"Times New Roman",serif;-webkit-text-size-adjust:100%}
-  .enrobe{max-width:1000px;margin:0 auto;padding:0 22px}
-  header{padding:64px 0 44px;border-bottom:1px solid var(--trait)}
-  .marque{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--or);
-    font-family:ui-monospace,monospace;margin:0 0 14px}
-  h1{font-size:clamp(30px,5.2vw,50px);line-height:1.12;margin:0 0 16px;font-weight:600;letter-spacing:-.015em}
-  .chapeau{font-size:clamp(17px,2.2vw,20px);color:var(--doux);margin:0;max-width:56ch}
-  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--doux);
-    font-family:ui-monospace,monospace;font-weight:600;margin:52px 0 18px}
-  .grille{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(268px,1fr))}
-  a.carte{display:block;text-decoration:none;color:inherit;background:var(--carte);
-    border:1px solid var(--trait);border-radius:13px;padding:20px;box-shadow:var(--ombre)}
-  a.carte:hover{border-color:var(--or)}
-  a.carte h3{margin:0 0 7px;font-size:19px;font-weight:600;line-height:1.3}
-  a.carte p{margin:0;color:var(--doux);font-size:14.5px;line-height:1.55}
-  .meta{margin-top:12px;font-family:ui-monospace,monospace;font-size:11.5px;
-    letter-spacing:.06em;text-transform:uppercase;color:var(--or)}
-  .grand{grid-column:1/-1;display:flex;gap:20px;align-items:flex-start}
-  .grand .ico{flex:0 0 auto;width:44px;height:44px;color:var(--or)}
-  .note{color:var(--doux);font-size:14px;line-height:1.6;max-width:64ch;margin:14px 0 0}
-  footer{margin:64px 0 40px;padding-top:22px;border-top:1px solid var(--trait);
-    color:var(--doux);font-size:13.5px}
-  footer p{margin:0 0 6px}
-  footer a{color:var(--doux);text-decoration:none;border-bottom:1px dotted var(--trait);
-    font-family:ui-monospace,monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
-  footer a:hover{color:var(--or);border-bottom-color:var(--or)}
+}
+
+/* ─── base ────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font:400 1rem/1.6 var(--font-body);
+  font-variant-numeric:oldstyle-nums;
+  text-wrap:pretty;
+  -webkit-font-smoothing:antialiased;
+}
+:lang(ar){font-family:var(--font-ar);line-height:1.9}
+[dir="rtl"] body{font-family:var(--font-ar)}
+.ltr-nums{direction:ltr;unicode-bidi:isolate}
+h1,h2,h3{font-weight:600;line-height:1.15;margin:0;letter-spacing:-.012em}
+p{margin:0}
+a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:.18em}
+a:hover{color:var(--ink)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
+::selection{background:var(--accent-wash);color:var(--ink)}
+img{display:block;max-width:100%}
+/* `hidden` n'est qu'un `display:none` de la feuille du navigateur : la moindre
+   règle d'auteur qui pose un `display` le bat. `.toolbar` et `.grid` sont en
+   `display:grid`, si bien que les cacher par `hidden` ne cachait rien — la
+   barre de recherche s'affichait dès le premier livre, alors que le dessin la
+   réserve à partir de huit. Un seul garde, plutôt qu'un `[hidden]` par bloc
+   qu'on oublie au suivant. */
+[hidden]{display:none!important}
+.wrap{max-width:76rem;margin-inline:auto;padding-inline:var(--s5)}
+.eyebrow{
+  font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);font-variant-numeric:lining-nums;
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;inset-block-start:-3rem;inset-inline-start:var(--s4);z-index:9;
+  background:var(--card);border:1px solid var(--rule);padding:var(--s2) var(--s3);border-radius:var(--r)}
+.skip:focus{inset-block-start:var(--s2)}
+
+/* ─── masthead ────────────────────────────────────────────── */
+.masthead{border-block-end:1px solid var(--rule);background:var(--paper)}
+.masthead .wrap{display:flex;align-items:baseline;gap:var(--s4);
+  padding-block:var(--s4);min-height:0}
+.brand{font-size:1.0625rem;font-weight:600;letter-spacing:.02em;color:var(--ink);text-decoration:none}
+.brand:hover{color:var(--accent-ink)}
+.brand-note{color:var(--ink-3);font-size:.8125rem;margin-inline-start:auto}
+.theme-btn{
+  font:inherit;font-size:.75rem;color:var(--ink-3);background:none;
+  border:1px solid var(--rule);border-radius:var(--r);
+  padding:.2rem .55rem;cursor:pointer;letter-spacing:.04em;
+}
+.theme-btn:hover{color:var(--ink);border-color:var(--ink-3)}
+.theme-btn:active{background:var(--accent-wash)}
+
+/* ─── hero ────────────────────────────────────────────────── */
+.hero{padding-block:var(--s8) var(--s7);position:relative}
+.hero::after{
+  content:"";position:absolute;inset-block-end:0;inset-inline:var(--s5);
+  height:1px;background:linear-gradient(to right,transparent,var(--rule-soft) 12%,var(--rule-soft) 88%,transparent);
+}
+.hero h1{
+  font-size:clamp(2rem,5.2vw,3.4rem);max-width:20ch;
+  margin-block-end:var(--s4);
+}
+.hero h1 em{font-style:italic;color:var(--accent-ink)}
+.hero p{max-width:var(--measure);color:var(--ink-2);font-size:1.0625rem}
+.hero .eyebrow{margin-block-end:var(--s3)}
+
+/* ─── section frame ───────────────────────────────────────── */
+.section{padding-block:var(--s7)}
+.section-head{
+  display:flex;align-items:flex-end;gap:var(--s4);flex-wrap:wrap;
+  margin-block-end:var(--s5);
+}
+.section-head h2{font-size:1.375rem}
+/* Le compte porte un nombre, et un nombre dans une phrase de droite à gauche
+   saute au mauvais bout : « 40 books » se lisait « books 40 ». Même isolement
+   que `.ltr-nums` sur les fiches, appliqué ici aussi — les cartes l'avaient,
+   le titre de section non. */
+.section-head .note{color:var(--ink-3);font-size:.875rem;margin-inline-start:auto;
+  unicode-bidi:isolate}
+
+/* ─── toolbar ─────────────────────────────────────────────── */
+.toolbar{margin-block-end:var(--s5);display:grid;gap:var(--s3)}
+.search{position:relative;max-width:22rem}
+.search input{
+  font:inherit;font-size:.9375rem;width:100%;color:var(--ink);
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:.5rem .7rem;
+}
+.search input::placeholder{color:var(--ink-3)}
+.search input:hover{border-color:var(--ink-3)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center}
+.chip-group{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.chip-group>.eyebrow{margin-inline-end:var(--s1)}
+.chip{
+  font:inherit;font-size:.8125rem;cursor:pointer;
+  background:none;color:var(--ink-2);
+  border:1px solid var(--rule);border-radius:100px;padding:.15rem .65rem;
+}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip[aria-pressed="true"]{
+  background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink);
+}
+.count{color:var(--ink-3);font-size:.8125rem;font-variant-numeric:lining-nums}
+
+/* ─── book grid ───────────────────────────────────────────── */
+.grid{
+  display:grid;gap:var(--s5) var(--s4);
+  grid-template-columns:repeat(auto-fill,minmax(11.5rem,1fr));
+}
+.book{
+  display:grid;gap:var(--s3);grid-template-rows:auto 1fr;
+  text-decoration:none;color:inherit;border-radius:var(--r);
+}
+.book:hover .cover{transform:translateY(-3px);box-shadow:0 6px 22px -10px rgba(33,29,25,.45)}
+.book:hover .book-title{color:var(--accent-ink);text-decoration:underline;text-underline-offset:.18em}
+.cover{
+  position:relative;aspect-ratio:3/4;overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--rule);border-radius:var(--r);
+  box-shadow:var(--shadow);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover .spine{
+  position:absolute;inset-block:0;inset-inline-start:0;width:5px;
+  background:var(--bookaccent,var(--accent));opacity:.85;
+}
+/* typographic fallback when no thumbnail exists yet */
+.cover-fallback{
+  height:100%;display:grid;align-content:space-between;gap:var(--s3);
+  padding:var(--s4) var(--s3) var(--s3) calc(var(--s3) + 5px);
+  background:
+    repeating-linear-gradient(to bottom,transparent 0 1.55rem,var(--rule-soft) 1.55rem 1.5625rem),
+    var(--card);
+}
+.cover-fallback .cf-title{
+  font-size:.9375rem;line-height:1.3;font-weight:600;color:var(--bookaccent,var(--accent-ink));
+  text-wrap:balance;
+}
+.cover-fallback .cf-foot{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.book-title{font-size:.9375rem;font-weight:600;line-height:1.3;margin:0}
+.book-meta{display:flex;flex-wrap:wrap;gap:.4rem;align-items:baseline;
+  color:var(--ink-3);font-size:.8125rem;margin-block-start:.15rem}
+.book-author{color:var(--ink-2);font-size:.8125rem;font-style:italic}
+.badge{
+  font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--rule);border-radius:2px;padding:.05rem .3rem;color:var(--ink-3);
+  font-variant-numeric:lining-nums;
+}
+
+/* ─── empty state ─────────────────────────────────────────── */
+.empty{
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--card);
+  padding:var(--s7) var(--s5);text-align:start;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 1.55rem,var(--rule-soft) 1.55rem 1.5625rem);
+}
+.empty h3{font-size:1.125rem;margin-block-end:var(--s2)}
+.empty p{color:var(--ink-2);max-width:38rem}
+.empty code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8125rem;
+  background:var(--accent-wash);padding:.1rem .3rem;border-radius:2px;
+}
+
+/* ─── tools band ──────────────────────────────────────────── */
+.tools{display:flex;flex-wrap:wrap;gap:var(--s4)}
+.tool{
+  flex:1 1 20rem;max-width:32rem;
+  display:grid;gap:var(--s3);align-content:start;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--card);
+  padding:var(--s5);text-decoration:none;color:inherit;box-shadow:var(--shadow);
+  transition:border-color .18s ease,transform .18s ease;
+}
+.tool:hover{border-color:var(--accent);transform:translateY(-2px)}
+.tool:hover .tool-title{color:var(--accent-ink)}
+.tool-title{font-size:1.125rem;font-weight:600}
+.tool p{color:var(--ink-2);font-size:.9375rem;max-width:36ch}
+.tool .go{color:var(--accent-ink);font-size:.875rem}
+.tool[hidden]{display:none}
+.ruled{
+  height:3.25rem;border:1px solid var(--rule-soft);border-radius:2px;
+  background:
+    linear-gradient(to right,transparent 0 1.5rem,var(--seyes) 1.5rem 1.0625rem,transparent 0),
+    repeating-linear-gradient(to right,var(--seyes) 0 .5px,transparent .5px .25rem),
+    repeating-linear-gradient(to bottom,var(--seyes) 0 .5px,transparent .5px .8125rem);
+  opacity:.5;
+}
+.plot{
+  height:3.25rem;border:1px solid var(--rule-soft);border-radius:2px;
+  background:repeating-linear-gradient(to right,var(--rule-soft) 0 .5px,transparent .5px .8125rem),
+             repeating-linear-gradient(to bottom,var(--rule-soft) 0 .5px,transparent .5px .8125rem);
+  position:relative;overflow:hidden;
+}
+.plot::after{
+  content:"";position:absolute;inset-block-start:50%;inset-inline:0;height:1px;
+  background:var(--accent);opacity:.7;
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+}
+
+/* ─── footer ──────────────────────────────────────────────── */
+.foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7)}
+.foot .wrap{
+  display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);align-items:baseline;
+  padding-block:var(--s5) var(--s6);color:var(--ink-3);font-size:.8125rem;
+}
+.foot a{color:var(--ink-3);text-decoration:none}
+.foot a:hover{color:var(--ink);text-decoration:underline}
+.foot .atelier{margin-inline-start:auto;color:var(--ink-3);opacity:.7}
+.foot .atelier:hover{opacity:1}
+
+@media (max-width:34rem){
+  .wrap{padding-inline:var(--s4)}
+  .hero{padding-block:var(--s6) var(--s5)}
+  .section{padding-block:var(--s6)}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));gap:var(--s4) var(--s3)}
+  .tool{padding:var(--s4)}
+  .brand-note{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="enrobe">
+<a class="skip" href="#library">Skip to the books</a>
 
-<header>
-  <p class="marque">Fable</p>
-  <h1>Des manuels où l’on peut tirer sur les courbes.</h1>
-  <p class="chapeau">Chaque figure est calculée, jamais dessinée : un rayon qui rebondit
-    obéit à la loi de la réflexion, une relation de conjugaison est mesurée sur les rayons
-    et non recopiée d’une formule. Ce qui peut être calculé n’est jamais écrit à la main.</p>
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="./">Fable</a>
+    <span class="brand-note">Interactive textbooks · fr · en · ar</span>
+    <button class="theme-btn" id="theme" type="button" aria-pressed="false">Dark</button>
+  </div>
 </header>
 
-<h2>La bibliothèque</h2>
-<div class="grille" id="livres"></div>
-<p class="note" id="vide" hidden>Aucun manuel publié pour l’instant.</p>
+<main>
+  <section class="hero wrap">
+    <p class="eyebrow">Figures are computed, never drawn</p>
+    <h1>Textbooks where you can <em>pull on the curves</em>.</h1>
+    <p>A light ray leaving a mirror obeys the law of reflection because the page solves it, not because someone drew it that way. Drag the mirror and the ray follows. A lens's focal length is measured off its own rays. There are 102 kinds of interactive figure in the engine, and every one of them is live.</p>
+  </section>
 
-<h2>Les outils</h2>
-<div class="grille">
-  <a class="carte grand" href="cahier/">
-    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5.5A1.5 1.5 0 0 1 4 19.5z"/>
-      <path d="M8 3v18M11 8h6M11 12h6M11 16h4"/>
-    </svg>
-    <div>
-      <h3>Le Jaguar — le cahier de l’élève</h3>
-      <p>Prendre des notes sur du vrai papier Séyès, découper des passages d’un manuel,
-        surligner, annoter, poser un graphe ou une carte au milieu d’une leçon.</p>
-      <p class="note">Votre cahier reste sur votre appareil : rien n’est envoyé nulle part,
-        et il n’y a pas de compte à créer. Sur ordinateur, il s’enregistre dans un fichier
-        que vous choisissez — déposez-le dans un dossier synchronisé et vous avez la
-        sauvegarde et l’historique gratuitement.</p>
-      <div class="meta">Ouvrir le cahier →</div>
+  <section class="section wrap" id="library">
+    <div class="section-head">
+      <h2>The library</h2>
+      <span class="note" id="count"></span>
     </div>
-  </a>
 
-  <a class="carte grand" href="sfy/app/" id="carte-sfy" hidden>
-    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="3.2"/>
-      <path d="M12 2.6v3.4M12 18v3.4M2.6 12H6M18 12h3.4M5.4 5.4l2.4 2.4M16.2 16.2l2.4 2.4M18.6 5.4l-2.4 2.4M7.8 16.2l-2.4 2.4"/>
-    </svg>
-    <div>
-      <h3>See for yourself</h3>
-      <p>Des expériences par matière, où l’on règle et l’on mesure. Un prisme qui disperse
-        pour de vrai, un miroir concave dont le foyer tombe sur R/2 parce qu’on l’a trouvé
-        et non écrit, et un jeu de douze casse-tête sur le chemin de la lumière.</p>
-      <div class="meta">Ouvrir les simulations →</div>
+    <div class="toolbar" id="toolbar" hidden>
+      <div class="search">
+        <label class="sr" for="q">Search the library</label>
+        <input id="q" type="search" placeholder="Search titles and authors" autocomplete="off">
+      </div>
+      <div class="chips" id="chips"></div>
     </div>
-  </a>
-</div>
 
-<footer>
-  <p>Fable — moteur de manuels interactifs.</p>
-  <p>Les manuels et les simulations fonctionnent hors ligne une fois chargés.
-     Le cahier n’envoie aucune donnée : tout reste dans votre navigateur ou dans votre fichier.</p>
-  <!-- L'entrée de l'atelier. Discrète, pas cachée : la dissimuler serait se
-       raconter qu'elle protège quelque chose, alors qu'elle n'ouvre que des
-       liens vers des ports locaux, inutiles ailleurs. -->
-  <p><a href="#atelier" id="lien-atelier">Atelier</a></p>
+    <div class="grid" id="grid"></div>
+
+    <div class="empty" id="empty" hidden>
+      <h3>No books yet.</h3>
+      <p>This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.</p>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="tools-h">
+    <div class="section-head">
+      <h2 id="tools-h">And two things to read with</h2>
+    </div>
+    <div class="tools">
+      <a class="tool" href="cahier/">
+        <div class="ruled" aria-hidden="true"></div>
+        <span class="tool-title">Le Jaguar</span>
+        <p>A pupil's notebook on real Séyès ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on this device and no account is asked for.</p>
+        <span class="go">Open the notebook &rsaquo;</span>
+      </a>
+      <a class="tool" href="sfy/app/" id="tool-sfy" hidden>
+        <div class="plot" aria-hidden="true"></div>
+        <span class="tool-title">See for yourself</span>
+        <p>The simulations on their own, outside any book — set the values, run it, watch what the equations actually do.</p>
+        <span class="go">Open the simulations &rsaquo;</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Fable — interactive textbooks in French, English and Arabic.</span>
+    <a href="cahier/">Le Jaguar</a>
+    <a class="atelier" id="lien-atelier" href="#atelier">Atelier</a>
+  </div>
 </footer>
 
-</div>
+<script type="application/json" id="seed">
+[
+ {
+  "cover": "cover.png",
+  "subjects": [
+   "Mathématiques",
+   "Physique-Chimie",
+   "SVT",
+   "Géographie",
+   "Français"
+  ],
+  "level": "Lycée",
+  "dir": "books/manuel-bac-demo",
+  "slug": "manuel-bac-demo",
+  "source": "manuel-bac-demo",
+  "title": "Manuel du Bac — démonstration",
+  "author": "",
+  "tagline": "",
+  "lang": "fr",
+  "dir_texte": "ltr",
+  "look": "crisp",
+  "accent": "#8c2f2a",
+  "resume": "Cinq disciplines, un seul livre — et chaque figure se manipule.",
+  "droits": "à nous",
+  "chapters": 8,
+  "built": true,
+  "chapterList": [
+   {
+    "file": "01-mathematiques.md",
+    "title": "Mathématiques",
+    "rendu": "01.html"
+   },
+   {
+    "file": "02-svt.md",
+    "title": "Sciences de la Vie et de la Terre",
+    "rendu": "02.html"
+   },
+   {
+    "file": "03-geographie.md",
+    "title": "Géographie",
+    "rendu": "03.html"
+   },
+   {
+    "file": "04-physique-chimie.md",
+    "title": "Physique — Chimie",
+    "rendu": "04.html"
+   },
+   {
+    "file": "05-francais.md",
+    "title": "Français",
+    "rendu": "05.html"
+   },
+   {
+    "file": "06-tous-niveaux.md",
+    "title": "Du primaire au lycée",
+    "rendu": "06.html"
+   },
+   {
+    "file": "07-nouveaux-elements.md",
+    "title": "Nouveaux éléments",
+    "rendu": "07.html"
+   },
+   {
+    "file": "08-lire-une-carte.md",
+    "title": "Lire une carte",
+    "rendu": "08.html"
+   }
+  ]
+ },
+ {
+  "cover": "cover.png",
+  "subjects": [
+   "Littérature",
+   "Anglais"
+  ],
+  "level": "Collège",
+  "dir": "books/alice-au-pays-des-merveilles",
+  "slug": "alice-au-pays-des-merveilles",
+  "source": "Alice in wonderland",
+  "title": "Alice’s Adventures in Wonderland",
+  "author": "Lewis Carroll",
+  "tagline": "",
+  "lang": "en",
+  "dir_texte": "ltr",
+  "look": "classic",
+  "accent": "#8c2f2a",
+  "resume": "Lewis Carroll, 1865. Domaine public.",
+  "droits": "domaine public",
+  "chapters": 1,
+  "built": true,
+  "chapterList": [
+   {
+    "file": "01-map.md",
+    "title": "A map of the world",
+    "rendu": "01.html"
+   }
+  ]
+ },
+ {
+  "cover": "cover.png",
+  "subjects": [
+   "Littérature",
+   "Anglais"
+  ],
+  "level": "Lycée",
+  "dir": "books/moby-dick",
+  "slug": "moby-dick",
+  "source": "moby-dick",
+  "title": "Moby-Dick",
+  "author": "Herman Melville",
+  "tagline": "THE WHALE.",
+  "lang": "en",
+  "dir_texte": "ltr",
+  "look": "classic",
+  "accent": "#8c2f2a",
+  "resume": "Herman Melville, 1851. Domaine public.",
+  "droits": "domaine public",
+  "chapters": 3,
+  "built": true,
+  "chapterList": [
+   {
+    "file": "chapter1.md",
+    "title": "chapter1",
+    "rendu": "01.html"
+   },
+   {
+    "file": "03-untitled-chapter.md",
+    "title": "Untitled chapter",
+    "rendu": "02.html"
+   },
+   {
+    "file": "chapter2.md",
+    "title": "chapter2",
+    "rendu": "03.html"
+   }
+  ]
+ }
+]
+</script>
 
 <script>
-/* La liste est posée à la construction par scripts/make-web.mjs : une page
-   statique n'a pas de dossier à parcourir, et un index écrit à la main aurait
-   fini par mentir sur ce qui est réellement publié. */
-(function () {
-  var livres = [{"slug":"manuel-bac-demo","title":"Manuel du Bac — démonstration","resume":"Cinq chapitres qui font tourner les 102 éléments interactifs du moteur.","chapters":8},{"slug":"alice-au-pays-des-merveilles","title":"Alice’s Adventures in Wonderland","resume":"Lewis Carroll, 1865. Domaine public.","chapters":1},{"slug":"moby-dick","title":"Moby-Dick","resume":"Herman Melville, 1851. Domaine public.","chapters":3}];
-  var sfy = false;
-  // La carte des simulations ne s'affiche que si elles ont réellement été
-  // publiées. Un lien vers une page qui charge à vide est pire qu'un lien
-  // absent : il fait passer un travail inachevé pour un travail cassé.
-  if (sfy) document.getElementById('carte-sfy').hidden = false;
-  var hote = document.getElementById('livres');
-  if (!livres.length) { document.getElementById('vide').hidden = false; return; }
-  livres.forEach(function (l) {
-    var a = document.createElement('a');
-    a.className = 'carte';
-    a.href = 'library/' + encodeURIComponent(l.slug) + '/';
-    var h = document.createElement('h3'); h.textContent = l.title; a.appendChild(h);
-    if (l.resume) { var p = document.createElement('p'); p.textContent = l.resume; a.appendChild(p); }
-    var m = document.createElement('div'); m.className = 'meta';
-    m.textContent = l.chapters + (l.chapters === 1 ? ' chapitre' : ' chapitres');
-    a.appendChild(m);
-    hote.appendChild(a);
+(function(){
+  var LANGNAME={fr:"Français",en:"English",ar:"العربية"};
+  var root=document.documentElement, grid=document.getElementById('grid'),
+      empty=document.getElementById('empty'), toolbar=document.getElementById('toolbar'),
+      chipsEl=document.getElementById('chips'), countEl=document.getElementById('count'),
+      qEl=document.getElementById('q');
+  var books=[], filters={subject:null,level:null,lang:null}, q='';
+
+  /* theme */
+  var btn=document.getElementById('theme');
+  function applyTheme(t){
+    if(t) root.setAttribute('data-theme',t); else root.removeAttribute('data-theme');
+    var dark = t==='dark' || (!t && matchMedia('(prefers-color-scheme:dark)').matches);
+    btn.textContent = dark ? 'Light' : 'Dark';
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+  }
+  try{ applyTheme(localStorage.getItem('fable-theme')); }catch(e){ applyTheme(null); }
+  btn.addEventListener('click',function(){
+    var next = btn.getAttribute('aria-pressed')==='true' ? 'light' : 'dark';
+    applyTheme(next);
+    try{ localStorage.setItem('fable-theme',next); }catch(e){}
   });
+
+  function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n;}
+
+  function card(b){
+    var a=el('a','book');
+    a.href='library/'+b.slug+'/';
+    a.style.setProperty('--bookaccent', b.accent||'var(--accent)');
+    if(b.lang){a.setAttribute('lang',b.lang);}
+    var sens = b.dir_texte || (b.lang==='ar' ? 'rtl' : '');
+    if(sens){a.setAttribute('dir',sens);}
+    var cov=el('div','cover');
+    var img=new Image();
+    img.src='library/'+b.slug+'/cover.png';
+    img.alt='';
+    img.loading='lazy';
+    img.onerror=function(){
+      cov.innerHTML='';
+      var f=el('div','cover-fallback');
+      f.appendChild(el('div','cf-title',b.title));
+      var foot=el('div','cf-foot',(b.author||LANGNAME[b.lang]||''));
+      f.appendChild(foot);
+      cov.appendChild(el('span','spine'));
+      cov.appendChild(f);
+    };
+    cov.appendChild(el('span','spine'));
+    cov.appendChild(img);
+    a.appendChild(cov);
+    var body=el('div');
+    var t=el('h3','book-title',b.title); body.appendChild(t);
+    if(b.author) body.appendChild(el('div','book-author',b.author));
+    var meta=el('div','book-meta');
+    meta.appendChild(el('span','badge',(b.lang||'').toUpperCase()));
+    if(b.chapters) meta.appendChild(el('span','ltr-nums',b.chapters+(b.chapters>1?' chapters':' chapter')));
+    body.appendChild(meta);
+    a.appendChild(body);
+    return a;
+  }
+
+  /* Une matière peut être une liste : le manuel du bac en couvre cinq, et il
+     doit apparaître sous chacune. On aplatit donc, ici et au filtrage, plutôt
+     que de forcer un livre à n'avoir qu'une matière — ce serait le dessin qui
+     dicterait le contenu. */
+  function valuesOf(b,key){
+    var v = key==='subject' ? (b.subjects || b.subject) : b[key];
+    if(v==null || v==='') return [];
+    return Object.prototype.toString.call(v)==='[object Array]' ? v : [v];
+  }
+  function facet(key){
+    var seen=[], i, j, vs;
+    for(i=0;i<books.length;i++){ vs=valuesOf(books[i],key);
+      for(j=0;j<vs.length;j++) if(seen.indexOf(vs[j])<0) seen.push(vs[j]); }
+    return seen.sort();
+  }
+
+  function buildChips(){
+    chipsEl.innerHTML='';
+    [['subject','Subject'],['level','Level'],['lang','Language']].forEach(function(pair){
+      var key=pair[0], vals=facet(key);
+      if(vals.length<2) return;                    /* a facet with one value filters nothing */
+      var g=el('div','chip-group');
+      g.appendChild(el('span','eyebrow',pair[1]));
+      vals.forEach(function(v){
+        var c=el('button','chip', key==='lang' ? (LANGNAME[v]||v) : v);
+        c.type='button'; c.setAttribute('aria-pressed','false');
+        c.addEventListener('click',function(){
+          filters[key] = filters[key]===v ? null : v;
+          buildChips(); render();
+        });
+        if(filters[key]===v) c.setAttribute('aria-pressed','true');
+        g.appendChild(c);
+      });
+      chipsEl.appendChild(g);
+    });
+  }
+
+  function render(){
+    var list=books.filter(function(b){
+      if(filters.subject && valuesOf(b,'subject').indexOf(filters.subject)<0) return false;
+      if(filters.level && b.level!==filters.level) return false;
+      if(filters.lang && b.lang!==filters.lang) return false;
+      if(q && (b.title+' '+(b.author||'')).toLowerCase().indexOf(q)<0) return false;
+      return true;
+    });
+    grid.innerHTML='';
+    list.forEach(function(b){ grid.appendChild(card(b)); });
+    empty.hidden = books.length>0;
+    grid.hidden = books.length===0;
+    countEl.textContent = books.length ? (list.length===books.length
+        ? books.length+(books.length>1?' books':' book')
+        : list.length+' of '+books.length) : '';
+    if(books.length && !list.length){
+      grid.hidden=true; empty.hidden=false;
+      empty.querySelector('h3').textContent='Nothing matches that.';
+      empty.querySelector('p').textContent='Clear the search or a filter to see the rest of the library.';
+    }
+  }
+
+  qEl.addEventListener('input',function(){ q=qEl.value.trim().toLowerCase(); render(); });
+
+  function start(data){
+    books=data||[];
+    toolbar.hidden = books.length<8;              /* the toolbar earns its place around a dozen books */
+    buildChips();
+    render();
+  }
+
+  /* Les simulations ne sont montrées que si la construction les a publiées.
+     Un lien vers une page qui charge à vide est pire qu'un lien absent. */
+  /* Non remplacé — la source ouverte telle quelle — `true` est un nom
+     inconnu, et l'exception emportait tout le script : page sans livres, sans
+     outils, sans rien. Le jeton se lit donc sous garde, comme la graine. */
+  var SFY_PRET=(function(){ try{ return true; }catch(e){ return false; } })();
+  if(SFY_PRET){ var ts=document.getElementById('tool-sfy'); if(ts) ts.hidden=false; }
+
+  /* the built library; falls back to the inline seed when opened as a bare file */
+  /* La graine est posée par la construction. Non remplacée — la source ouverte
+     telle quelle — elle n'est pas du JSON, et un `JSON.parse` nu vidait la page
+     entière : plus de livres, plus d'outils, plus de pied de page. Une graine
+     illisible ne doit coûter que la graine. */
+  var seed=[];
+  try{ seed=JSON.parse(document.getElementById('seed').textContent); }catch(e){}
+  var demo=(location.search.match(/demo=([a-z]+)/)||[])[1];
+  /* demo only: the fixture script sits at the end of the body, so wait for it */
+  if(demo){ document.addEventListener('DOMContentLoaded',function(){
+    start(window.__demo ? window.__demo(demo,seed) : seed);
+  }); return; }
+  fetch('library/library.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    /* library.json est { books: [...] } — la même forme que lit le cahier. Un
+       tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
+       une forme au fichier que deux applications se partagent. */
+    .then(function(j){ start(j && j.books ? j.books : (j || seed)); })
+    .catch(function(){ start(seed); });
 })();
 </script>
+
+
 <script src="atelier.js"></script>
 </body>
 </html>

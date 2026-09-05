@@ -1,0 +1,12 @@
+{
+  "id": "la-fission-et-la-fusion",
+  "subject": "physique",
+  "title": "La fission et la fusion",
+  "summary": "Casser un noyau lourd avec un neutron, suivre la réaction en chaîne génération après génération, puis tenter l’inverse : rapprocher deux noyaux légers assez fort pour franchir leur répulsion.",
+  "look": "Un neutron de plus ou de moins par fission, et la chaîne s’éteint ou s’emballe — tout tient dans le facteur k.",
+  "vignette": "fission",
+  "levels": ["lycee"],
+  "tags": ["fission", "fusion", "réaction en chaîne", "barrière coulombienne", "neutron", "centrale nucléaire"],
+  "minutes": 25,
+  "variables": ["facteur de multiplication k", "énergie cinétique", "barrière coulombienne", "générations"]
+}

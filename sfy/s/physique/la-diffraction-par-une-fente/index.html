@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- La matière pose ses deux teintes sur la racine ; le bloc de thème dans
+     style.css choisit laquelle sert. Rien d'autre dans la page ne fixe --sub :
+     l'en-tête, les curseurs, les tracés et la note en héritent tous. -->
+<html lang="fr" data-subject="physique" data-niveau="lycee"
+  style="--sub-l:#10707f;--sub-d:#4ec5d6">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La diffraction par une fente — See for yourself</title>
+<link rel="icon" href="../../../mark.svg">
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body class="is-lab">
+<header class="lab-head">
+  <a class="lab-back" href="../../../#/physique" title="Retour au catalogue">‹</a>
+  <span class="lab-sub">Physique</span>
+  <h1>La diffraction par une fente</h1>
+  <div class="grow"></div>
+  <a class="marque-bloc" href="../../../"><svg class="marque" viewBox="0 0 32 32" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="See for yourself"><path d="M8.5 5.5A17 17 0 0 1 8.5 26.5A17 17 0 0 1 8.5 5.5Z"/><path class="rai" d="M8.5 5.5 22.4 13.2"/><path class="rai" d="M8.5 26.5 22.4 18.8"/><circle cx="27.6" cy="16" r="2.5" fill="currentColor" stroke="none"/></svg><b>See for yourself</b></a>
+  <button class="lab-btn" data-theme-toggle title="Clair / sombre">◐</button>
+  <button class="lab-btn" data-full title="Plein écran">⤢</button>
+</header>
+<main class="lab">
+  <div class="lab-stagewrap"><div class="lab-stage" id="stage"></div></div>
+  <aside class="lab-side">
+    <section class="lab-panel" id="controls"><h2>Réglages</h2><div class="lab-fields" id="fields"></div></section>
+    <section class="lab-panel" id="readouts" hidden><h2>Mesures</h2><div class="lab-rows" id="rows"></div></section>
+  </aside>
+</main>
+<p class="lab-look"><b>Ce qu’il faut voir</b> La tache s’élargit quand la fente se resserre — et les points L = f(1/a) tombent sur une droite qui passe par l’origine, dont la pente vaut 2λD.</p>
+<section class="lab-notes"><h4>La manipulation, dans l’ordre</h4><p>C’est l’exercice 3 de la séance, fait au lieu d’être lu.</p><ol><li>Laissez <code>λ</code> et <code>D</code> tranquilles pendant toute la mesure — on ne fait varier qu’une chose à la fois, et ici c’est <code>a</code>.</li><li>Posez les deux curseurs <code>C₁</code> et <code>C₂</code> sur les deux <b>extinctions</b> qui encadrent la tache centrale : les endroits où la courbe touche zéro. Cliquez sur l’écran, le curseur le plus proche vient s’y placer.</li><li>Appuyez sur <b>＋ Relever (1/a , L)</b>.</li><li>Changez de fente. Recommencez. Quatre ou cinq fentes suffisent.</li></ol><p>Le graphe s’ouvre tout seul. Les points doivent tomber sur une <b>droite passant par l’origine</b>, et sa pente vaut <code>2λD</code> :</p><p><code>L = 2λD / a</code>  soit  <code>L = (2λD) × (1/a)</code></p><p>d’où <code>λ = pente / 2D</code>. Comparez à <code>λ</code> du laser, affiché juste en dessous.</p><p>Si un point sort de la droite, ce n’est pas la simulation : c’est un curseur mal posé. Reprenez-le, il n’y a rien d’autre à corriger.</p><h4>Ce que la figure n’est pas</h4><p>Elle n’est pas dessinée. Chaque colonne de l’écran vaut</p><p><code>I / I₀ = (sin u / u)²</code>  avec  <code>u = π a sin θ / λ</code></p><p>Les extinctions tombent donc là où <code>sin θ = k λ/a</code> sans qu’on les y place, et les franges secondaires valent 4,7 % puis 1,7 % de l’éclairement central parce que la fonction le dit. La <b>courbe</b> du haut est cet éclairement, sans retouche.</p><p>La <b>bande</b> du dessous est une photo, et « Photo surexposée » est cochée par défaut : à l’échelle vraie, une frange à 4,7 % est presque noire. L’œil et le capteur ne sont pas linéaires — c’est pourquoi une photo de diffraction montre bien plus de franges qu’un tracé fidèle. La courbe dit le vrai, la bande dit ce qu’on voit.</p><h4>Les trois influences du cours, en une manette chacune</h4><ul><li><b>a diminue → la tache s’élargit.</b> Contre-intuitif, et c’est le cœur du chapitre : plus l’ouverture est étroite, plus l’onde s’étale.</li><li><b>λ diminue → la tache rétrécit.</b> Passez du rouge (633 nm) au bleu (450 nm) sans rien toucher d’autre.</li><li><b>D augmente → la tache s’élargit.</b> Là, rien d’étonnant : l’angle est le même, l’écran est plus loin.</li></ul><p>L’angle, lui, ne dépend <b>que</b> de <code>λ/a</code>. Changer <code>D</code> déplace la tache sur l’écran sans changer <code>θ</code> d’un iota — le relevé <code>θ</code> le montre.</p><h4>λ/a ou asin(λ/a) ?</h4><p>Le cours écrit <code>θ = λ/a</code>. La valeur exacte est <code>θ = asin(λ/a)</code>, et l’écran est à <code>x = D tan θ</code>, pas <code>D θ</code>. Les deux relevés sont affichés côte à côte avec leur écart. Aux valeurs d’ici il vaut quelques millièmes de pour cent : l’approximation est excellente, et c’est bien pour cela qu’on l’enseigne.</p><p>Pour voir où elle cède, poussez <code>a</code> vers 30 µm avec <code>λ</code> à 750 nm. <code>λ/a</code> approche alors 0,025 et l’écart devient lisible. En dessous de <code>a = λ</code>, il n’y a plus d’extinction du tout : la fente est plus étroite que l’onde.</p><h4>Fente ou fil : la même figure</h4><p>Les exercices passent du fil de pêche aux fils calibrés puis au cheveu. Ce n’est pas une distraction : une fente de largeur <code>a</code> et un fil de diamètre <code>a</code> donnent la même figure de diffraction hors du centre — c’est le théorème de Babinet. Basculez l’obstacle, la tache ne bouge pas. C’est ce qui permet de <b>mesurer un cheveu avec un laser</b>, ce que fait l’exercice 3 à sa dernière question.</p><h4>À essayer</h4><ul><li>Relevez cinq fentes, lisez <code>λ</code>. Puis changez <code>D</code> et refaites les cinq. La pente change, <code>λ</code> non.</li><li>Mélangez volontairement deux valeurs de <code>D</code> dans un même graphe. Les points ne s’alignent plus, et la simulation vous le dit — <code>2λD</code> n’est plus une constante.</li><li>Posez les curseurs sur la <b>deuxième</b> extinction de chaque côté : vous mesurez <code>2L</code>. La pente double, et <code>λ</code> lue est deux fois trop grande. La formule ne protège de rien si l’on ne mesure pas ce qu’elle décrit.</li></ul></section>
+<div class="lab-err" id="err" hidden></div>
+<script type="module">
+  window.__SIM__ = {"subject":"physique","id":"la-diffraction-par-une-fente","title":"La diffraction par une fente"};
+</script>
+<script type="module" src="../../../runner.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "id": "le-chemin-de-la-lumiere",
+  "subject": "physique",
+  "title": "Le chemin de la lumière",
+  "summary": "Deux modes. Douze casse-tête où l’on conduit un faisceau jusqu’à des billes de couleur avec des miroirs, des prismes et une colonne d’eau — puis un bac à sable : grand plateau, quatorze pièces à poser, laser à longueur d’onde réglable, ampoule, objet lumineux, trou, écran, œil, miroir courbe et lentille convergente ou divergente, et les montages du cours prêts à charger. Rien n’est dessiné à la main : chaque rebond est la loi de la réflexion, chaque traversée celle de Descartes, et le foyer d’un miroir courbe tombe sur R/2 sans qu’aucune formule de miroir soit écrite.",
+  "look": "Cinq rayons parallèles sur un miroir concave se recoupent à R/2 — la formule des foyers est RETROUVÉE, jamais appliquée ; ouvrez le miroir et ils cessent de se recouper au même point, c’est l’aberration de sphéricité. Posez un objet et une lentille : OA′ et γ sont MESURÉS là où les rayons se recoupent, et 1/OA′ − 1/OA tombe sur 1/f — en positif comme en négatif.",
+  "vignette": "lumiere",
+  "levels": [
+    "college",
+    "lycee"
+  ],
+  "tags": [
+    "lumière",
+    "réflexion",
+    "réfraction",
+    "Descartes",
+    "prisme",
+    "angle limite",
+    "réflexion totale",
+    "lentille mince",
+    "lentille divergente",
+    "miroir concave",
+    "miroir convexe",
+    "aberration de sphéricité",
+    "relation de conjugaison",
+    "grandissement",
+    "image virtuelle",
+    "chambre noire",
+    "sténopé",
+    "fibre optique",
+    "dispersion",
+    "couleurs",
+    "synthèse additive",
+    "jeu",
+    "bac à sable"
+  ],
+  "minutes": 40,
+  "variables": [
+    "position et angle des pièces",
+    "couleur de la lumière",
+    "longueur d’onde du laser",
+    "signe et valeur de la distance focale",
+    "rayon de courbure et ouverture du miroir",
+    "largeur du trou",
+    "verre du prisme",
+    "dispersion"
+  ]
+}
