@@ -4,9 +4,9 @@
 // just a walk of the sims/ folder. There is no state to get out of step with the
 // disk: reload the page and you are looking at what is actually there.
 
-import { vignette } from './vignettes.js';
-import { BRAND, marque, blocMarque } from './brand.js';
-import { LANG, T, champ, poserSelecteur } from './langue.js';
+import { vignette } from './vignettes.js?v=mu536jxn';
+import { BRAND, marque, blocMarque } from './brand.js?v=mu536jxn';
+import { LANG, T, champ, poserSelecteur } from './langue.js?v=mu536jxn';
 
 // L'enseigne est montée depuis brand.js, jamais recopiée dans index.html : une
 // marque écrite à deux endroits est une marque qui finit par différer.
