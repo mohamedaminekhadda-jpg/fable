@@ -5,8 +5,43 @@
   "summary": "Cinq pôles, leurs flux, et une case à cocher qui retourne la carte : les échanges internes à chaque pôle. Puis les neuf passages par lesquels tout doit tenir, et le commerce extérieur du Maroc en deux colonnes.",
   "look": "La mondialisation ressemble à un réseau mondial jusqu’à ce qu’on montre les échanges internes : 61 % de ce que l’Europe vend ne quitte pas l’Europe, contre 16 % pour l’Afrique.",
   "vignette": "globe-flux",
-  "levels": ["lycee"],
-  "tags": ["mondialisation", "commerce mondial", "Triade", "détroits", "Suez", "Malacca", "Tanger Med", "Maroc"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "mondialisation",
+    "commerce mondial",
+    "Triade",
+    "détroits",
+    "Suez",
+    "Malacca",
+    "Tanger Med",
+    "Maroc"
+  ],
   "minutes": 35,
-  "variables": ["flux internes", "passage stratégique", "pôle sélectionné"]
+  "variables": [
+    "flux internes",
+    "passage stratégique",
+    "pôle sélectionné"
+  ],
+  "en": {
+    "title": "World trade",
+    "summary": "Five poles, their flows, and a checkbox that flips the map: internal trade within each pole. Then the nine passages through which everything must hold, and Morocco's foreign trade in two columns.",
+    "look": "Globalization looks like a global network until you show internal trade: 61 % of what Europe sells does not leave Europe, versus 16 % for Africa.",
+    "tags": [
+      "globalization",
+      "world trade",
+      "triad",
+      "straits",
+      "Suez",
+      "Malacca",
+      "Tanger Med",
+      "Morocco"
+    ],
+    "variables": [
+      "internal flows",
+      "strategic passage",
+      "selected pole"
+    ]
+  }
 }

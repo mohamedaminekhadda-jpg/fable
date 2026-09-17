@@ -5,8 +5,43 @@
   "summary": "Croiser deux indicateurs sur cinquante et un pays, les colorer sur un planisphère, les classer — et regarder ce que chaque représentation montre et ce qu’elle cache.",
   "look": "Aucun indicateur ne suffit seul : le PIB par habitant classe le Qatar devant la France, l’IDH remet les choses en place.",
   "vignette": "globe",
-  "levels": ["lycee"],
-  "tags": ["développement", "IDH", "PIB", "Nord-Sud", "indicateurs", "planisphère", "Maroc"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "développement",
+    "IDH",
+    "PIB",
+    "Nord-Sud",
+    "indicateurs",
+    "planisphère",
+    "Maroc"
+  ],
   "minutes": 30,
-  "variables": ["indicateur en abscisse", "indicateur en ordonnée", "année", "continent"]
+  "variables": [
+    "indicateur en abscisse",
+    "indicateur en ordonnée",
+    "année",
+    "continent"
+  ],
+  "en": {
+    "title": "Development indicators",
+    "summary": "Cross two indicators over fifty-one countries, colour them on a world map, rank them — and look at what each representation shows and what it hides.",
+    "look": "No single indicator is enough: GDP per capita ranks Qatar ahead of France, the HDI puts things back in order.",
+    "tags": [
+      "development",
+      "HDI",
+      "GDP",
+      "North-South",
+      "indicators",
+      "world map",
+      "Morocco"
+    ],
+    "variables": [
+      "indicator on x-axis",
+      "indicator on y-axis",
+      "year",
+      "continent"
+    ]
+  }
 }

@@ -5,8 +5,41 @@
   "summary": "Placer les examens sur les quarante semaines d’une grossesse : ce que chacun prélève, à quelle date il est possible, ce qu’il permet de voir et ce qu’il coûte en risque.",
   "look": "Aucun examen n’est disponible tout le temps : chacun a sa fenêtre, et plus il renseigne, plus il coûte.",
   "vignette": "frise",
-  "levels": ["lycee"],
-  "tags": ["diagnostic prénatal", "échographie", "amniocentèse", "choriocentèse", "cordocentèse", "FISH", "caryotype"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "diagnostic prénatal",
+    "échographie",
+    "amniocentèse",
+    "choriocentèse",
+    "cordocentèse",
+    "FISH",
+    "caryotype"
+  ],
   "minutes": 20,
-  "variables": ["semaine de grossesse", "examen choisi", "indications"]
+  "variables": [
+    "semaine de grossesse",
+    "examen choisi",
+    "indications"
+  ],
+  "en": {
+    "title": "Prenatal diagnosis",
+    "summary": "Placing the tests on the forty weeks of a pregnancy: what each one samples, at what date it is possible, what it allows to be seen and what it costs in risk.",
+    "look": "No test is available all the time: each has its window, and the more it tells, the more it costs.",
+    "tags": [
+      "prenatal diagnosis",
+      "ultrasound",
+      "amniocentesis",
+      "chorionic villus sampling",
+      "cordocentesis",
+      "FISH",
+      "karyotype"
+    ],
+    "variables": [
+      "week of pregnancy",
+      "test chosen",
+      "indications"
+    ]
+  }
 }

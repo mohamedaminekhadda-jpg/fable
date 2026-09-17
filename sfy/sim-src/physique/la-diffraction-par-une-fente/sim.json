@@ -5,8 +5,43 @@
   "summary": "Mesurer la tache centrale au curseur pour plusieurs fentes, porter L en fonction de 1/a, et lire la longueur d’onde du laser sur la pente de la droite.",
   "look": "La tache s’élargit quand la fente se resserre — et les points L = f(1/a) tombent sur une droite qui passe par l’origine, dont la pente vaut 2λD.",
   "vignette": "diffraction",
-  "levels": ["lycee"],
-  "tags": ["ondes", "lumière", "diffraction", "laser", "longueur d’onde", "écart angulaire"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "ondes",
+    "lumière",
+    "diffraction",
+    "laser",
+    "longueur d’onde",
+    "écart angulaire"
+  ],
   "minutes": 25,
-  "variables": ["longueur d’onde λ", "largeur de fente a", "distance D", "largeur L", "écart angulaire θ"]
+  "variables": [
+    "longueur d’onde λ",
+    "largeur de fente a",
+    "distance D",
+    "largeur L",
+    "écart angulaire θ"
+  ],
+  "en": {
+    "title": "Diffraction by a slit",
+    "summary": "Measure the central spot with the cursor for several slits, plot L against 1/a, and read the laser wavelength from the slope of the line.",
+    "look": "The spot widens when the slit narrows — and the points L = f(1/a) fall on a straight line through the origin, whose slope is 2λD.",
+    "tags": [
+      "waves",
+      "light",
+      "diffraction",
+      "laser",
+      "wavelength",
+      "angular separation"
+    ],
+    "variables": [
+      "wavelength λ",
+      "slit width a",
+      "distance D",
+      "width L",
+      "angular separation θ"
+    ]
+  }
 }

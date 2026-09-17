@@ -5,8 +5,37 @@
   "summary": "Résoudre une équation en retirant des poids et des boîtes — à condition de faire la même chose des deux côtés. Les opérations interdites sont proposées aussi : la balance bascule, et l’on voit pourquoi la règle existe.",
   "look": "Retirez un poids d’un seul côté : le fléau penche. L’égalité n’est pas une phrase à recopier, c’est un équilibre qu’on casse ou qu’on garde.",
   "vignette": "balance",
-  "levels": ["college"],
-  "tags": ["équation", "égalité", "inconnue", "balance", "résolution", "opérations"],
+  "levels": [
+    "college"
+  ],
+  "tags": [
+    "équation",
+    "égalité",
+    "inconnue",
+    "balance",
+    "résolution",
+    "opérations"
+  ],
   "minutes": 20,
-  "variables": ["l’équation", "les opérations choisies"]
+  "variables": [
+    "l’équation",
+    "les opérations choisies"
+  ],
+  "en": {
+    "title": "The balance of equations",
+    "summary": "Solve an equation by removing weights and boxes — provided you do the same thing on both sides. Forbidden operations are also offered: the balance tips, and you see why the rule exists.",
+    "look": "Remove a weight from one side only: the beam tilts. Equality is not a sentence to copy out, it is an equilibrium that you break or keep.",
+    "tags": [
+      "equation",
+      "equality",
+      "unknown",
+      "balance",
+      "solving",
+      "operations"
+    ],
+    "variables": [
+      "the equation",
+      "the chosen operations"
+    ]
+  }
 }

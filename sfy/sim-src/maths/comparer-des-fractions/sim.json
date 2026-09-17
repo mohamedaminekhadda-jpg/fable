@@ -5,8 +5,36 @@
   "summary": "Deux barres de même longueur, découpées différemment. On clique pour colorier, et l’on voit tout de suite laquelle est la plus grande — sans poser une seule opération.",
   "look": "Deux tiers, c’est plus que la moitié, et cela se voit avant de se calculer. Deux quarts et une moitié tombent exactement au même endroit sur la ligne des nombres.",
   "vignette": "fractions",
-  "levels": ["primaire", "college"],
-  "tags": ["fractions", "comparaison", "fractions égales", "partage", "ligne des nombres"],
+  "levels": [
+    "primaire",
+    "college"
+  ],
+  "tags": [
+    "fractions",
+    "comparaison",
+    "fractions égales",
+    "partage",
+    "ligne des nombres"
+  ],
   "minutes": 15,
-  "variables": ["nombre de parts", "parts coloriées"]
+  "variables": [
+    "nombre de parts",
+    "parts coloriées"
+  ],
+  "en": {
+    "title": "Compare two fractions",
+    "summary": "Two bars of the same length, cut differently. You click to colour them, and you see straight away which is the larger — without setting out a single operation.",
+    "look": "Two thirds is more than one half, and that can be seen before calculating. Two quarters and one half fall exactly at the same place on the number line.",
+    "tags": [
+      "fractions",
+      "comparison",
+      "equivalent fractions",
+      "sharing",
+      "number line"
+    ],
+    "variables": [
+      "number of parts",
+      "coloured parts"
+    ]
+  }
 }

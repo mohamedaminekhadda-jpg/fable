@@ -44,5 +44,45 @@
     "largeur du trou",
     "verre du prisme",
     "dispersion"
-  ]
+  ],
+  "en": {
+    "title": "The path of light",
+    "summary": "Two modes. Twelve puzzles where you guide a beam to coloured marbles with mirrors, prisms and a water column — then a sandbox: large board, fourteen pieces to place, laser with adjustable wavelength, bulb, luminous object, hole, screen, eye, curved mirror and converging or diverging lens, and the lesson setups ready to load. Nothing is drawn by hand: each bounce is the law of reflection, each crossing that of Descartes, and the focus of a curved mirror falls on R/2 without any mirror formula being written.",
+    "look": "Five parallel rays on a concave mirror intersect at R/2 — the formula for the foci is REDISCOVERED, never applied; open the mirror and they stop intersecting at the same point, that is spherical aberration. Place an object and a lens: OA′ and γ are MEASURED where the rays intersect, and 1/OA′ − 1/OA falls on 1/f — in positive as in negative.",
+    "tags": [
+      "light",
+      "reflection",
+      "refraction",
+      "Descartes",
+      "prism",
+      "critical angle",
+      "total internal reflection",
+      "thin lens",
+      "diverging lens",
+      "concave mirror",
+      "convex mirror",
+      "spherical aberration",
+      "conjugate relation",
+      "magnification",
+      "virtual image",
+      "camera obscura",
+      "pinhole",
+      "optical fibre",
+      "dispersion",
+      "colours",
+      "additive colour mixing",
+      "game",
+      "sandbox"
+    ],
+    "variables": [
+      "position and angle of pieces",
+      "colour of light",
+      "laser wavelength",
+      "sign and value of the focal length",
+      "radius of curvature and aperture of the mirror",
+      "width of the hole",
+      "glass of the prism",
+      "dispersion"
+    ]
+  }
 }

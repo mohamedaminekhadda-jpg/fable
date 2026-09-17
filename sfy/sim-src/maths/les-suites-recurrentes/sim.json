@@ -5,8 +5,41 @@
   "summary": "Tirer u(0) à la souris et voir le tracé de u(n+1) = f(u(n)) monter en escalier, s’enrouler en spirale, tourner en cycle ou partir dans tous les sens — puis lire pourquoi dans |f’(l)|.",
   "look": "Le rapport de deux écarts successifs tend vers |f’(l)| : c’est ce nombre, et lui seul, qui décide si la suite converge, à quelle vitesse, et en escalier ou en spirale.",
   "vignette": "escalier",
-  "levels": ["lycee"],
-  "tags": ["suites", "récurrence", "point fixe", "convergence", "monotonie", "dichotomie", "méthode de Newton"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "suites",
+    "récurrence",
+    "point fixe",
+    "convergence",
+    "monotonie",
+    "dichotomie",
+    "méthode de Newton"
+  ],
   "minutes": 30,
-  "variables": ["la suite", "u(0)", "nombre de pas"]
+  "variables": [
+    "la suite",
+    "u(0)",
+    "nombre de pas"
+  ],
+  "en": {
+    "title": "Recurrence sequences: the staircase",
+    "summary": "Drag u(0) with the mouse and see the plot of u(n+1) = f(u(n)) climb as a staircase, coil into a spiral, turn in a cycle or go off in all directions — then read why in |f’(l)|.",
+    "look": "The ratio of two successive differences tends toward |f’(l)|: it is this number, and it alone, that decides whether the sequence converges, how fast, and as a staircase or a spiral.",
+    "tags": [
+      "sequences",
+      "recurrence",
+      "fixed point",
+      "convergence",
+      "monotonicity",
+      "bisection",
+      "Newton's method"
+    ],
+    "variables": [
+      "the sequence",
+      "u(0)",
+      "number of steps"
+    ]
+  }
 }

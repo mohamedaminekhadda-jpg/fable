@@ -5,8 +5,43 @@
   "summary": "Régler n et p, lire la loi — puis lancer mille tirages, dix mille, et voir les fréquences observées venir se poser sur les probabilités théoriques.",
   "look": "Les traits orange sont ce qu’on a obtenu, les bâtons ce qu’on avait prévu. À mille tirages ils se cherchent encore ; à dix mille ils se confondent. C’est la loi des grands nombres, faite et non racontée.",
   "vignette": "cloche",
-  "levels": ["lycee"],
-  "tags": ["probabilités", "loi binomiale", "espérance", "variance", "loi des grands nombres", "simulation", "épreuve de Bernoulli"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "probabilités",
+    "loi binomiale",
+    "espérance",
+    "variance",
+    "loi des grands nombres",
+    "simulation",
+    "épreuve de Bernoulli"
+  ],
   "minutes": 25,
-  "variables": ["n", "p", "k", "graine du tirage"]
+  "variables": [
+    "n",
+    "p",
+    "k",
+    "graine du tirage"
+  ],
+  "en": {
+    "title": "The binomial distribution, and the experiment that recovers it",
+    "summary": "Set n and p, read the distribution — then run a thousand draws, ten thousand, and see the observed frequencies come to settle on the theoretical probabilities.",
+    "look": "The orange lines are what we obtained, the bars what we had expected. At a thousand draws they are still seeking each other; at ten thousand they merge. It is the law of large numbers, done and not recounted.",
+    "tags": [
+      "probability",
+      "binomial distribution",
+      "expected value",
+      "variance",
+      "law of large numbers",
+      "simulation",
+      "Bernoulli trial"
+    ],
+    "variables": [
+      "n",
+      "p",
+      "k",
+      "random seed"
+    ]
+  }
 }

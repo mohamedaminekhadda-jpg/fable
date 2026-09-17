@@ -5,8 +5,41 @@
   "summary": "Trois courbes empilées sur le même axe et un curseur qui les traverse : la tangente s’incline sur f pendant que le point descend sur f′, et le tableau de variations se dessine tout seul en dessous.",
   "look": "La tangente devient horizontale exactement quand f′ coupe l’axe, et la courbure se retourne exactement quand f″ le coupe. Le tableau de variations n’est rien d’autre que le signe de f′.",
   "vignette": "tangente",
-  "levels": ["lycee"],
-  "tags": ["dérivée", "tangente", "variations", "convexité", "point d’inflexion", "extremum", "asymptote", "étude de fonction"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "dérivée",
+    "tangente",
+    "variations",
+    "convexité",
+    "point d’inflexion",
+    "extremum",
+    "asymptote",
+    "étude de fonction"
+  ],
   "minutes": 30,
-  "variables": ["la fonction", "x"]
+  "variables": [
+    "la fonction",
+    "x"
+  ],
+  "en": {
+    "title": "The study of a function: f, f′ and f″ together",
+    "summary": "Three curves stacked on the same axis and a cursor that crosses them: the tangent tilts on f while the point goes down on f′, and the table of variations draws itself on its own underneath.",
+    "look": "The tangent becomes horizontal exactly when f′ crosses the axis, and the curvature reverses exactly when f″ crosses it. The table of variations is nothing other than the sign of f′.",
+    "tags": [
+      "derivative",
+      "tangent",
+      "variations",
+      "convexity",
+      "inflection point",
+      "extremum",
+      "asymptote",
+      "study of a function"
+    ],
+    "variables": [
+      "the function",
+      "x"
+    ]
+  }
 }

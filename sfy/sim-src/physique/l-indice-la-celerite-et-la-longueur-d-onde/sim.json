@@ -5,8 +5,47 @@
   "summary": "Faire entrer une onde lumineuse dans le verre et regarder ce qui change — la célérité et la longueur d’onde — et ce qui ne change pas : la fréquence.",
   "look": "Dans le verre les ondulations se resserrent, mais les deux détecteurs battent exactement au même rythme : λ change, ν non.",
   "vignette": "onde-refraction",
-  "levels": ["lycee"],
-  "tags": ["lumière", "indice", "célérité", "longueur d’onde", "fréquence", "spectre", "ultraviolet", "infrarouge"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "lumière",
+    "indice",
+    "célérité",
+    "longueur d’onde",
+    "fréquence",
+    "spectre",
+    "ultraviolet",
+    "infrarouge"
+  ],
   "minutes": 20,
-  "variables": ["indice n", "longueur d’onde λ", "célérité v", "fréquence ν", "épaisseur e"]
+  "variables": [
+    "indice n",
+    "longueur d’onde λ",
+    "célérité v",
+    "fréquence ν",
+    "épaisseur e"
+  ],
+  "en": {
+    "title": "The refractive index, the speed and the wavelength",
+    "summary": "Send a light wave into glass and look at what changes — the speed and the wavelength — and what does not change: the frequency.",
+    "look": "In glass the ripples tighten, but the two detectors beat at exactly the same rate: λ changes, ν does not.",
+    "tags": [
+      "light",
+      "refractive index",
+      "speed",
+      "wavelength",
+      "frequency",
+      "spectrum",
+      "ultraviolet",
+      "infrared"
+    ],
+    "variables": [
+      "refractive index n",
+      "wavelength λ",
+      "speed v",
+      "frequency ν",
+      "thickness e"
+    ]
+  }
 }

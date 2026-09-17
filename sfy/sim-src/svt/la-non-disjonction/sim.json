@@ -5,8 +5,45 @@
   "summary": "Suivre une paire de chromosomes à travers les deux divisions de la méiose, la faire mal se séparer, et voir quels gamètes en sortent — puis quel zygote après fécondation.",
   "look": "Selon que l’accident a lieu à la première ou à la seconde division, les quatre gamètes sont tous anormaux, ou seulement deux.",
   "vignette": "division",
-  "levels": ["lycee"],
-  "tags": ["méiose", "non-disjonction", "gamète", "trisomie", "monosomie", "Turner", "Klinefelter", "Down"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "méiose",
+    "non-disjonction",
+    "gamète",
+    "trisomie",
+    "monosomie",
+    "Turner",
+    "Klinefelter",
+    "Down"
+  ],
   "minutes": 20,
-  "variables": ["division où survient l’accident", "paire concernée", "gamètes obtenus", "zygote"]
+  "variables": [
+    "division où survient l’accident",
+    "paire concernée",
+    "gamètes obtenus",
+    "zygote"
+  ],
+  "en": {
+    "title": "Nondisjunction",
+    "summary": "Follow a pair of chromosomes through the two divisions of meiosis, make it separate incorrectly, and see which gametes come out — then which zygote after fertilization.",
+    "look": "Depending on whether the accident occurs at the first or the second division, the four gametes are all abnormal, or only two.",
+    "tags": [
+      "meiosis",
+      "nondisjunction",
+      "gamete",
+      "trisomy",
+      "monosomy",
+      "Turner",
+      "Klinefelter",
+      "Down"
+    ],
+    "variables": [
+      "division where the accident occurs",
+      "affected pair",
+      "gametes obtained",
+      "zygote"
+    ]
+  }
 }

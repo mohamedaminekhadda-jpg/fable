@@ -4,9 +4,49 @@
   "title": "La tectonique des plaques, en coupe",
   "summary": "Trois frontières et trois mesures : le code-barres magnétique d’une dorsale, la distance fosse-volcans d’une subduction, la racine qui porte une chaîne de montagnes. Rien n’est dessiné au jugé.",
   "look": "Réglez la dorsale à 2,5 cm/an puis à 15 : le code-barres s’étire dans le rapport exact des vitesses. C’est en mesurant ces bandes, en 1963, qu’on a démontré que les fonds océaniques s’écartent.",
-  "levels": ["college", "lycee"],
+  "levels": [
+    "college",
+    "lycee"
+  ],
   "vignette": "plaques",
-  "tags": ["tectonique", "dorsale", "subduction", "collision", "séisme", "volcan", "isostasie", "inversions magnétiques", "Terre"],
+  "tags": [
+    "tectonique",
+    "dorsale",
+    "subduction",
+    "collision",
+    "séisme",
+    "volcan",
+    "isostasie",
+    "inversions magnétiques",
+    "Terre"
+  ],
   "minutes": 25,
-  "variables": ["la frontière", "la vitesse d’écartement", "le pendage", "l’épaisseur de croûte"]
+  "variables": [
+    "la frontière",
+    "la vitesse d’écartement",
+    "le pendage",
+    "l’épaisseur de croûte"
+  ],
+  "en": {
+    "title": "Plate tectonics, in cross-section",
+    "summary": "Three boundaries and three measurements: the magnetic barcode of a mid-ocean ridge, the trench-volcano distance of a subduction, the root that supports a mountain range. Nothing is drawn by guesswork.",
+    "look": "Set the mid-ocean ridge to 2,5 cm/an then to 15: the barcode stretches in the exact ratio of the speeds. It was by measuring these bands, in 1963, that it was demonstrated that the ocean floors move apart.",
+    "tags": [
+      "tectonics",
+      "mid-ocean ridge",
+      "subduction",
+      "collision",
+      "earthquake",
+      "volcano",
+      "isostasy",
+      "magnetic reversals",
+      "Earth"
+    ],
+    "variables": [
+      "boundary",
+      "spreading rate",
+      "dip",
+      "crust thickness"
+    ]
+  }
 }

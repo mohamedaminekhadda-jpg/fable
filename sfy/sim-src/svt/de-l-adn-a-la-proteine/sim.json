@@ -4,9 +4,46 @@
   "title": "De l’ADN à la protéine",
   "summary": "La double hélice qui tourne, l’ARN polymérase qui la copie, le ribosome qui la lit trois lettres à la fois — sur le vrai gène de la bêta-globine. Et une base qu’on peut changer d’un clic pour voir ce qu’il advient de la protéine.",
   "look": "Changez la vingtième base en T : le septième codon passe de GAG à GTG, l’acide glutamique devient une valine, et vous venez de fabriquer la drépanocytose. Une lettre.",
-  "levels": ["lycee"],
+  "levels": [
+    "lycee"
+  ],
   "vignette": "helice",
-  "tags": ["ADN", "double hélice", "transcription", "traduction", "code génétique", "ARN messager", "ribosome", "mutation", "drépanocytose"],
+  "tags": [
+    "ADN",
+    "double hélice",
+    "transcription",
+    "traduction",
+    "code génétique",
+    "ARN messager",
+    "ribosome",
+    "mutation",
+    "drépanocytose"
+  ],
   "minutes": 30,
-  "variables": ["l’étape", "la séquence d’ADN", "la base changée"]
+  "variables": [
+    "l’étape",
+    "la séquence d’ADN",
+    "la base changée"
+  ],
+  "en": {
+    "title": "From DNA to protein",
+    "summary": "The double helix turning, the RNA polymerase copying it, the ribosome reading it three letters at a time — on the real beta-globin gene. And a base you can change with one click to see what becomes of the protein.",
+    "look": "Change the twentieth base to T: the seventh codon goes from GAG to GTG, glutamic acid becomes a valine, and you have just made sickle-cell disease. One letter.",
+    "tags": [
+      "DNA",
+      "double helix",
+      "transcription",
+      "translation",
+      "genetic code",
+      "messenger RNA",
+      "ribosome",
+      "mutation",
+      "sickle-cell disease"
+    ],
+    "variables": [
+      "the step",
+      "the DNA sequence",
+      "the changed base"
+    ]
+  }
 }

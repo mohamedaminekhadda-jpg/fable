@@ -5,8 +5,43 @@
   "summary": "Tirer le point M(z) à la souris et regarder son image se déplacer : le module s’élève au carré, l’argument double, la trace dessine la loi. Puis les racines n-ièmes de l’unité, et leur somme qui se referme sur zéro.",
   "look": "Sur z ↦ z², faites un tour du cercle unité avec la souris : l’image en fait deux. L’argument double, et cela ne se démontre pas — cela se regarde.",
   "vignette": "plan-complexe",
-  "levels": ["lycee"],
-  "tags": ["nombres complexes", "module", "argument", "forme exponentielle", "rotation", "similitude", "racines de l’unité"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "nombres complexes",
+    "module",
+    "argument",
+    "forme exponentielle",
+    "rotation",
+    "similitude",
+    "racines de l’unité"
+  ],
   "minutes": 30,
-  "variables": ["la transformation", "z", "a et b", "n"]
+  "variables": [
+    "la transformation",
+    "z",
+    "a et b",
+    "n"
+  ],
+  "en": {
+    "title": "The complex plane: moving z",
+    "summary": "Drag point M(z) with the mouse and watch its image move: the modulus is squared, the argument doubles, the trace draws the law. Then the n-th roots of unity, and their sum that closes back on zero.",
+    "look": "On z ↦ z², go once around the unit circle with the mouse: the image goes around twice. The argument doubles, and that is not proved — it is looked at.",
+    "tags": [
+      "complex numbers",
+      "modulus",
+      "argument",
+      "exponential form",
+      "rotation",
+      "similarity",
+      "roots of unity"
+    ],
+    "variables": [
+      "the transformation",
+      "z",
+      "a and b",
+      "n"
+    ]
+  }
 }

@@ -5,8 +5,45 @@
   "summary": "Pousser le nombre de rectangles et voir l’aire se préciser — puis lire, sur un second graphe, ce que coûte cette précision : une droite dont la pente est l’ordre de la méthode.",
   "look": "Doubler le nombre de rectangles divise l’erreur par deux à gauche, et par quatre au milieu. La pente de la droite en repère logarithmique est mesurée à l’écran, pas recopiée du cours.",
   "vignette": "rectangles",
-  "levels": ["lycee"],
-  "tags": ["intégrale", "aire", "sommes de Riemann", "trapèzes", "primitive", "convergence", "ordre d’une méthode"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "intégrale",
+    "aire",
+    "sommes de Riemann",
+    "trapèzes",
+    "primitive",
+    "convergence",
+    "ordre d’une méthode"
+  ],
   "minutes": 25,
-  "variables": ["la fonction", "a", "b", "nombre de tranches", "la méthode"]
+  "variables": [
+    "la fonction",
+    "a",
+    "b",
+    "nombre de tranches",
+    "la méthode"
+  ],
+  "en": {
+    "title": "The Riemann sums",
+    "summary": "Push the number of rectangles and see the area become precise — then read, on a second graph, what this precision costs: a line whose slope is the order of the method.",
+    "look": "Doubling the number of rectangles divides the error by two on the left, and by four in the middle. The slope of the line in a logarithmic plot is measured on screen, not copied from the course.",
+    "tags": [
+      "integral",
+      "area",
+      "Riemann sums",
+      "trapezoids",
+      "antiderivative",
+      "convergence",
+      "order of a method"
+    ],
+    "variables": [
+      "the function",
+      "a",
+      "b",
+      "number of slices",
+      "the method"
+    ]
+  }
 }

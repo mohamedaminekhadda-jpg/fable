@@ -5,8 +5,45 @@
   "summary": "Construire un arbre, marquer qui est atteint, et laisser la déduction se faire : quels modes de transmission restent possibles, lesquels sont exclus et pourquoi, et quel risque court l’enfant à naître.",
   "look": "Un arbre exclut des modes plus qu’il n’en désigne un — et il en reste presque toujours plus d’un.",
   "vignette": "arbre",
-  "levels": ["lycee"],
-  "tags": ["génétique", "hérédité", "pedigree", "autosomique", "gonosomique", "dominant", "récessif", "risque"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "génétique",
+    "hérédité",
+    "pedigree",
+    "autosomique",
+    "gonosomique",
+    "dominant",
+    "récessif",
+    "risque"
+  ],
   "minutes": 30,
-  "variables": ["arbre", "mode de transmission", "génotypes", "risque pour l’enfant à naître"]
+  "variables": [
+    "arbre",
+    "mode de transmission",
+    "génotypes",
+    "risque pour l’enfant à naître"
+  ],
+  "en": {
+    "title": "The family tree",
+    "summary": "Build a tree, mark who is affected, and let the deduction happen: which modes of transmission remain possible, which are excluded and why, and what risk the unborn child runs.",
+    "look": "A tree rules out modes more than it identifies one — and almost always more than one remains.",
+    "tags": [
+      "genetics",
+      "heredity",
+      "pedigree",
+      "autosomal",
+      "sex-linked",
+      "dominant",
+      "recessive",
+      "risk"
+    ],
+    "variables": [
+      "tree",
+      "mode of transmission",
+      "genotypes",
+      "risk for the unborn child"
+    ]
+  }
 }

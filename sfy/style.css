@@ -244,6 +244,18 @@ a.marque-bloc:focus-visible { outline: 2px solid var(--sub); outline-offset: 5px
 }
 .icon-btn:hover { border-color: var(--sub); color: var(--sub); }
 
+/* FR / EN — même encre et même bordure que le bouton de thème, pour que
+   l'en-tête garde une seule famille de commandes. */
+.langsel { display: flex; gap: 2px; }
+.lang-btn {
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  padding: 7px 8px; cursor: pointer; color: var(--ink-soft);
+  font: 600 11px/1 var(--mono, ui-monospace, monospace); letter-spacing: .1em;
+  transition: .14s;
+}
+.lang-btn:hover { color: var(--sub); }
+.lang-btn[aria-pressed="true"] { color: var(--sub); border-color: var(--rule); }
+
 /* the search field, which is also the only chrome on the home page */
 .find { position: relative; }
 .find input {

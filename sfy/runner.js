@@ -1,3 +1,39 @@
+/* ── LA LANGUE DU CADRE ──
+   La page d'une simulation est fabriquee a la construction, donc en francais.
+   Le cadre — titre, « Reglages », « Mesures », « Ce qu'il faut voir » — porte
+   ses deux versions, et c'est ici qu'on choisit.
+   Le CONTENU de la simulation, lui, reste dans la langue ou il est ecrit :
+   chaque sim.js porte ses propres libelles. */
+import { LANG, T, poserSelecteur } from './langue.js';
+
+poserSelecteur(document.getElementById('langsel'));
+document.documentElement.lang = LANG;
+{
+  const d = document;
+  for (const el of d.querySelectorAll('[data-i18n]')) {
+    const v = T(el.getAttribute('data-i18n'));
+    if (v) el.textContent = v;
+  }
+  for (const el of d.querySelectorAll('[data-i18n-title]')) {
+    const v = T(el.getAttribute('data-i18n-title'));
+    if (v) el.title = v;
+  }
+  if (LANG === 'en') {
+    const S = window.__SIM__ || {};
+    if (S.titleEn) {
+      const h = d.getElementById('lab-titre');
+      if (h) h.textContent = S.titleEn;
+      d.title = S.titleEn + ' — See for yourself';
+    }
+    const sub = d.querySelector('.lab-sub');
+    if (sub && sub.dataset.subEn) sub.textContent = sub.dataset.subEn;
+    const look = d.querySelector('.lab-look');
+    if (look && look.dataset.lookEn) {
+      const t = look.querySelector('.look-txt');
+      if (t) t.textContent = look.dataset.lookEn;
+    }
+  }
+}
 // Loads one simulation onto the bench.
 //
 // The reason this is a module rather than a few lines in the generated page is

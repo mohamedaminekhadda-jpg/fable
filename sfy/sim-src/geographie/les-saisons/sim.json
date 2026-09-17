@@ -4,9 +4,45 @@
   "title": "Les saisons, et la distance qui n’explique rien",
   "summary": "Faites défiler l’année : la durée du jour, la hauteur du Soleil et l’énergie reçue se calculent pour la latitude de votre choix. L’orbite est dessinée à l’échelle vraie — c’est-à-dire ronde.",
   "look": "Le 3 janvier, la Terre est au plus près du Soleil de toute l’année. C’est aussi le cœur de l’hiver au Maroc, en France, au Japon. Regardez la distance et l’énergie reçue varier en sens contraire : l’inclinaison de l’axe fait tout, la distance ne fait rien.",
-  "levels": ["college", "lycee"],
+  "levels": [
+    "college",
+    "lycee"
+  ],
   "vignette": "saisons",
-  "tags": ["saisons", "inclinaison", "solstice", "équinoxe", "durée du jour", "insolation", "orbite", "Terre", "climat"],
+  "tags": [
+    "saisons",
+    "inclinaison",
+    "solstice",
+    "équinoxe",
+    "durée du jour",
+    "insolation",
+    "orbite",
+    "Terre",
+    "climat"
+  ],
   "minutes": 25,
-  "variables": ["le jour de l’année", "la latitude"]
+  "variables": [
+    "le jour de l’année",
+    "la latitude"
+  ],
+  "en": {
+    "title": "The seasons, and the distance that explains nothing",
+    "summary": "Scroll through the year: day length, the height of the Sun and the energy received are calculated for the latitude of your choice. The orbit is drawn to true scale — that is, round.",
+    "look": "On 3 January, the Earth is closest to the Sun of the whole year. It is also the heart of winter in Morocco, France and Japan. Watch the distance and the energy received vary in opposite directions: the tilt of the axis does everything, the distance does nothing.",
+    "tags": [
+      "seasons",
+      "tilt",
+      "solstice",
+      "equinox",
+      "day length",
+      "insolation",
+      "orbit",
+      "Earth",
+      "climate"
+    ],
+    "variables": [
+      "day of the year",
+      "latitude"
+    ]
+  }
 }

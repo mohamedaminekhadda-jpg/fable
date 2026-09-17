@@ -5,8 +5,41 @@
   "summary": "Casser un noyau lourd avec un neutron, suivre la réaction en chaîne génération après génération, puis tenter l’inverse : rapprocher deux noyaux légers assez fort pour franchir leur répulsion.",
   "look": "Un neutron de plus ou de moins par fission, et la chaîne s’éteint ou s’emballe — tout tient dans le facteur k.",
   "vignette": "fission",
-  "levels": ["lycee"],
-  "tags": ["fission", "fusion", "réaction en chaîne", "barrière coulombienne", "neutron", "centrale nucléaire"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "fission",
+    "fusion",
+    "réaction en chaîne",
+    "barrière coulombienne",
+    "neutron",
+    "centrale nucléaire"
+  ],
   "minutes": 25,
-  "variables": ["facteur de multiplication k", "énergie cinétique", "barrière coulombienne", "générations"]
+  "variables": [
+    "facteur de multiplication k",
+    "énergie cinétique",
+    "barrière coulombienne",
+    "générations"
+  ],
+  "en": {
+    "title": "Fission and fusion",
+    "summary": "Break a heavy nucleus with a neutron, follow the chain reaction generation after generation, then try the opposite: bring two light nuclei close enough together to overcome their repulsion.",
+    "look": "One more or one fewer neutron per fission, and the chain dies out or runs away — everything hangs on the factor k.",
+    "tags": [
+      "fission",
+      "fusion",
+      "chain reaction",
+      "Coulomb barrier",
+      "neutron",
+      "nuclear power plant"
+    ],
+    "variables": [
+      "multiplication factor k",
+      "kinetic energy",
+      "Coulomb barrier",
+      "generations"
+    ]
+  }
 }

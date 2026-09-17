@@ -5,8 +5,45 @@
   "summary": "Poser une à une les couches d’une carte du Maroc — densité, agriculture irriguée, phosphates, industrie, tourisme, ports, barrages — et voir pourquoi elles se superposent toutes au même endroit.",
   "look": "Presque tout se tient sur une bande atlantique large de deux cents kilomètres : c’est là que sont l’eau, les plaines, les ports et les hommes.",
   "vignette": "maroc",
-  "levels": ["lycee"],
-  "tags": ["Maroc", "régions", "densité", "agriculture", "phosphates", "industrie", "tourisme", "littoralisation"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "Maroc",
+    "régions",
+    "densité",
+    "agriculture",
+    "phosphates",
+    "industrie",
+    "tourisme",
+    "littoralisation"
+  ],
   "minutes": 30,
-  "variables": ["couche thématique", "région", "densité", "part de la population"]
+  "variables": [
+    "couche thématique",
+    "région",
+    "densité",
+    "part de la population"
+  ],
+  "en": {
+    "title": "Morocco: the challenges of development",
+    "summary": "Lay down one by one the layers of a map of Morocco — density, irrigated agriculture, phosphates, industry, tourism, ports, dams — and see why they all overlap in the same place.",
+    "look": "Almost everything holds within an Atlantic strip two hundred kilometres wide: that is where the water, the plains, the ports and the people are.",
+    "tags": [
+      "Morocco",
+      "regions",
+      "density",
+      "agriculture",
+      "phosphates",
+      "industry",
+      "tourism",
+      "littoralisation"
+    ],
+    "variables": [
+      "thematic layer",
+      "region",
+      "density",
+      "share of the population"
+    ]
+  }
 }

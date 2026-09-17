@@ -5,8 +5,45 @@
   "summary": "Suivre un rayon à travers le prisme, voir la lumière blanche s’ouvrir en spectre, chercher le minimum de déviation et en tirer l’indice du verre puis les constantes A et B de Cauchy.",
   "look": "Les couleurs se séparent parce que l’indice dépend de λ — coupez la dispersion (B = 0) et le spectre se referme en un seul rayon blanc.",
   "vignette": "prisme",
-  "levels": ["lycee"],
-  "tags": ["lumière", "réfraction", "dispersion", "prisme", "indice", "Descartes", "spectre"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "lumière",
+    "réfraction",
+    "dispersion",
+    "prisme",
+    "indice",
+    "Descartes",
+    "spectre"
+  ],
   "minutes": 30,
-  "variables": ["angle au sommet A", "incidence i₁", "indice n", "déviation D", "longueur d’onde λ"]
+  "variables": [
+    "angle au sommet A",
+    "incidence i₁",
+    "indice n",
+    "déviation D",
+    "longueur d’onde λ"
+  ],
+  "en": {
+    "title": "The prism and dispersion",
+    "summary": "Follow a ray through the prism, see white light open into a spectrum, find the minimum deviation and from it derive the refractive index of the glass then Cauchy's constants A and B.",
+    "look": "The colors separate because the refractive index depends on λ — cut dispersion (B = 0) and the spectrum closes back into a single white ray.",
+    "tags": [
+      "light",
+      "refraction",
+      "dispersion",
+      "prism",
+      "refractive index",
+      "Descartes",
+      "spectrum"
+    ],
+    "variables": [
+      "apex angle A",
+      "angle of incidence i₁",
+      "refractive index n",
+      "deviation D",
+      "wavelength λ"
+    ]
+  }
 }

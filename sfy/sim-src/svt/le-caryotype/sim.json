@@ -5,8 +5,43 @@
   "summary": "Ranger les chromosomes par paires, compter, et nommer ce qu’on trouve : trisomies, monosomies, anomalies des gonosomes et anomalies de structure.",
   "look": "Une seule paire en trop ou en moins, et le caryotype porte un nom de syndrome — le 21 est le plus petit autosome, et ce n’est pas un hasard.",
   "vignette": "caryotype",
-  "levels": ["lycee"],
-  "tags": ["caryotype", "chromosome", "trisomie", "monosomie", "Down", "Turner", "Klinefelter", "délétion"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "caryotype",
+    "chromosome",
+    "trisomie",
+    "monosomie",
+    "Down",
+    "Turner",
+    "Klinefelter",
+    "délétion"
+  ],
   "minutes": 20,
-  "variables": ["nombre de chromosomes", "paire modifiée", "formule chromosomique"]
+  "variables": [
+    "nombre de chromosomes",
+    "paire modifiée",
+    "formule chromosomique"
+  ],
+  "en": {
+    "title": "The karyotype",
+    "summary": "Arrange the chromosomes in pairs, count, and name what you find: trisomies, monosomies, sex chromosome abnormalities and structural abnormalities.",
+    "look": "A single pair too many or too few, and the karyotype bears a syndrome name — 21 is the smallest autosome, and that is no coincidence.",
+    "tags": [
+      "karyotype",
+      "chromosome",
+      "trisomy",
+      "monosomy",
+      "Down",
+      "Turner",
+      "Klinefelter",
+      "deletion"
+    ],
+    "variables": [
+      "number of chromosomes",
+      "modified pair",
+      "chromosomal formula"
+    ]
+  }
 }

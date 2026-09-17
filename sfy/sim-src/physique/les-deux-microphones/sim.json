@@ -5,8 +5,43 @@
   "summary": "Faire glisser le second microphone jusqu’à ce que les deux courbes se superposent, relever la distance, et en déduire λ puis la célérité du son.",
   "look": "Les courbes se superposent chaque fois que d avance d’une longueur d’onde — et l’écart entre deux relevés successifs EST λ.",
   "vignette": "onde-deux",
-  "levels": ["lycee"],
-  "tags": ["ondes", "son", "longueur d’onde", "phase", "oscilloscope", "célérité"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "ondes",
+    "son",
+    "longueur d’onde",
+    "phase",
+    "oscilloscope",
+    "célérité"
+  ],
   "minutes": 20,
-  "variables": ["fréquence f", "distance d", "température", "λ", "v"]
+  "variables": [
+    "fréquence f",
+    "distance d",
+    "température",
+    "λ",
+    "v"
+  ],
+  "en": {
+    "title": "The two microphones",
+    "summary": "Slide the second microphone until the two curves overlap, record the distance, and deduce λ then the speed of sound.",
+    "look": "The curves overlap each time d advances by one wavelength — and the gap between two successive readings IS λ.",
+    "tags": [
+      "waves",
+      "sound",
+      "wavelength",
+      "phase",
+      "oscilloscope",
+      "speed"
+    ],
+    "variables": [
+      "frequency f",
+      "distance d",
+      "temperature",
+      "λ",
+      "v"
+    ]
+  }
 }

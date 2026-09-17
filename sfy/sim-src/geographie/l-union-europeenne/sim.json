@@ -5,8 +5,43 @@
   "summary": "Tirer un curseur de 1957 à aujourd’hui et voir l’Union s’agrandir pays par pays — puis superposer la zone euro, l’espace Schengen et la richesse par habitant, et constater que les trois cartes ne coïncident pas.",
   "look": "Six pays en 1957, vingt-huit en 2013, vingt-sept après le Brexit : l’Union n’a pas une frontière, elle en a plusieurs, et elles ne se superposent jamais.",
   "vignette": "cercle-etoiles",
-  "levels": ["lycee"],
-  "tags": ["Union européenne", "élargissement", "euro", "Schengen", "Brexit", "intégration régionale", "développement"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "Union européenne",
+    "élargissement",
+    "euro",
+    "Schengen",
+    "Brexit",
+    "intégration régionale",
+    "développement"
+  ],
   "minutes": 30,
-  "variables": ["année", "couche observée", "population", "PIB par habitant"]
+  "variables": [
+    "année",
+    "couche observée",
+    "population",
+    "PIB par habitant"
+  ],
+  "en": {
+    "title": "The European Union: a bloc that is being built",
+    "summary": "Drag a slider from 1957 to today and watch the Union expand country by country — then overlay the euro area, the Schengen area and wealth per inhabitant, and observe that the three maps do not coincide.",
+    "look": "Six countries in 1957, twenty-eight in 2013, twenty-seven after Brexit: the Union does not have one border, it has several, and they never overlap.",
+    "tags": [
+      "European Union",
+      "enlargement",
+      "euro",
+      "Schengen",
+      "Brexit",
+      "regional integration",
+      "development"
+    ],
+    "variables": [
+      "year",
+      "observed layer",
+      "population",
+      "GDP per capita"
+    ]
+  }
 }

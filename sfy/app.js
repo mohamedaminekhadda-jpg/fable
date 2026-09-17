@@ -6,10 +6,22 @@
 
 import { vignette } from './vignettes.js';
 import { BRAND, marque, blocMarque } from './brand.js';
+import { LANG, T, champ, poserSelecteur } from './langue.js';
 
 // L'enseigne est montée depuis brand.js, jamais recopiée dans index.html : une
 // marque écrite à deux endroits est une marque qui finit par différer.
 document.getElementById('marque').outerHTML = blocMarque({ href: '#/' });
+
+/* La langue, avant tout rendu : l'en-tete et l'attribut `lang` du document se
+   posent une fois, le reste passe par T(). */
+poserSelecteur(document.getElementById('langsel'));
+document.documentElement.lang = LANG;
+{
+  const champRech = document.getElementById('q');
+  if (champRech) champRech.placeholder = T('chercher');
+  const bTheme = document.getElementById('theme');
+  if (bTheme) bTheme.title = T('theme');
+}
 
 const view = document.getElementById('view');
 const q = document.getElementById('q');
@@ -88,11 +100,11 @@ function subjectCard(s) {
     <div class="subject-top">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon}</svg>
-      <h3>${esc(s.name)}</h3>
+      <h3>${esc(champ(s, 'name'))}</h3>
     </div>
-    <p>${esc(s.tagline)}</p>
+    <p>${esc(champ(s, 'tagline'))}</p>
     ${reglure(n, '', 11, 200)}
-    <div class="count">${n ? `<b>${n}</b> ${n === 1 ? 'simulation' : 'simulations'}` : 'aucune simulation pour l’instant'}</div>
+    <div class="count">${n ? `<b>${n}</b> ${esc(n === 1 ? T('sim1') : T('simN'))}` : esc(T('aucuneSim'))}</div>
   </a>`;
 }
 
@@ -100,15 +112,15 @@ function simCard(sim) {
   const s = DATA.subjects.find((x) => x.id === sim.subject)
     || { id: sim.subject, colour: '#888', short: sim.subject };
   const chips = [
-    ...(sim.levels || []).map((l) => (DATA.levels.find((x) => x.id === l) || { name: l }).name),
+    ...(sim.levels || []).map((l) => champ(DATA.levels.find((x) => x.id === l) || { name: l }, 'name')),
     ...(sim.minutes ? [sim.minutes + ' min'] : []),
   ];
   return `<a class="sim" href="s/${esc(sim.subject)}/${esc(sim.id)}/index.html" ${teintes(s)}>
     <div class="sim-vig-band">${vignette(sim)}</div>
-    <div class="sim-kicker"><i></i>${esc(s.short)}</div>
-    <h3>${esc(sim.title)}</h3>
-    ${sim.summary ? `<p>${esc(sim.summary)}</p>` : '<p></p>'}
-    ${sim.look ? `<div class="sim-look">${esc(sim.look)}</div>` : ''}
+    <div class="sim-kicker"><i></i>${esc(champ(s, 'short'))}</div>
+    <h3>${esc(champ(sim, 'title'))}</h3>
+    ${champ(sim, 'summary') ? `<p>${esc(champ(sim, 'summary'))}</p>` : '<p></p>'}
+    ${champ(sim, 'look') ? `<div class="sim-look">${esc(champ(sim, 'look'))}</div>` : ''}
     ${chips.length ? `<div class="chips">${chips.map((c) => `<span class="chip min">${esc(c)}</span>`).join('')}</div>` : ''}
   </a>`;
 }
@@ -116,7 +128,7 @@ function simCard(sim) {
 function problemsBlock() {
   if (!DATA.problems.length) return '';
   return `<div class="problems">
-    <h4>${plural(DATA.problems.length, 'dossier ignoré dans sims/', 'dossiers ignorés dans sims/')}</h4>
+    <h4>${plural(DATA.problems.length, T('dossier1'), T('dossierN'))}</h4>
     <ul>${DATA.problems.map((p) => `<li><code>${esc(p.where)}</code> — ${esc(p.msg)}</li>`).join('')}</ul>
   </div>`;
 }
@@ -126,7 +138,7 @@ function problemsBlock() {
 function emptyBench(subject) {
   const where = subject ? `sims/${subject.id}/` : 'sims/&lt;matière&gt;/';
   return `<div class="empty">
-    <h3>Rien sur la paillasse${subject ? ' en ' + esc(subject.short.toLowerCase()) : ''}</h3>
+    <h3>Rien sur la paillasse${subject ? ' en ' + esc(champ(subject, 'short').toLowerCase()) : ''}</h3>
     <p>La bibliothèque est vide : le catalogue lit le dossier <code>${where}</code>, et il n’y a encore rien dedans.</p>
     <ol class="steps">
       <li>Dans un terminal : <code>npm run new</code></li>
@@ -145,8 +157,8 @@ function pied() {
     <div class="tickrule"></div>
     <div class="fine">
       <span>${esc(BRAND.nom)}</span>
-      <span>${DATA.sims.length} expériences</span>
-      <a href="#/marque">La marque</a>
+      <span>${DATA.sims.length} ${esc(DATA.sims.length > 1 ? T('expN') : T('exp1'))}</span>
+      <a href="#/marque">${esc(T('laMarque'))}</a>
     </div>
   </footer>`;
 }
@@ -154,14 +166,13 @@ function pied() {
 function home() {
   const total = DATA.sims.length;
   return `<section class="hero">
-      <h1>${esc(BRAND.promesse)}</h1>
-      <p>Des expériences que l’on règle, relance et mesure soi-même — une par notion,
-         à côté du cours. Rien n’est raconté : tout se calcule et se voit à l’écran.</p>
+      <h1>${esc(T('promesse'))}</h1>
+      <p>${esc(T('lede'))}</p>
       <div class="tickrule"></div>
     </section>
-    <div class="shelf-h">Matières</div>
+    <div class="shelf-h">${esc(T('matieres'))}</div>
     <div class="subjects">${DATA.subjects.map(subjectCard).join('')}</div>
-    ${total ? `<div class="shelf-h">Ajoutées récemment</div>
+    ${total ? `<div class="shelf-h">${esc(T('recentes'))}</div>
       <div class="sims">${DATA.sims.slice().sort((a, b) => b.updated - a.updated).slice(0, 6).map(simCard).join('')}</div>`
       : emptyBench(null)}
     ${problemsBlock()}
@@ -170,14 +181,14 @@ function home() {
 
 function subjectPage(id) {
   const s = DATA.subjects.find((x) => x.id === id);
-  if (!s) return `<section class="hero"><h1>Matière inconnue</h1><p><a href="#/">Retour au catalogue</a></p></section>`;
+  if (!s) return `<section class="hero"><h1>${esc(T('inconnue'))}</h1><p><a href="#/">${esc(T('retour'))}</a></p></section>`;
   const sims = DATA.sims.filter((x) => x.subject === id);
   return `<section class="hero" ${teintes(s)}>
-      <h1>${esc(s.name)}</h1>
-      <p>${esc(s.tagline)}</p>
+      <h1>${esc(champ(s, 'name'))}</h1>
+      <p>${esc(champ(s, 'tagline'))}</p>
       ${reglure(sims.length, 'sub', 16, 560)}
     </section>
-    <div class="shelf-h">${sims.length ? plural(sims.length, 'expérience', 'expériences') : 'Aucune expérience'}</div>
+    <div class="shelf-h">${sims.length ? plural(sims.length, T('exp1'), T('expN')) : T('aucuneExp')}</div>
     ${sims.length ? `<div class="sims">${sims.map(simCard).join('')}</div>` : emptyBench(s)}
     ${pied()}`;
 }
@@ -192,7 +203,7 @@ function marquePage() {
   const t = (s) => `<div class="papier ${s === 'clair' ? 'clair' : 'sombre'}">
     <div class="pastilles">${DATA.subjects.map((x) => `<div class="pastille">
       <i style="background:${esc(s === 'clair' ? x.colour : (x.colourDark || x.colour))}"></i>
-      ${esc(x.short)}</div>`).join('')}
+      ${esc(champ(x, 'short'))}</div>`).join('')}
       <div class="pastille"><i style="background:${s === 'clair' ? '#c8452c' : '#ff6a52'}"></i>en mesure</div>
     </div></div>`;
   return `<section class="hero">
@@ -296,12 +307,18 @@ function marquePage() {
 function searchPage(term) {
   const t = norm(term);
   const hits = DATA.sims.filter((s) => {
+    /* On indexe les DEUX langues : qui lit la page en anglais tape un mot
+       anglais, et la fiche francaise seule ne le trouverait pas. L'inverse
+       est vrai aussi. */
+    const e = s.en || {};
+    const suj = DATA.subjects.find((x) => x.id === s.subject) || {};
     const hay = norm([s.title, s.summary, s.look, (s.tags || []).join(' '),
-      (DATA.subjects.find((x) => x.id === s.subject) || {}).name].join(' '));
+      e.title, e.summary, e.look, (e.tags || []).join(' '),
+      suj.name, (suj.en || {}).name].join(' '));
     return hay.includes(t);
   });
   return `<section class="hero">
-      <h1>${hits.length ? plural(hits.length, 'résultat', 'résultats') : 'Aucun résultat'}</h1>
+      <h1>${hits.length ? plural(hits.length, T('res1'), T('resN')) : T('aucunRes')}</h1>
       <p>pour « ${esc(term)} »</p>
     </section>
     ${hits.length ? `<div class="sims">${hits.map(simCard).join('')}</div>`

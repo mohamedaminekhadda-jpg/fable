@@ -5,8 +5,43 @@
   "summary": "Partir d’une seule fission et remonter, étape par étape, jusqu’au gramme, à la tonne et à l’année — puis comparer un combustible nucléaire à un combustible chimique sur la même échelle.",
   "look": "Un gramme d’uranium et une tonne et demie de butane libèrent la même énergie : six ordres de grandeur séparent le noyau de la molécule.",
   "vignette": "centrale",
-  "levels": ["lycee"],
-  "tags": ["fission", "fusion", "centrale nucléaire", "mole", "rendement", "ordres de grandeur"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "fission",
+    "fusion",
+    "centrale nucléaire",
+    "mole",
+    "rendement",
+    "ordres de grandeur"
+  ],
   "minutes": 25,
-  "variables": ["masse de combustible", "énergie libérée", "puissance", "rendement", "durée"]
+  "variables": [
+    "masse de combustible",
+    "énergie libérée",
+    "puissance",
+    "rendement",
+    "durée"
+  ],
+  "en": {
+    "title": "From the nucleus to the power plant",
+    "summary": "Start from a single fission and work back, step by step, to the gram, the tonne and the year — then compare a nuclear fuel with a chemical fuel on the same scale.",
+    "look": "A gram of uranium and a tonne and a half of butane release the same energy: six orders of magnitude separate the nucleus from the molecule.",
+    "tags": [
+      "fission",
+      "fusion",
+      "nuclear power plant",
+      "mole",
+      "efficiency",
+      "orders of magnitude"
+    ],
+    "variables": [
+      "fuel mass",
+      "energy released",
+      "power",
+      "efficiency",
+      "duration"
+    ]
+  }
 }

@@ -5,8 +5,41 @@
   "summary": "Ébranler une corde tendue, suivre un point M, et lire le retard τ entre ce que fait la source et ce que fait M.",
   "look": "M refait exactement le geste de la source — mais τ = d ⁄ v plus tard, et sans jamais avancer d’un centimètre.",
   "vignette": "onde",
-  "levels": ["lycee"],
-  "tags": ["ondes", "onde progressive", "célérité", "retard", "corde"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "ondes",
+    "onde progressive",
+    "célérité",
+    "retard",
+    "corde"
+  ],
   "minutes": 15,
-  "variables": ["tension F", "masse linéique µ", "célérité v", "retard τ", "durée θ"]
+  "variables": [
+    "tension F",
+    "masse linéique µ",
+    "célérité v",
+    "retard τ",
+    "durée θ"
+  ],
+  "en": {
+    "title": "The string: appearance and delay",
+    "summary": "Shake a taut string, track a point M, and read the delay τ between what the source does and what M does.",
+    "look": "M repeats exactly the source's motion — but τ = d ⁄ v later, and without ever moving forward a centimetre.",
+    "tags": [
+      "waves",
+      "progressive wave",
+      "wave speed",
+      "delay",
+      "string"
+    ],
+    "variables": [
+      "tension F",
+      "linear density µ",
+      "wave speed v",
+      "delay τ",
+      "duration θ"
+    ]
+  }
 }

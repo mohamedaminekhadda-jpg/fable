@@ -5,8 +5,41 @@
   "summary": "Couper l’ADN par une enzyme de restriction, faire migrer les fragments sur un gel, révéler ceux qui comptent avec une sonde — et lire un génotype, ou confondre un suspect.",
   "look": "Le gel ne montre pas des gènes, il montre des longueurs : c’est la position d’une bande qui trahit l’allèle.",
   "vignette": "gel",
-  "levels": ["lycee"],
-  "tags": ["ADN", "électrophorèse", "enzyme de restriction", "Southern blot", "sonde", "profil génétique", "mucoviscidose"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "ADN",
+    "électrophorèse",
+    "enzyme de restriction",
+    "Southern blot",
+    "sonde",
+    "profil génétique",
+    "mucoviscidose"
+  ],
   "minutes": 25,
-  "variables": ["génotypes de la famille", "site de restriction", "taille des fragments"]
+  "variables": [
+    "génotypes de la famille",
+    "site de restriction",
+    "taille des fragments"
+  ],
+  "en": {
+    "title": "Electrophoresis and DNA profiling",
+    "summary": "Cut DNA with a restriction enzyme, run the fragments on a gel, reveal the ones that matter with a probe — and read a genotype, or confound a suspect.",
+    "look": "The gel does not show genes, it shows lengths: it is the position of a band that betrays the allele.",
+    "tags": [
+      "DNA",
+      "electrophoresis",
+      "restriction enzyme",
+      "Southern blot",
+      "probe",
+      "genetic profile",
+      "cystic fibrosis"
+    ],
+    "variables": [
+      "family genotypes",
+      "restriction site",
+      "fragment size"
+    ]
+  }
 }

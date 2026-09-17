@@ -4,9 +4,49 @@
   "title": "La sélection naturelle",
   "summary": "Des papillons clairs sur une écorce claire. Noircissez le tronc et faites passer les générations : la population devient sombre. Pourtant aucun papillon n’a changé de couleur — pas un seul, jamais.",
   "look": "Mettez la variété initiale à zéro et les mutations à zéro, puis noircissez le tronc. Les papillons sont mangés par centaines et rien ne bouge : sans différences entre les individus, la sélection n’a rien à trier.",
-  "levels": ["college", "lycee"],
+  "levels": [
+    "college",
+    "lycee"
+  ],
   "vignette": "papillon",
-  "tags": ["évolution", "sélection naturelle", "Darwin", "phalène du bouleau", "mutation", "variabilité", "adaptation", "population"],
+  "tags": [
+    "évolution",
+    "sélection naturelle",
+    "Darwin",
+    "phalène du bouleau",
+    "mutation",
+    "variabilité",
+    "adaptation",
+    "population"
+  ],
   "minutes": 25,
-  "variables": ["la teinte du tronc", "la prédation", "les mutations", "l’effectif", "la variété initiale"]
+  "variables": [
+    "la teinte du tronc",
+    "la prédation",
+    "les mutations",
+    "l’effectif",
+    "la variété initiale"
+  ],
+  "en": {
+    "title": "Natural selection",
+    "summary": "Light butterflies on light bark. Blacken the trunk and let the generations pass: the population becomes dark. Yet no butterfly has changed colour — not one, ever.",
+    "look": "Set the initial variety to zero and the mutations to zero, then blacken the trunk. The butterflies are eaten by the hundreds and nothing moves: without differences between individuals, selection has nothing to sort.",
+    "tags": [
+      "evolution",
+      "natural selection",
+      "Darwin",
+      "peppered moth",
+      "mutation",
+      "variability",
+      "adaptation",
+      "population"
+    ],
+    "variables": [
+      "trunk colour",
+      "predation",
+      "mutations",
+      "population size",
+      "initial variety"
+    ]
+  }
 }

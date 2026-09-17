@@ -5,8 +5,43 @@
   "summary": "Prendre un noyau, peser ses nucléons séparément, constater qu’il en manque — et lire dans ce défaut de masse l’énergie qui tient le noyau ensemble, puis porter le tout sur la courbe d’Aston.",
   "look": "La courbe descend d’un côté et remonte de l’autre : c’est pourquoi les noyaux lourds gagnent à se casser et les légers à s’unir.",
   "vignette": "vallee",
-  "levels": ["lycee"],
-  "tags": ["noyau", "énergie de liaison", "défaut de masse", "Einstein", "courbe d’Aston", "stabilité"],
+  "levels": [
+    "lycee"
+  ],
+  "tags": [
+    "noyau",
+    "énergie de liaison",
+    "défaut de masse",
+    "Einstein",
+    "courbe d’Aston",
+    "stabilité"
+  ],
   "minutes": 25,
-  "variables": ["nombre de masse A", "numéro atomique Z", "défaut de masse Δm", "énergie de liaison", "E/A"]
+  "variables": [
+    "nombre de masse A",
+    "numéro atomique Z",
+    "défaut de masse Δm",
+    "énergie de liaison",
+    "E/A"
+  ],
+  "en": {
+    "title": "Aston's curve and binding energy",
+    "summary": "Take a nucleus, weigh its nucleons separately, note that some is missing — and read in this mass defect the energy that holds the nucleus together, then plot the whole on Aston's curve.",
+    "look": "The curve goes down on one side and rises on the other: that is why heavy nuclei gain by splitting and light ones by fusing.",
+    "tags": [
+      "nucleus",
+      "binding energy",
+      "mass defect",
+      "Einstein",
+      "Aston's curve",
+      "stability"
+    ],
+    "variables": [
+      "mass number A",
+      "atomic number Z",
+      "mass defect Δm",
+      "binding energy",
+      "E/A"
+    ]
+  }
 }

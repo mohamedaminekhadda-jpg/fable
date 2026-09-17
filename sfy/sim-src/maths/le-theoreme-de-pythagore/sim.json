@@ -5,8 +5,39 @@
   "summary": "Tirer le point C et regarder les trois carrés construits sur les côtés changer de taille. Les deux petits mis bout à bout font-ils la longueur du grand ? Seulement quand l’angle est droit.",
   "look": "Le théorème n’est pas toujours vrai — il l’est exactement quand l’angle en C est droit. Et l’ensemble des points où cela arrive dessine un cercle : celui de diamètre [AB].",
   "vignette": "pythagore",
-  "levels": ["college"],
-  "tags": ["Pythagore", "triangle rectangle", "aire", "carré", "réciproque", "cercle", "géométrie"],
+  "levels": [
+    "college"
+  ],
+  "tags": [
+    "Pythagore",
+    "triangle rectangle",
+    "aire",
+    "carré",
+    "réciproque",
+    "cercle",
+    "géométrie"
+  ],
   "minutes": 20,
-  "variables": ["position de C", "longueur de [AB]"]
+  "variables": [
+    "position de C",
+    "longueur de [AB]"
+  ],
+  "en": {
+    "title": "Pythagoras' theorem: the three squares",
+    "summary": "Drag point C and watch the three squares built on the sides change size. Do the two small ones placed end to end make the length of the large one? Only when the angle is right.",
+    "look": "The theorem is not always true — it is exactly true when the angle at C is right. And the set of points where this happens draws a circle: the one with diameter [AB].",
+    "tags": [
+      "Pythagoras",
+      "right triangle",
+      "area",
+      "square",
+      "converse",
+      "circle",
+      "geometry"
+    ],
+    "variables": [
+      "position of C",
+      "length of [AB]"
+    ]
+  }
 }
