@@ -726,8 +726,6 @@ body::after{
 }
 .foot a{color:var(--ink-3);text-decoration:none}
 .foot a:hover{color:var(--ink);text-decoration:underline}
-.foot .atelier{margin-inline-start:auto;color:var(--ink-3);opacity:.7}
-.foot .atelier:hover{opacity:1}
 
 @media (max-width:34rem){
   .wrap{padding-inline:var(--s4)}
@@ -972,7 +970,6 @@ body::after{
   <div class="wrap">
     <span data-i18n="footer">Fable — interactive books and textbooks in French, English and Arabic.</span>
     <a href="cahier/">Le Jaguar</a>
-    <a class="atelier" id="lien-atelier" href="#atelier">Atelier</a>
   </div>
 </footer>
 
@@ -3549,11 +3546,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu5xufai). Non remplacée —
+  /* La version est posée par la construction (mu5y73mz). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu5xufai')
+  fetch('library/library.json?v=mu5y73mz')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -3564,7 +3561,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu5xufai"></script>
+<script src="compte.js?v=mu5y73mz"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
@@ -3573,6 +3570,5 @@ body::after{
   window.FableCompte.poserBouton(document.getElementById('compte-hote'));
 })();
 </script>
-<script src="atelier.js?v=mu5xufai"></script>
 </body>
 </html>

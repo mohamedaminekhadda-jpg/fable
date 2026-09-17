@@ -49,6 +49,48 @@
      dans `cahier/`, où il n'est pas. On relève donc notre propre adresse au
      chargement, tant que `document.currentScript` existe (il ne vaut plus rien
      une fois dans une fonction asynchrone). */
+  /* Les adresses qui voient l'entrée de l'Atelier. Lues depuis la
+     configuration ; vides, personne ne la voit — pas même vous. */
+  var proprietaires = [];
+  function chezSoi() {
+    var u = etat.utilisateur;
+    return !!(u && u.email && proprietaires.indexOf(String(u.email).toLowerCase()) >= 0);
+  }
+
+  /* ── LES OUTILS LOCAUX ──
+     Studio, la Console et Le Classeur tournent sur VOTRE machine, en Node. Ils
+     ne sont pas sur le site et ne peuvent pas y être : ils écrivent des
+     fichiers, lancent des constructions et poussent sur un dépôt, et un
+     hébergement statique n'exécute rien. Ce panneau n'« ouvre » donc aucun
+     accès — il ouvre des liens vers des ports, ce qui n'est pas un secret mais
+     une convention.
+
+     Une adresse peut aussi être une URL complète : c'est ce qui permet de
+     joindre Studio depuis ailleurs, à travers un tunnel qui authentifie AVANT
+     d'arriver à la machine. Chacun règle la sienne dans son navigateur ; rien
+     n'est publié. */
+  var OUTILS = [
+    { id: 'console', nom: 'Console', quoi: 'ce qui est en ligne, construire, déployer', port: 4310 },
+    { id: 'studio', nom: 'Studio', quoi: 'écrire et construire les manuels', port: 4000 },
+    { id: 'classeur', nom: 'Le Classeur', quoi: 'la plateforme : classes, bulletins, examens', port: 4300 },
+  ];
+  var CLE_ADR = 'fable-outils-adresses';
+  function adresses() {
+    try { return JSON.parse(localStorage.getItem(CLE_ADR) || '{}') || {}; } catch (e) { return {}; }
+  }
+  function adresseDe(o, t) {
+    var v = t[o.id];
+    if (!v) return 'http://localhost:' + o.port + '/';
+    if (/^\d+$/.test(String(v))) return 'http://localhost:' + v + '/';
+    return String(v).replace(/\/*$/, '/');
+  }
+  /* Seuls `http:` et `https:`. Sans ce filtre, une adresse `javascript:…`
+     collée dans le champ deviendrait un lien qui exécute du code au clic. */
+  function adresseValide(v) {
+    if (/^\d+$/.test(v)) { var k = Number(v); return k > 0 && k < 65536; }
+    try { var u = new URL(v); return u.protocol === 'http:' || u.protocol === 'https:'; } catch (e) { return false; }
+  }
+
   var BASE = (function () {
     var sc = document.currentScript;
     var u = (sc && sc.src) || '';
@@ -280,7 +322,15 @@
      l'accueil dit `--card` et `--ink-3`, le cahier `--paper` et `--slate`, les
      simulations `--paper` et `--ink-mute`. La fenêtre est chez elle partout,
      et suit le thème de la page sans rien savoir d'elle. */
-  var STYLE = '.fc-dlg{color-scheme:light dark;  --fc-pap:var(--card,var(--paper,#faf6ee));  --fc-enc:var(--ink,#211d19);  --fc-mut:var(--ink-3,var(--slate,var(--ink-mute,#6f675c)));  --fc-trait:var(--rule,var(--trait,var(--paper-3,#ded5c6)));  --fc-acc:var(--accent,var(--sub,#8c2f2a));  border:1px solid var(--fc-trait);border-radius:12px;background:var(--fc-pap);color:var(--fc-enc);  padding:0;inline-size:min(24rem,calc(100vw - 2rem));  font:400 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;  box-shadow:0 30px 70px -30px rgba(0,0,0,.55)}.fc-dlg::backdrop{background:rgba(20,17,14,.45)}.fc-dlg h2{margin:0 0 4px;font-size:17px;letter-spacing:-.01em}.fc-dlg .fc-corps{padding:20px}.fc-dlg p{margin:0 0 14px;color:var(--fc-mut);font-size:13.5px}.fc-dlg label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;  color:var(--fc-mut);margin:10px 0 3px}.fc-dlg input{font:inherit;font-size:14px;width:100%;padding:8px 10px;border-radius:7px;  border:1px solid var(--fc-trait);background:var(--fc-pap);color:var(--fc-enc)}.fc-dlg input:focus{outline:2px solid var(--fc-acc);outline-offset:1px}.fc-dlg button{font:inherit;font-size:14px;cursor:pointer;border-radius:100px;padding:8px 14px;  border:1px solid var(--fc-trait);background:transparent;color:var(--fc-enc)}.fc-dlg button:hover{border-color:var(--fc-mut)}.fc-dlg .fc-fort{background:var(--fc-acc);border-color:var(--fc-acc);color:var(--fc-pap);font-weight:600;width:100%}.fc-dlg .fc-ou{display:flex;align-items:center;gap:10px;margin:16px 0 2px;  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fc-mut)}.fc-dlg .fc-ou::before,.fc-dlg .fc-ou::after{content:"";flex:1;height:1px;background:var(--fc-trait)}.fc-dlg .fc-rang{display:flex;gap:8px;margin-top:16px}.fc-dlg .fc-rang button{flex:1}.fc-dlg .fc-err{min-height:16px;font-size:13px;margin:10px 0 0;  color:color-mix(in oklab,#e0554d 72%,var(--fc-enc))}.fc-dlg .fc-qui{display:flex;align-items:center;gap:10px;margin-bottom:14px}.fc-dlg .fc-qui img{inline-size:36px;block-size:36px;border-radius:50%}.fc-dlg .fc-qui b{display:block;font-size:15px}.fc-dlg .fc-qui span{font-size:12.5px;color:var(--fc-mut)}';
+  var STYLE = '.fc-dlg{color-scheme:light dark;  --fc-pap:var(--card,var(--paper,#faf6ee));  --fc-enc:var(--ink,#211d19);  --fc-mut:var(--ink-3,var(--slate,var(--ink-mute,#6f675c)));  --fc-trait:var(--rule,var(--trait,var(--paper-3,#ded5c6)));  --fc-acc:var(--accent,var(--sub,#8c2f2a));  border:1px solid var(--fc-trait);border-radius:12px;background:var(--fc-pap);color:var(--fc-enc);  padding:0;inline-size:min(24rem,calc(100vw - 2rem));  font:400 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;  box-shadow:0 30px 70px -30px rgba(0,0,0,.55)}.fc-dlg::backdrop{background:rgba(20,17,14,.45)}.fc-dlg h2{margin:0 0 4px;font-size:17px;letter-spacing:-.01em}.fc-dlg .fc-corps{padding:20px}.fc-dlg p{margin:0 0 14px;color:var(--fc-mut);font-size:13.5px}.fc-dlg label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;  color:var(--fc-mut);margin:10px 0 3px}.fc-dlg input{font:inherit;font-size:14px;width:100%;padding:8px 10px;border-radius:7px;  border:1px solid var(--fc-trait);background:var(--fc-pap);color:var(--fc-enc)}.fc-dlg input:focus{outline:2px solid var(--fc-acc);outline-offset:1px}.fc-dlg button{font:inherit;font-size:14px;cursor:pointer;border-radius:100px;padding:8px 14px;  border:1px solid var(--fc-trait);background:transparent;color:var(--fc-enc)}.fc-dlg button:hover{border-color:var(--fc-mut)}.fc-dlg .fc-fort{background:var(--fc-acc);border-color:var(--fc-acc);color:var(--fc-pap);font-weight:600;width:100%}.fc-dlg .fc-ou{display:flex;align-items:center;gap:10px;margin:16px 0 2px;  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fc-mut)}.fc-dlg .fc-ou::before,.fc-dlg .fc-ou::after{content:"";flex:1;height:1px;background:var(--fc-trait)}.fc-dlg .fc-rang{display:flex;gap:8px;margin-top:16px}.fc-dlg .fc-rang button{flex:1}.fc-dlg .fc-err{min-height:16px;font-size:13px;margin:10px 0 0;  color:color-mix(in oklab,#e0554d 72%,var(--fc-enc))}.fc-dlg .fc-qui{display:flex;align-items:center;gap:10px;margin-bottom:14px}.fc-dlg .fc-qui img{inline-size:36px;block-size:36px;border-radius:50%}.fc-dlg .fc-qui b{display:block;font-size:15px}.fc-dlg .fc-qui span{font-size:12.5px;color:var(--fc-mut)}\
+.fc-dlg .fc-outils{list-style:none;margin:0;padding:0}\
+.fc-dlg .fc-outils li{border-bottom:1px solid var(--fc-trait)}\
+.fc-dlg .fc-outils a{display:block;padding:9px 2px;text-decoration:none;color:inherit}\
+.fc-dlg .fc-outils a:hover{color:var(--fc-acc)}\
+.fc-dlg .fc-outils b{display:block;font-size:14.5px}\
+.fc-dlg .fc-outils span{font-size:12.5px;color:var(--fc-mut)}\
+.fc-dlg .fc-note{font-size:12px;color:var(--fc-mut);margin:10px 0 0}\
+.fc-dlg .fc-note button{font-size:12px;padding:3px 9px;margin-top:6px}';
 
   var dlg = null;
   function fenetre() {
@@ -307,8 +357,10 @@
         + '<div class="fc-qui">' + (u.photo ? '<img alt="" src="' + echappe(u.photo) + '">' : '')
         + '<span><b>' + echappe(u.nom || u.email) + '</b>'
         + '<span>' + echappe(etat.dernier || 'Vos cahiers suivent ce compte.') + '</span></span></div>'
+        + (chezSoi() ? atelierHtml() : '')
         + '<div class="fc-rang"><button data-fermer>Fermer</button>'
         + '<button data-sortir>Se déconnecter</button></div>';
+      if (chezSoi()) brancherAtelier(c);
       c.querySelector('[data-sortir]').onclick = function () {
         window.FableCompte.deconnecter().then(function () { d.close(); });
       };
@@ -345,6 +397,41 @@
     if (f) f.onclick = function () { d.close(); };
     d.appendChild(c);
     d.showModal();
+  }
+
+  function atelierHtml() {
+    var t = adresses();
+    return '<div class="fc-ou">votre atelier</div>'
+      + '<ul class="fc-outils">'
+      + OUTILS.map(function (o) {
+        var u = adresseDe(o, t);
+        return '<li><a href="' + echappe(u) + '" target="_blank" rel="noopener">'
+          + '<b>' + echappe(o.nom) + '</b><span>' + echappe(o.quoi) + '</span></a></li>';
+      }).join('')
+      + '</ul>'
+      + '<p class="fc-note">Ils tournent sur cette machine. Ailleurs, ces liens ouvrent '
+      + 'un port vide — ce qui est exactement la protection : ils n’écoutent que 127.0.0.1. '
+      + '<button data-adresses>Changer une adresse…</button></p>';
+  }
+
+  function brancherAtelier(c) {
+    var b = c.querySelector('[data-adresses]');
+    if (!b) return;
+    b.onclick = function () {
+      var t = adresses();
+      var noms = OUTILS.map(function (o, i) { return (i + 1) + ' = ' + o.nom; }).join(', ');
+      var q = prompt('Quel outil ? (' + noms + ')', '1');
+      if (q === null) return;
+      var o = OUTILS[Number(q) - 1];
+      if (!o) return;
+      var v = (prompt('Adresse de ' + o.nom + ' — un port (4310), ou une URL complète '
+        + '(https://studio.mon-tailnet.ts.net) :', String(t[o.id] || o.port)) || '').trim();
+      if (!v) return;
+      if (!adresseValide(v)) { alert('Attendu : un port, ou une adresse http(s) complète.'); return; }
+      t[o.id] = /^\d+$/.test(v) ? Number(v) : v;
+      try { localStorage.setItem(CLE_ADR, JSON.stringify(t)); } catch (e) { /* refusé */ }
+      ouvrirDialogue();
+    };
   }
 
   function echappe(t) {
@@ -392,6 +479,7 @@
       try {
         var cfg = await import(BASE + 'firebase-config.js');
         etat.pret = !!(cfg.CONFIG_FIREBASE && cfg.CONFIG_FIREBASE.apiKey && cfg.CONFIG_FIREBASE.projectId);
+        proprietaires = (cfg.PROPRIETAIRES || []).map(function (e) { return String(e).trim().toLowerCase(); }).filter(Boolean);
       } catch (e) { etat.pret = false; }
       return etat.pret;
     },

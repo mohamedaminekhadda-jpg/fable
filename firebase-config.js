@@ -51,6 +51,24 @@ export const CONFIG_FIREBASE = {
   // appId: '1:000000000000:web:0000000000000000000000',
 };
 
+/* ── QUI EST CHEZ SOI ICI ─────────────────────────────────────────────────
+ *
+ * Les adresses e-mail qui, une fois connectées, voient l'entrée de l'Atelier :
+ * Studio, la Console, Le Classeur. Elles remplacent le mot de passe que ce
+ * panneau demandait avant — un seul compte plutôt que deux secrets.
+ *
+ * QUE CE SOIT CLAIR : cette liste ne protège rien, et ne le prétend pas. Elle
+ * est publique, comme tout ce qui part sur le site, et un panneau caché par du
+ * JavaScript se rouvre en trois clics. Ce qui protège Studio et la Console,
+ * c'est qu'ils n'écoutent que 127.0.0.1 et refusent tout autre `Host` : un
+ * visiteur qui force ce panneau ouvre des liens vers SA machine, où il n'y a
+ * rien. La liste ne fait qu'éviter de montrer une porte à ceux dont ce n'est
+ * pas la maison.
+ */
+export const PROPRIETAIRES = [
+  'mkhadda@datacandy.com',
+];
+
 /* La version du SDK chargée depuis le CDN de Google. Elle est écrite ici plutôt
    que dispersée dans le code : la monter, c'est changer un seul nombre. */
 export const VERSION_SDK = '10.12.0';
