@@ -10,6 +10,30 @@
         "Français"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "Mathematics",
+        "Physics & Chemistry",
+        "Life sciences",
+        "Geography",
+        "French"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "démonstration",
+        "figures interactives",
+        "exercices corrigés",
+        "toutes matières"
+      ],
+      "tagsEn": [
+        "showcase",
+        "interactive figures",
+        "worked answers",
+        "all subjects"
+      ],
+      "year": "2026",
+      "yearEn": "2026",
+      "translator": "",
+      "translatorEn": "",
       "dir": "books/manuel-bac-demo",
       "slug": "manuel-bac-demo",
       "source": "manuel-bac-demo",
@@ -20,7 +44,8 @@
       "dir_texte": "ltr",
       "look": "crisp",
       "accent": "#8c2f2a",
-      "resume": "Cinq disciplines, un seul livre — et chaque figure se manipule.",
+      "resume": "Cinq disciplines dans un seul livre, et pas une figure qui ne se manipule.",
+      "resumeEn": "Five subjects in one book, and not a single figure you cannot take hold of.",
       "droits": "à nous",
       "chapters": 8,
       "built": true,
@@ -74,6 +99,29 @@
         "Anglais"
       ],
       "level": "Collège",
+      "subjectsEn": [
+        "Literature",
+        "English"
+      ],
+      "levelEn": "Lower secondary",
+      "tags": [
+        "roman",
+        "fantaisie",
+        "victorien",
+        "nonsense",
+        "court"
+      ],
+      "tagsEn": [
+        "novel",
+        "fantasy",
+        "Victorian",
+        "nonsense",
+        "short read"
+      ],
+      "year": "1865",
+      "yearEn": "1865",
+      "translator": "",
+      "translatorEn": "",
       "dir": "books/alice-au-pays-des-merveilles",
       "slug": "alice-au-pays-des-merveilles",
       "source": "Alice in wonderland",
@@ -84,7 +132,8 @@
       "dir_texte": "ltr",
       "look": "classic",
       "accent": "#8c2f2a",
-      "resume": "Lewis Carroll, 1865. Domaine public.",
+      "resume": "Une petite fille tombe dans un terrier et trouve un monde qui raisonne de travers — avec une rigueur parfaite.",
+      "resumeEn": "A girl falls down a rabbit-hole into a world that reasons crookedly, and does it with perfect rigour.",
       "droits": "domaine public",
       "chapters": 1,
       "built": true,
@@ -103,6 +152,29 @@
         "Anglais"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "Literature",
+        "English"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "roman",
+        "la mer",
+        "américain",
+        "XIXᵉ siècle",
+        "long"
+      ],
+      "tagsEn": [
+        "novel",
+        "the sea",
+        "American",
+        "19th century",
+        "long read"
+      ],
+      "year": "1851",
+      "yearEn": "1851",
+      "translator": "",
+      "translatorEn": "",
       "dir": "books/moby-dick",
       "slug": "moby-dick",
       "source": "moby-dick",
@@ -113,7 +185,8 @@
       "dir_texte": "ltr",
       "look": "classic",
       "accent": "#8c2f2a",
-      "resume": "Herman Melville, 1851. Domaine public.",
+      "resume": "Un baleinier, un capitaine qui ne cherche qu’une seule baleine, et cent trente-cinq chapitres pour comprendre pourquoi.",
+      "resumeEn": "A whaler, a captain who wants one whale and no other, and a hundred and thirty-five chapters to find out why.",
       "droits": "domaine public",
       "chapters": 136,
       "built": true,
@@ -807,6 +880,29 @@
         "Anglais"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "Literature",
+        "English"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "épopée",
+        "poésie",
+        "Grèce antique",
+        "mythologie",
+        "voyage"
+      ],
+      "tagsEn": [
+        "epic",
+        "poetry",
+        "ancient Greece",
+        "mythology",
+        "voyage"
+      ],
+      "year": "≈ 700 av. J.-C.",
+      "yearEn": "c. 700 BC",
+      "translator": "trad. William Cullen Bryant",
+      "translatorEn": "tr. William Cullen Bryant",
       "dir": "books/the-odyssey",
       "slug": "the-odyssey",
       "source": "the-odyssey",
@@ -817,7 +913,8 @@
       "dir_texte": "ltr",
       "look": "literature",
       "accent": "#7a4a24",
-      "resume": "Homère, trad. William Cullen Bryant. Domaine public.",
+      "resume": "Dix ans pour rentrer chez soi. Le poème qui a fixé, pour tout le monde après lui, ce que veut dire un voyage.",
+      "resumeEn": "Ten years to get home. The poem that settled, for everyone after it, what a journey means.",
       "droits": "domaine public",
       "chapters": 25,
       "built": true,
@@ -956,6 +1053,29 @@
         "Anglais"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "Philosophy",
+        "English"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "philosophie",
+        "stoïcisme",
+        "Rome antique",
+        "carnet",
+        "court"
+      ],
+      "tagsEn": [
+        "philosophy",
+        "Stoicism",
+        "ancient Rome",
+        "notebook",
+        "short read"
+      ],
+      "year": "≈ 180",
+      "yearEn": "c. AD 180",
+      "translator": "trad. George Long",
+      "translatorEn": "tr. George Long",
       "dir": "books/meditations",
       "slug": "meditations",
       "source": "meditations",
@@ -966,7 +1086,8 @@
       "dir_texte": "ltr",
       "look": "literature",
       "accent": "#7a4a24",
-      "resume": "Marc Aurèle, trad. George Long. Domaine public.",
+      "resume": "Un empereur qui s’écrit à lui-même, sous la tente et en campagne, ce qu’il faudra tenir demain.",
+      "resumeEn": "An emperor writing to himself, under canvas and on campaign, about what he will have to hold to tomorrow.",
       "droits": "domaine public",
       "chapters": 12,
       "built": true,
@@ -1041,6 +1162,30 @@
         "Anglais"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "History",
+        "Philosophy",
+        "English"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "politique",
+        "philosophie",
+        "Renaissance",
+        "Italie",
+        "court"
+      ],
+      "tagsEn": [
+        "politics",
+        "philosophy",
+        "Renaissance",
+        "Italy",
+        "short read"
+      ],
+      "year": "1532",
+      "yearEn": "1532",
+      "translator": "trad. W. K. Marriott",
+      "translatorEn": "tr. W. K. Marriott",
       "dir": "books/the-prince",
       "slug": "the-prince",
       "source": "the-prince",
@@ -1051,7 +1196,8 @@
       "dir_texte": "ltr",
       "look": "newsprint",
       "accent": "#a11f1f",
-      "resume": "Nicolas Machiavel, trad. W. K. Marriott. Domaine public.",
+      "resume": "Comment on prend le pouvoir et comment on le garde, décrit sans une once de morale — et c’est là tout le scandale.",
+      "resumeEn": "How power is taken and how it is kept, described without a gram of morality — which is the whole scandal.",
       "droits": "domaine public",
       "chapters": 27,
       "built": true,
@@ -1200,6 +1346,29 @@
         "Anglais"
       ],
       "level": "Lycée",
+      "subjectsEn": [
+        "Literature",
+        "English"
+      ],
+      "levelEn": "Upper secondary",
+      "tags": [
+        "science-fiction",
+        "Égypte",
+        "anticipation",
+        "XIXᵉ siècle",
+        "rareté"
+      ],
+      "tagsEn": [
+        "science fiction",
+        "Egypt",
+        "future history",
+        "19th century",
+        "rarity"
+      ],
+      "year": "1827",
+      "yearEn": "1827",
+      "translator": "",
+      "translatorEn": "",
       "dir": "books/the-mummy",
       "slug": "the-mummy",
       "source": "the-mummy",
@@ -1210,7 +1379,8 @@
       "dir_texte": "ltr",
       "look": "literature",
       "accent": "#7a4a24",
-      "resume": "Jane C. Loudon, 1827. Domaine public.",
+      "resume": "Une momie réveillée en 2126, par une romancière de vingt ans qui a inventé la science-fiction avant que le mot existe.",
+      "resumeEn": "A mummy woken in 2126, by a twenty-year-old novelist who invented science fiction before the word for it existed.",
       "droits": "domaine public",
       "chapters": 33,
       "built": true,
