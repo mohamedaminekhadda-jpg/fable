@@ -736,10 +736,10 @@ body.nb-op{cursor:grabbing;user-select:none}
 
 </style>
 
-<script src="model.js?v=mu5xc46i"></script>
-<script src="sanitize.js?v=mu5xc46i"></script>
-<script src="jaguar-shim.js?v=mu5xc46i"></script>
-<script src="compte.js?v=mu5xc46i"></script>
+<script src="model.js?v=mu5xufai"></script>
+<script src="sanitize.js?v=mu5xufai"></script>
+<script src="jaguar-shim.js?v=mu5xufai"></script>
+<script src="../compte.js?v=mu5xufai"></script>
 </head>
 <body>
 
@@ -1585,52 +1585,20 @@ function supprimerCahier(cah){
 }
 
 /* ═════ le compte ═════ */
-/* Facultatif, et silencieux tant qu'il n'est pas configuré : sans Firebase
-   rempli, aucun bouton n'apparaît et le cahier se comporte comme avant. */
+/* Le bouton ET la fenêtre viennent de compte.js, à la racine du site : c'est
+   le compte de FABLE, le même que sur l'accueil et sur les simulations. Le
+   cahier avait sa propre fenêtre de connexion ; deux fenêtres pour une seule
+   identité auraient fini par ne plus dire la même chose. Ici on ne garde que
+   la phrase qui dit où vivent les cahiers. */
 async function peindreCompte(){
-  const hote=$('#shCompte2'); if(!hote||!window.FableCompte) return;
-  if(!await FableCompte.configure()) return;      /* pas configuré : rien du tout */
+  const hote=$('#shCompte2');
+  if(!hote||!window.FableCompte) return;
+  if(!await FableCompte.poserBouton(hote)) return;   /* pas configuré : rien */
   FableCompte.surChangement(function(e){
-    hote.innerHTML='';
-    if(e.utilisateur){
-      if(e.utilisateur.photo){ const im=new Image(); im.src=e.utilisateur.photo; im.alt=''; hote.appendChild(im); }
-      const q=document.createElement('span'); q.className='qui';
-      q.textContent=e.utilisateur.nom||e.utilisateur.email; hote.appendChild(q);
-      if(e.dernier){ const s2=document.createElement('span'); s2.className='sh-etat'; s2.textContent=e.dernier; hote.appendChild(s2); }
-      const d=document.createElement('button'); d.type='button'; d.textContent='Se déconnecter';
-      d.onclick=async function(){ await FableCompte.deconnecter(); ouvrirEtagere(false); };
-      hote.appendChild(d);
-      $('#shOu').textContent='Sur cet appareil, et dans votre compte.';
-    } else {
-      const b=document.createElement('button'); b.type='button'; b.textContent='Se connecter';
-      b.onclick=ouvrirConnexion; hote.appendChild(b);
-      $('#shOu').textContent='Sur cet appareil.';
-    }
+    $('#shOu').textContent = e.utilisateur
+      ? 'Sur cet appareil, et dans votre compte.'
+      : 'Sur cet appareil.';
   });
-}
-
-function ouvrirConnexion(){
-  popup('Se connecter','pour retrouver vos cahiers partout',
-    '<p style="margin-bottom:12px">Vos cahiers restent sur cet appareil. Le compte en garde une copie, '
-    +'pour les retrouver sur un autre — et rien d’autre.</p>'
-    +'<div class="actions" style="justify-content:flex-start;margin-bottom:14px">'
-    +'<button class="primary" id="cnGoogle">Continuer avec Google</button></div>'
-    +'<div class="fld"><label>Ou par e-mail</label><input id="cnMail" type="email" autocomplete="username" placeholder="vous@exemple.fr"></div>'
-    +'<div class="fld"><label>Mot de passe</label><input id="cnMdp" type="password" autocomplete="current-password"></div>'
-    +'<p class="sh-etat" id="cnErr" style="min-height:14px;color:#a5332b"></p>'
-    +'<div class="actions"><button onclick="closePopup()">Annuler</button>'
-    +'<button id="cnCreer">Créer un compte</button>'
-    +'<button class="primary" id="cnOk">Se connecter</button></div>');
-  const err=function(e){ $('#cnErr').textContent=(e&&e.message)||String(e); };
-  $('#cnGoogle').onclick=async function(){ try{ await FableCompte.connecterGoogle(); closePopup(); ouvrirEtagere(false); }catch(e){ err(e); } };
-  const parMail=async function(creer){
-    try{
-      await FableCompte.connecterEmail($('#cnMail').value.trim(),$('#cnMdp').value,creer);
-      closePopup(); ouvrirEtagere(false);
-    }catch(e){ err(e); }
-  };
-  $('#cnOk').onclick=function(){ parMail(false); };
-  $('#cnCreer').onclick=function(){ parMail(true); };
 }
 
 async function importerFichier(fichier){

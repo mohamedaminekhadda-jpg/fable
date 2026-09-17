@@ -151,6 +151,15 @@ kbd{
 .mast-search svg{inline-size:.8125rem;block-size:.8125rem}
 .mast-search kbd{margin-inline-start:.25rem}
 @media (max-width:52rem){.mast-search span{display:none}.mast-search kbd{display:none}}
+/* Le compte, dans l'en-tête. Vide et invisible tant que Firebase n'est pas
+   configuré : `poserBouton` ne pose rien, et `:empty` ne laisse pas de trou. */
+.compte-hote:empty{display:none}
+.compte-hote button{
+  font:inherit;font-size:.8125rem;color:var(--ink-2);cursor:pointer;
+  background:var(--card);border:1px solid var(--rule);border-radius:100px;
+  padding:.3rem .8rem;transition:border-color .15s,color .15s;
+}
+.compte-hote button:hover{border-color:var(--ink-3);color:var(--ink)}
 .langsel{display:flex;gap:2px}
 .lang-btn{
   font:600 11px/1 var(--font-mono);letter-spacing:.1em;
@@ -789,6 +798,7 @@ body::after{
       <span data-i18n="searchBtn">Search</span>
       <kbd id="kbd-hint">Ctrl K</kbd>
     </button>
+    <span class="compte-hote" id="compte-hote"></span>
     <div class="langsel" role="group" aria-label="Language">
       <button type="button" class="lang-btn" data-lang="fr">FR</button>
       <button type="button" class="lang-btn" data-lang="en">EN</button>
@@ -3539,11 +3549,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu5xc46i). Non remplacée —
+  /* La version est posée par la construction (mu5xufai). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu5xc46i')
+  fetch('library/library.json?v=mu5xufai')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -3554,6 +3564,15 @@ body::after{
 </script>
 
 
-<script src="atelier.js?v=mu5xc46i"></script>
+<script src="compte.js?v=mu5xufai"></script>
+<script>
+/* Le même compte que le cahier et que les simulations : même fichier, même
+   origine, donc même session. Il ne s'affiche que s'il est configuré. */
+(function(){
+  if(!window.FableCompte) return;
+  window.FableCompte.poserBouton(document.getElementById('compte-hote'));
+})();
+</script>
+<script src="atelier.js?v=mu5xufai"></script>
 </body>
 </html>

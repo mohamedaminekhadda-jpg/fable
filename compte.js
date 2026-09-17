@@ -41,6 +41,20 @@
   var ecouteurs = [];
   var fb = null;        // les modules Firebase, chargés à la demande
 
+  /* OÙ EST CE FICHIER. Le compte est servi une seule fois, à la racine du
+     site, et chargé depuis trois profondeurs différentes : `/index.html`,
+     `/cahier/index.html`, `/sfy/index.html`. Or un `import()` écrit dans un
+     script classique se résout contre l'adresse de la PAGE, pas contre celle
+     du script — `./firebase-config.js` serait donc allé chercher le fichier
+     dans `cahier/`, où il n'est pas. On relève donc notre propre adresse au
+     chargement, tant que `document.currentScript` existe (il ne vaut plus rien
+     une fois dans une fonction asynchrone). */
+  var BASE = (function () {
+    var sc = document.currentScript;
+    var u = (sc && sc.src) || '';
+    return u ? u.replace(/[^/]*$/, '') : './';
+  })();
+
   function prevenir() { ecouteurs.forEach(function (f) { try { f(etat); } catch (e) { /* un écouteur fautif ne casse pas les autres */ } }); }
   function dire(m) { etat.dernier = m; prevenir(); }
 
@@ -50,7 +64,7 @@
      hors ligne ne doit pas payer le poids d'un service qu'il n'utilise pas. */
   async function charger() {
     if (fb) return fb;
-    var cfg = await import('./firebase-config.js');
+    var cfg = await import(BASE + 'firebase-config.js');
     var C = cfg.CONFIG_FIREBASE || {};
     if (!C.apiKey || !C.projectId) throw new Error('Firebase n’est pas configuré (web/firebase-config.js).');
     var base = 'https://www.gstatic.com/firebasejs/' + (cfg.VERSION_SDK || '10.12.0') + '/';
@@ -249,13 +263,134 @@
     return dedans ? dedans[1] : m;
   }
 
+  /* ── UNE SEULE FENÊTRE ─────────────────────────────────────────────────
+     Le cahier avait la sienne. L'accueil et les simulations en auraient eu
+     une chacun, et les trois auraient divergé — c'est déjà arrivé dans ce
+     projet aux médaillons, dessinés en double. Elle vit donc ici, avec son
+     style, et les trois surfaces l'ouvrent.
+
+     Les couleurs sont des variables `--fc-…` : chaque page peut les reprendre
+     pour que la fenêtre soit chez elle, et sans rien faire elle suit déjà le
+     clair et le sombre du système. */
+  /* LES COULEURS VIENNENT DE LA PAGE, pas du système. Premier essai : une
+     règle `prefers-color-scheme` — et la fenêtre s'ouvrait en sombre sur un
+     accueil réglé en clair, parce que le thème de Fable est un choix de
+     l'utilisateur et non celui du système d'exploitation.
+     Chaque jeton va donc chercher celui de l'hôte, avec une chaîne de replis :
+     l'accueil dit `--card` et `--ink-3`, le cahier `--paper` et `--slate`, les
+     simulations `--paper` et `--ink-mute`. La fenêtre est chez elle partout,
+     et suit le thème de la page sans rien savoir d'elle. */
+  var STYLE = '.fc-dlg{color-scheme:light dark;  --fc-pap:var(--card,var(--paper,#faf6ee));  --fc-enc:var(--ink,#211d19);  --fc-mut:var(--ink-3,var(--slate,var(--ink-mute,#6f675c)));  --fc-trait:var(--rule,var(--trait,var(--paper-3,#ded5c6)));  --fc-acc:var(--accent,var(--sub,#8c2f2a));  border:1px solid var(--fc-trait);border-radius:12px;background:var(--fc-pap);color:var(--fc-enc);  padding:0;inline-size:min(24rem,calc(100vw - 2rem));  font:400 15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;  box-shadow:0 30px 70px -30px rgba(0,0,0,.55)}.fc-dlg::backdrop{background:rgba(20,17,14,.45)}.fc-dlg h2{margin:0 0 4px;font-size:17px;letter-spacing:-.01em}.fc-dlg .fc-corps{padding:20px}.fc-dlg p{margin:0 0 14px;color:var(--fc-mut);font-size:13.5px}.fc-dlg label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;  color:var(--fc-mut);margin:10px 0 3px}.fc-dlg input{font:inherit;font-size:14px;width:100%;padding:8px 10px;border-radius:7px;  border:1px solid var(--fc-trait);background:var(--fc-pap);color:var(--fc-enc)}.fc-dlg input:focus{outline:2px solid var(--fc-acc);outline-offset:1px}.fc-dlg button{font:inherit;font-size:14px;cursor:pointer;border-radius:100px;padding:8px 14px;  border:1px solid var(--fc-trait);background:transparent;color:var(--fc-enc)}.fc-dlg button:hover{border-color:var(--fc-mut)}.fc-dlg .fc-fort{background:var(--fc-acc);border-color:var(--fc-acc);color:var(--fc-pap);font-weight:600;width:100%}.fc-dlg .fc-ou{display:flex;align-items:center;gap:10px;margin:16px 0 2px;  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fc-mut)}.fc-dlg .fc-ou::before,.fc-dlg .fc-ou::after{content:"";flex:1;height:1px;background:var(--fc-trait)}.fc-dlg .fc-rang{display:flex;gap:8px;margin-top:16px}.fc-dlg .fc-rang button{flex:1}.fc-dlg .fc-err{min-height:16px;font-size:13px;margin:10px 0 0;  color:color-mix(in oklab,#e0554d 72%,var(--fc-enc))}.fc-dlg .fc-qui{display:flex;align-items:center;gap:10px;margin-bottom:14px}.fc-dlg .fc-qui img{inline-size:36px;block-size:36px;border-radius:50%}.fc-dlg .fc-qui b{display:block;font-size:15px}.fc-dlg .fc-qui span{font-size:12.5px;color:var(--fc-mut)}';
+
+  var dlg = null;
+  function fenetre() {
+    if (dlg) return dlg;
+    var st = document.createElement('style'); st.textContent = STYLE;
+    document.head.appendChild(st);
+    dlg = document.createElement('dialog');
+    dlg.className = 'fc-dlg';
+    document.body.appendChild(dlg);
+    /* Cliquer à côté referme : `showModal` ne ferme que sur Échap, et une
+       fenêtre dont on ne devine pas la sortie donne l'impression d'être pris. */
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    return dlg;
+  }
+
+  function ouvrirDialogue() {
+    var d = fenetre();
+    d.innerHTML = '';
+    var c = document.createElement('div'); c.className = 'fc-corps';
+
+    if (etat.utilisateur) {
+      var u = etat.utilisateur;
+      c.innerHTML = '<h2>Votre compte</h2>'
+        + '<div class="fc-qui">' + (u.photo ? '<img alt="" src="' + echappe(u.photo) + '">' : '')
+        + '<span><b>' + echappe(u.nom || u.email) + '</b>'
+        + '<span>' + echappe(etat.dernier || 'Vos cahiers suivent ce compte.') + '</span></span></div>'
+        + '<div class="fc-rang"><button data-fermer>Fermer</button>'
+        + '<button data-sortir>Se déconnecter</button></div>';
+      c.querySelector('[data-sortir]').onclick = function () {
+        window.FableCompte.deconnecter().then(function () { d.close(); });
+      };
+    } else {
+      c.innerHTML = '<h2>Votre compte Fable</h2>'
+        + '<p>Un seul compte pour les livres, le cahier et les simulations. '
+        + 'Vos cahiers restent sur cet appareil — le compte en garde une copie, '
+        + 'pour les retrouver ailleurs.</p>'
+        + '<button class="fc-fort" data-google>Continuer avec Google</button>'
+        + '<div class="fc-ou">ou par e-mail</div>'
+        + '<label for="fc-mail">Adresse</label>'
+        + '<input id="fc-mail" type="email" autocomplete="username" placeholder="vous@exemple.fr">'
+        + '<label for="fc-mdp">Mot de passe</label>'
+        + '<input id="fc-mdp" type="password" autocomplete="current-password">'
+        + '<p class="fc-err" data-err></p>'
+        + '<div class="fc-rang"><button data-creer>Créer un compte</button>'
+        + '<button class="fc-fort" data-entrer>Se connecter</button></div>';
+      var err = c.querySelector('[data-err]');
+      var dire2 = function (e) { err.textContent = (e && e.message) || String(e); };
+      c.querySelector('[data-google]').onclick = function () {
+        err.textContent = '';
+        window.FableCompte.connecterGoogle().then(function () { d.close(); }, dire2);
+      };
+      var parMail = function (creer) {
+        err.textContent = '';
+        window.FableCompte.connecterEmail(
+          c.querySelector('#fc-mail').value.trim(), c.querySelector('#fc-mdp').value, creer
+        ).then(function () { d.close(); }, dire2);
+      };
+      c.querySelector('[data-entrer]').onclick = function () { parMail(false); };
+      c.querySelector('[data-creer]').onclick = function () { parMail(true); };
+    }
+    var f = c.querySelector('[data-fermer]');
+    if (f) f.onclick = function () { d.close(); };
+    d.appendChild(c);
+    d.showModal();
+  }
+
+  function echappe(t) {
+    return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x];
+    });
+  }
+
+  /* ── LE BOUTON, POSÉ PARTOUT PAREIL ──
+     Chaque page donne l'élément d'accueil et la classe de son propre style ;
+     le contenu et le comportement viennent d'ici. C'est ce qui fait que les
+     trois surfaces montrent la MÊME personne sans se recopier. */
+  async function poserBouton(hote, classe) {
+    if (!hote) return false;
+    if (!(await window.FableCompte.configure())) return false;
+    window.FableCompte.surChangement(function (e) {
+      hote.innerHTML = '';
+      var b = document.createElement('button');
+      b.type = 'button';
+      if (classe) b.className = classe;
+      if (e.utilisateur) {
+        var court = (e.utilisateur.nom || e.utilisateur.email || '').split(' ')[0].split('@')[0];
+        if (e.utilisateur.photo) {
+          var im = new Image(); im.src = e.utilisateur.photo; im.alt = '';
+          im.width = 18; im.height = 18;
+          im.style.cssText = 'border-radius:50%;vertical-align:-4px;margin-inline-end:6px';
+          b.appendChild(im);
+        }
+        b.appendChild(document.createTextNode(court));
+        b.title = e.utilisateur.email + (e.dernier ? ' — ' + e.dernier : '');
+      } else {
+        b.textContent = 'Se connecter';
+      }
+      b.onclick = ouvrirDialogue;
+      hote.appendChild(b);
+    });
+    return true;
+  }
+
   window.FableCompte = {
     etat: etat,
     /* `configure` se lit sans rien charger : l'interface doit savoir s'il faut
        montrer un bouton de connexion AVANT de télécharger le moindre SDK. */
     configure: async function () {
       try {
-        var cfg = await import('./firebase-config.js');
+        var cfg = await import(BASE + 'firebase-config.js');
         etat.pret = !!(cfg.CONFIG_FIREBASE && cfg.CONFIG_FIREBASE.apiKey && cfg.CONFIG_FIREBASE.projectId);
       } catch (e) { etat.pret = false; }
       return etat.pret;
@@ -295,6 +430,8 @@
     },
     synchroniser: synchroniser,
     pousserBientot: pousserBientot,
+    ouvrirDialogue: ouvrirDialogue,
+    poserBouton: poserBouton,
     /* Les deux morceaux de logique qui peuvent se tromper sans qu'on le voie :
        le découpage, et la décision de qui gagne. Exposés pour être vérifiés
        depuis la console du navigateur, sans compte ni réseau. */

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>See for yourself</title>
 <link rel="icon" href="mark.svg">
-<link rel="stylesheet" href="style.css?v=mu5xc46i">
+<link rel="stylesheet" href="style.css?v=mu5xufai">
 </head>
 <body>
 
@@ -21,12 +21,15 @@
     <input id="q" type="search" placeholder="Chercher une expérience…" autocomplete="off" spellcheck="false">
   </div>
   <!-- rempli par app/langue.js : FR / EN, sur la même clé que le reste de Fable -->
+  <!-- le compte de Fable : posé par app.js, invisible s’il n’est pas configuré -->
+  <span class="compte-hote" id="compte-hote"></span>
   <div class="langsel" id="langsel" role="group" aria-label="Langue"></div>
   <button class="icon-btn" id="theme" title="Clair / sombre">◐</button>
 </header>
 
 <main class="wrap" id="view"></main>
 
-<script type="module" src="app.js?v=mu5xc46i"></script>
+<script src="../compte.js?v=mu5xufai"></script>
+<script type="module" src="app.js?v=mu5xufai"></script>
 </body>
 </html>

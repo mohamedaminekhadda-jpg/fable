@@ -742,3 +742,10 @@ body.is-lab { display: block; }
 }
 .regles b { font-weight: 600; }
 .regles span { font-size: 13.5px; line-height: 1.6; color: var(--ink-soft); }
+
+/* Le compte de Fable, dans l’en-tête. Vide, il ne laisse pas de trou. */
+.compte-hote:empty{display:none}
+.compte-hote button{font:inherit;font-size:12px;cursor:pointer;color:var(--mut);
+  background:var(--card,transparent);border:1px solid var(--bord,currentColor);
+  border-radius:100px;padding:5px 11px;opacity:.85}
+.compte-hote button:hover{opacity:1;color:var(--ink)}
