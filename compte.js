@@ -91,13 +91,26 @@
     try { var u = new URL(v); return u.protocol === 'http:' || u.protocol === 'https:'; } catch (e) { return false; }
   }
 
-  var BASE = (function () {
+  var BASE = './', VERSION_Q = '';
+  (function () {
     var sc = document.currentScript;
     var u = (sc && sc.src) || '';
-    return u ? u.replace(/[^/]*$/, '') : './';
+    if (!u) return;
+    BASE = u.replace(/[^/]*$/, '');
+    /* LA VERSION, REPRISE DE NOTRE PROPRE ADRESSE. `compte.js` est servi
+       estampillé (`?v=…`) par la construction ; la configuration qu'il importe
+       ne l'était pas, et GitHub Pages la sert en `max-age=600`. Résultat
+       constaté en vrai : le compte se connectait au bon projet, mais lisait
+       une liste de propriétaires périmée, et l'entrée de l'atelier ne
+       s'ouvrait pas. Troisième fois que ce piège se referme dans ce projet —
+       il ne suffit pas de versionner la page, il faut versionner ce qu'elle VA
+       CHERCHER. En reprenant la nôtre, rien n'est à tenir à jour : toute
+       publication invalide les deux d'un coup. */
+    var q = /[?&](v=[^&]*)/.exec(u);
+    if (q) VERSION_Q = '?' + q[1];
   })();
 
-  function prevenir() { ecouteurs.forEach(function (f) { try { f(etat); } catch (e) { /* un écouteur fautif ne casse pas les autres */ } }); }
+  function prevenir() { etat.chezSoi = chezSoi(); ecouteurs.forEach(function (f) { try { f(etat); } catch (e) { /* un écouteur fautif ne casse pas les autres */ } }); }
   function dire(m) { etat.dernier = m; prevenir(); }
 
   /* ── le chargement, tardif et facultatif ────────────────────────────────
@@ -106,7 +119,7 @@
      hors ligne ne doit pas payer le poids d'un service qu'il n'utilise pas. */
   async function charger() {
     if (fb) return fb;
-    var cfg = await import(BASE + 'firebase-config.js');
+    var cfg = await import(BASE + 'firebase-config.js' + VERSION_Q);
     var C = cfg.CONFIG_FIREBASE || {};
     if (!C.apiKey || !C.projectId) throw new Error('Firebase n’est pas configuré (web/firebase-config.js).');
     var base = 'https://www.gstatic.com/firebasejs/' + (cfg.VERSION_SDK || '10.12.0') + '/';
@@ -477,7 +490,7 @@
        montrer un bouton de connexion AVANT de télécharger le moindre SDK. */
     configure: async function () {
       try {
-        var cfg = await import(BASE + 'firebase-config.js');
+        var cfg = await import(BASE + 'firebase-config.js' + VERSION_Q);
         etat.pret = !!(cfg.CONFIG_FIREBASE && cfg.CONFIG_FIREBASE.apiKey && cfg.CONFIG_FIREBASE.projectId);
         proprietaires = (cfg.PROPRIETAIRES || []).map(function (e) { return String(e).trim().toLowerCase(); }).filter(Boolean);
       } catch (e) { etat.pret = false; }
