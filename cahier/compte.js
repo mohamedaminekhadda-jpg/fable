@@ -132,12 +132,35 @@
     return out;
   }
 
-  /* ── la fusion ──
+  /* ── QUI GAGNE ──
+     Séparé de l'envoi et de la réception exprès : c'est ici que sont les
+     décisions, donc c'est ici que sont les erreurs possibles, et une fonction
+     pure se vérifie sans réseau ni compte. Elle est exposée sous `_essai`
+     plus bas, et c'est ce qui permet d'en faire la preuve.
+
      Cahier par cahier, la version la plus récente gagne. Ce qui n'existe que
-     d'un côté est copié de l'autre. Aucune suppression n'est propagée : un
+     d'un côté est copié vers l'autre. Aucune suppression n'est propagée : un
      cahier effacé sur un appareil revient depuis le nuage, ce qui est le moins
      mauvais des deux défauts — perdre du travail est pire que devoir effacer
      deux fois. */
+  function decider(locaux, distants) {
+    var quandDist = {};
+    distants.forEach(function (d) { quandDist[d.id] = d.updated || 0; });
+    var quandLoc = {};
+    locaux.forEach(function (c) { quandLoc[c.id] = (c.notebook && c.notebook.updated) || 0; });
+    var monter = [], descendre = [];
+    Object.keys(quandLoc).forEach(function (id) {
+      /* Strictement plus récent : à égalité on ne touche à rien. Les deux
+         côtés portent alors le même travail, et réécrire pour rien coûte une
+         écriture par cahier à chaque ouverture. */
+      if (!(id in quandDist) || quandLoc[id] > quandDist[id]) monter.push(id);
+    });
+    Object.keys(quandDist).forEach(function (id) {
+      if (!(id in quandLoc) || quandDist[id] > quandLoc[id]) descendre.push(id);
+    });
+    return { monter: monter, descendre: descendre };
+  }
+
   async function synchroniser() {
     var st = magasin();
     if (!st || !etat.utilisateur || etat.occupe) return;
@@ -146,24 +169,18 @@
       var locaux = await st.tousCahiers();
       var parId = {};
       locaux.forEach(function (c) { parId[c.id] = c.notebook; });
-      var distants = await listeDistante();
-      var distId = {};
-      distants.forEach(function (d) { distId[d.id] = d.updated; });
+      var quoi = decider(locaux, await listeDistante());
 
       var montes = 0, descendus = 0;
-
-      for (var id in parId) {
-        var l = parId[id];
-        var quandLoc = (l && l.updated) || 0;
-        if (!(id in distId)) { await pousserCahier(id, l); montes++; }
-        else if (quandLoc > (distId[id] || 0)) { await pousserCahier(id, l); montes++; }
+      for (var i = 0; i < quoi.monter.length; i++) {
+        await pousserCahier(quoi.monter[i], parId[quoi.monter[i]]);
+        montes++;
       }
-      for (var j = 0; j < distants.length; j++) {
-        var d2 = distants[j];
-        var loc = parId[d2.id];
-        if (loc && (loc.updated || 0) >= (d2.updated || 0)) continue;
-        var nb = await tirerCahier(d2.id);
-        if (nb) { await st.putCahier({ id: d2.id, notebook: nb }); descendus++; }
+      for (var j = 0; j < quoi.descendre.length; j++) {
+        var nb = await tirerCahier(quoi.descendre[j]);
+        /* Un cahier illisible — morceau manquant, écriture interrompue — ne
+           doit pas écraser celui de l'appareil. On le laisse où il est. */
+        if (nb) { await st.putCahier({ id: quoi.descendre[j], notebook: nb }); descendus++; }
       }
 
       if (montes || descendus) {
@@ -198,6 +215,40 @@
     }, 4000);
   }
 
+  /* Firebase renvoie des codes ; un élève lit une phrase. Chacune dit ce qui
+     s'est passé ET ce qu'on peut faire — un message qui ne mène à rien n'aide
+     que celui qui l'a écrit. */
+  var RAISONS = {
+    'auth/popup-blocked': 'Le navigateur a bloqué la fenêtre de Google. Autorisez les fenêtres pour ce site, ou passez par l’e-mail.',
+    'auth/popup-closed-by-user': 'La fenêtre de Google a été fermée avant la fin.',
+    'auth/cancelled-popup-request': 'Une autre fenêtre de connexion était déjà ouverte.',
+    'auth/unauthorized-domain': 'Ce domaine n’est pas autorisé dans Firebase (Authentication → Settings → Authorized domains).',
+    'auth/operation-not-allowed': 'Cette méthode n’est pas activée dans Firebase (Authentication → Sign-in method).',
+    'auth/invalid-email': 'Cette adresse e-mail n’est pas valide.',
+    'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+    'auth/wrong-password': 'Mot de passe incorrect.',
+    'auth/user-not-found': 'Aucun compte avec cette adresse. Utilisez « Créer un compte ».',
+    'auth/email-already-in-use': 'Un compte existe déjà avec cette adresse. Utilisez « Se connecter ».',
+    'auth/weak-password': 'Mot de passe trop court — six caractères au minimum.',
+    'auth/network-request-failed': 'Pas de réseau. Vos cahiers restent sur cet appareil, comme toujours.',
+  };
+  function raison(e) {
+    var c = (e && e.code) || '';
+    if (RAISONS[c]) return RAISONS[c];
+    /* Les trois pannes du RÉGLAGE, celles qu'on rencontre en branchant le
+       projet et pas en s'en servant. Elles arrivent sous des codes verbeux —
+       « auth/api-key-not-valid.-please-pass-a-valid-api-key. » — d'où le test
+       sur un fragment plutôt que sur le code entier. */
+    if (/api-key/.test(c)) return 'La clef Firebase n’est pas valide. Recollez la configuration dans la console (panneau « Comptes »).';
+    if (/configuration-not-found/.test(c)) return 'Le projet répond, mais l’authentification n’y est pas activée (Firebase → Authentication → Get started).';
+    if (/project-not-found|invalid-app-id/.test(c)) return 'Ce projet Firebase est introuvable — vérifiez `projectId` et `appId`.';
+    var m = (e && e.message) || String(e);
+    /* « Firebase: Error (auth/quelque-chose). » : l'emballage n'apprend rien,
+       le code oui. On ne garde que lui plutôt que d'afficher la phrase entière. */
+    var dedans = /\(([^)]+)\)/.exec(m);
+    return dedans ? dedans[1] : m;
+  }
+
   window.FableCompte = {
     etat: etat,
     /* `configure` se lit sans rien charger : l'interface doit savoir s'il faut
@@ -212,12 +263,30 @@
     surChangement: function (f) { ecouteurs.push(f); try { f(etat); } catch (e) { /* ignore */ } },
     connecterGoogle: async function () {
       var x = await charger();
-      await x.a.signInWithPopup(x.auth, new x.a.GoogleAuthProvider());
+      var f = new x.a.GoogleAuthProvider();
+      try {
+        await x.a.signInWithPopup(x.auth, f);
+      } catch (e) {
+        /* Une fenêtre bloquée n'est pas un refus : sur un téléphone, dans une
+           application qui ouvre les liens chez elle, elle l'est presque
+           toujours. On repart alors par redirection — la page s'en va chez
+           Google et revient connectée. */
+        var c = (e && e.code) || '';
+        if (c === 'auth/popup-blocked' || c === 'auth/operation-not-supported-in-this-environment') {
+          await x.a.signInWithRedirect(x.auth, f);
+          return;
+        }
+        var err = new Error(raison(e)); err.code = c; throw err;
+      }
     },
     connecterEmail: async function (email, mdp, creer) {
+      if (!email) throw new Error('Une adresse e-mail est demandée.');
+      if (!mdp || mdp.length < 6) throw new Error('Mot de passe trop court — six caractères au minimum.');
       var x = await charger();
-      if (creer) await x.a.createUserWithEmailAndPassword(x.auth, email, mdp);
-      else await x.a.signInWithEmailAndPassword(x.auth, email, mdp);
+      try {
+        if (creer) await x.a.createUserWithEmailAndPassword(x.auth, email, mdp);
+        else await x.a.signInWithEmailAndPassword(x.auth, email, mdp);
+      } catch (e) { var err = new Error(raison(e)); err.code = e && e.code; throw err; }
     },
     deconnecter: async function () {
       if (!fb) return;
@@ -226,5 +295,9 @@
     },
     synchroniser: synchroniser,
     pousserBientot: pousserBientot,
+    /* Les deux morceaux de logique qui peuvent se tromper sans qu'on le voie :
+       le découpage, et la décision de qui gagne. Exposés pour être vérifiés
+       depuis la console du navigateur, sans compte ni réseau. */
+    _essai: { decouper: decouper, decider: decider, TAILLE: TAILLE },
   };
 })();
