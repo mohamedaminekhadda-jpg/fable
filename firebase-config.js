@@ -66,7 +66,7 @@ export const CONFIG_FIREBASE = {
  * pas la maison.
  */
 export const PROPRIETAIRES = [
-  'mkhadda@datacandy.com',
+  'mohamedaminekhadda@gmail.com',
 ];
 
 /* La version du SDK chargée depuis le CDN de Google. Elle est écrite ici plutôt
