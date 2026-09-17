@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fable — interactive textbooks</title>
-<meta name="description" content="Interactive school textbooks in French, English and Arabic. Every figure is computed, not drawn.">
-<meta property="og:title" content="Fable — interactive textbooks">
-<meta property="og:description" content="Textbooks where you can pull on the curves. Every figure is computed, not drawn.">
+<title>Fable — interactive books and textbooks</title>
+<meta name="description" content="Interactive books and school textbooks in French, English and Arabic. Every figure is computed, not drawn.">
+<meta property="og:title" content="Fable — interactive books and textbooks">
+<meta property="og:description" content="Books and textbooks you can pull the curves out of. Every figure is computed, not drawn.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <!-- La marque tient dans un « F » : une icône en SVG dans l'adresse elle-même,
@@ -397,7 +397,42 @@ body::after{
   font:inherit;font-size:.8125rem;color:var(--ink-2);background:var(--card);
   border:1px solid var(--rule);border-radius:100px;padding:.35rem .7rem;cursor:pointer;
 }
-.chips{display:grid;gap:var(--s2)}
+.filtres-btn{
+  display:inline-flex;align-items:center;gap:.45rem;font:inherit;font-size:.8125rem;
+  color:var(--ink-2);background:var(--card);border:1px solid var(--rule);
+  border-radius:100px;padding:.35rem .85rem;cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.filtres-btn:hover{border-color:var(--ink-3);color:var(--ink)}
+.filtres-btn[aria-expanded="true"]{background:var(--accent-wash);border-color:var(--accent);color:var(--accent-ink)}
+.filtres-btn svg{inline-size:.875rem;block-size:.875rem}
+.filtres-btn .n{
+  font:600 .625rem/1 var(--font-mono);background:var(--accent);color:var(--paper);
+  border-radius:100px;min-inline-size:1.15em;padding:.22em .35em;text-align:center;
+}
+/* Les filtres actifs, en clair et en dehors du panneau. Chacun s'enlève. */
+.actifs{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+.actifs:empty{display:none}
+.pill{
+  display:inline-flex;align-items:center;gap:.35rem;font:inherit;font-size:.8125rem;
+  background:var(--accent-wash);color:var(--accent-ink);
+  border:1px solid var(--accent);border-radius:100px;padding:.15rem .3rem .15rem .7rem;
+  cursor:pointer;
+}
+.pill .x{
+  display:inline-flex;align-items:center;justify-content:center;
+  inline-size:1.15em;block-size:1.15em;border-radius:100px;
+  background:rgba(0,0,0,.08);font-size:.9em;line-height:1;
+}
+.pill:hover .x{background:var(--accent);color:var(--paper)}
+.pill .quoi{opacity:.65;font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase}
+/* Le panneau. Il s'ouvre sous la rangée, il ne flotte pas : un panneau flottant
+   se referme au moindre clic, et on vient justement y cliquer plusieurs fois. */
+.chips{
+  display:grid;gap:var(--s3);
+  border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--card);
+  padding:var(--s4);
+}
 .chip-group{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline}
 .chip-group>.eyebrow{flex:0 0 5.5rem;padding-block-start:.2rem}
 @media (max-width:40rem){.chip-group>.eyebrow{flex-basis:100%}}
@@ -414,6 +449,7 @@ body::after{
 .chip .n{font-size:.6875rem;color:var(--ink-3);margin-inline-start:.3rem;font-variant-numeric:lining-nums}
 .chip[aria-pressed="true"] .n{color:inherit;opacity:.7}
 .chip-more{border-style:dashed}
+.badge-genre{border-color:var(--accent);color:var(--accent-ink);letter-spacing:.08em}
 .clear-all{
   font:inherit;font-size:.8125rem;color:var(--accent-ink);background:none;border:0;
   cursor:pointer;text-decoration:underline;text-underline-offset:.18em;padding:.15rem .2rem;
@@ -744,7 +780,7 @@ body::after{
       </svg>
       Fable
     </a>
-    <span class="brand-note" data-i18n="tagline">Interactive textbooks · fr · en · ar</span>
+    <span class="brand-note" data-i18n="tagline">Books and textbooks · fr · en · ar</span>
     <span class="mast-spacer"></span>
     <button class="mast-search" id="open-palette" type="button">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -766,7 +802,7 @@ body::after{
     <div class="hero-grid">
       <div class="hero-txt">
         <p class="eyebrow" data-i18n="eyebrow">Figures are computed, never drawn</p>
-        <h1 data-i18n-html="h1">Textbooks where you can <em>pull on the curves</em>.</h1>
+        <h1 data-i18n-html="h1">Books you can <em>pull the curves out of</em>.</h1>
         <p class="lede" data-i18n="lede">The figure does not illustrate the lesson. It works it out, while you watch, from the same few lines of mathematics the lesson is about.</p>
         <div class="cta">
           <a class="btn btn-1" href="#library" data-i18n="ctaLib">Browse the library</a>
@@ -858,6 +894,14 @@ body::after{
           <option value="long" data-i18n="sortLong">Longest first</option>
           <option value="short" data-i18n="sortShort">Shortest first</option>
         </select>
+        <button class="filtres-btn" id="filtres-btn" type="button"
+                aria-expanded="false" aria-controls="chips">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 6h16M7 12h10M10 18h4"/>
+          </svg>
+          <span data-i18n="filtres">Filters</span>
+          <span class="n" id="filtres-n" hidden></span>
+        </button>
         <div class="segmented" role="group" id="viewsel">
           <button type="button" data-view="shelf" aria-pressed="true">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -871,7 +915,11 @@ body::after{
           </button>
         </div>
       </div>
-      <div class="chips" id="chips"></div>
+      <!-- Ce qui est ACTIF reste dehors. Ranger les filtres derrière un bouton
+           est une bonne idée ; ranger aussi ceux qui agissent en est une très
+           mauvaise — on cherche alors pourquoi l'étagère est à moitié vide. -->
+      <div class="actifs" id="actifs"></div>
+      <div class="chips" id="chips" hidden></div>
     </div>
 
     <div class="grid" id="grid"></div>
@@ -912,7 +960,7 @@ body::after{
 
 <footer class="foot">
   <div class="wrap">
-    <span data-i18n="footer">Fable — interactive textbooks in French, English and Arabic.</span>
+    <span data-i18n="footer">Fable — interactive books and textbooks in French, English and Arabic.</span>
     <a href="cahier/">Le Jaguar</a>
     <a class="atelier" id="lien-atelier" href="#atelier">Atelier</a>
   </div>
@@ -966,6 +1014,8 @@ body::after{
    "worked answers",
    "all subjects"
   ],
+  "genre": "Manuel",
+  "genreEn": "Textbook",
   "year": "2026",
   "yearEn": "2026",
   "translator": "",
@@ -1054,6 +1104,8 @@ body::after{
    "nonsense",
    "short read"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "1865",
   "yearEn": "1865",
   "translator": "",
@@ -1107,6 +1159,8 @@ body::after{
    "19th century",
    "long read"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "1851",
   "yearEn": "1851",
   "translator": "",
@@ -1835,6 +1889,8 @@ body::after{
    "mythology",
    "voyage"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "≈ 700 av. J.-C.",
   "yearEn": "c. 700 BC",
   "translator": "trad. William Cullen Bryant",
@@ -2008,6 +2064,8 @@ body::after{
    "notebook",
    "short read"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "≈ 180",
   "yearEn": "c. AD 180",
   "translator": "trad. George Long",
@@ -2118,6 +2176,8 @@ body::after{
    "Italy",
    "short read"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "1532",
   "yearEn": "1532",
   "translator": "trad. W. K. Marriott",
@@ -2301,6 +2361,8 @@ body::after{
    "19th century",
    "rarity"
   ],
+  "genre": "Livre",
+  "genreEn": "Book",
   "year": "1827",
   "yearEn": "1827",
   "translator": "",
@@ -2502,11 +2564,11 @@ body::after{
   var TEXTES = {
     fr: {
       skip: 'Aller aux livres',
-      tagline: 'Manuels interactifs · fr · en · ar',
+      tagline: 'Livres et manuels · fr · en · ar',
       dark: 'Sombre', light: 'Clair',
       searchBtn: 'Chercher',
       eyebrow: 'Les figures sont calculées, jamais dessinées',
-      h1: 'Des manuels dont on peut <em>tirer les courbes</em>.',
+      h1: 'Des livres dont on peut <em>tirer les courbes</em>.',
       lede: 'La figure n’illustre pas la leçon : elle la résout, sous vos yeux, avec les mêmes quelques lignes de mathématiques dont la leçon parle.',
       ctaLib: 'Voir la bibliothèque', ctaNb: 'Ouvrir le cahier',
       murHint: 'Cliquez une couverture pour ouvrir le livre',
@@ -2522,7 +2584,8 @@ body::after{
       sortShelf: 'Ordre de l’étagère', sortAz: 'A → Z',
       sortLong: 'Les plus longs', sortShort: 'Les plus courts',
       viewShelf: 'Étagère', viewList: 'Liste',
-      fSubject: 'Matière', fLevel: 'Niveau', fLang: 'Langue', fTag: 'Étiquette',
+      fSubject: 'Matière', fLevel: 'Niveau', fLang: 'Langue', fTag: 'Étiquette', fGenre: 'Type',
+      filtres: 'Filtres', fermerFiltres: 'Masquer les filtres', retirer: 'Retirer ce filtre',
       clearAll: 'Tout effacer', more: 'et %n de plus', less: 'moins',
       emptyH: 'Aucun livre pour l’instant.',
       emptyP: 'Ceci est une copie neuve de Fable — le moteur, le lecteur et le cahier sont là, mais l’étagère est vide. Posez un dossier de livre dans <code>library/</code> et reconstruisez : il apparaîtra ici avec sa couverture, sa langue et son nombre de chapitres.',
@@ -2531,7 +2594,7 @@ body::after{
       openNb: 'Ouvrir le cahier ›',
       sfyDesc: 'Les simulations seules, hors de tout livre — réglez les valeurs, relancez, regardez ce que font vraiment les équations.',
       openSfy: 'Ouvrir les simulations ›',
-      footer: 'Fable — manuels interactifs en français, anglais et arabe.',
+      footer: 'Fable — livres et manuels interactifs en français, anglais et arabe.',
       chapter: 'chapitre', chapters: 'chapitres',
       book: 'livre', books: 'livres', of: 'sur',
       noMatch: 'Rien ne correspond.',
@@ -2541,16 +2604,16 @@ body::after{
       palBook: 'livre', palChapter: 'chapitre', palNone: 'Rien de tel dans la bibliothèque.',
       palStart: 'Tapez un titre, un auteur, une matière — ou un nom de chapitre.',
       inBook: 'dans',
-      pageTitle: 'Fable — manuels interactifs',
-      pageDesc: 'Des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
+      pageTitle: 'Fable — livres et manuels interactifs',
+      pageDesc: 'Des livres et des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
     },
     en: {
       skip: 'Skip to the books',
-      tagline: 'Interactive textbooks · fr · en · ar',
+      tagline: 'Books and textbooks · fr · en · ar',
       dark: 'Dark', light: 'Light',
       searchBtn: 'Search',
       eyebrow: 'Figures are computed, never drawn',
-      h1: 'Textbooks where you can <em>pull on the curves</em>.',
+      h1: 'Books you can <em>pull the curves out of</em>.',
       lede: 'The figure does not illustrate the lesson. It works it out, while you watch, from the same few lines of mathematics the lesson is about.',
       ctaLib: 'Browse the library', ctaNb: 'Open the notebook',
       murHint: 'Click a cover to open the book',
@@ -2566,7 +2629,8 @@ body::after{
       sortShelf: 'Shelf order', sortAz: 'A → Z',
       sortLong: 'Longest first', sortShort: 'Shortest first',
       viewShelf: 'Shelf', viewList: 'List',
-      fSubject: 'Subject', fLevel: 'Level', fLang: 'Language', fTag: 'Tag',
+      fSubject: 'Subject', fLevel: 'Level', fLang: 'Language', fTag: 'Tag', fGenre: 'Type',
+      filtres: 'Filters', fermerFiltres: 'Hide filters', retirer: 'Remove this filter',
       clearAll: 'Clear all', more: '%n more', less: 'fewer',
       emptyH: 'No books yet.',
       emptyP: 'This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.',
@@ -2575,7 +2639,7 @@ body::after{
       openNb: 'Open the notebook ›',
       sfyDesc: 'The simulations on their own, outside any book — set the values, run it, watch what the equations actually do.',
       openSfy: 'Open the simulations ›',
-      footer: 'Fable — interactive textbooks in French, English and Arabic.',
+      footer: 'Fable — interactive books and textbooks in French, English and Arabic.',
       chapter: 'chapter', chapters: 'chapters',
       book: 'book', books: 'books', of: 'of',
       noMatch: 'Nothing matches that.',
@@ -2585,8 +2649,8 @@ body::after{
       palBook: 'book', palChapter: 'chapter', palNone: 'Nothing like that in the library.',
       palStart: 'Type a title, an author, a subject — or a chapter name.',
       inBook: 'in',
-      pageTitle: 'Fable — interactive textbooks',
-      pageDesc: 'Interactive school textbooks in French, English and Arabic. Every figure is computed, not drawn.'
+      pageTitle: 'Fable — interactive books and textbooks',
+      pageDesc: 'Interactive books and school textbooks in French, English and Arabic. Every figure is computed, not drawn.'
     }
   };
 
@@ -2784,8 +2848,11 @@ body::after{
       chipsEl=document.getElementById('chips'), countEl=document.getElementById('count'),
       qEl=document.getElementById('q'), qClear=document.getElementById('q-clear'),
       sortEl=document.getElementById('sort'), viewSel=document.getElementById('viewsel'),
-      statsEl=document.getElementById('stats');
-  var books=[], filters={subject:null,level:null,lang:null,tag:null}, q='';
+      statsEl=document.getElementById('stats'),
+      actifsEl=document.getElementById('actifs'),
+      filtresBtn=document.getElementById('filtres-btn'), filtresN=document.getElementById('filtres-n');
+  var books=[], filters={genre:null,subject:null,level:null,lang:null,tag:null}, q='';
+  var CLES=['genre','subject','level','lang','tag'];
   var vue='shelf', tri='shelf', tousLesMots=false, premier=true;
 
   /* ── la langue d'une fiche ──
@@ -2907,6 +2974,8 @@ body::after{
     }
 
     var meta=el('div','book-meta');
+    var ge=loc(b,'genre');
+    if(ge) meta.appendChild(el('span','badge badge-genre',ge));
     meta.appendChild(el('span','badge',(b.lang||'').toUpperCase()));
     var an=loc(b,'year');
     if(an){ meta.appendChild(el('span','ltr-nums',an)); }
@@ -2929,6 +2998,7 @@ body::after{
   function valuesOf(b,key){
     if(key==='subject') return liste(b,'subjects');
     if(key==='tag') return liste(b,'tags');
+    if(key==='genre'){ var g=loc(b,'genre'); return g?[g]:[]; }
     if(key==='level'){ var l=loc(b,'level'); return l?[l]:[]; }
     if(key==='lang') return b.lang?[b.lang]:[];
     return [];
@@ -2945,7 +3015,8 @@ body::after{
 
   function buildChips(){
     chipsEl.innerHTML='';
-    var groupes=[['subject',T('fSubject')],['level',T('fLevel')],['lang',T('fLang')],['tag',T('fTag')]];
+    var groupes=[['genre',T('fGenre')],['subject',T('fSubject')],['level',T('fLevel')],
+                 ['lang',T('fLang')],['tag',T('fTag')]];
     groupes.forEach(function(pair){
       var key=pair[0], vals=facet(key);
       if(vals.length<2) return;                    /* une facette à une seule valeur ne filtre rien */
@@ -2971,16 +3042,59 @@ body::after{
       }
       chipsEl.appendChild(g);
     });
-    if(filters.subject||filters.level||filters.lang||filters.tag||q){
+  }
+
+  /* ── CE QUI AGIT RESTE VISIBLE ──
+     Le panneau se referme ; les filtres en cours, non. Chacun est une pastille
+     qui dit ce qu'il filtre et s'enlève d'un clic, et le bouton porte leur
+     nombre. Sans cela, une étagère filtrée par mégarde n'a l'air que d'une
+     bibliothèque à moitié vide. */
+  function majActifs(){
+    actifsEl.innerHTML='';
+    var n=0;
+    CLES.forEach(function(k){
+      if(!filters[k]) return;
+      n++;
+      var b=el('button','pill'); b.type='button';
+      b.title=T('retirer');
+      b.appendChild(el('span','quoi',T(k==='subject'?'fSubject':k==='level'?'fLevel'
+        :k==='lang'?'fLang':k==='tag'?'fTag':'fGenre')));
+      b.appendChild(document.createTextNode(k==='lang' ? (LANGNAME[filters[k]]||filters[k]) : filters[k]));
+      b.appendChild(el('span','x','×'));
+      b.addEventListener('click',function(){ poser(k,null); });
+      actifsEl.appendChild(b);
+    });
+    if(q){
+      var bq=el('button','pill'); bq.type='button'; bq.title=T('retirer');
+      bq.appendChild(el('span','quoi',T('searchBtn')));
+      bq.appendChild(document.createTextNode(qEl.value));
+      bq.appendChild(el('span','x','×'));
+      bq.addEventListener('click',function(){
+        qEl.value=''; q=''; qClear.hidden=true; rafraichir(); ecrireURL();
+      });
+      actifsEl.appendChild(bq);
+    }
+    if(n||q){
       var raz=el('button','clear-all',T('clearAll'));
       raz.type='button';
       raz.addEventListener('click',function(){
-        filters={subject:null,level:null,lang:null,tag:null}; q=''; qEl.value='';
-        qClear.hidden=true; avecTransition(function(){ buildChips(); render(); });
+        CLES.forEach(function(k){ filters[k]=null; });
+        q=''; qEl.value=''; qClear.hidden=true;
+        avecTransition(rafraichir); ecrireURL();
       });
-      var g2=el('div','chip-group'); g2.appendChild(raz); chipsEl.appendChild(g2);
+      actifsEl.appendChild(raz);
     }
+    filtresN.hidden = !n;
+    filtresN.textContent = String(n);
   }
+
+  function rafraichir(){ buildChips(); majActifs(); render(); }
+
+  filtresBtn.addEventListener('click',function(){
+    var ouvert = chipsEl.hidden;
+    chipsEl.hidden = !ouvert;
+    filtresBtn.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+  });
 
   /* Un fondu croisé quand le contenu change d'un bloc — pas à chaque frappe :
      une transition par caractère tapé serait du retard, pas du soin. */
@@ -3004,7 +3118,7 @@ body::after{
   }
   function poser(key,val){
     filters[key]=val;
-    avecTransition(function(){ buildChips(); render(); });
+    avecTransition(rafraichir);
     ecrireURL();
   }
 
@@ -3013,7 +3127,7 @@ body::after{
   function ecrireURL(){
     var p=[];
     if(q) p.push('q='+encodeURIComponent(q));
-    ['subject','level','lang','tag'].forEach(function(k){
+    CLES.forEach(function(k){
       if(filters[k]) p.push(k+'='+encodeURIComponent(filters[k]));
     });
     if(vue!=='shelf') p.push('view='+vue);
@@ -3038,7 +3152,7 @@ body::after{
      le nom de chaque chapitre. Construit une fois par livre, pas par frappe. */
   function indexer(b){
     if(b.__idx) return b.__idx;
-    var parts=[b.title, b.author||'', loc(b,'resume'), loc(b,'year'), loc(b,'level'),
+    var parts=[b.title, b.author||'', loc(b,'resume'), loc(b,'year'), loc(b,'level'), loc(b,'genre'),
                loc(b,'translator'), LANGNAME[b.lang]||'', b.lang||'']
       .concat(liste(b,'subjects')).concat(liste(b,'tags'));
     var ch=b.chapterList||[];
@@ -3058,6 +3172,7 @@ body::after{
   function render(){
     var qq=pli(q);
     var list=books.filter(function(b){
+      if(filters.genre && loc(b,'genre')!==filters.genre) return false;
       if(filters.subject && valuesOf(b,'subject').indexOf(filters.subject)<0) return false;
       if(filters.tag && valuesOf(b,'tag').indexOf(filters.tag)<0) return false;
       if(filters.level && loc(b,'level')!==filters.level) return false;
@@ -3102,11 +3217,11 @@ body::after{
   qEl.addEventListener('input',function(){
     q=qEl.value.trim().toLowerCase();
     qClear.hidden=!qEl.value;
-    render(); buildChips();
+    rafraichir();
     clearTimeout(minuteur); minuteur=setTimeout(ecrireURL,300);
   });
   qClear.addEventListener('click',function(){
-    qEl.value=''; q=''; qClear.hidden=true; qEl.focus(); render(); buildChips(); ecrireURL();
+    qEl.value=''; q=''; qClear.hidden=true; qEl.focus(); rafraichir(); ecrireURL();
   });
   sortEl.addEventListener('change',function(){ tri=sortEl.value; avecTransition(render); ecrireURL(); });
   viewSel.addEventListener('click',function(ev){
@@ -3133,8 +3248,21 @@ body::after{
     var mur=document.getElementById('mur'), scene=document.getElementById('mur-scene'),
         nom=document.getElementById('mur-nom');
     if(!mur||!scene) return;
-    var livres=list.slice(0,9);
-    if(!livres.length){ mur.hidden=true; if(nom) nom.hidden=true; return; }
+    /* ── UN ANNEAU, PAS UN ÉVENTAIL ──
+       La distance au centre est calculée en CIRCULAIRE : le livre le plus à
+       droite est aussi celui le plus à gauche, et la série n'a donc ni début
+       ni fin. Pour que la couture ne se voie pas, il faut une place où une
+       carte soit déjà invisible au moment où elle la traverse — d'où un anneau
+       d'au moins sept places pour cinq visibles. Une étagère plus courte est
+       donc répétée jusqu'à en avoir sept ; avec un seul livre il n'y a rien à
+       faire tourner, et on le pose simplement au milieu. */
+    var base=list.slice(0,12);
+    if(!base.length){ mur.hidden=true; if(nom) nom.hidden=true; return; }
+    var livres=base.slice();
+    if(base.length>1){
+      while(livres.length<7) livres=livres.concat(base);
+      livres=livres.slice(0,Math.max(7,base.length));
+    }
 
     var cartes=livres.map(function(b){
       var a=document.createElement('a');
@@ -3152,13 +3280,24 @@ body::after{
       return a;
     });
 
-    var centre=Math.min(1,livres.length-1), pas=null, arret=false;
+    var N=livres.length;
+    /* Le nombre de places visibles de chaque côté. Il ne peut pas dépasser la
+       moitié de l'anneau : au-delà, la place extrême serait encore visible
+       quand une carte la traverse, et on verrait le saut. */
+    var VIS=Math.min(3,Math.floor(N/2));
+    var centre=Math.min(1,N-1), pas=null, arret=false, precedent=[];
 
     function place(c){
-      centre=((c%livres.length)+livres.length)%livres.length;
+      centre=((c%N)+N)%N;
       for(var i=0;i<cartes.length;i++){
         var d=i-centre;
-        var ad=Math.abs(d);
+        if(d>N/2) d-=N;
+        if(d<-N/2) d+=N;
+        /* Au-delà des places visibles, la carte est garée sur la dernière,
+           transparente : c'est là qu'elle change de côté sans qu'on la voie. */
+        var cache = VIS>0 && Math.abs(d)>=VIS;
+        var dd = cache ? (d<0?-VIS:VIS) : d;
+        var ad=Math.abs(dd);
         /* ATTENTION : un pourcentage dans `translateX` se mesure sur la
            LARGEUR DE LA CARTE, pas sur celle du mur. La première version
            écrivait `d*17%` en croyant écarter les livres d'un sixième du mur ;
@@ -3166,17 +3305,32 @@ body::after{
            marchaient dessus. Les écarts sont donc exprimés en largeurs de
            carte, et resserrés à mesure qu'on s'éloigne — comme une pile vue
            de biais, où les livres du fond se chevauchent plus. */
-        var x = d===0 ? 0 : (d<0?-1:1)*(56+(ad-1)*30);
-        var z=-ad*130, ry=d===0?0:(d<0?34:-34), s=1-Math.min(ad,4)*0.07;
+        var x = dd===0 ? 0 : (dd<0?-1:1)*(56+(ad-1)*30);
+        var z=-ad*130, ry=dd===0?0:(dd<0?34:-34), sc=1-Math.min(ad,4)*0.07;
+
+        /* Une carte avance d'un cran par pas. Si elle en change de plus d'un,
+           c'est qu'elle vient de passer la couture : elle est invisible à cet
+           instant, mais une transition la ferait traverser tout le mur à
+           l'écran. On la coupe pour ce seul déplacement, puis on la rend. */
+        var av=precedent[i];
+        var saute = av!==undefined && Math.abs(dd-av)>1;
+        if(saute) cartes[i].style.transition='none';
+
         cartes[i].style.transform='translate(-50%,-50%) translateX('+x+'%) translateZ('+z
-          +'px) rotateY('+ry+'deg) scale('+s+')';
-        cartes[i].style.opacity=String(Math.max(0,1-ad*0.2));
+          +'px) rotateY('+ry+'deg) scale('+sc+')';
+        cartes[i].style.opacity = cache ? '0' : String(Math.max(0,1-ad*0.24));
         cartes[i].style.zIndex=String(50-ad);
         /* L'ombre tombe du côté où la carte s'éloigne : à gauche du centre
            elle s'enfonce vers la gauche, à droite vers la droite. */
         cartes[i].style.setProperty('--ombre', String(Math.min(ad*0.34,0.8)));
-        cartes[i].style.setProperty('--sens', d<0 ? '270deg' : '90deg');
-        cartes[i].classList.toggle('est-devant', d===0);
+        cartes[i].style.setProperty('--sens', dd<0 ? '270deg' : '90deg');
+        cartes[i].classList.toggle('est-devant', dd===0);
+        /* Une carte garée ne doit pas rester cliquable : elle est invisible,
+           et un clic dessus ouvrirait un livre qu'on ne voit pas. */
+        cartes[i].style.pointerEvents = cache ? 'none' : '';
+
+        if(saute){ void cartes[i].offsetWidth; cartes[i].style.transition=''; }
+        precedent[i]=dd;
       }
       if(nom){
         var b=livres[centre];
@@ -3198,6 +3352,7 @@ body::after{
 
     function relance(){
       if(pas) clearInterval(pas);
+      if(N<3) return;                      /* rien à faire tourner */
       if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
       pas=setInterval(function(){
         /* Onglet caché : rien à montrer, donc rien à faire. */
@@ -3356,8 +3511,12 @@ body::after{
     document.getElementById('toolbar').hidden = books.length<2;
     construireMur(books);
     stats();
-    buildChips();
-    render();
+    rafraichir();
+    /* Un filtre venu de l'adresse ouvre le panneau : on doit voir d'où il
+       sort, pas seulement son effet. */
+    if(CLES.some(function(k){ return !!filters[k]; })){
+      chipsEl.hidden=false; filtresBtn.setAttribute('aria-expanded','true');
+    }
   }
 
   /* Les simulations ne sont montrées que si la construction les a publiées.
@@ -3380,11 +3539,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu5vhxe3). Non remplacée —
+  /* La version est posée par la construction (mu5wau32). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu5vhxe3')
+  fetch('library/library.json?v=mu5wau32')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -3395,6 +3554,6 @@ body::after{
 </script>
 
 
-<script src="atelier.js?v=mu5vhxe3"></script>
+<script src="atelier.js?v=mu5wau32"></script>
 </body>
 </html>

@@ -30,6 +30,8 @@
         "worked answers",
         "all subjects"
       ],
+      "genre": "Manuel",
+      "genreEn": "Textbook",
       "year": "2026",
       "yearEn": "2026",
       "translator": "",
@@ -118,6 +120,8 @@
         "nonsense",
         "short read"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "1865",
       "yearEn": "1865",
       "translator": "",
@@ -171,6 +175,8 @@
         "19th century",
         "long read"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "1851",
       "yearEn": "1851",
       "translator": "",
@@ -899,6 +905,8 @@
         "mythology",
         "voyage"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "≈ 700 av. J.-C.",
       "yearEn": "c. 700 BC",
       "translator": "trad. William Cullen Bryant",
@@ -1072,6 +1080,8 @@
         "notebook",
         "short read"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "≈ 180",
       "yearEn": "c. AD 180",
       "translator": "trad. George Long",
@@ -1182,6 +1192,8 @@
         "Italy",
         "short read"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "1532",
       "yearEn": "1532",
       "translator": "trad. W. K. Marriott",
@@ -1365,6 +1377,8 @@
         "19th century",
         "rarity"
       ],
+      "genre": "Livre",
+      "genreEn": "Book",
       "year": "1827",
       "yearEn": "1827",
       "translator": "",
