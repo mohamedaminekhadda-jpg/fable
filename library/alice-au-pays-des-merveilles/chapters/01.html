@@ -92,6 +92,8 @@ body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
 /* FULL-SCREEN COVER */
 .book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
 .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
@@ -169,6 +171,9 @@ body[dir="rtl"] .lookup-panel.show{transform:none}
 .lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
 .lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
 .lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
 .lookup-extract{font-size:15px;line-height:1.6}
 .lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
@@ -4656,7 +4661,7 @@ html,body{margin:0;background:var(--paper)}</style></head>
 </svg>
 </template></div>
 </div></main></div>
-<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
+<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
 <script>
 (function(){
   var CFG=window.__BOOK__||{};
@@ -15061,28 +15066,4 @@ html,body{margin:0;background:var(--paper)}</style></head>
   if(document.readyState!=='loading')init(); else document.addEventListener('DOMContentLoaded',init);
   window.__hydrateInteractive=init;
 })();
-</script><script>(function(){window.addEventListener('message',function(e){var h=e&&e.data&&e.data.__rawh;if(typeof h!=='number')return;var fr=document.querySelectorAll('iframe.rawhtml-frame');for(var i=0;i<fr.length;i++){if(fr[i].contentWindow===e.source){fr[i].style.height=Math.max(24,h)+'px';break;}}});})();</script><script>(function(){
-  function setup(fig){
-    var scroll=fig.querySelector('.figure-scroll'); if(!scroll||scroll.__g)return; scroll.__g=1;
-    var wrap=fig.querySelector('.figure-carousel-wrap');
-    var L=fig.querySelector('.figure-nav-l'), R=fig.querySelector('.figure-nav-r');
-    var items=fig.querySelectorAll('.figure-item');
-    function sizeItems(){ var vw=scroll.clientWidth; if(!vw)return; for(var i=0;i<items.length;i++){ var w=parseFloat(items[i].getAttribute('data-w')); if(w>0){ items[i].style.flex='0 0 auto'; items[i].style.width=Math.round(vw*w/100)+'px'; } } }
-    function edges(){ var max=scroll.scrollWidth-scroll.clientWidth-1; wrap.classList.toggle('at-start',scroll.scrollLeft<=2); wrap.classList.toggle('at-end',scroll.scrollLeft>=max); wrap.classList.toggle('no-scroll',scroll.scrollWidth<=scroll.clientWidth+2); }
-    function step(dir){ scroll.scrollBy({left:dir*Math.max(180,scroll.clientWidth*0.8),behavior:'smooth'}); }
-    if(L)L.addEventListener('click',function(){step(-1);}); if(R)R.addEventListener('click',function(){step(1);});
-    scroll.addEventListener('scroll',edges); window.addEventListener('resize',function(){sizeItems();edges();});
-    var down=false,sx=0,sl=0,moved=false;
-    scroll.addEventListener('pointerdown',function(e){down=true;moved=false;sx=e.clientX;sl=scroll.scrollLeft;scroll.classList.add('drag');});
-    scroll.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-sx;if(Math.abs(dx)>3)moved=true;scroll.scrollLeft=sl-dx;});
-    function end(){if(!down)return;down=false;scroll.classList.remove('drag');}
-    scroll.addEventListener('pointerup',end);scroll.addEventListener('pointerleave',end);scroll.addEventListener('pointercancel',end);
-    scroll.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();}},true);
-    scroll.addEventListener('dragstart',function(e){e.preventDefault();});
-    scroll.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){scroll.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
-    sizeItems(); edges(); setTimeout(function(){sizeItems();edges();},80); setTimeout(edges,500);
-  }
-  function init(){ var fs=document.querySelectorAll('.figure-carousel'); for(var i=0;i<fs.length;i++)setup(fs[i]); }
-  window.__gallery=init;
-  if(document.readyState!=='loading')init(); else document.addEventListener('DOMContentLoaded',init);
-})();</script></body></html>
+</script></body></html>

@@ -92,6 +92,8 @@ body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
 /* FULL-SCREEN COVER */
 .book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
 .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
@@ -169,6 +171,9 @@ body[dir="rtl"] .lookup-panel.show{transform:none}
 .lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
 .lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
 .lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
 .lookup-extract{font-size:15px;line-height:1.6}
 .lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
@@ -3656,7 +3661,7 @@ html,body{margin:0;background:var(--paper)}</style></head>
 </div><div class="notes reveal"><div class="notes-title">Notes</div><div class="note"><div class="note-num">1</div><div><p>Les programmes du cycle 2 (CP–CE2) demandent la lecture de l’heure en heures entières puis en demi-heures ; le quart d’heure et la minute viennent au cycle 3.</p>
 </div></div></div>
 </div></main></div>
-<script>window.__BOOK__={"geo":{},"lang":"fr","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapitre","contents":"Sommaire","myBook":"Mon livre","backCover":"Quatrième de couverture","loading":"Chargement","close":"Fermer","gotIt":"J’ai compris","bookmarks":"Signets","bookmarkThis":"Poser un signet ici","bookmarked":"Signet posé","bookmarkRemoved":"Signet retiré","alreadyBookmarked":"Un signet est déjà posé ici","removeBookmark":"Retirer le signet — ","openChapterFirst":"Ouvrez un chapitre pour poser un signet","findText":"Rechercher","smallerText":"Texte plus petit","largerText":"Texte plus grand","twoPage":"Vue sur deux pages","toDark":"Passer en mode sombre","toLight":"Passer en mode clair","dictionary":"Dictionnaire","wikipedia":"Wikipédia","quote":"Citer","marginalia":"Notes en marge","imageCopied":"Image copiée","exportMd":"Exporter .md","backupJson":"Sauvegarde .json","importNotes":"Importer","notesInvalid":"Ce fichier n’est pas un fichier de notes valide.","notesNone":"Aucune note dans ce fichier.","answerKey":"Corrigé","answerKeyTitle":"Afficher toutes les réponses du livre","notesTab":"Notes","hintContentsHtml":"<b>Cliquez</b> un chapitre pour y aller — ou <b>survolez</b> une ligne pour en lire le résumé.","hintNoteHtml":"<b>Sélectionnez</b> un passage pour le surligner — ou y attacher une <b>note</b> privée. Tout se retrouve dans l’onglet Notes.","tocEyebrow":"Sommaire","tocBy":"par","tocScroll":"Faites défiler ↓","notesTitle":"Notes et surlignages","endnotes":"Notes","amber":"Ambre","rose":"Rose","mint":"Menthe","sky":"Ciel","check":"Vérifier","show":"Montrer","clear":"Effacer","reset":"Recommencer","next":"Suivant","prev":"Précédent","answer":"Réponse","showAnswer":"Voir la réponse","hide":"Masquer","play":"Lecture","pause":"Pause","score":"Score","correct":"Juste","wrong":"Faux","tryAgain":"Pas encore — réessayez.","allMatched":"Parfait — toutes les paires y sont !","step":"Étape","total":"Total","legend":"Légende","scratchToReveal":"Grattez pour découvrir","tapToVote":"Touchez une réponse pour voter.","thanksVoting":"Merci pour votre vote.","cannotRender":"Cet élément n’a pas pu s’afficher"}};</script>
+<script>window.__BOOK__={"geo":{},"lang":"fr","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapitre","contents":"Sommaire","myBook":"Mon livre","backCover":"Quatrième de couverture","loading":"Chargement","close":"Fermer","gotIt":"J’ai compris","bookmarks":"Signets","bookmarkThis":"Poser un signet ici","bookmarked":"Signet posé","bookmarkRemoved":"Signet retiré","alreadyBookmarked":"Un signet est déjà posé ici","removeBookmark":"Retirer le signet — ","openChapterFirst":"Ouvrez un chapitre pour poser un signet","findText":"Rechercher","smallerText":"Texte plus petit","largerText":"Texte plus grand","twoPage":"Vue sur deux pages","toDark":"Passer en mode sombre","toLight":"Passer en mode clair","dictionary":"Dictionnaire","wikipedia":"Wikipédia","lookupLoading":"Recherche…","lookupInBook":"Dans ce livre","lookupNone":"Rien trouvé pour","lookupOffline":"Hors ligne, ou le service ne répond pas.","lookupSearch":"Chercher","quote":"Citer","marginalia":"Notes en marge","imageCopied":"Image copiée","exportMd":"Exporter .md","backupJson":"Sauvegarde .json","importNotes":"Importer","notesInvalid":"Ce fichier n’est pas un fichier de notes valide.","notesNone":"Aucune note dans ce fichier.","answerKey":"Corrigé","answerKeyTitle":"Afficher toutes les réponses du livre","notesTab":"Notes","hintContentsHtml":"<b>Cliquez</b> un chapitre pour y aller — ou <b>survolez</b> une ligne pour en lire le résumé.","hintNoteHtml":"<b>Sélectionnez</b> un passage pour le surligner — ou y attacher une <b>note</b> privée. Tout se retrouve dans l’onglet Notes.","tocEyebrow":"Sommaire","tocBy":"par","tocScroll":"Faites défiler ↓","notesTitle":"Notes et surlignages","endnotes":"Notes","amber":"Ambre","rose":"Rose","mint":"Menthe","sky":"Ciel","check":"Vérifier","show":"Montrer","clear":"Effacer","reset":"Recommencer","next":"Suivant","prev":"Précédent","answer":"Réponse","showAnswer":"Voir la réponse","hide":"Masquer","play":"Lecture","pause":"Pause","score":"Score","correct":"Juste","wrong":"Faux","tryAgain":"Pas encore — réessayez.","allMatched":"Parfait — toutes les paires y sont !","step":"Étape","total":"Total","legend":"Légende","scratchToReveal":"Grattez pour découvrir","tapToVote":"Touchez une réponse pour voter.","thanksVoting":"Merci pour votre vote.","cannotRender":"Cet élément n’a pas pu s’afficher"}};</script>
 <script>
 (function(){
   var CFG=window.__BOOK__||{};
@@ -14061,28 +14066,4 @@ html,body{margin:0;background:var(--paper)}</style></head>
   if(document.readyState!=='loading')init(); else document.addEventListener('DOMContentLoaded',init);
   window.__hydrateInteractive=init;
 })();
-</script><script>(function(){window.addEventListener('message',function(e){var h=e&&e.data&&e.data.__rawh;if(typeof h!=='number')return;var fr=document.querySelectorAll('iframe.rawhtml-frame');for(var i=0;i<fr.length;i++){if(fr[i].contentWindow===e.source){fr[i].style.height=Math.max(24,h)+'px';break;}}});})();</script><script>(function(){
-  function setup(fig){
-    var scroll=fig.querySelector('.figure-scroll'); if(!scroll||scroll.__g)return; scroll.__g=1;
-    var wrap=fig.querySelector('.figure-carousel-wrap');
-    var L=fig.querySelector('.figure-nav-l'), R=fig.querySelector('.figure-nav-r');
-    var items=fig.querySelectorAll('.figure-item');
-    function sizeItems(){ var vw=scroll.clientWidth; if(!vw)return; for(var i=0;i<items.length;i++){ var w=parseFloat(items[i].getAttribute('data-w')); if(w>0){ items[i].style.flex='0 0 auto'; items[i].style.width=Math.round(vw*w/100)+'px'; } } }
-    function edges(){ var max=scroll.scrollWidth-scroll.clientWidth-1; wrap.classList.toggle('at-start',scroll.scrollLeft<=2); wrap.classList.toggle('at-end',scroll.scrollLeft>=max); wrap.classList.toggle('no-scroll',scroll.scrollWidth<=scroll.clientWidth+2); }
-    function step(dir){ scroll.scrollBy({left:dir*Math.max(180,scroll.clientWidth*0.8),behavior:'smooth'}); }
-    if(L)L.addEventListener('click',function(){step(-1);}); if(R)R.addEventListener('click',function(){step(1);});
-    scroll.addEventListener('scroll',edges); window.addEventListener('resize',function(){sizeItems();edges();});
-    var down=false,sx=0,sl=0,moved=false;
-    scroll.addEventListener('pointerdown',function(e){down=true;moved=false;sx=e.clientX;sl=scroll.scrollLeft;scroll.classList.add('drag');});
-    scroll.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-sx;if(Math.abs(dx)>3)moved=true;scroll.scrollLeft=sl-dx;});
-    function end(){if(!down)return;down=false;scroll.classList.remove('drag');}
-    scroll.addEventListener('pointerup',end);scroll.addEventListener('pointerleave',end);scroll.addEventListener('pointercancel',end);
-    scroll.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();}},true);
-    scroll.addEventListener('dragstart',function(e){e.preventDefault();});
-    scroll.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){scroll.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
-    sizeItems(); edges(); setTimeout(function(){sizeItems();edges();},80); setTimeout(edges,500);
-  }
-  function init(){ var fs=document.querySelectorAll('.figure-carousel'); for(var i=0;i<fs.length;i++)setup(fs[i]); }
-  window.__gallery=init;
-  if(document.readyState!=='loading')init(); else document.addEventListener('DOMContentLoaded',init);
-})();</script></body></html>
+</script></body></html>

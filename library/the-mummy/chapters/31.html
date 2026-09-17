@@ -1,0 +1,927 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><base href="__JAGUAR_BASE__"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,0,900;9..144,1,400;9..144,1,700&amp;family=Spline+Sans+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Amiri+Quran&family=Reem+Kufi&display=swap" rel="stylesheet"><style>:root{
+--ink:#1a2238;--ink-soft:#3d4663;--paper:#f4f1ea;--paper-deep:#ebe6db;--oxblood:#8c2f2a;--oxblood-soft:#b05750;--accent:#8c2f2a;--accent-soft:#b05750;--gold:#c9a054;--slate:#6b7089;--rule:#d8d1c2;--nav-active:#5DCAA5;--teal:#5DCAA5;
+--nav-bg:#1a2238;
+--nav-text:#f4f1ea;
+--hl-amber:#ecc15a;
+--hl-rose:#d27870;
+--hl-mint:#7ec496;
+--hl-sky:#7ea0d6;
+--serif:'Fraunces', Georgia, serif;
+--mono:'Spline Sans Mono', monospace;
+}
+html.dark{
+--ink:#ece7da;--ink-soft:#b6b2a6;--paper:#14161c;--paper-deep:#1d2029;--oxblood:#c75d54;--oxblood-soft:#dd857c;--accent:#c75d54;--accent-soft:#dd857c;--gold:#cda05a;--slate:#9095a6;--rule:rgba(255,255,255,.12);--nav-active:#5fa39b;--teal:#5fa39b;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+
+/* NAV (always dark by design) */
+.book-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nav-bg);display:flex;align-items:center;padding:0 18px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--accent);transform:translateY(-100%);transition:transform .35s ease}
+.book-nav.visible{transform:translateY(0)}
+.book-nav::-webkit-scrollbar{display:none}
+.nav-brand{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--nav-text);padding:12px 14px 12px 0;border-right:1px solid rgba(244,241,234,.15);margin-right:8px;white-space:nowrap;flex-shrink:0}
+.nav-item{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:13px 10px;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;flex-shrink:0}
+.nav-item:hover{color:var(--nav-text)}
+.nav-item.active{color:var(--nav-active);border-bottom-color:var(--nav-active)}
+
+/* THEME TOGGLE */
+.theme-toggle{position:relative;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;padding:0;margin-left:auto;flex-shrink:0;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.theme-toggle:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.theme-toggle svg{width:15px;height:15px;display:block}
+.theme-toggle .ic-sun{display:none}
+html.dark .theme-toggle .ic-sun{display:block}
+html.dark .theme-toggle .ic-moon{display:none}
+body[dir="rtl"] .theme-toggle{margin-left:0;margin-right:auto}
+
+/* RTL */
+body[dir="rtl"] .book-nav{flex-direction:row-reverse}
+body[dir="rtl"] .book-chapter,body[dir="rtl"] .toc-inner{direction:rtl;text-align:right}
+body[dir="rtl"] .toc-row{direction:rtl}
+body[dir="rtl"] .pull{border-left:none;border-right:3px solid var(--accent);padding-left:0;padding-right:28px}
+body[dir="rtl"] .toc-arrow{transform:scaleX(-1)}
+body[dir="rtl"] .section-marker::after{margin-left:0}
+body[dir="rtl"] .toc-part::after{margin-left:0}
+
+/* READING-PROGRESS BAR */
+.read-progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:600;background:linear-gradient(90deg,var(--accent),var(--gold));box-shadow:0 0 10px rgba(140,47,42,.45);transition:width .1s linear}
+body[dir="rtl"] .read-progress{left:auto;right:0}
+
+/* REVEAL / OPENER ANIMATIONS (IntersectionObserver-driven) */
+.js-anim .reveal{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .9s cubic-bezier(.22,.61,.36,1),filter .85s ease;will-change:opacity,transform}
+.js-anim .reveal.in{opacity:1;transform:none;filter:none}
+/* entrance variants — set via data-anim, only BEFORE reveal so .in always wins */
+.js-anim .reveal[data-anim="scale"]:not(.in){transform:scale(.93)}
+.js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(-46px)}
+.js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(46px)}
+.js-anim .reveal[data-anim="rise"]:not(.in){transform:translateY(40px)}
+.js-anim .reveal[data-anim="blur"]:not(.in){filter:blur(12px);transform:translateY(14px)}
+.js-anim .reveal[data-anim="fade"]:not(.in){transform:none}
+.js-anim .reveal[data-anim="zoom"]:not(.in){transform:scale(1.06)}
+body[dir="rtl"] .js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(46px)}
+body[dir="rtl"] .js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(-46px)}
+.js-anim .opener>*{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.61,.36,1)}
+.js-anim .opener.opener-in>*{opacity:1;transform:none}
+.js-anim .opener.opener-in .ch-eyebrow{transition-delay:.05s}
+.js-anim .opener.opener-in .ch-number{transition-delay:.18s}
+.js-anim .opener.opener-in .ch-title{transition-delay:.30s}
+.js-anim .opener.opener-in .ch-standfirst{transition-delay:.44s}
+.js-anim .section-marker::after{transform:scaleX(0);transform-origin:left center;transition:transform 1s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .section-marker.in::after{transform:scaleX(1)}
+body[dir="rtl"] .js-anim .section-marker::after{transform-origin:right center}
+.js-anim .pull{position:relative;border-left-color:transparent}
+.js-anim .pull::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .85s cubic-bezier(.22,.61,.36,1) .1s}
+.js-anim .pull.in::before{transform:scaleY(1)}
+body[dir="rtl"] .js-anim .pull{border-right-color:transparent}
+body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
+.js-anim .verdict{position:relative;overflow:hidden}
+.js-anim .verdict::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .95s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .verdict.in::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1 !important;transform:none !important;transition:none}
+  html{scroll-behavior:auto}
+  .js-anim .opener>*{opacity:1;transform:none}
+  .js-anim .section-marker::after{transform:scaleX(1)}
+  .js-anim .pull::before,.js-anim .verdict::before{transform:scaleY(1)}
+  .read-progress{display:none}
+}
+
+/* FULL-SCREEN COVER */
+.book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
+
+/* INTERACTIVE TOC */
+.book-toc{min-height:100vh;background:var(--paper);position:relative;padding:90px 0 80px}
+.toc-inner{max-width:760px;margin:0 auto;padding:0 32px}
+.toc-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+.toc-bigtitle{margin-bottom:4px}
+.toc-after{display:inline-block;font-style:italic;font-weight:400;font-size:clamp(28px,5vw,44px);color:var(--ink-soft);letter-spacing:-.02em}
+.toc-demo{display:block;font-weight:700;font-size:clamp(46px,9vw,82px);text-transform:uppercase;letter-spacing:-.04em;line-height:.9;color:var(--ink)}
+.toc-byline{font-style:italic;font-size:17px;color:var(--slate);margin-bottom:44px}
+.toc-part{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:34px 0 10px;display:flex;align-items:center;gap:14px}
+.toc-part::after{content:'';flex:1;height:1px;background:var(--rule)}
+.toc-list{position:relative}
+a.toc-row{display:grid;grid-template-columns:54px 1fr 30px;gap:0 16px;align-items:center;padding:18px 16px;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background .2s,padding .2s,color .2s;border-radius:3px;position:relative}
+a.toc-row:first-child{border-top:1px solid var(--rule)}
+a.toc-row:hover{background:var(--ink);color:var(--paper);padding-left:24px}
+a.toc-row:hover .toc-num{color:var(--gold)}
+a.toc-row:hover .toc-arrow{opacity:1;transform:translateX(0);color:var(--nav-active)}
+.toc-num{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.05em}
+.toc-rowtitle{font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.toc-arrow{font-size:18px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+
+/* TOC HOVER PANEL (dark popover) */
+.toc-panel{position:fixed;width:340px;background:var(--nav-bg);color:var(--nav-text);border-radius:6px;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);z-index:400;pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .22s ease,transform .22s ease;border-top:3px solid var(--accent)}
+.toc-panel.show{opacity:1;transform:translateY(0) scale(1)}
+.tp-num{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:8px;font-weight:600}
+.tp-title{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+.tp-blurb{font-size:15px;line-height:1.6;color:rgba(244,241,234,.85);font-style:italic;margin-bottom:18px}
+.tp-egg-divider{width:32px;height:2px;background:var(--gold);margin-bottom:14px;opacity:.6}
+.tp-egg{font-size:13.5px;line-height:1.55;color:rgba(244,241,234,.7)}
+.tp-blurb:empty,.tp-egg:empty,.tp-egg-divider.hide{display:none}
+@media(max-width:820px){.toc-panel{display:none !important}}
+
+/* HIGHLIGHTS & NOTES */
+.nav-notes{display:inline-flex;align-items:center;gap:7px}
+.nav-notes-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--gold);color:var(--nav-bg);font-size:9px;font-weight:700;letter-spacing:0;line-height:1}
+.nav-notes-count[data-empty="1"]{display:none}
+mark.hl{background:transparent;color:inherit;border-radius:2px;padding:.05em 0;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:filter .15s ease}
+mark.hl:hover{filter:brightness(.93)}
+mark.hl-amber{background:rgba(240,196,90,.50);box-shadow:inset 0 -.5em 0 -.35em rgba(176,132,40,.55)}
+mark.hl-rose{background:rgba(214,120,112,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(160,70,62,.5)}
+mark.hl-mint{background:rgba(125,196,150,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(54,120,82,.5)}
+mark.hl-sky{background:rgba(126,160,214,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(60,96,160,.5)}
+mark.hl.has-note::after{content:'';display:inline-block;width:5px;height:5px;margin:0 1px 0 2px;border-radius:50%;background:var(--accent);vertical-align:.5em}
+@keyframes hlFlash{0%{box-shadow:0 0 0 0 rgba(201,160,84,0)}18%{box-shadow:0 0 0 4px rgba(201,160,84,.55)}100%{box-shadow:0 0 0 0 rgba(201,160,84,0)}}
+mark.hl-flash{animation:hlFlash 1.6s ease}
+.hl-toolbar{position:fixed;z-index:560;display:flex;align-items:center;background:var(--nav-bg);border-radius:30px;padding:7px 10px;box-shadow:0 12px 34px rgba(0,0,0,.34);opacity:0;transform:translateY(6px) scale(.96);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
+.hl-toolbar.show{opacity:1;transform:none;pointer-events:auto}
+.hl-swatch{width:22px;height:22px;border-radius:50%;margin:0 4px;cursor:pointer;border:2px solid rgba(244,241,234,0);box-shadow:0 0 0 1px rgba(0,0,0,.18) inset;transition:transform .12s ease}
+.hl-swatch:hover{transform:scale(1.18)}
+.hl-tool-div{width:1px;height:20px;background:rgba(244,241,234,.18);margin:0 8px}
+.hl-note-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--nav-text);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 6px 4px 2px}
+.hl-note-btn:hover{color:var(--gold)}
+.hl-note-btn svg{width:13px;height:13px}
+.hl-look-btn{background:none;border:0;cursor:pointer;color:var(--nav-text);padding:4px 5px;display:inline-flex;align-items:center}
+.hl-look-btn:hover{color:var(--gold)}
+.hl-look-btn svg{width:16px;height:16px}
+/* dictionary / wikipedia lookup panel */
+.lookup-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.lookup-backdrop.show{opacity:1;pointer-events:auto}
+.lookup-panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.lookup-panel.show{transform:none}
+body[dir="rtl"] .lookup-panel{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .lookup-panel.show{transform:none}
+.lookup-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lookup-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.lookup-close{background:none;border:0;color:#f4f1ea;font-size:26px;line-height:1;cursor:pointer;opacity:.7}
+.lookup-close:hover{opacity:1}
+.lookup-body{flex:1;overflow-y:auto;padding:18px 22px 40px}
+.lookup-word{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:2px}
+.lookup-phon{font-family:var(--mono);font-size:13px;color:#9aa0b0;margin-bottom:14px}
+.lookup-pos{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+.lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
+.lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
+.lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
+.lookup-extract{font-size:15px;line-height:1.6}
+.lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
+.lookup-loading,.lookup-empty{color:#9aa0b0;font-size:14px;padding:10px 0}
+.hl-noteedit{position:fixed;z-index:570;width:300px;background:var(--nav-bg);color:var(--nav-text);border-radius:9px;padding:15px 15px 13px;box-shadow:0 18px 50px rgba(0,0,0,.42);opacity:0;transform:translateY(8px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+.hl-noteedit.show{opacity:1;transform:none;pointer-events:auto}
+.hl-ne-colors{display:flex;gap:8px;margin-bottom:11px}
+.hl-ne-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset;border:2px solid transparent;transition:transform .12s ease}
+.hl-ne-dot:hover{transform:scale(1.15)}
+.hl-ne-dot.sel{border-color:var(--nav-text)}
+.hl-noteedit textarea{width:100%;min-height:84px;resize:vertical;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);border-radius:6px;color:var(--nav-text);font-family:var(--serif);font-size:15px;line-height:1.5;padding:10px 11px;outline:none}
+.hl-noteedit textarea::placeholder{color:rgba(244,241,234,.38);font-style:italic}
+.hl-noteedit textarea:focus{border-color:var(--gold)}
+.hl-ne-actions{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.hl-ne-del{background:none;border:0;color:rgba(244,241,234,.5);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:4px}
+.hl-ne-del:hover{color:#d27870}
+.hl-ne-save{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 16px;border-radius:5px}
+.hl-ne-save:hover{filter:brightness(1.08)}
+.notes-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.notes-backdrop.show{opacity:1;pointer-events:auto}
+.notes-drawer{position:fixed;top:0;right:0;height:100%;width:min(424px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.notes-drawer.show{transform:none}
+body[dir="rtl"] .notes-drawer{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .notes-drawer.show{transform:none}
+.notes-head{display:flex;align-items:flex-start;justify-content:space-between;padding:30px 28px 22px;border-bottom:1px solid rgba(244,241,234,.1)}
+.notes-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+.notes-h1{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.notes-close{background:none;border:0;color:rgba(244,241,234,.55);font-size:26px;line-height:1;cursor:pointer;padding:0 2px;margin-top:-2px}
+.notes-close:hover{color:#f4f1ea}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px 40px}
+.notes-empty{padding:48px 22px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:16px;line-height:1.6;font-family:var(--serif)}
+.note-card{position:relative;display:grid;grid-template-columns:4px 1fr;gap:15px;padding:17px 14px 16px;border-radius:8px;cursor:pointer;transition:background .18s ease;margin-bottom:4px}
+.note-card:hover{background:rgba(244,241,234,.055)}
+.note-bar{border-radius:3px}
+.note-bar.c-amber{background:var(--hl-amber)}.note-bar.c-rose{background:var(--hl-rose)}.note-bar.c-mint{background:var(--hl-mint)}.note-bar.c-sky{background:var(--hl-sky)}
+.note-excerpt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;color:rgba(244,241,234,.92);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-body{font-size:14px;line-height:1.55;color:#cdd2df;margin-bottom:10px;white-space:pre-wrap}
+.note-meta{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,234,.42)}
+.note-meta .nm-ch{color:var(--gold)}
+.note-del{position:absolute;top:12px;right:8px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:0;transition:opacity .15s ease}
+body[dir="rtl"] .note-del{right:auto;left:8px}
+.note-card:hover .note-del{opacity:1}
+.note-del:hover{color:#d27870}
+@media(max-width:600px){.hl-noteedit{width:calc(100vw - 24px)}}
+@media(max-width:600px),(pointer:coarse){
+  .hl-toolbar{padding:9px 12px;border-radius:34px}
+  .hl-swatch{width:30px;height:30px;margin:0 5px}
+  .hl-note-btn{font-size:11px;padding:8px 8px 8px 4px}
+  .hl-note-btn svg{width:16px;height:16px}
+  .hl-tool-div{height:24px;margin:0 9px}
+  .hl-noteedit{max-height:min(72vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 14px}
+  .hl-ne-dot{width:26px;height:26px}
+  .hl-noteedit textarea{font-size:16px;min-height:96px}
+  .hl-ne-save{padding:11px 20px;font-size:11px}
+  .hl-ne-del{padding:8px 6px;font-size:11px}
+  .notes-close{font-size:32px;padding:4px 6px}
+}
+
+/* CHAPTER WRAPPER + BREAK */
+.book-chapter{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px;position:relative}
+.chapter-break{max-width:var(--content-width,720px);margin:0 auto;padding:50px 28px;display:flex;align-items:center;justify-content:center;gap:16px}
+.chapter-break::before,.chapter-break::after{content:'';flex:1;height:1px;background:var(--rule)}
+.chapter-break::after{content:'◆';flex:0;color:var(--accent);font-size:11px}
+
+/* INTERSTITIAL EMBED */
+.interstitial-embed{margin:0;padding:72px 16px;background:#0e0e0e;display:flex;justify-content:center;align-items:center}
+.interstitial-embed iframe{width:min(560px,90vw);aspect-ratio:3/4;border:0;display:block;background:#0e0e0e;box-shadow:0 30px 70px rgba(0,0,0,.55);color-scheme:light}
+
+/* BACK COVER */
+.book-back-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.back-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+
+/* DARK-MODE adjustments (blocks that use --ink as a *background* need a real dark fill) */
+html.dark .book-toc{background:#101218}
+html.dark .chapter-break::before,html.dark .chapter-break::after{background:var(--rule)}
+html.dark .verdict,html.dark .arg-head,html.dark .case-head{background:#0b0c11;color:var(--ink)}
+html.dark .case-stat{background:var(--paper-deep)}
+
+/* EYE-OPENING LOADER */
+.ad-loader{position:fixed;inset:0;z-index:9000;background:radial-gradient(120% 92% at 50% 42%,#1b1815 0%,#121110 56%,#0b0a09 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .8s ease;overflow:hidden}
+.ad-loader.gone{opacity:0;pointer-events:none}
+.ad-loader-custom{padding:0;gap:0;background:#0e0e0e}
+.ad-loader-frame{width:100%;height:100%;border:0;display:block}
+.ad-eye-wrap{position:relative;width:320px;max-width:82vw;display:flex;align-items:center;justify-content:center}
+.ad-loader-logo{width:200px;max-width:64vw;height:auto;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5));animation:adLogoIn 1s ease forwards,adLogoPulse 2.4s 1s ease-in-out infinite}
+@keyframes adLogoIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
+@keyframes adLogoPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.82}}
+.ad-eye2{width:100%;transform-origin:center;transform:scaleY(.04);animation:adEyeOpen 1.9s cubic-bezier(.5,.05,.2,1) forwards}
+.ad-eye2 .eye-outer{width:100%;aspect-ratio:2.8/1;background:#0b0b0d;border-radius:50%;box-shadow:0 0 55px 6px rgba(150,142,124,.32);display:flex;align-items:center;justify-content:center}
+.ad-eye2 .eye-white{width:68%;aspect-ratio:2.5/1;background:#f0ebe0;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ad-eye2 .eye-iris{width:44%;aspect-ratio:1;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;animation:adIrisLook 6s 1.05s ease-in-out infinite}
+.ad-eye2 .eye-pupil{width:40%;aspect-ratio:1;background:#0d0d0d;border-radius:50%}
+@keyframes adEyeOpen{0%{transform:scaleY(.04)}45%{transform:scaleY(1)}57%{transform:scaleY(.12)}70%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+@keyframes adIrisLook{0%,100%{transform:translateX(0)}22%{transform:translateX(-24%)}48%{transform:translateX(20%)}74%{transform:translateX(-8%)}}
+.ad-loader-cap{font-family:var(--mono);font-size:11px;letter-spacing:.46em;text-transform:uppercase;color:rgba(244,241,234,.62);opacity:0;animation:adCapIn .9s 1.25s ease forwards;padding-left:.46em;text-align:center}
+.ad-loader-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);opacity:0;animation:adCapIn .9s 1.55s ease forwards}
+@keyframes adCapIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .ad-eye2{animation:none;transform:none}
+  .ad-eye2 .eye-iris,.ad-loader-cap,.ad-loader-sub{animation:none;opacity:1}
+}
+
+/* COACHMARKS */
+.ad-coach{position:fixed;z-index:585;width:284px;max-width:calc(100vw - 28px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(201,160,84,.28);border-radius:11px;padding:16px 17px 14px;box-shadow:0 20px 56px rgba(0,0,0,.5);opacity:0;transform:translateY(8px) scale(.97);transition:opacity .26s ease,transform .26s ease;pointer-events:none}
+.ad-coach.show{opacity:1;transform:none;pointer-events:auto}
+.ad-coach .cm-k{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:9px}
+.ad-coach .cm-k svg{width:14px;height:14px;flex-shrink:0}
+.ad-coach .cm-t{font-family:var(--serif);font-size:16px;line-height:1.52;color:rgba(244,241,234,.94)}
+.ad-coach .cm-t b{color:#ecc15a;font-weight:600;font-style:italic}
+.ad-coach .cm-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.ad-coach .cm-step{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(244,241,234,.42)}
+.ad-coach .cm-got{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:9px 16px;border-radius:5px}
+.ad-coach .cm-got:hover{filter:brightness(1.08)}
+.ad-coach .cm-arrow{position:absolute;width:13px;height:13px;background:var(--nav-bg);border:1px solid rgba(201,160,84,.28);transform:rotate(45deg)}
+.ad-coach[data-place="below"] .cm-arrow{top:-7px;border-right:0;border-bottom:0}
+.ad-coach[data-place="above"] .cm-arrow{bottom:-7px;border-left:0;border-top:0}
+
+/* SHARE QUOTE CARD + EXPORT NOTES */
+.notes-actions{display:flex;gap:8px;margin-top:12px}
+.notes-actions .na-btn{flex:1;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);color:#f4f1ea;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.notes-actions .na-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notes-actions .na-btn svg{width:13px;height:13px}
+.note-share{position:absolute;top:12px;right:30px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;padding:4px;opacity:0;transition:opacity .15s}
+body[dir="rtl"] .note-share{right:auto;left:30px}
+.note-card:hover .note-share{opacity:1}
+.note-share:hover{color:var(--gold)}
+.note-share svg{width:15px;height:15px;display:block}
+/* share modal */
+.share-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.78);z-index:700;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.share-backdrop.show{opacity:1;pointer-events:auto}
+.share-box{background:#151b2c;border-radius:14px;padding:22px;max-width:520px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.55);transform:translateY(12px) scale(.98);transition:transform .25s ease}
+.share-backdrop.show .share-box{transform:none}
+.share-box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.share-box-title{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.share-box-close{background:none;border:0;color:rgba(244,241,234,.5);font-size:26px;line-height:1;cursor:pointer}
+.share-box-close:hover{color:#f4f1ea}
+.share-canvas-wrap{border-radius:10px;overflow:hidden;background:#0e0e0e;margin-bottom:16px}
+.share-canvas-wrap canvas{width:100%;height:auto;display:block}
+.share-box-actions{display:flex;gap:10px}
+.share-box-actions button{flex:1;border:0;border-radius:8px;padding:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.share-dl{background:var(--gold);color:#151b2c;font-weight:700}
+.share-dl:hover{filter:brightness(1.08)}
+.share-copy{background:rgba(244,241,234,.08);color:#f4f1ea;border:1px solid rgba(244,241,234,.18) !important}
+.share-copy:hover{border-color:var(--gold) !important;color:var(--gold)}
+
+/* NAV TOOL BUTTONS (search, font size, spread) — match the theme toggle */
+.nav-tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* Le bouton « See for yourself » : discret dans la barre, il s'allume au survol.
+   Le libellé disparaît sous 720 px et il ne reste que la marque — sur un
+   téléphone la barre doit d'abord servir à lire le livre. */
+.nav-sfy{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--nav-text);opacity:.72;border:1px solid rgba(244,241,234,.22);border-radius:999px;padding:5px 11px 5px 9px;font-size:11.5px;letter-spacing:.02em;white-space:nowrap;transition:opacity .16s,border-color .16s,background .16s}
+.nav-sfy svg{width:17px;height:17px;flex-shrink:0}
+.nav-sfy:hover,.nav-sfy:focus-visible{opacity:1;border-color:var(--nav-active);background:rgba(244,241,234,.08)}
+.nav-sfy:focus-visible{outline:2px solid var(--nav-active);outline-offset:2px}
+@media (max-width:720px){.nav-sfy span{display:none}.nav-sfy{padding:5px 8px;gap:0}}
+body[dir="rtl"] .nav-tools{margin-left:0;margin-right:auto}
+.nav-tools .theme-toggle{margin-left:0}
+body[dir="rtl"] .nav-tools .theme-toggle{margin-right:0}
+.nav-btn{position:relative;height:34px;min-width:34px;padding:0 9px;border-radius:17px;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;transition:background .2s,border-color .2s,color .2s;font-family:var(--mono);font-size:12px;flex-shrink:0}
+.nav-btn:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.nav-btn.active{border-color:var(--nav-active);color:var(--nav-active)}
+.nav-btn svg{width:15px;height:15px;display:block}
+.nav-fontsize{display:inline-flex;align-items:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);border-radius:17px;overflow:hidden}
+.nav-fontsize button{background:none;border:0;color:var(--nav-text);cursor:pointer;height:32px;width:30px;font-family:var(--serif);line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.nav-fontsize button:hover{color:var(--gold)}
+.nav-fontsize .fs-sm{font-size:12px}.nav-fontsize .fs-lg{font-size:17px}
+.nav-fontsize .fs-div{width:1px;height:18px;background:rgba(244,241,234,.18)}
+
+/* SEARCH PANEL */
+.search-panel{position:fixed;top:0;left:0;right:0;z-index:320;transform:translateY(-100%);transition:transform .28s ease;background:var(--nav-bg);box-shadow:0 12px 34px rgba(0,0,0,.34)}
+.search-panel.show{transform:translateY(0)}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;max-width:860px;margin:0 auto}
+.search-bar svg.s-ic{width:17px;height:17px;color:rgba(244,241,234,.55);flex-shrink:0}
+.search-bar input{flex:1;background:transparent;border:0;outline:none;color:var(--nav-text);font-family:var(--serif);font-size:18px}
+.search-bar input::placeholder{color:rgba(244,241,234,.4)}
+.search-count{font-family:var(--mono);font-size:11px;color:rgba(244,241,234,.5);letter-spacing:.08em;white-space:nowrap}
+.search-bar .s-btn{background:rgba(244,241,234,.08);border:0;color:var(--nav-text);width:30px;height:30px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.search-bar .s-btn:hover{color:var(--gold)}
+.search-results{max-width:860px;margin:0 auto;max-height:min(56vh,520px);overflow-y:auto;padding:0 16px 14px}
+.sr-group{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:12px 4px 8px}
+.sr-item{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:11px 12px;cursor:pointer;color:rgba(244,241,234,.9);font-family:var(--serif);font-size:15px;line-height:1.5}
+body[dir="rtl"] .sr-item{text-align:right}
+.sr-item:hover,.sr-item.current{background:rgba(244,241,234,.07)}
+.sr-item .sr-ch{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--nav-active);margin-bottom:4px;display:block}
+.sr-item mark{background:rgba(201,160,84,.5);color:#fff;border-radius:2px}
+.sr-empty{color:rgba(244,241,234,.45);font-style:italic;padding:18px 12px;font-size:15px}
+mark.search-hit{background:rgba(201,160,84,.42);color:inherit;border-radius:2px;box-shadow:inset 0 -.5em 0 -.35em rgba(201,160,84,.5)}
+mark.search-hit.current{background:var(--gold);color:#1a2238;box-shadow:none}
+
+/* TWO-PAGE SPREAD VIEW + PAGE FLIP */
+body.spread-active{overflow:hidden}
+body.spread-active .read-progress{display:none}
+.spread-stage{position:fixed;top:48px;left:0;right:0;bottom:0;z-index:250;background:var(--paper);display:none;perspective:2400px}
+.spread-stage.show{display:block}
+.spread-viewport{position:absolute;inset:0;overflow:hidden}
+.spread-pages{height:100%;column-fill:auto;padding:40px 56px;transition:transform .5s cubic-bezier(.4,.0,.2,1);transform:translateX(0);box-sizing:border-box}
+.spread-pages .book-chapter{max-width:none;margin:0;padding:0;font-size:calc(18px * var(--reading-scale))}
+.spread-pages .opener{padding:0 0 28px;break-inside:avoid}
+.spread-pages .ch-title{font-size:34px}
+.spread-pages .lead::first-letter{float:none;font-size:inherit;padding:0;color:var(--accent)}
+.spread-pages .reveal{opacity:1 !important;transform:none !important}
+.spread-pages .verdict{margin:28px 0}
+.spread-pages .interstitial-embed,.spread-pages .chapter-break{display:none}
+.spread-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule);pointer-events:none;z-index:2}
+.spread-nav{position:absolute;top:0;bottom:0;width:18%;z-index:3;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.spread-nav:hover{opacity:1}
+.spread-prev{left:0}.spread-next{right:0}
+.spread-nav .arr{width:42px;height:42px;border-radius:50%;background:var(--nav-bg);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.spread-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--slate);background:var(--paper);padding:4px 12px;border-radius:20px;border:1px solid var(--rule)}
+/* content-bearing page-flip: clones of the real pages turn around the spine */
+.spread-flip{position:absolute;inset:0;z-index:5;pointer-events:none;perspective:2200px;display:none}
+.flip-win{position:absolute;top:0;bottom:0;overflow:hidden;background:var(--paper)}
+.flip-right{left:50%;right:0}
+.flip-left{left:0;right:50%}
+.flip-inner{position:absolute;top:0;bottom:0;width:200%}
+.flip-right .flip-inner{left:-100%}
+.flip-left .flip-inner{left:0}
+.flip-cover{z-index:1}
+.flip-leaf{z-index:2;backface-visibility:hidden;transform:rotateY(0deg);box-shadow:0 0 30px rgba(0,0,0,.28)}
+.flip-leaf.leaf-fwd{transform-origin:left center}
+.flip-leaf.leaf-back{transform-origin:right center}
+/* curl shading on the turning page surface */
+.flip-shade{position:absolute;inset:0;pointer-events:none;z-index:3}
+.leaf-fwd .flip-shade{background:linear-gradient(90deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+.leaf-back .flip-shade{background:linear-gradient(270deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+@media (prefers-reduced-motion: reduce){.spread-pages{transition:none}.spread-flip{display:none !important}}
+@media(max-width:720px){
+  .spread-pages{column-gap:0 !important;padding:30px 26px}
+  .spread-divider{display:none}
+}
+
+/* BOOKMARKS — silk ribbon + dropdown */
+.nav-btn-count{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--gold);color:var(--nav-bg);font-family:var(--mono);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.nav-btn-count[data-empty="1"]{display:none}
+.bm-ribbon{position:absolute;left:-16px;width:26px;height:62px;z-index:40;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-soft) 55%,var(--accent));box-shadow:2px 3px 9px rgba(0,0,0,.30);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);transition:filter .15s ease,transform .15s ease}
+.bm-ribbon::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:3px;height:32px;border-radius:2px;background:rgba(255,255,255,.38)}
+.bm-ribbon:hover{filter:brightness(1.1);transform:translateY(2px)}
+.bm-ribbon.bm-new{animation:bmDrop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bmDrop{0%{transform:translateY(-72px) rotate(-5deg);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.bm-ribbon.bm-leave{animation:bmLeave .35s ease forwards}
+@keyframes bmLeave{to{transform:translateY(-72px) rotate(-5deg);opacity:0}}
+body[dir="rtl"] .bm-ribbon{left:auto;right:-16px}
+@media(max-width:760px){.bm-ribbon{left:-6px;width:20px;height:50px}body[dir="rtl"] .bm-ribbon{right:-6px;left:auto}}
+.bm-panel{position:fixed;top:50px;z-index:330;width:300px;max-width:calc(100vw - 24px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(244,241,234,.14);border-radius:11px;box-shadow:0 18px 52px rgba(0,0,0,.46);padding:9px;opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.bm-panel.show{opacity:1;transform:none;pointer-events:auto}
+.bm-add,.bm-resume{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:8px;padding:11px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.bm-add{background:var(--accent);color:#fff}.bm-add:hover{filter:brightness(1.1)}
+.bm-add svg{width:14px;height:14px}
+.bm-resume{background:rgba(244,241,234,.08);color:var(--nav-text);border:1px solid rgba(244,241,234,.16);margin-top:7px}
+.bm-resume:hover{border-color:var(--gold);color:var(--gold)}
+.bm-list{max-height:46vh;overflow-y:auto;margin-top:8px}
+.bm-empty{padding:18px 12px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:14px;font-family:var(--serif)}
+.bm-item{display:grid;grid-template-columns:7px 1fr;gap:11px;padding:10px 24px 10px 10px;border-radius:8px;cursor:pointer;position:relative}
+.bm-item:hover{background:rgba(244,241,234,.07)}
+.bm-item .bm-bar{border-radius:3px;background:var(--accent)}
+.bm-item .bm-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.bm-item .bm-snip{font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.45;color:rgba(244,241,234,.9);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bm-item .bm-x{position:absolute;top:8px;right:7px;background:none;border:0;color:rgba(244,241,234,.34);cursor:pointer;font-size:15px;line-height:1;padding:2px;opacity:0}
+.bm-item:hover .bm-x{opacity:1}.bm-item .bm-x:hover{color:var(--accent)}
+.bm-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--nav-bg);color:var(--nav-text);padding:11px 20px;border-radius:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;box-shadow:0 14px 38px rgba(0,0,0,.42);opacity:0;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:620;display:inline-flex;align-items:center;gap:9px}
+.bm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bm-toast svg{width:15px;height:15px;color:var(--gold)}
+
+/* RESPONSIVE + PRINT */
+@media(max-width:600px){
+  .book-chapter{padding:0 18px}
+  .toc-inner{padding:0 20px}
+  a.toc-row{grid-template-columns:40px 1fr 24px}
+  .toc-rowtitle{font-size:18px}
+}
+/* the answer-key switch in the nav */
+.nav-item.nav-key.on{color:var(--gold);font-weight:600}
+.nav-item.nav-key.on::before{content:"✓ ";font-size:.9em}
+
+@media print{
+  .book-nav,.read-progress,.ad-loader,.ad-coach,.hl-toolbar,.hl-noteedit,.notes-drawer,.notes-backdrop,.interstitial-embed{display:none !important}
+  .chapter-break{break-after:page}
+  .reveal{opacity:1 !important;transform:none !important}
+
+  /* ── paper ──────────────────────────────────────────────────────────
+     A book is read on a screen and photocopied on paper. Printing keeps
+     whatever state the reader is in — so the answer-key switch decides
+     whether you get the worksheet or its correction out of the same file. */
+  @page{margin:16mm 14mm}
+  html,html.dark{
+    --paper:#fff;--paper-deep:#f4f4f4;--ink:#111;--ink-soft:#333;--slate:#555;--rule:#bbb;
+    background:#fff !important;color:#111 !important}
+  html.dark body,body{background:#fff !important;color:#111 !important}
+  .book-chapter{padding:0 !important}
+
+  /* keep a figure, a table or a widget whole on one page where it fits */
+  .iw,figure,.md-table,.evidence,.case,.argument,.stat,.notes{break-inside:avoid}
+  h2,h3,.subhead,.section-marker{break-after:avoid}
+
+  /* controls mean nothing on paper — the content they act on stays */
+  .iw-btn,.iwm-qbtn,.iw3d-tools,.iw3d-hint,.iwglo-bar,.iwfc-bar,.iwfc-judge,
+  .iword-btns,.iwlb-actions,.iwiq-actions,.iwiq-tip,.iwex-actions,.iwsrc-rev,
+  .iwrx-actions,.iwnuc-actions,.iwm-quiz,.iwtl-quizbar,.iwtl-reset,.iwx-actions,
+  .iwq-actions,.figure-nav,.iwopt-ctl,input[type=range],
+  .iwwv-ctl,.iwfr-btns,.iwcj-tabs{display:none !important}
+
+  /* answer spaces print as ruled boxes, not as browser widgets.
+     Note the bare input selectors: the crossword, the posed operation and the
+     numeration table use an input with maxlength and no type attribute, so
+     input[type=text] never reaches them. */
+  input[type=text],input[type=search],input[type=number],textarea,select,
+  .iwpo-c input,.iwcw-c input,.iwpv-c input,
+  .iwq-blank,.iwex-a,.iwnuc-in,.iwm-qin{
+    border:1px solid #999 !important;background:#fff !important;color:#111 !important;
+    box-shadow:none !important;-webkit-appearance:none;appearance:none}
+  .iwcw-c input{border:0 !important}   /* the cell already has one */
+
+  /* a ticked radio in the marking grid is drawn with a box-shadow, and browsers
+     drop backgrounds when printing — give it an ink fill that survives */
+  .iw-rb input:checked+i{background:#111 !important;box-shadow:inset 0 0 0 3.5px #fff !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* the Sankey labels are white on coloured bands, so the bands have to print */
+  .iw-en .iwen-svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* only the open tense of a conjugation prints; the other tabs are gone above */
+
+  /* a flip card printed edge-on is a blank rectangle — lay both faces flat */
+  .iw-fc .iwfc-card{height:auto !important;perspective:none !important}
+  .iw-fc .iwfc-inner{transform:none !important;transform-style:flat !important;position:static !important}
+  .iw-fc .iwfc-face{position:static !important;backface-visibility:visible !important;
+    transform:none !important;border:1px solid #999;margin-bottom:6px;page-break-inside:avoid}
+  .iw-fc .iwfc-front{background:#f4f4f4 !important;color:#111 !important}
+  .iw-fc .iwfc-front i{display:none}
+
+  /* anything hidden behind a disclosure opens up */
+  details{display:block}
+  details>summary{list-style:none;font-weight:600}
+  details>*{display:block !important}
+  .iwme-step.hid,.iwme-ans.hid{opacity:1 !important;display:list-item !important}
+  .iwsrc-model[hidden],.iwex-sol[hidden],.iwex-hint[hidden]{display:block !important}
+
+  /* the reader's own frame */
+  .rawhtml-frame,.iw-embed-frame{border:1px solid #bbb}
+  a{color:#111 !important;text-decoration:none}
+}
+
+
+/* reading typography lives on the chapter wrapper so it doesn't touch nav/TOC */
+.book-chapter{font-size:19px;line-height:1.78;padding-bottom:130px;text-rendering:optimizeLegibility}
+.book-chapter p{margin-bottom:26px}
+.book-chapter em{font-style:italic}
+.book-chapter strong{font-weight:600;color:var(--ink)}
+.book-chapter a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* chapter opener */
+.opener{padding:120px 0 70px;border-bottom:1px solid var(--rule);margin-bottom:64px}
+.ch-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;font-weight:500}
+.ch-number{font-family:var(--mono);font-size:15px;color:var(--slate);letter-spacing:.1em;margin-bottom:10px}
+.ch-title{font-size:58px;line-height:1.04;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
+.ch-standfirst{font-size:23px;line-height:1.5;color:var(--ink-soft);font-weight:400;font-style:italic;max-width:92%}
+
+/* drop cap on the lead paragraph */
+.lead::first-letter{font-size:76px;line-height:.72;float:left;font-weight:600;padding:8px 14px 0 0;color:var(--accent)}
+body[dir="rtl"] .lead::first-letter{float:right;padding:8px 0 0 14px}
+
+/* section marker */
+.section-marker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:64px 0 24px;display:flex;align-items:center;gap:16px}
+.section-marker::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+/* pull quote */
+.pull{font-size:30px;line-height:1.3;font-weight:500;color:var(--ink);margin:56px 0;padding-left:28px;border-left:3px solid var(--accent);letter-spacing:-.01em}
+
+/* verdict (ink panel) */
+.verdict{background:var(--ink);color:var(--paper);margin:60px -28px;padding:60px 48px;border-radius:3px}
+.verdict p{font-size:29px;line-height:1.4;font-weight:500;letter-spacing:-.01em;margin-bottom:0}
+.verdict .accent{color:var(--gold)}
+
+/* evidence box */
+.evidence{background:var(--paper-deep);border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:3px;padding:30px 32px 26px;margin:44px 0}
+.evidence-label{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.evidence-figure{font-family:var(--serif);font-size:46px;line-height:1.05;font-weight:600;color:var(--accent);letter-spacing:-.02em;margin-bottom:14px}
+.evidence-body{font-size:18px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px}
+.evidence-body p{margin-bottom:14px}.evidence-body p:last-child{margin-bottom:0}
+.evidence-label:first-child{margin-top:0}
+.evidence-source{font-family:var(--mono);font-size:12px;color:var(--slate);letter-spacing:.04em;padding-top:14px;border-top:1px solid var(--rule)}
+.evidence-source sup{color:var(--accent);font-weight:600}
+
+/* case-study card */
+.case{border:1px solid var(--rule);border-radius:3px;margin:44px 0;overflow:hidden}
+.case-head{background:var(--ink);color:var(--paper);padding:22px 30px}
+.case-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px}
+.case-name{font-size:26px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
+.case-body{padding:26px 30px 28px;background:var(--paper-deep)}
+.case-body p{margin-bottom:18px;font-size:18px}
+.case-body p:last-child{margin-bottom:0}
+.case-stat{font-family:var(--mono);font-size:14px;color:var(--ink);font-weight:500;background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:4px 10px;display:inline-block;margin:0 6px 8px 0}
+
+/* argument card (his vs mine) */
+.argument{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin:52px 0}
+.arg-head{background:var(--ink);color:var(--paper);padding:16px 28px;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600}
+.arg-side{padding:24px 28px;border-top:1px solid var(--rule);display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;background:var(--paper-deep)}
+.arg-side:first-of-type{border-top:none}
+.arg-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding-top:3px;line-height:1.4}
+.arg-label.his{color:var(--slate)}
+.arg-label.mine{color:var(--accent)}
+.arg-text{font-size:17px;line-height:1.6;color:var(--ink-soft)}
+
+/* footnote markers + endnotes */
+sup.fn{font-family:var(--mono);font-size:.62em;color:var(--accent);font-weight:600;vertical-align:super;cursor:pointer;padding:0 1px}
+.notes{margin-top:90px;padding-top:34px;border-top:1px solid var(--rule)}
+.notes-title{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:24px}
+.note{display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:14px;line-height:1.5;color:var(--ink-soft);margin-bottom:14px;font-family:var(--serif)}
+.note-num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;padding-top:2px}
+.note a{color:var(--slate);text-decoration:underline;text-underline-offset:2px}
+
+/* dialogue */
+.dialogue{margin:44px 0;padding-left:22px;border-left:2px solid var(--rule)}
+.dlg-line{display:grid;grid-template-columns:minmax(80px,140px) 1fr;gap:18px;align-items:baseline;margin-bottom:18px}
+.dlg-speaker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;padding-top:4px;text-align:right}
+.dlg-text{font-size:19px;line-height:1.6;color:var(--ink)}
+.dlg-aside{font-style:italic;color:var(--slate);font-size:16px;margin:6px 0 18px;padding-left:0}
+body[dir="rtl"] .dialogue{padding-left:0;padding-right:22px;border-left:none;border-right:2px solid var(--rule)}
+body[dir="rtl"] .dlg-speaker{text-align:left}
+@media(max-width:600px){.dlg-line{grid-template-columns:1fr;gap:2px}.dlg-speaker{text-align:left;padding-top:0}}
+
+/* closing line */
+.closer{font-size:27px;line-height:1.42;font-weight:500;color:var(--ink);margin:70px 0 0;padding:38px 0 0;border-top:3px double var(--ink);letter-spacing:-.01em}
+.closer .accent{color:var(--accent)}
+
+/* epigraph (opening quote) */
+.epigraph{margin:40px 0 52px;text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
+.epigraph-text{font-size:24px;line-height:1.45;font-style:italic;color:var(--ink-soft);letter-spacing:-.01em}
+.epigraph-cite{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-top:18px}
+
+/* figure (one or many images + caption) */
+.figure{margin:44px 0;text-align:center}
+.figure-imgs{display:flex;justify-content:center;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.figure-item{margin:0;display:flex;flex-direction:column;align-items:center;max-width:100%}
+.figure-item img{max-width:100%;height:auto;border-radius:3px;display:block}
+.figure-item-cap{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--slate);margin-top:7px;line-height:1.45}
+/* solo: one centred image */
+.figure-single .figure-item{margin-left:auto;margin-right:auto}
+/* row: side by side, equal share unless an image sets its own % */
+.figure-row .figure-imgs{flex-wrap:nowrap}
+.figure-row .figure-item{flex:1 1 0;min-width:0}
+.figure-row .figure-item img{width:100%;object-fit:cover}
+/* column: stacked vertically */
+.figure-column .figure-imgs{flex-direction:column;flex-wrap:nowrap;align-items:center}
+.figure-column .figure-item{width:100%}
+/* grid: multi-column */
+.figure-grid .figure-imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.figure-grid .figure-item{width:100%}
+.figure-grid .figure-item img{width:100%}
+/* carousel: a draggable strip with arrows + fading edges */
+.figure-carousel-wrap{position:relative}
+.figure-carousel .figure-scroll{overflow-x:auto;overflow-y:hidden;cursor:grab;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.figure-carousel .figure-scroll::-webkit-scrollbar{display:none;height:0;width:0}
+.figure-carousel .figure-scroll.drag{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.figure-carousel .figure-imgs{flex-wrap:nowrap;justify-content:flex-start;width:max-content;padding:2px}
+.figure-carousel .figure-item{flex:0 0 auto;width:300px}
+.figure-carousel .figure-item img{width:100%}
+.figure-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.18);transition:opacity .25s,background .15s}
+.figure-nav:hover{background:var(--paper-deep)}
+.figure-nav-l{left:6px}.figure-nav-r{right:6px}
+.figure-carousel-wrap.at-start .figure-nav-l,.figure-carousel-wrap.at-end .figure-nav-r,.figure-carousel-wrap.no-scroll .figure-nav{opacity:0;pointer-events:none}
+.figure-small{max-width:300px;margin-left:auto;margin-right:auto}
+.figure-medium{max-width:520px;margin-left:auto;margin-right:auto}
+.figure-large{max-width:780px;margin-left:auto;margin-right:auto}
+.figure-full{max-width:100%}
+.figure-carousel.figure-small,.figure-carousel.figure-medium,.figure-carousel.figure-large{max-width:none}
+.figure-cap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--slate);margin-top:12px;line-height:1.5}
+@media(max-width:600px){.figure-row .figure-imgs{flex-wrap:wrap}}
+
+/* free-form chapter canvas (Layout mode) */
+.book-chapter.canvas-chapter{max-width:none;margin:0;padding:0}
+/* keep the chapter opener (title) in the centred reading column even though the canvas is full-width */
+.book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
+.ch-canvas-main{margin:0;padding:0}
+.ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+.ch-canvas{position:relative;transform-origin:top left}
+.layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
+/* Un element masque par l'auteur. Le livre construit ne le contient jamais —
+   le rendu s'arrete avant — et cette regle ne sert donc qu'a l'apercu de
+   Studio, ou il faut bien pouvoir le retrouver pour le rallumer. */
+.layout-item.li-masque{opacity:.28;filter:grayscale(1)}
+/* tables inside a recoloured layout element follow that element's ink/rule */
+.layout-item .md-table th,.layout-item table th{color:var(--ink)}
+.layout-item .md-table td,.layout-item table td{color:var(--ink-soft)}
+.layout-item table th,.layout-item table td,.layout-item .md-table-bordered table,.layout-item .md-table-bordered th,.layout-item .md-table-bordered td{border-color:var(--rule)}
+.layout-item>*{min-height:0}
+.layout-item>:first-child{margin-top:0}
+.layout-item>:last-child{margin-bottom:0}
+.layout-item img{max-width:100%}
+.layout-item .figure{margin:0;flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.layout-item .figure-imgs{flex:1 1 auto;min-height:0;align-items:center}
+.layout-item .figure-item img{max-height:100%;object-fit:contain}
+.layout-item .media{margin:0}
+.layout-item .media-el,.layout-item video{max-height:100%}
+/* canvas content is positioned, not scroll-revealed — always show it */
+.ch-canvas .reveal{opacity:1!important;transform:none!important}
+
+/* Arabic / Quran passage */
+.arabic-text{direction:rtl;text-align:right;font-family:'Amiri','Scheherazade New',serif;font-size:1.5em;line-height:2.15;color:var(--ink);margin:34px 0}
+.arabic-text[data-font="quran"]{font-family:'Amiri Quran','Amiri',serif;font-size:1.7em;line-height:2.5;text-align:center}
+.arabic-text[data-font="kufi"]{font-family:'Reem Kufi','Amiri',serif}
+
+/* raw HTML — isolated in a sandboxed iframe so it can't affect the page */
+.rawhtml{margin:40px 0}
+.rawhtml-frame{width:100%;border:0;display:block;background:transparent;min-height:24px}
+.layout-item .rawhtml{margin:0}
+.layout-item .rawhtml-frame{height:100%}
+
+/* media (audio / video) */
+.media{margin:44px 0;text-align:center}
+.media-el{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+video.media-el{width:100%;background:#000;border:1px solid var(--rule)}
+.media-audio{width:100%;height:44px}
+
+/* images inside prose tables */
+.book-chapter table img{max-width:150px;height:auto;border-radius:4px;vertical-align:middle;display:inline-block}
+
+/* callout / aside note */
+.callout{background:var(--paper-deep);border-left:3px solid var(--gold);border-radius:3px;padding:22px 26px;margin:40px 0;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+.callout p{margin-bottom:14px}.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+body[dir="rtl"] .callout{border-left:none;border-right:3px solid var(--gold)}
+
+/* subheading */
+.subhead{font-size:27px;line-height:1.2;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:52px 0 18px}
+
+/* verse / poem */
+.verse{font-style:italic;font-size:19px;line-height:1.7;color:var(--ink);margin:40px 0;padding-left:28px;border-left:1px solid var(--rule);white-space:pre-wrap}
+body[dir="rtl"] .verse{border-left:none;border-right:1px solid var(--rule);padding-left:0;padding-right:28px}
+
+/* scene break (within a chapter) */
+.scene-break{display:flex;align-items:center;justify-content:center;gap:14px;margin:54px 0;color:var(--accent);font-size:12px}
+.scene-break::before,.scene-break::after{content:'';width:46px;height:1px;background:var(--rule)}
+
+/* stat (single big figure) */
+.stat{margin:44px 0;text-align:center}
+.stat-figure{font-size:64px;line-height:1;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+.stat-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin-top:12px}
+
+/* letter / epistolary */
+.letter{background:var(--paper-deep);border:1px solid var(--rule);border-radius:3px;padding:34px 38px;margin:44px 0;font-size:18px;line-height:1.7;color:var(--ink-soft)}
+.letter p{margin-bottom:18px}.letter p:last-child{margin-bottom:0}
+
+/* tables */
+.book-chapter table{width:100%;border-collapse:collapse;margin:40px 0;font-size:16px}
+.book-chapter th,.book-chapter td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.book-chapter th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:600}
+.book-chapter td{color:var(--ink-soft)}
+body[dir="rtl"] .book-chapter th,body[dir="rtl"] .book-chapter td{text-align:right}
+/* table outline styles (the :::table wrapper) */
+.md-table{margin:40px 0}
+.md-table table{margin:0}
+.md-table-bordered table{border:1px solid var(--rule)}
+.md-table-bordered th,.md-table-bordered td{border:1px solid var(--rule)}
+.md-table-striped th,.md-table-striped td{border-bottom:0}
+.md-table-striped tbody tr:nth-child(odd) td{background:var(--paper-deep)}
+.md-table-minimal th,.md-table-minimal td{border-bottom:0}
+.md-table-minimal th{border-bottom:2px solid var(--rule)}
+.md-table-boxed{border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.md-table-boxed th,.md-table-boxed td{padding:12px 16px}
+.md-table-boxed th{background:var(--paper-deep)}
+.md-table-boxed td{border-bottom:1px solid var(--rule)}
+.md-table-boxed tr:last-child td{border-bottom:0}
+
+/* lists */
+.book-chapter ul,.book-chapter ol{margin:0 0 26px 1.3em}
+.book-chapter li{margin-bottom:9px;line-height:1.7}
+
+@media (max-width:600px){
+  .book-chapter{font-size:18px}
+  .epigraph-text{font-size:20px}
+  .subhead{font-size:22px}
+  .stat-figure{font-size:48px}
+  .letter{padding:24px 22px}
+  .ch-title{font-size:40px}
+  .ch-standfirst{font-size:20px;max-width:100%}
+  .opener{padding:70px 0 48px}
+  .pull{font-size:24px}
+  .verdict{margin:48px -20px;padding:44px 28px}
+  .verdict p{font-size:23px}
+  .arg-side{grid-template-columns:1fr;gap:6px}
+  .closer{font-size:23px}
+  .lead::first-letter{font-size:62px}
+}
+
+/* ── reader font-size control: --reading-scale multiplies the prose sizes ── */
+:root{--reading-scale:1}
+.book-chapter{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .ch-standfirst{font-size:calc(23px * var(--reading-scale))}
+.book-chapter .pull{font-size:calc(30px * var(--reading-scale))}
+.book-chapter .verdict p{font-size:calc(29px * var(--reading-scale))}
+.book-chapter .evidence-body{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .case-body p{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .dlg-text{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .callout{font-size:calc(17px * var(--reading-scale))}
+.book-chapter .letter{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .closer{font-size:calc(27px * var(--reading-scale))}
+.book-chapter .verse{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .epigraph-text{font-size:calc(24px * var(--reading-scale))}
+@media (max-width:600px){ .book-chapter{font-size:calc(18px * var(--reading-scale))} }
+
+
+
+
+html,body{margin:0;background:var(--paper)}</style></head>
+<body><div class="book-chapter canvas-chapter" id="chap"><main class="ch-canvas-main"><div class="ch-canvas" style="width:760px;height:1000px">
+<p class="reveal">Notwithstanding the able manner in which the revolution had been effected, England was still in a state of tumult. Though the army had been seduced by the example of Edmund, and the people had been obliged to submit, they were by no means perfectly satisfied with their new government; and Rosabella found, too late, that though the throne might be compared to a bed of roses, it was not without its thorns. The discontented nobles who had aided her cause were also extremely displeased by what they called the trifling value of the rewards bestowed upon them; though, in fact, they rated their services so high, that Rosabella found her whole kingdom did not possess the power of repaying them to their satisfaction. It was also a considerable grievance of these haughty nobles to see Prince Ferdinand return to the English Court immediately after the dethronement of Elvira, and be received with open arms by Rosabella, who, with the anxiety to conciliate the friendship of foreign powers, usually displayed by those whose thrones feel far from secure at home, loaded him with favours, and even gave him a post of honour in the command of her own bodyguard.</p>
+<p class="reveal">Whilst the unreasonableness of her people thus embittered Rosabella’s political life, her domestic happiness seemed to rest upon a yet more unstable foundation. She knew that though she possessed Edmund’s hand, his heart was still devoted to Elvira; and jealousy made her view all his actions in a distorted light. If he were sad, she was sure he was thinking of her rival; and if gay, she fancied it a masque put on only to deceive her. She was thus completely miserable, and Edmund was as wretched as herself. He felt that he had sacrificed himself to revenge, and sold his peace for a bauble, which, when obtained, did not seem worth the trouble of possessing. His father too﻿—Sir Ambrose, his doting father, was now entirely estranged from him, as he repeatedly declared he would never forgive a traitor, who could forget his oath of allegiance for his own aggrandizement.</p>
+<p class="reveal">“No!” exclaimed the old man, “I loved, I doted upon Edmund; but the Edmund I loved is vanished. My darling son was brave and noble, not a deceptive scoundrel. No, no, my old heart may break﻿—nay, I hope it will﻿—but never whilst I live shall a deceitful traitor be pressed against this breast.”</p>
+<p class="reveal">Edmund was inconsolable; he passionately loved his father, and could not bear his anger: besides, he felt that the reproaches of the old man were seconded by those of his own heart. It is painful at any time to bear the censures of the world, but they fall with double weight when we know we have deserved them. Edmund was dissatisfied with himself, and, consequently, disposed to quarrel with the world. He fancied it looked coldly upon him, and, in return, he affected to despise it. A hundred times a day he repeated that he was perfectly indifferent to everything that was said of him; whilst his nervous anxiety to peruse the newspapers, and make himself perfectly acquainted with every popular rumour, proved that he was only too sensible to every word that was uttered. Edmund had made the mob his idol, he could not live without its applauses, and wretched indeed are those who thus depend on others for their hopes of happiness.</p>
+<p class="reveal">Edmund’s disgust at his new rank and situation was soon still farther increased by a visit from Lord Gustavus, who, with several other lords, was deputed to present to his Majesty the complaints of the Commons. They wanted to be enfranchised, they desired innumerable rights and privileges, and in fact they wanted to be all kings; for if half that they demanded had been granted, Edmund must have made them more powerful than himself. He pointed this out to Lord Gustavus, and condescended to reason with him upon the folly of their desires.</p>
+<p class="reveal">“Impossible!” cried Lord Gustavus. “Your Majesty must excuse me but I cannot listen to such arguments; I came here to defend the liberties of the people. Reform is necessary﻿—without reform, nothing can go on well. Evils must be torn up root and branch.”</p>
+<p class="reveal">“Are not my subjects healthy, wealthy, and prosperous?” asked Edmund. “Have they not been successful at home and abroad? Do not the English peasants live as well as most foreign princes, and what more can they require?”</p>
+<p class="reveal">“Liberty, Sire,” returned Lord Gustavus. “What are all these pretended advantages without liberty? mere toys; gaudy apples, but rotten at the core. Of what use, indeed, are all the blessings of life, without liberty to give them zest, and radical reform to purge them of all impurities?”</p>
+<p class="reveal">“But listen to reason.”</p>
+<p class="reveal">“Reason! Thinking as I think, and as I am sure every rational being must think, or at least ought to think, your Majesty must forgive me if I assert, that even Reason herself does not deserve to be attended to, when she is basely enlisted upon the side of Tyranny.”</p>
+<p class="reveal">“Nay, then,” said Edmund, “it is useless to attempt to argue with you. I thought you had made Reason your goddess; but if you worship her only as long as it suits your own purposes, I have done. You may retire. I shall take the petition into consideration, and give it an answer when I may think fit.”</p>
+<p class="reveal">Edmund, who, from being degraded and debased in his own opinion, no longer possessed that confidence in himself which had formerly carried conviction with all he said, had yet sufficient dignity in his manner to awe those to silence who dared to dispute his commands; and Lord Gustavus and his colleagues, not presuming to make farther remonstrance, retired in dudgeon. This incident contributed to sicken Edmund of reigning: he became disgusted with his Queen, his court, his kingdom, and his country, and secluding himself as much as possible from public life, left the care of managing the affairs of state to Rosabella and Father Morris, who now throwing off the disguise he so long had worn, appeared openly as the dispenser of her favours, and the arbiter of her actions.</p>
+<p class="reveal">The spirit of poor Sir Ambrose was quite broken by these misfortunes. The defection of his son, and the ingratitude of his friend’s confessor stung him to the core. He retired again to the country, where with his friend the Duke, Clara, and Father Murphy, he contrived to exist, though but the shadow of his former self. The Duke was also grievously changed, and it was melancholy to see these two poor old men wandering about their splendid gardens and magnificent palaces like roaming ghosts, permitted to revisit for a time the scenes of their departed happiness. Clara now became the sole stay that bound these old men to life. Her character had developed itself wonderfully in the midst of the striking events she had witnessed. Firm, courageous, and enterprising, though still gentle﻿—the lively girl seemed changed into the intelligent woman, whose active mind and comprehensive spirit foresaw everything and provided against every emergency, Clara was still young; but her spirit was mature beyond her years, and her attention to the Duke and Sir Ambrose was unremitting.</p>
+<p class="reveal">“Well!” would they often say, “though we have lost much, we ought still to be thankful that Clara is spared to us:” and then with tears trickling down their aged cheeks, they would join in imploring Heaven to shower down blessings upon her head. In the meantime, Clara herself was far from happy. She would, it is true, exert herself to appear cheerful, but it was evident it was an exertion; and often, when the Duke and Sir Ambrose had seated themselves to a party at chess, she would steal out unobserved, and retire to a little pavilion in the Duke’s garden, near what were formerly the apartments of Father Morris, as being the most secluded spot she could find; this part of the mansion having been carefully shut up and avoided by every human being, since the departure of the priest, as infectious; the indignation that the worthy and attached servants of his Grace felt towards Father Morris for his desertion of their master, being extended even to the rooms he had occupied.</p>
+<p class="reveal">In this secluded spot Clara often sat for hours, lost in meditation, her head resting upon her hand, and her eyes fixed on vacancy. Winter had now given place to spring, and all nature seemed to revive with that gay and joyous season, but the heart of Clara was still lonely; she fancied it could enjoy no second summer; and she felt almost disposed to quarrel with all around her for displaying a gaiety in which she could not participate. Nothing makes a broken heart feel more gloomy than to see all other objects look gay. It turns from them in disgust, and feels its own misery doubled by the sight of their happiness.</p>
+<p class="reveal">One evening as Clara was sitting absorbed in melancholy reflections, she was startled by hearing a deep-drawn sigh heaved heavily behind her. She turned, and fancied she could distinguish a figure in the midst of the twilight;﻿—but, magnified by the obscurity, the figure seemed of gigantic proportions. Uttering a faint scream, she attempted to fly﻿—when a hand of iron grasped her arm, and arrested her progress. An icy chill shot to her heart, whilst the well-remembered voice of Cheops sounded in her ears.</p>
+<p class="reveal">“Clara,” said he, in his deep sepulchral tone, “would you save your Queen?”</p>
+<p class="reveal">“With the sacrifice of my life, if necessary,” replied Clara firmly.</p>
+<p class="reveal">“Clara,” continued the Mummy, “I have marked you attentively﻿—and as I do not know any individual possessing more strength of mind and personal courage than yourself, I have fixed upon you to be my attendant in this enterprise. The life of Elvira is in danger; and even my influence cannot much longer save her, if she remain in the power of Father Morris. Besides, the lesson she has already had has been sufficiently severe. I will aid her to escape, and you must assist me. You shall go to Ireland; and there, if the warlike Roderick be not deaf to the cry of beauty in distress, through his aid Elvira may hope redress﻿—at least, she must implore his help.﻿—Rosabella is now at a palace near this, and she has brought her rival in her train; for, with the usual jealousy and suspicion of tyrants and usurpers, she scarcely dares to trust her from her sight. Besides this, her diabolical revenge is gratified in making Elvira wait humbly near her throne, and serve in those palaces where she once commanded. Moved by this ungenerous conduct, and the patience with which the unhappy Elvira bears her sufferings, the nobles and people of the realm begin to pity her: and when they are disgusted with the haughtiness and intolerance of Rosabella, they sigh for the return of the gentle Elvira. Father Morris perceives this, and determining to rid Rosabella of her rival, the fair Elvira fades beneath his arts, like a flower withering on its stem.”</p>
+<p class="reveal">“She must be saved!” said Clara, with enthusiasm; “she <em>shall</em> be saved!﻿—Point but out the means, and I am devoted to her service.”</p>
+<p class="reveal">“You must assume these weeds, and follow me,” said Cheops, pointing to a bundle in a corner of the pavilion, which Clara had not before noticed. “In half an hour I will return for you.”</p>
+<p class="reveal">“And my sudden disappearance,” rejoined Clara, “will it not excite suspicion?”</p>
+<p class="reveal">“The river which runs through the grounds is deep and rapid,” returned Cheops; “some of your clothes left upon its banks﻿—”</p>
+<p class="reveal">“I comprehend,” cried Clara eagerly; “but the poor old Duke, and Sir Ambrose?﻿—”</p>
+<p class="reveal">“Their anxiety and distress may be great, but cannot be lasting: the feelings of age are blunt, and﻿—”</p>
+<p class="reveal">“Oh, no!” exclaimed Clara, “you are deceived; for age feels grief more acutely than youth. The mind has lost its elasticity﻿—hope is dead within it, and the old brood over their secret sorrows till they pine gradually away.”</p>
+<p class="reveal">“By Osiris! thou art a most extraordinary girl,” said Cheops; “the old do brood over grief, but why say this to me? Do I not know it well﻿—too well?” continued he, looking at her earnestly. Clara turned pale, and trembled, for the hideous countenance of the Mummy, when distorted by human passions, was almost too much for mortals to behold and live. Cheops saw her agitation; and, hastily averting his eyes, continued in a calmer tone﻿—“Whatever the sufferings of the old men may be for the moment, I suppose even you will allow the life of Elvira more than counterbalances them;﻿—and, by inflicting this temporary pain, you will save them from the more lasting agony they would endure from her death: for Father Morris is so subtle, that it would be dangerous to give them the slightest hint of our intention, lest he should worm it from them. Be ready then, Clara; resign thyself to my instructions, and, above all, fear not.”</p>
+<p class="reveal">Clara bent her head in token of assent, and Cheops disappeared. Upon examining the clothes, Clara found them to be the dress of a Greek peasant boy, numbers of whom at this period were rambling over England singing wild romances to their harps or lutes, and telling fortunes in a kind of doggerel rhyme. Exposure to the air tanned most of these wandering minstrels brown, and Clara found a bottle of liquid in the parcel to stain her face and hands. She bound up her flaxen ringlets, and, covering her head with curls of a jetty blackness, she found the metamorphosis so complete that she scarcely knew herself as she saw her figure reflected in a large mirror behind her. It was now nearly dark, but Cheops had left the necessary implements for striking a light, and Clara made her toilette without the least difficulty.</p>
+<p class="reveal">Anxious were the moments, however, which passed after her task was completed, till the arrival of Cheops; and when he did come, she saw he was attired as herself. He grasped her arm, and without speaking led her to the banks of the river. Clara shuddered when she found herself alone in the power of this mysterious being, and saw the river roll deep and dark beneath her feet. Cheops felt her shudder, and cried with one of his horrid laughs, which sounded fearfully amidst the stillness of the night, “What! do even <em>you</em> fear me? Is there <em>no</em> courage in this degenerate race? None? What do you fear? If you dread to trust yourself in my power, or think yourself unequal to the task you have undertaken, retire: there is yet time, and I wish no unwilling agents. Poor child!” continued he, looking at her with feeling; “thou dost not know me, but for worlds I would not harm thee!”</p>
+<p class="reveal">“I will go with you,” said Clara resolutely; “I do not shrink. Let what will await me, I will not recede: though unheard-of torments may attend me, I will endure them.”</p>
+<p class="reveal">“By the Holy Gods of my forefathers,” cried Cheops, “she is a brave girl! Yes, Clara, I will trust thee; and though we should encounter horrors fearful as those which menace the initiati in the dread Isian mysteries, I will not doubt thy courage. A determined spirit, Clara, may subdue even Fate.”</p>
+<p class="reveal">As he spoke, he threw the clothes she had brought for the purpose carelessly upon the banks of the river; and then again seizing her arm, he dragged her forward with such rapidity, that in an incredibly short time they approached the palace of Rosabella. The mansion looked the region of enchantment. Brilliantly illuminated, light streamed from every window; and through the colonnade of the great hall, groups of elegantly dressed people were seen moving gaily to and fro, some dancing, and others listening to harmonious music.</p>
+<p class="reveal">Clara, though terrified and exhausted, felt still irresistibly impelled to proceed, and, still guided by her strange companion, entered, unobserved, the outer court of the palace.</p>
+<p class="reveal">“Prince Ferdinand of Germany commands the guard tonight,” whispered Cheops, in a low, unnatural voice; “it is well, he shall go with us.”</p>
+<p class="reveal">“But will he?” asked Clara tremblingly.</p>
+<p class="reveal">“Will he?” returned Cheops, with his peculiar sneer: “dost thou doubt my power, girl?”</p>
+<p class="reveal">Clara and Cheops had now reached a place from whence, unobserved, they could survey the whole of the splendid apartment before them. They had, in fact, entered the hall, and placed themselves in a kind of recess shaded by projecting pillars, from whence they could see every part of the saloon. Clara was astonished to find herself so easily in the presence of the Queen, for she knew not how they had attained their present situation; and she would have spoken to ask Cheops, but he laid his finger upon his lips: and whispering﻿—“Hippocrates was the only son of Isis and Osiris!”﻿—she comprehended he meant that Wisdom and Knowledge produced Silence, and she did not dare to breathe a syllable.</p>
+<p class="reveal">Rosabella sat upon a splendid dais, gorgeously attired; her black eyes flashing with added brilliancy from the deep rouge upon her cheeks; whilst her raven hair was adorned with diamonds, and a splendid tiara of the same precious stones sparkled on her forehead; a robe of crimson velvet, bordered with ermine, fell in graceful folds over her fine figure; whilst her swanlike neck and snowy arms, exposed perhaps more than delicacy might strictly warrant, were also loaded with costly jewels. Around her, stood the ladies of her court, and amongst the rest, Elvira, plainly attired in a robe of dark grey silk. No ornaments shone amongst her golden tresses, and her naturally fair complexion seemed faded to a sickly and unnatural whiteness.</p>
+<p class="reveal">The indignation of Clara could scarcely be restrained at this sight; but Cheops laying his hand upon her arm, they stood suddenly before the Queen.</p>
+<p class="reveal">“Ah! who are these?” cried Rosabella, starting. Cheops took no notice of her surprise; but, tuning his lute, began to sing a few doggerel verses in praise of her Majesty.</p>
+<p class="reveal">Clara’s astonishment and awe now surpassed description; her sense of personal identity became confused; she could scarcely fancy that it was really the hideous Mummy who was her companion: her senses swam, her head became giddy, and she could scarcely keep herself from fainting.</p>
+<p class="reveal">“What means this mummery?” asked Rosabella; “how came these minstrels here?”</p>
+<p class="reveal">“It is doubtless a device of the King,” returned some of her ladies, “to amuse your majesty.”</p>
+<p class="reveal">Rosabella smiled; attentions were now so rare upon the part of Edmund towards her, that she felt gratified it should be even supposed he wished to please her, and addressing the minstrel more graciously, asked what brought him to England. He sung his reply: and in the same doggerel rhyme asked the Queen to let him tell her fortune.</p>
+<p class="reveal">“What say you, ladies,” said Rosabella, again smiling, “shall we hear our destiny?”</p>
+<p class="reveal">The ladies, delighted with anything that promised an interruption to the general gloom which hung over Rosabella’s court, gladly assented; and, to Clara’s infinite surprise, the Mummy addressed a few doggerel verses to each, whilst the voice in which he repeated this nonsense, was so different from his usual deep sepulchral tones, that Clara’s wonder became mixed with fear, and she shuddered with horror as the conviction, that the being with whom she had associated herself was indeed a demon, flashed across her mind.</p>
+<p class="reveal">When Elvira’s turn came, Clara perceived her colour was heightened, and that she trembled excessively, yet the Mummy’s verses to her were as unmeaning as to the rest. Whilst this scene was passing, the King and Father Morris approached. The former stood silent and abstracted, apparently quite unconscious of the group before him; whilst Father Morris gazed at them intently, with a satirical sneer upon his countenance, as though in thorough contempt for such folly.</p>
+<p class="reveal">“How can you endure such mummery?” said he to Rosabella, after a short pause.</p>
+<p class="reveal">“Anything for a change,” said she, sighing. The father’s dark eye glanced upon the King, and then upon Rosabella, as with a gloomy frown he stalked on. The Queen coloured, and hastily waving her hand to the minstrel, as a sign that he might depart, she turned away, and the disappointed ladies were reluctantly obliged to follow in her train. In a few minutes a page returned with a chain and a purse of gold, which he gave the minstrels, and retired. Clara was upon the point of refusing her share of this bounty, but a look from the Mummy made her sensible of her error, and she took it without uttering a syllable. Her hesitation, however, did not pass unnoticed, and she found, to her infinite horror, when they quitted the palace, that two of the Queen’s servants had followed them. Clara trembled excessively, and clung tightly to the Mummy’s arm for protection; but that mysterious being still stalked on with the same indifference as before. Clara longed to give him some intimation of the danger which awaited him, but she could not speak; the words seemed to swell in her throat and almost choke her, whilst she found herself dragged along by an irresistible influence, too powerful to admit of her even struggling against it. Inexpressible agony seized her as she found herself hurried on towards the river; and when, as they reached the brink, she beheld Cheops stamp with supernatural force upon the fragile bridge which stretched across the water, and saw the slender plank sink beneath his weight, she could bear no more, but, screaming with horror, rushed forward to save him. A strong arm, however, pulled her back; she felt herself whirled round, and for the moment her senses seemed to desert her. The next instant she found she had been dragged under some bushes, and saw their pursuers rush down to the place where the broken bridge had been.</p>
+<p class="reveal">“They are gone, by Jupiter!” said one; “I heard them fall into the water. It was a tremendous crash.”</p>
+<p class="reveal">“I heard them too,” returned the other; “they fell as heavy as lead; and how they screamed!”</p>
+<p class="reveal">“The young one screamed,” said the first; “but the old one groaned.”</p>
+<p class="reveal">“What does it matter,” resumed the second, “whether they screamed or groaned? They are gone to the devil a little before their time, and so we have only to go back as we came. Between ourselves, it was nonsense to take the trouble to watch them. They were evidently only what they seemed to be; and even Father Morris, suspicious as he is, gave us no orders about them.”</p>
+<p class="reveal">“Thy dull head cannot see,” said the first. “The father’s negligence was the very motive of my vigilance. Things are not with him as they have been﻿—he wants to rule the Queen with a rod of iron, and Rosabella will not endure control. Now, it struck me when I saw the youth’s hesitation, that all was not right, and, I thought, if I could discover what had escaped him﻿—”</p>
+<p class="reveal">“I see,” said the other; “his lifeless trunk might have had the honour of serving as a stepping-stone to enable <em>you</em> to rise.”</p>
+<p class="reveal">“It was possible,” returned the other, laughing; and they retired, their voices gradually dying away till they became inaudible in the distance. Clara now perceived that the Mummy stood beside her. He did not speak, but pressed his finger upon his lips in token of silence, and for some minutes they stood fixed to the spot:﻿—till, as the last faint echo of the servants’ footsteps died away, he again seized the arm of Clara, and hurried her away towards a gloomy cave.</p>
+<p class="reveal">They stopped at the entrance; and though the poor girl was still too much terrified to speak, yet she felt somewhat relieved by the discovery that the Mummy had evidently saved her from danger, instead of, as she feared, precipitating her into it. She still gazed with awe, however, at his strange unearthly figure, as he stood with his eyes fixed earnestly upon a star, apparently occupied in muttering prayers addressed to it.</p>
+<p class="reveal">“Clara!” at length said he, his deep, full voice echoing solemnly through the vaulted cave; “Clara!” again he repeated, whilst the blood of his terrified companion seemed to curdle in her veins at the awful sound. She slowly and tremblingly advanced﻿—he grasped her arm﻿—she attempted to shrink back, but seemed fixed as though by magic;﻿—“Hear me,” continued the Mummy, in a low, hollow tone, which appeared to rise from the tomb, and contrasted fearfully with the lighter accents he had employed as a minstrel﻿—“Elvira understood my signal, and she will soon be here; but you must do the rest. Prince Ferdinand keeps guard tonight. Pass through this cave; the outlet will bring you to his station. Throw yourself at his feet, and appeal to his compassion in whatever language the feelings of the moment may inspire. He will readily listen to you, for he has not forgotten your visit to him in prison, and will swear to devote himself to your service. Tell him you accept his offers, and entreat him to convey yourself and the Queen to Ireland﻿—where Roderick will receive and protect you. He will immediately comply; and his being the companion of your flight, will induce the belief that you are gone to Germany, and will consequently prevent the least danger of pursuit.”</p>
+<p class="reveal">At this moment a slight figure, wrapped in a large mantle, appeared at the entrance of the cavern. “Elvira!” cried Cheops, and the stranger sprang forward. “Then I am right,” exclaimed she, whilst her whole frame trembled with agitation.</p>
+<p class="reveal">“This is your guide,” said Cheops, in his deep sepulchral tone; “follow her, and you will do well. Farewell! we shall never meet again.” Then bending over her, he pressed his lips to her forehead, and to that of Clara.</p>
+<p class="reveal">Both shuddered at the touch of those cold marble lips, and an icy chill ran through their veins, as the fearful conviction that their companion was no earthly being thrilled in their bosoms. Even the strongest minds dread supernatural horrors, and our fair fugitives turned involuntarily away. When they looked again, the Mummy was gone, and the darkness appeared so profound that they were obliged to grope their way cautiously along. Fearing alike to remain or to advance, they proceeded with trembling steps slowly along a narrow passage; their minds filled with that vague sense of danger which generally attends the want of light, when imagination pictures terrors that do not really exist, and Fancy lends her aid to magnify those which do.</p>
+<p class="reveal">By degrees, however, the Queen and her companion became accustomed to the darkness; and as the pupils of their eyes dilated, they were enabled to discern the objects around them. Innumerable fantastic shapes now appeared to flit before them, and grim giants to frown awfully from every corner of the gloomy vault they were traversing. The dim and indistinct light threw a misty veil round the projecting corners of the rocks, which gave them a fearful and unnatural grandeur; whilst the fair friends, overpowered with terror, gazed timidly around, and stood a few moments not daring to advance into the darker abysses of the caverns, and yet dreading alike to remain where they were, or to return.</p>
+<p class="reveal">“We must go on,” said Elvira at length, her voice echoing through the cave, till she started at the sound.</p>
+<p class="reveal">“O God!” cried Clara; “hark! a thousand mocking demons seem to repeat from every rock﻿—Go on!﻿—”</p>
+<p class="reveal">“Go on!” again rang in a thousand varied tones through the cavern.</p>
+<p class="reveal">“Let us proceed,” whispered Elvira, shuddering; “this is a fearful place!”</p>
+<p class="reveal">And they hurried on as fast as their trembling limbs could carry them, along a dark and gloomy passage, leading in the direction pointed out by the Mummy. In a few minutes, a bright though glimmering light appeared afar off, like a star, which, gleaming through the darkness, seemed a beacon of hope to guide them on to happiness. A slight current of air, too, now blew freshly in their faces, and their spirits rose, as with quickened steps they hastened onward in the direction from whence it appeared to proceed.</p>
+<p class="reveal">The light now seemed rapidly to enlarge, and the wind blew more freshly, whilst the Queen and her companion distinctly heard the heavy stamping of horses, which vibrated fearfully on the hollow ground, and grew louder and louder every moment as they advanced.</p>
+<p class="reveal">“Ah! what is that?” cried Elvira trembling, clinging closer to her companion.</p>
+<p class="reveal">“It is the bivouac of Prince Ferdinand,” replied Clara; “the Mummy told me we should find him here, and that he would aid us.”</p>
+<p class="reveal">“Ah, that fearful Mummy,” murmured Elvira softly; “if he should deceive us, and this should be only a plan to betray us to our enemies?”</p>
+<p class="reveal">“Fear not,” said Clara; “come what may, we must dare the worst.”</p>
+<p class="reveal">They had now reached the outlet of the cavern, and found an opening large enough to admit of a single person. Cautiously advancing towards it, they paused for a few moments ere they descended, to gaze upon the scene below. A troop of soldiers were scattered round, in various attitudes of repose, under a small grove of trees, whilst their horses grazed at a little distance. The prince alone seemed awake, and he lay apart from his companions, stretched upon a grassy bank, a thick tree spreading above him, his head resting upon his hand, and his eyes fixed upon the ground. The moon shone brightly, and played upon the prince’s polished armour, like summer lightning dancing on a lake. His helmet was thrown aside, and his countenance looked pale and sad, whilst his frequent sighs betrayed the uneasiness of his mind.</p>
+<p class="reveal">“Let us advance,” said Clara, “and try to move him to compassion.”</p>
+<p class="reveal">Elvira complied; and with light and timid steps, fearing almost to breathe, lest they should break the slumbers of their enemies, they approached the prince. All was still, save the hard breathing of the sleeping soldiers, and the measured champing of the horses; their stately figures strongly relieved by the dark grey sky beyond, whilst their long manes and tails swept the ground. The prince was now listlessly tracing figures in the grass with the scabbard of his sword: he started as they approached, and hastily demanded the cause of their intrusion.</p>
+<p class="reveal">“Mercy!” cried Elvira, sinking upon her knees before him; “mercy!” She could say no more, but gasping for breath, she stretched out her arms imploringly, whilst everything around seemed to swim before her eyes, and the figures of the prince, the trees, the horses, and the sleeping soldiers, appeared all dilated to gigantic magnitude. She entirely forgot the pathetic appeal she had intended making to the prince’s feelings, and every faculty seemed suspended in the intenseness of her anxiety.</p>
+<p class="reveal">“For Heaven’s sake, good youth,” exclaimed the prince, addressing Clara, “explain the meaning of this scene! Why does this lovely female kneel to me, and why does she implore my mercy?”</p>
+<p class="reveal">“Because she has no other hope, save in that and Heaven,” said Clara solemnly: “It is the Queen.”</p>
+<p class="reveal">“Elvira!” cried the prince: then raising her eagerly, he continued﻿—“Your Majesty may command my services, and I am most happy fate has given me an opportunity of showing my gratitude; only tell me how I can assist you.”</p>
+<p class="reveal">A few words from Clara explained the urgency of their situation; and the prince, promising to meet them with horses in an hour, persuaded them to return to the cavern till he should join them. Heavily rolled the minutes of this tedious hour, which seemed destined never to have an end, till the nerves of Elvira and Clara were wrought up to such a pitch of agony, that death would have appeared a blessing. At length, the prince came, bringing with him only his faithful Hans.</p>
+<p class="reveal">The sight of him was sufficient to rouse the almost fainting spirits of the Queen; and, without speaking a single word, she and Clara hurried after their conductors, to the wood where the horses were waiting for them.</p>
+<p class="reveal">They mounted, still in perfect silence, and hurried through the most intricate paths they could find; for, as morning dawned, they feared inevitable destruction. Before it became quite light, however, they had reached a thick wood, near the centre of which, they found a half ruined hut; and here did the ci-devant Queen of England and her suite try to obtain a few hours’ repose. But, alas! sleep fled from Elvira’s eyes; she could not forget she was a fugitive in her own kingdom, flying with terror from those very people who, but a few months before, had almost worshipped her as a goddess; and not even the exhaustion of her body could overcome the hurry of her spirits, whilst every time she closed her eyes, and felt a soft doze creeping over her troubled senses, she started up again in horror, fancying her pursuers had overtaken her.</p>
+<p class="reveal">Consternation reigned in the palace when the flight of Elvira, and the defection of Prince Ferdinand were made known there. “She is gone to Germany!” was the universal cry, and troops were directly dispatched to all the seaports, whilst a whole fleet of balloons were ordered to scour the air in all directions, and arrest every aerial vehicle they should meet with, whose passengers could not give a perfectly satisfactory account of themselves. These commissions were executed to the letter, as the guards now sought by extra diligence to excuse the negligence with which they had suffered the Queen to escape; and numerous were the wandering lovers, absconding clerks, and unfaithful wives, who were brought before the Council instead of Elvira and the German Prince, of whom, however, nothing could be heard, their measures having been taken too well to expose them to detection.</p>
+<p class="reveal">In the meantime, Clara being missed, the Duke and Sir Ambrose were inconsolable; and dispatched emissaries everywhere in search of her. Amongst the rest, Father Murphy and Abelard were sent to explore every corner of the grounds, and the disconsolate searchers having in vain wandered through the gardens, restless and forlorn, at last arrived upon the banks of the river. The aspect of the place was dreary in the extreme: evening was closing in; the river looked dark and dull, and Father Murphy shivered and crossed himself as he looked around.</p>
+<p class="reveal">“Och, murther! but this is an awful place, Mr. Abelard,” said he: “and I’m after thinking the sooner we get out of it the better.”</p>
+<p class="reveal">“Ah, what is that?” cried the butler, springing forward eagerly, and snatching at something in the bushes that looked light.</p>
+<p class="reveal">It was Clara’s mantle. Abelard uttered a groan of horror as he recognized it; and the priest starting at the sound, his foot slipped, and he rolled into the water, floundering about like a huge porpoise.</p>
+<p class="reveal">“Oh dear! oh dear!” cried Abelard, “he will certainly be drowned. Submersion in an aqueous fluid is almost always destructive of animal life, and I see little chance that he has of escape.”</p>
+<p class="reveal">“Och! and will ye let me drown while ye’re talking?” asked the indignant priest. “Before it’s the good-natured thing ye’d be doing in pulling me out, will ye let me be suffocated?”</p>
+<p class="reveal">“No, no, certainly not!” returned Abelard; “my agony is unspeakable at your distress. I only doubt how I shall be able to raise you without a lever or pully. The application of the mechanical powers﻿—”</p>
+<p class="reveal">“May go to the devil,” cried Father Murphy, as he crawled out without assistance; “and so you would have let me drown, whilst you are talking of the mechanical powers?”</p>
+<p class="reveal">“Excuse me, father,” returned Abelard; “friendship is a powerful affection of the human mind; it invigorates, it warms﻿—”</p>
+<p class="reveal">“Does it,” said the priest, shaking himself like a water-spaniel; “then I should be very glad to have a little of it at present, for I am shivering with cold.”</p>
+<p class="reveal">“I am surprised to hear you talk of cold, father,” said Abelard. “You are, surely, too fat to feel cold; for animal oil is universally allowed to be a bad conductor of caloric.”</p>
+<p class="reveal">Father Murphy did not speak, but his look was sufficient, and his teeth clattering in his head afforded an ample commentary upon the text.</p>
+<p class="reveal">“It is strange,” continued the butler, “that fat people generally seem ashamed of their obesity, for they have many advantages which lean people never can enjoy. For instance, they ought never to feel any violent craving for food. Fat serving as an interdium, through which the nutritive matter extracted from food passes, before it is assimilated to repair the loss of the individual, ought to serve as a magazine to supply his wants; and a fat man should be able to abstain from food much longer than another; because, during his abstinence, the collected fat must be rapidly reabsorbed.”</p>
+<p class="reveal">“Oh!” groaned Father Murphy, “would to Heaven I had a broiled rump steak at this moment, smoking hot, and swimming in gravy; and a fine frothing pot of porther!”</p>
+<p class="reveal">“A rump steak is no bad thing,” resumed Abelard, his mouth watering at the bare mention of the savory viand; “and I do not wish it to be understood, by any means, that a man can live without eating. On the contrary, the indivisibility and individuality of the living body, can only be maintained by an incessant change of the particles which enter into its composition; part of the animal food being reduced into chyle, and part becoming bones; which are, in fact, only secretory organs, incrusted with phospate of lime. The lymphatic vessels remove this salt, and﻿—”</p>
+<p class="reveal">“Och! and it’s Clara you are forgetting all this while,” interrupted Father Murphy. “The purty creature!﻿—sure, and it’s her manthle after all, so it is; and here we are talking of stuff and nonsense; and quite forgetting she’s drowned, and kilt all over, pure soul!”</p>
+<p class="reveal">“Alas! alas!” returned Abelard, “I have not forgotten her; and I assure you, I feel my lachrymal gland suffused almost to overflowing, whenever a thought of what may be her fate shoots across my pia-mater.”</p>
+<p class="reveal">The despair of the Duke and Sir Ambrose, when they saw their emissaries return with the clothes of Clara, may be easily imagined; and when they heard of the flight of Elvira, and the threats which Father Morris now openly indulged in, that the ex-Queen should be publicly executed if found, for having endeavoured to raise an insurrection, the climax of their misery seemed full.</p>
+<p class="reveal">In the meantime the party of Elvira did not dare to leave the hut in which they had remained pent up the whole day; their horses being crowded within its walls, as well as themselves, to prevent the possibility of discovery. At length, the shades of evening began to fall, and they again set forward at a rapid pace: though the agony they had suffered all day from fear of detection﻿—the narrow space in which they had been cooped up, together with want of food, had exhausted the Queen so much that the morning found her unable to proceed without refreshment, and about daybreak they were obliged to approach a cottage to implore assistance.</p>
+<p class="reveal">The cottager and his son were out at work; but the woman of the house agreed to give the fugitives the shelter they requested. The prince, delighted at receiving this permission, flew back to the Queen to lift her from her horse; but, alas! Elvira was not in a state to enjoy even the most welcome tidings. Pale and livid as a corpse, her head hung upon the prince’s shoulder as he bore her into the house, and her terrified friends thought she had expired. A little warm milk, however, revived her, and she opened her eyes.</p>
+<p class="reveal">“I am ready﻿—quite ready﻿—to go on,” said she gasping for utterance, and again sinking back in a fainting fit.</p>
+<p class="reveal">“It is impossible she can proceed in this state,” said the prince to Clara, in a whisper; “what will become of us?”</p>
+<p class="reveal">“We must remain here quietly, till she is better,” said Clara.</p>
+<p class="reveal">“But if we should be pursued and taken?”</p>
+<p class="reveal">“We cannot die better than in such a cause,” said the heroic girl.</p>
+<p class="reveal">“It is strange,” said the prince, looking at her earnestly, “that the Queen has been able to inspire such enthusiastic devotion in such a mere boy.”</p>
+<p class="reveal">Clara blushed, and cast her eyes upon the ground, whilst the prince gazed upon her blushing cheeks still more earnestly, till she turned away from him abashed. He took her hand; “I cannot be mistaken,” said he, “it is, it is, Miss Montagu!”</p>
+<p class="reveal">Clara’s agitation betrayed her. “I must attend the Queen,” said she, breaking from him; and the prince, respecting the awkwardness of her situation, forbore to urge her farther: he felt, however, completely happy. Clara was too artless to conceal the interest he had excited in her breast, and it was not in the nature of man to be indifferent to the devotion of so young and lovely a creature. His eyes alone expressed his happiness; and Clara, who felt his delicacy in refraining from making any farther observations on her disguise, found her love for him increased tenfold by his forbearance.</p>
+<p class="reveal">A few hours’ repose restored Elvira so much, that she wished to pursue her journey immediately, and it was with the greatest difficulty that the prince persuaded her to wait till nightfall. “You must recruit your strength,” said he, “or you will never be able to plead your cause with the redoubtable Roderick. <em>He</em> is too stern a hero to be won as I was.”</p>
+<p class="reveal">“Oh, it is impossible to describe how I dread to meet him,” cried Elvira; “I tremble at his name. A being so fierce and stern as he is, will perhaps not even condescend to listen to a woman’s prayer, and he will spurn me from him.”</p>
+<p class="reveal">“Impossible!” cried the prince; “though I own, I wish we could do without him.”</p>
+<p class="reveal">Whilst the principals were thus employed, the cottager’s wife was endeavouring to learn from Hans who and what they were. “That poor lady seemed dreadfully tired,” said she. “When she came, she looked just like a drooping daffadowndilly; when the gentlemen lifted her from her horse﻿—oh! it was quite moving to see her!”</p>
+<p class="reveal">“Ja!” said Hans.</p>
+<p class="reveal">“However, though her illness should occasion a little delay,” continued the cottager; “I opine that you must be unreasonable to grumble, when you consider the delightful occasion it affords you of refreshing your olfactory nerves by partaking of a little of this odoriferous atmosphere.”</p>
+<p class="reveal">“My what nerves?” asked Hans.</p>
+<p class="reveal">“Your olfactory nerves,” replied the learned cottager, with a look of the greatest possible contempt: “that is, the nerves that line the membrane of the nasal organ. Every child knows that the nasal fossae are formed to receive sensations, as by their depth and extent a larger surface is given to the pituitary membrane, and these soft sinuses, or cavities, are enabled to retain a greater mass of air loaded with odoriferous matter.”</p>
+<p class="reveal">Poor Hans stood aghast at this explanation, which he found something like that said to be given by Dr. Johnson, when he called network a complicated concatenation of rectangular angles; and afraid to speak, lest he should draw upon himself a new volley of words as astounding as the last, he remained silent, staring at his companions with much the same kind of feeling as that with which a wild man of the woods just caught, might be supposed to gaze upon enlightened Europeans.</p>
+<p class="reveal">“Can you give me some more warm milk?” asked Clara, who now descended in search of refreshments for the Queen.</p>
+<p class="reveal">“Do you think so much of the tepid lacteous fluid good for the lady?” asked the cottager, as she put some milk into a saucepan.</p>
+<p class="reveal">“She can take nothing else,” returned Clara. “How delightfully that girl sings!” continued she, listening with rapture to a milkmaid, who was chanting an Italian bravura as she was milking her cow.</p>
+<p class="reveal">“Yes,” replied the cottager, “Angelica sings well. The parieties of her larynx are in a very tense condition, and her trachea is quite cartilaginous. But here comes my good man,” continued she; “he has been hard at work all day in the roads, and I am sure he must want some refreshment.”</p>
+<p class="reveal">“I do indeed feel excessive lassitude, missis,” said the cottager, as he came in; “and I want something to eat. What have ye got? Do see, will you, for it’s dreadful hard work breaking stones; most we had today were primitive limestone, but I found a few fine specimens of quartz. The crystals were quite rhomboidal, and I stopped at least half an hour admiring them.”</p>
+<p class="reveal">“Rock crystals are often found amongst quartz,” said his wife; “so I don’t think you had any occasion to lose your time in admiring them, when, you know, you break stones by measure, and your wife and children are starving for want of bread.”</p>
+<p class="reveal">“Do not distress yourself upon that head, my good woman,” said Clara; “we have money, and our gratitude will not permit you to want anything that we can give you.”</p>
+<p class="reveal">“Thank you, thank you,” cried the woman; “it’s a pleasure to serve a generous gentleman like your honour.”</p>
+<p class="reveal">“What a charming voice you have!” said Clara, turning away to avoid the woman’s praises, and addressing herself to the milkmaid; who, having finished her task, now stepped over the stile which divided the field from the garden of the cottage, with a pail of milk upon her head, and advanced gracefully towards them in measured steps.</p>
+<p class="reveal">“I am very happy to have pleased you, Sir,” replied the girl, dropping her foot into the fourth position, as she made an elegant curtsy, and then glided gracefully on.</p>
+<p class="reveal">“Stay, stay!” cried Clara; “won’t you give us another song before you go?”</p>
+<p class="reveal">“You must excuse me, Sir,” said the girl, again gracefully curtsying; “I am exceedingly sorry to be obliged to refuse a gentleman of your appearance; but singing requires an alternate enlargement and contraction of the glottis, an elevation and depression of the larynx, and an elongation and shortening of the neck, very difficult to be performed with a pail of milk upon one’s head!”</p>
+<p class="reveal">“Set down the pail, then,” said Clara.</p>
+<p class="reveal">“Indeed I can’t, Sir; for I have not a moment to spare. I just met some gentlemen of my acquaintance on the hill, and as I expect them here every moment, I must snatch an instant or two to arrange my toilette.”</p>
+<p class="reveal">“Gentlemen of your acquaintance!” cried the mother; “what gentlemen can you have met with here, child, that know you?”</p>
+<p class="reveal">“My cousin John who went for a soldier some time since, and a party of his companions.”</p>
+<p class="reveal">“And what brings them in these parts? No good, I fear; for John was always a wild good-for-nothing lad.”</p>
+<p class="reveal">“It is no evil, I assure you, mother,” said Angelica pertly; “but you are always fancying the worst. John is become a man of consequence now, and he is at the head of a party of soldiers, searching for some state prisoners. He’ll be made a captain if he finds them: and I hope he will, with all my heart.”</p>
+<p class="reveal">“Where are they now?” asked the mother.</p>
+<p class="reveal">“In the wood,” replied the girl; “and my brother is gone to help them to search, as he’ll get a share of the reward if they find the fugitives whilst he is with them.”</p>
+<p class="reveal">“And you’d go too, if you’d any wit,” said the wife to her husband, who had now seated himself comfortably before the fire, and seemed very unwilling to be disturbed. Inspired, however, by his wife’s remonstrance he roused himself, and stretching his heavy limbs, rolled rather than walked away. Angelica had also retired, and Clara was left alone with the woman. It has already been mentioned, that presence of mind was one of Clara’s distinguishing characteristics; and, perceiving the danger of the Queen, she was aware not a moment was to be lost. The observations of the woman to her husband, and, in fact, her whole manner, showed that avarice was her master passion, and upon this hint Clara spoke. She offered her abundance of gold; she enlarged upon the greediness of the soldiers, who, if she waited for their approach, would perhaps cheat her of her share in the promised reward, or, at least, give her such a trifle as would not be worth having; and at last drew forth the glittering metal and spread it before her eyes. Gold softens the hardest heart, and the cottager’s wife could resist no longer, but promised to connive at their escape.</p>
+<p class="reveal">Clara instantly ordered Hans to prepare the horses; and, informing the prince and Elvira of what had passed, the whole party again set forward on their eventful journey.</p>
+
+</div></main></div>
+<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
+</body></html>

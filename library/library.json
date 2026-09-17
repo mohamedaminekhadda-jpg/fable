@@ -1,7 +1,7 @@
 {
   "books": [
     {
-      "cover": "cover.png",
+      "cover": "cover.jpg",
       "subjects": [
         "Mathématiques",
         "Physique-Chimie",
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "cover": "cover.png",
+      "cover": "cover.jpg",
       "subjects": [
         "Littérature",
         "Anglais"
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "cover": "cover.png",
+      "cover": "cover.jpg",
       "subjects": [
         "Littérature",
         "Anglais"
@@ -115,23 +115,1270 @@
       "accent": "#8c2f2a",
       "resume": "Herman Melville, 1851. Domaine public.",
       "droits": "domaine public",
-      "chapters": 3,
+      "chapters": 136,
       "built": true,
       "chapterList": [
         {
-          "file": "chapter1.md",
-          "title": "chapter1",
+          "file": "001-i-loomings.md",
+          "title": "I: Loomings",
           "rendu": "01.html"
         },
         {
-          "file": "03-untitled-chapter.md",
-          "title": "Untitled chapter",
+          "file": "002-ii-the-carpetbag.md",
+          "title": "II: The Carpetbag",
           "rendu": "02.html"
         },
         {
-          "file": "chapter2.md",
-          "title": "chapter2",
+          "file": "003-iii-the-spouter-inn.md",
+          "title": "III: The Spouter-Inn",
           "rendu": "03.html"
+        },
+        {
+          "file": "004-iv-the-counterpane.md",
+          "title": "IV: The Counterpane",
+          "rendu": "04.html"
+        },
+        {
+          "file": "005-v-breakfast.md",
+          "title": "V: Breakfast",
+          "rendu": "05.html"
+        },
+        {
+          "file": "006-vi-the-street.md",
+          "title": "VI: The Street",
+          "rendu": "06.html"
+        },
+        {
+          "file": "007-vii-the-chapel.md",
+          "title": "VII: The Chapel",
+          "rendu": "07.html"
+        },
+        {
+          "file": "008-viii-the-pulpit.md",
+          "title": "VIII: The Pulpit",
+          "rendu": "08.html"
+        },
+        {
+          "file": "009-ix-the-sermon.md",
+          "title": "IX: The Sermon",
+          "rendu": "09.html"
+        },
+        {
+          "file": "010-x-a-bosom-friend.md",
+          "title": "X: A Bosom Friend",
+          "rendu": "10.html"
+        },
+        {
+          "file": "011-xi-nightgown.md",
+          "title": "XI: Nightgown",
+          "rendu": "11.html"
+        },
+        {
+          "file": "012-xii-biographical.md",
+          "title": "XII: Biographical",
+          "rendu": "12.html"
+        },
+        {
+          "file": "013-xiii-wheelbarrow.md",
+          "title": "XIII: Wheelbarrow",
+          "rendu": "13.html"
+        },
+        {
+          "file": "014-xiv-nantucket.md",
+          "title": "XIV: Nantucket",
+          "rendu": "14.html"
+        },
+        {
+          "file": "015-xv-chowder.md",
+          "title": "XV: Chowder",
+          "rendu": "15.html"
+        },
+        {
+          "file": "016-xvi-the-ship.md",
+          "title": "XVI: The Ship",
+          "rendu": "16.html"
+        },
+        {
+          "file": "017-xvii-the-ramadan.md",
+          "title": "XVII: The Ramadan",
+          "rendu": "17.html"
+        },
+        {
+          "file": "018-xviii-his-mark.md",
+          "title": "XVIII: His Mark",
+          "rendu": "18.html"
+        },
+        {
+          "file": "019-xix-the-prophet.md",
+          "title": "XIX: The Prophet",
+          "rendu": "19.html"
+        },
+        {
+          "file": "020-xx-all-astir.md",
+          "title": "XX: All Astir",
+          "rendu": "20.html"
+        },
+        {
+          "file": "021-xxi-going-aboard.md",
+          "title": "XXI: Going Aboard",
+          "rendu": "21.html"
+        },
+        {
+          "file": "022-xxii-merry-christmas.md",
+          "title": "XXII: Merry Christmas",
+          "rendu": "22.html"
+        },
+        {
+          "file": "023-xxiii-the-lee-shore.md",
+          "title": "XXIII: The Lee Shore",
+          "rendu": "23.html"
+        },
+        {
+          "file": "024-xxiv-the-advocate.md",
+          "title": "XXIV: The Advocate",
+          "rendu": "24.html"
+        },
+        {
+          "file": "025-xxv-postscript.md",
+          "title": "XXV: Postscript",
+          "rendu": "25.html"
+        },
+        {
+          "file": "026-xxvi-knights-and-squires.md",
+          "title": "XXVI: Knights and Squires",
+          "rendu": "26.html"
+        },
+        {
+          "file": "027-xxvii-knights-and-squires.md",
+          "title": "XXVII: Knights and Squires",
+          "rendu": "27.html"
+        },
+        {
+          "file": "028-xxviii-ahab.md",
+          "title": "XXVIII: Ahab",
+          "rendu": "28.html"
+        },
+        {
+          "file": "029-xxix-enter-ahab-to-him-stubb.md",
+          "title": "XXIX: Enter Ahab; To Him, Stubb",
+          "rendu": "29.html"
+        },
+        {
+          "file": "030-xxx-the-pipe.md",
+          "title": "XXX: The Pipe",
+          "rendu": "30.html"
+        },
+        {
+          "file": "031-xxxi-queen-mab.md",
+          "title": "XXXI: Queen Mab",
+          "rendu": "31.html"
+        },
+        {
+          "file": "032-xxxii-cetology.md",
+          "title": "XXXII: Cetology",
+          "rendu": "32.html"
+        },
+        {
+          "file": "033-xxxiii-the-specksnyder.md",
+          "title": "XXXIII: The Specksnyder",
+          "rendu": "33.html"
+        },
+        {
+          "file": "034-xxxiv-the-cabin-table.md",
+          "title": "XXXIV: The Cabin-Table",
+          "rendu": "34.html"
+        },
+        {
+          "file": "035-xxxv-the-masthead.md",
+          "title": "XXXV: The Masthead",
+          "rendu": "35.html"
+        },
+        {
+          "file": "036-xxxvi-the-quarterdeck.md",
+          "title": "XXXVI: The Quarterdeck",
+          "rendu": "36.html"
+        },
+        {
+          "file": "037-xxxvii-sunset.md",
+          "title": "XXXVII: Sunset",
+          "rendu": "37.html"
+        },
+        {
+          "file": "038-xxxviii-dusk.md",
+          "title": "XXXVIII: Dusk",
+          "rendu": "38.html"
+        },
+        {
+          "file": "039-xxxix-first-night-watch.md",
+          "title": "XXXIX: First Night-Watch",
+          "rendu": "39.html"
+        },
+        {
+          "file": "040-xl-midnight-forecastle.md",
+          "title": "XL: Midnight, Forecastle",
+          "rendu": "40.html"
+        },
+        {
+          "file": "041-xli-moby-dick.md",
+          "title": "XLI: Moby Dick",
+          "rendu": "41.html"
+        },
+        {
+          "file": "042-xlii-the-whiteness-of-the-whale.md",
+          "title": "XLII: The Whiteness of the Whale",
+          "rendu": "42.html"
+        },
+        {
+          "file": "043-xliii-hark.md",
+          "title": "XLIII: Hark!",
+          "rendu": "43.html"
+        },
+        {
+          "file": "044-xliv-the-chart.md",
+          "title": "XLIV: The Chart",
+          "rendu": "44.html"
+        },
+        {
+          "file": "045-xlv-the-affidavit.md",
+          "title": "XLV: The Affidavit",
+          "rendu": "45.html"
+        },
+        {
+          "file": "046-xlvi-surmises.md",
+          "title": "XLVI: Surmises",
+          "rendu": "46.html"
+        },
+        {
+          "file": "047-xlvii-the-mat-maker.md",
+          "title": "XLVII: The Mat-Maker",
+          "rendu": "47.html"
+        },
+        {
+          "file": "048-xlviii-the-first-lowering.md",
+          "title": "XLVIII: The First Lowering",
+          "rendu": "48.html"
+        },
+        {
+          "file": "049-xlix-the-hyena.md",
+          "title": "XLIX: The Hyena",
+          "rendu": "49.html"
+        },
+        {
+          "file": "050-l-ahabs-boat-and-crew-fedallah.md",
+          "title": "L: Ahab’s Boat and Crew. Fedallah",
+          "rendu": "50.html"
+        },
+        {
+          "file": "051-li-the-spirit-spout.md",
+          "title": "LI: The Spirit-Spout",
+          "rendu": "51.html"
+        },
+        {
+          "file": "052-lii-the-albatross.md",
+          "title": "LII: The Albatross",
+          "rendu": "52.html"
+        },
+        {
+          "file": "053-liii-the-gam.md",
+          "title": "LIII: The Gam",
+          "rendu": "53.html"
+        },
+        {
+          "file": "054-liv-the-town-hos-story.md",
+          "title": "LIV: The Town-Ho’s Story",
+          "rendu": "54.html"
+        },
+        {
+          "file": "055-lv-of-the-monstrous-pictures-of-whales.md",
+          "title": "LV: Of the Monstrous Pictures of Whales",
+          "rendu": "55.html"
+        },
+        {
+          "file": "056-lvi-of-the-less-erroneous-pictures-of-whales-and.md",
+          "title": "LVI: Of the Less Erroneous Pictures of Whales, and the True Pictures of Whaling Scenes",
+          "rendu": "56.html"
+        },
+        {
+          "file": "057-lvii-of-whales-in-paint-in-teeth-in-wood-in-shee.md",
+          "title": "LVII: Of Whales in Paint; in Teeth; in Wood; in Sheet-Iron; in Stone; in Mountains; in Stars",
+          "rendu": "57.html"
+        },
+        {
+          "file": "058-lviii-brit.md",
+          "title": "LVIII: Brit",
+          "rendu": "58.html"
+        },
+        {
+          "file": "059-lix-squid.md",
+          "title": "LIX: Squid",
+          "rendu": "59.html"
+        },
+        {
+          "file": "060-lx-the-line.md",
+          "title": "LX: The Line",
+          "rendu": "60.html"
+        },
+        {
+          "file": "061-lxi-stubb-kills-a-whale.md",
+          "title": "LXI: Stubb Kills a Whale",
+          "rendu": "61.html"
+        },
+        {
+          "file": "062-lxii-the-dart.md",
+          "title": "LXII: The Dart",
+          "rendu": "62.html"
+        },
+        {
+          "file": "063-lxiii-the-crotch.md",
+          "title": "LXIII: The Crotch",
+          "rendu": "63.html"
+        },
+        {
+          "file": "064-lxiv-stubbs-supper.md",
+          "title": "LXIV: Stubb’s Supper",
+          "rendu": "64.html"
+        },
+        {
+          "file": "065-lxv-the-whale-as-a-dish.md",
+          "title": "LXV: The Whale as a Dish",
+          "rendu": "65.html"
+        },
+        {
+          "file": "066-lxvi-the-shark-massacre.md",
+          "title": "LXVI: The Shark Massacre",
+          "rendu": "66.html"
+        },
+        {
+          "file": "067-lxvii-cutting-in.md",
+          "title": "LXVII: Cutting In",
+          "rendu": "67.html"
+        },
+        {
+          "file": "068-lxviii-the-blanket.md",
+          "title": "LXVIII: The Blanket",
+          "rendu": "68.html"
+        },
+        {
+          "file": "069-lxix-the-funeral.md",
+          "title": "LXIX: The Funeral",
+          "rendu": "69.html"
+        },
+        {
+          "file": "070-lxx-the-sphynx.md",
+          "title": "LXX: The Sphynx",
+          "rendu": "70.html"
+        },
+        {
+          "file": "071-lxxi-the-jeroboams-story.md",
+          "title": "LXXI: The Jeroboam’s Story",
+          "rendu": "71.html"
+        },
+        {
+          "file": "072-lxxii-the-monkey-rope.md",
+          "title": "LXXII: The Monkey-Rope",
+          "rendu": "72.html"
+        },
+        {
+          "file": "073-lxxiii-stubb-and-flask-kill-a-right-whale-and-th.md",
+          "title": "LXXIII: Stubb and Flask Kill a Right Whale; and Then Have a Talk Over Him",
+          "rendu": "73.html"
+        },
+        {
+          "file": "074-lxxiv-the-sperm-whales-headcontrasted-view.md",
+          "title": "LXXIV: The Sperm Whale’s Head—Contrasted View",
+          "rendu": "74.html"
+        },
+        {
+          "file": "075-lxxv-the-right-whales-headcontrasted-view.md",
+          "title": "LXXV: The Right Whale’s Head—Contrasted View",
+          "rendu": "75.html"
+        },
+        {
+          "file": "076-lxxvi-the-battering-ram.md",
+          "title": "LXXVI: The Battering-Ram",
+          "rendu": "76.html"
+        },
+        {
+          "file": "077-lxxvii-the-great-heidelburgh-tun.md",
+          "title": "LXXVII: The Great Heidelburgh Tun",
+          "rendu": "77.html"
+        },
+        {
+          "file": "078-lxxviii-cistern-and-buckets.md",
+          "title": "LXXVIII: Cistern and Buckets",
+          "rendu": "78.html"
+        },
+        {
+          "file": "079-lxxix-the-prairie.md",
+          "title": "LXXIX: The Prairie",
+          "rendu": "79.html"
+        },
+        {
+          "file": "080-lxxx-the-nut.md",
+          "title": "LXXX: The Nut",
+          "rendu": "80.html"
+        },
+        {
+          "file": "081-lxxxi-the-pequod-meets-the-virgin.md",
+          "title": "LXXXI: The Pequod Meets the Virgin",
+          "rendu": "81.html"
+        },
+        {
+          "file": "082-lxxxii-the-honor-and-glory-of-whaling.md",
+          "title": "LXXXII: The Honor and Glory of Whaling",
+          "rendu": "82.html"
+        },
+        {
+          "file": "083-lxxxiii-jonah-historically-regarded.md",
+          "title": "LXXXIII: Jonah Historically Regarded",
+          "rendu": "83.html"
+        },
+        {
+          "file": "084-lxxxiv-pitchpoling.md",
+          "title": "LXXXIV: Pitchpoling",
+          "rendu": "84.html"
+        },
+        {
+          "file": "085-lxxxv-the-fountain.md",
+          "title": "LXXXV: The Fountain",
+          "rendu": "85.html"
+        },
+        {
+          "file": "086-lxxxvi-the-tail.md",
+          "title": "LXXXVI: The Tail",
+          "rendu": "86.html"
+        },
+        {
+          "file": "087-lxxxvii-the-grand-armada.md",
+          "title": "LXXXVII: The Grand Armada",
+          "rendu": "87.html"
+        },
+        {
+          "file": "088-lxxxviii-schools-and-schoolmasters.md",
+          "title": "LXXXVIII: Schools and Schoolmasters",
+          "rendu": "88.html"
+        },
+        {
+          "file": "089-lxxxix-fast-fish-and-loose-fish.md",
+          "title": "LXXXIX: Fast-Fish and Loose-Fish",
+          "rendu": "89.html"
+        },
+        {
+          "file": "090-xc-heads-or-tails.md",
+          "title": "XC: Heads or Tails",
+          "rendu": "90.html"
+        },
+        {
+          "file": "091-xci-the-pequod-meets-the-rose-bud.md",
+          "title": "XCI: The Pequod Meets the Rose-Bud",
+          "rendu": "91.html"
+        },
+        {
+          "file": "092-xcii-ambergris.md",
+          "title": "XCII: Ambergris",
+          "rendu": "92.html"
+        },
+        {
+          "file": "093-xciii-the-castaway.md",
+          "title": "XCIII: The Castaway",
+          "rendu": "93.html"
+        },
+        {
+          "file": "094-xciv-a-squeeze-of-the-hand.md",
+          "title": "XCIV: A Squeeze of the Hand",
+          "rendu": "94.html"
+        },
+        {
+          "file": "095-xcv-the-cassock.md",
+          "title": "XCV: The Cassock",
+          "rendu": "95.html"
+        },
+        {
+          "file": "096-xcvi-the-try-works.md",
+          "title": "XCVI: The Try-Works",
+          "rendu": "96.html"
+        },
+        {
+          "file": "097-xcvii-the-lamp.md",
+          "title": "XCVII: The Lamp",
+          "rendu": "97.html"
+        },
+        {
+          "file": "098-xcviii-stowing-down-and-clearing-up.md",
+          "title": "XCVIII: Stowing Down and Clearing Up",
+          "rendu": "98.html"
+        },
+        {
+          "file": "099-xcix-the-doubloon.md",
+          "title": "XCIX: The Doubloon",
+          "rendu": "99.html"
+        },
+        {
+          "file": "100-c-leg-and-arm.md",
+          "title": "C: Leg and Arm",
+          "rendu": "100.html"
+        },
+        {
+          "file": "101-ci-the-decanter.md",
+          "title": "CI: The Decanter",
+          "rendu": "101.html"
+        },
+        {
+          "file": "102-cii-a-bower-in-the-arsacides.md",
+          "title": "CII: A Bower in the Arsacides",
+          "rendu": "102.html"
+        },
+        {
+          "file": "103-ciii-measurement-of-the-whales-skeleton.md",
+          "title": "CIII: Measurement of the Whale’s Skeleton",
+          "rendu": "103.html"
+        },
+        {
+          "file": "104-civ-the-fossil-whale.md",
+          "title": "CIV: The Fossil Whale",
+          "rendu": "104.html"
+        },
+        {
+          "file": "105-cv-does-the-whales-magnitude-diminishwill-he-per.md",
+          "title": "CV: Does the Whale’s Magnitude Diminish?—Will He Perish?",
+          "rendu": "105.html"
+        },
+        {
+          "file": "106-cvi-ahabs-leg.md",
+          "title": "CVI: Ahab’s Leg",
+          "rendu": "106.html"
+        },
+        {
+          "file": "107-cvii-the-carpenter.md",
+          "title": "CVII: The Carpenter",
+          "rendu": "107.html"
+        },
+        {
+          "file": "108-cviii-ahab-and-the-carpenter.md",
+          "title": "CVIII: Ahab and the Carpenter",
+          "rendu": "108.html"
+        },
+        {
+          "file": "109-cix-ahab-and-starbuck-in-the-cabin.md",
+          "title": "CIX: Ahab and Starbuck in the Cabin",
+          "rendu": "109.html"
+        },
+        {
+          "file": "110-cx-queequeg-in-his-coffin.md",
+          "title": "CX: Queequeg in His Coffin",
+          "rendu": "110.html"
+        },
+        {
+          "file": "111-cxi-the-pacific.md",
+          "title": "CXI: The Pacific",
+          "rendu": "111.html"
+        },
+        {
+          "file": "112-cxii-the-blacksmith.md",
+          "title": "CXII: The Blacksmith",
+          "rendu": "112.html"
+        },
+        {
+          "file": "113-cxiii-the-forge.md",
+          "title": "CXIII: The Forge",
+          "rendu": "113.html"
+        },
+        {
+          "file": "114-cxiv-the-gilder.md",
+          "title": "CXIV: The Gilder",
+          "rendu": "114.html"
+        },
+        {
+          "file": "115-cxv-the-pequod-meets-the-bachelor.md",
+          "title": "CXV: The Pequod Meets the Bachelor",
+          "rendu": "115.html"
+        },
+        {
+          "file": "116-cxvi-the-dying-whale.md",
+          "title": "CXVI: The Dying Whale",
+          "rendu": "116.html"
+        },
+        {
+          "file": "117-cxvii-the-whale-watch.md",
+          "title": "CXVII: The Whale Watch",
+          "rendu": "117.html"
+        },
+        {
+          "file": "118-cxviii-the-quadrant.md",
+          "title": "CXVIII: The Quadrant",
+          "rendu": "118.html"
+        },
+        {
+          "file": "119-cxix-the-candles.md",
+          "title": "CXIX: The Candles",
+          "rendu": "119.html"
+        },
+        {
+          "file": "120-cxx-the-deck-towards-the-end-of-the-first-night-.md",
+          "title": "CXX: The Deck Towards the End of the First Night Watch",
+          "rendu": "120.html"
+        },
+        {
+          "file": "121-cxxi-midnightthe-forecastle-bulwarks.md",
+          "title": "CXXI: Midnight.—The Forecastle Bulwarks",
+          "rendu": "121.html"
+        },
+        {
+          "file": "122-cxxii-midnight-aloftthunder-and-lightning.md",
+          "title": "CXXII: Midnight Aloft.—Thunder and Lightning",
+          "rendu": "122.html"
+        },
+        {
+          "file": "123-cxxiii-the-musket.md",
+          "title": "CXXIII: The Musket",
+          "rendu": "123.html"
+        },
+        {
+          "file": "124-cxxiv-the-needle.md",
+          "title": "CXXIV: The Needle",
+          "rendu": "124.html"
+        },
+        {
+          "file": "125-cxxv-the-log-and-line.md",
+          "title": "CXXV: The Log and Line",
+          "rendu": "125.html"
+        },
+        {
+          "file": "126-cxxvi-the-life-buoy.md",
+          "title": "CXXVI: The Life-Buoy",
+          "rendu": "126.html"
+        },
+        {
+          "file": "127-cxxvii-the-deck.md",
+          "title": "CXXVII: The Deck",
+          "rendu": "127.html"
+        },
+        {
+          "file": "128-cxxviii-the-pequod-meets-the-rachel.md",
+          "title": "CXXVIII: The Pequod Meets the Rachel",
+          "rendu": "128.html"
+        },
+        {
+          "file": "129-cxxix-the-cabin.md",
+          "title": "CXXIX: The Cabin",
+          "rendu": "129.html"
+        },
+        {
+          "file": "130-cxxx-the-hat.md",
+          "title": "CXXX: The Hat",
+          "rendu": "130.html"
+        },
+        {
+          "file": "131-cxxxi-the-pequod-meets-the-delight.md",
+          "title": "CXXXI: The Pequod Meets the Delight",
+          "rendu": "131.html"
+        },
+        {
+          "file": "132-cxxxii-the-symphony.md",
+          "title": "CXXXII: The Symphony",
+          "rendu": "132.html"
+        },
+        {
+          "file": "133-cxxxiii-the-chasefirst-day.md",
+          "title": "CXXXIII: The Chase—First Day",
+          "rendu": "133.html"
+        },
+        {
+          "file": "134-cxxxiv-the-chasesecond-day.md",
+          "title": "CXXXIV: The Chase—Second Day",
+          "rendu": "134.html"
+        },
+        {
+          "file": "135-cxxxv-the-chasethird-day.md",
+          "title": "CXXXV: The Chase—Third Day",
+          "rendu": "135.html"
+        },
+        {
+          "file": "136-epilogue.md",
+          "title": "Epilogue",
+          "rendu": "136.html"
+        }
+      ]
+    },
+    {
+      "cover": "cover.jpg",
+      "subjects": [
+        "Littérature",
+        "Anglais"
+      ],
+      "level": "Lycée",
+      "dir": "books/the-odyssey",
+      "slug": "the-odyssey",
+      "source": "the-odyssey",
+      "title": "The Odyssey",
+      "author": "Homer",
+      "tagline": "",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "literature",
+      "accent": "#7a4a24",
+      "resume": "Homère, trad. William Cullen Bryant. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 25,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "001-preface.md",
+          "title": "Preface",
+          "rendu": "01.html"
+        },
+        {
+          "file": "002-book-i-visit-of-pallas-to-telemachus.md",
+          "title": "Book I: Visit of Pallas to Telemachus",
+          "rendu": "02.html"
+        },
+        {
+          "file": "003-book-ii-departure-of-telemachus-from-ithaca.md",
+          "title": "Book II: Departure of Telemachus from Ithaca",
+          "rendu": "03.html"
+        },
+        {
+          "file": "004-book-iii-interview-of-telemachus-with-nestor.md",
+          "title": "Book III: Interview of Telemachus with Nestor",
+          "rendu": "04.html"
+        },
+        {
+          "file": "005-book-iv-conference-of-telemachus-and-menelaus.md",
+          "title": "Book IV: Conference of Telemachus and Menelaus",
+          "rendu": "05.html"
+        },
+        {
+          "file": "006-book-v-departure-of-ulysses-from-calypso.md",
+          "title": "Book V: Departure of Ulysses from Calypso",
+          "rendu": "06.html"
+        },
+        {
+          "file": "007-book-vi-ulysses-discovered-by-nausicaa.md",
+          "title": "Book VI: Ulysses Discovered by Nausicaä",
+          "rendu": "07.html"
+        },
+        {
+          "file": "008-book-vii-reception-of-ulysses-by-alcinous.md",
+          "title": "Book VII: Reception of Ulysses by Alcinoüs",
+          "rendu": "08.html"
+        },
+        {
+          "file": "009-book-viii-festivals-in-honor-of-ulysses.md",
+          "title": "Book VIII: Festivals in Honor of Ulysses",
+          "rendu": "09.html"
+        },
+        {
+          "file": "010-book-ix-the-ciconians-lotus-eaters-and-cyclops.md",
+          "title": "Book IX: The Ciconians, Lotus-Eaters, and Cyclops",
+          "rendu": "10.html"
+        },
+        {
+          "file": "011-book-x-aeolus-the-lestrigonians-and-circe.md",
+          "title": "Book X: Aeolus, the Lestrigonians, and Circè",
+          "rendu": "11.html"
+        },
+        {
+          "file": "012-book-xi-visit-of-ulysses-to-the-land-of-the-dead.md",
+          "title": "Book XI: Visit of Ulysses to the Land of the Dead",
+          "rendu": "12.html"
+        },
+        {
+          "file": "013-book-xii-the-sirens-scylla-and-charybdis.md",
+          "title": "Book XII: The Sirens, Scylla, and Charybdis",
+          "rendu": "13.html"
+        },
+        {
+          "file": "014-book-xiii-arrival-of-ulysses-at-ithaca.md",
+          "title": "Book XIII: Arrival of Ulysses at Ithaca",
+          "rendu": "14.html"
+        },
+        {
+          "file": "015-book-xiv-meeting-of-ulysses-and-eumaeus.md",
+          "title": "Book XIV: Meeting of Ulysses and Eumaeus",
+          "rendu": "15.html"
+        },
+        {
+          "file": "016-book-xv-return-of-telemachus.md",
+          "title": "Book XV: Return of Telemachus",
+          "rendu": "16.html"
+        },
+        {
+          "file": "017-book-xvi-ulysses-discovering-himself-to-telemach.md",
+          "title": "Book XVI: Ulysses Discovering Himself to Telemachus",
+          "rendu": "17.html"
+        },
+        {
+          "file": "018-book-xvii-return-of-ulysses-to-his-palace.md",
+          "title": "Book XVII: Return of Ulysses to His Palace",
+          "rendu": "18.html"
+        },
+        {
+          "file": "019-book-xviii-combat-of-ulysses-and-irus.md",
+          "title": "Book XVIII: Combat of Ulysses and Irus",
+          "rendu": "19.html"
+        },
+        {
+          "file": "020-book-xix-ulysses-recognized-by-eurycleia.md",
+          "title": "Book XIX: Ulysses Recognized by Eurycleia",
+          "rendu": "20.html"
+        },
+        {
+          "file": "021-book-xx-the-last-banquet-of-the-suitors.md",
+          "title": "Book XX: The Last Banquet of the Suitors",
+          "rendu": "21.html"
+        },
+        {
+          "file": "022-book-xxi-the-bending-of-the-bow-of-ulysses.md",
+          "title": "Book XXI: The Bending of the Bow of Ulysses",
+          "rendu": "22.html"
+        },
+        {
+          "file": "023-book-xxii-death-of-the-suitors.md",
+          "title": "Book XXII: Death of the Suitors",
+          "rendu": "23.html"
+        },
+        {
+          "file": "024-book-xxiii-ulysses-and-penelope-after-the-slaugh.md",
+          "title": "Book XXIII: Ulysses and Penelope After the Slaughter",
+          "rendu": "24.html"
+        },
+        {
+          "file": "025-book-xxiv-conclusion.md",
+          "title": "Book XXIV: Conclusion",
+          "rendu": "25.html"
+        }
+      ]
+    },
+    {
+      "cover": "cover.jpg",
+      "subjects": [
+        "Philosophie",
+        "Anglais"
+      ],
+      "level": "Lycée",
+      "dir": "books/meditations",
+      "slug": "meditations",
+      "source": "meditations",
+      "title": "Meditations",
+      "author": "Marcus Aurelius",
+      "tagline": "",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "literature",
+      "accent": "#7a4a24",
+      "resume": "Marc Aurèle, trad. George Long. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 12,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "001-book-i.md",
+          "title": "Book I",
+          "rendu": "01.html"
+        },
+        {
+          "file": "002-book-ii.md",
+          "title": "Book II",
+          "rendu": "02.html"
+        },
+        {
+          "file": "003-book-iii.md",
+          "title": "Book III",
+          "rendu": "03.html"
+        },
+        {
+          "file": "004-book-iv.md",
+          "title": "Book IV",
+          "rendu": "04.html"
+        },
+        {
+          "file": "005-book-v.md",
+          "title": "Book V",
+          "rendu": "05.html"
+        },
+        {
+          "file": "006-book-vi.md",
+          "title": "Book VI",
+          "rendu": "06.html"
+        },
+        {
+          "file": "007-book-vii.md",
+          "title": "Book VII",
+          "rendu": "07.html"
+        },
+        {
+          "file": "008-book-viii.md",
+          "title": "Book VIII",
+          "rendu": "08.html"
+        },
+        {
+          "file": "009-book-ix.md",
+          "title": "Book IX",
+          "rendu": "09.html"
+        },
+        {
+          "file": "010-book-x.md",
+          "title": "Book X",
+          "rendu": "10.html"
+        },
+        {
+          "file": "011-book-xi.md",
+          "title": "Book XI",
+          "rendu": "11.html"
+        },
+        {
+          "file": "012-book-xii.md",
+          "title": "Book XII",
+          "rendu": "12.html"
+        }
+      ]
+    },
+    {
+      "cover": "cover.jpg",
+      "subjects": [
+        "Histoire",
+        "Philosophie",
+        "Anglais"
+      ],
+      "level": "Lycée",
+      "dir": "books/the-prince",
+      "slug": "the-prince",
+      "source": "the-prince",
+      "title": "The Prince",
+      "author": "Niccolò Machiavelli",
+      "tagline": "",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "newsprint",
+      "accent": "#a11f1f",
+      "resume": "Nicolas Machiavel, trad. W. K. Marriott. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 27,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "001-introduction.md",
+          "title": "Introduction",
+          "rendu": "01.html"
+        },
+        {
+          "file": "002-i-how-many-kinds-of-principalities-there-are-and.md",
+          "title": "I: How Many Kinds of Principalities There Are, and by What Means They Are Acquired",
+          "rendu": "02.html"
+        },
+        {
+          "file": "003-ii-concerning-hereditary-principalities.md",
+          "title": "II: Concerning Hereditary Principalities",
+          "rendu": "03.html"
+        },
+        {
+          "file": "004-iii-concerning-mixed-principalities.md",
+          "title": "III: Concerning Mixed Principalities",
+          "rendu": "04.html"
+        },
+        {
+          "file": "005-iv-why-the-kingdom-of-darius-conquered-by-alexan.md",
+          "title": "IV: Why the Kingdom of Darius, Conquered by Alexander, Did Not Rebel Against the Successors of Alexander at His Death",
+          "rendu": "05.html"
+        },
+        {
+          "file": "006-v-concerning-the-way-to-govern-cities-or-princip.md",
+          "title": "V: Concerning the Way to Govern Cities or Principalities Which Lived Under Their Own Laws Before They Were Annexed",
+          "rendu": "06.html"
+        },
+        {
+          "file": "007-vi-concerning-new-principalities-which-are-acqui.md",
+          "title": "VI: Concerning New Principalities Which Are Acquired by One’s Own Arms and Ability",
+          "rendu": "07.html"
+        },
+        {
+          "file": "008-vii-concerning-new-principalities-which-are-acqu.md",
+          "title": "VII: Concerning New Principalities Which Are Acquired Either by the Arms of Others or by Good Fortune",
+          "rendu": "08.html"
+        },
+        {
+          "file": "009-viii-concerning-those-who-have-obtained-a-princi.md",
+          "title": "VIII: Concerning Those Who Have Obtained a Principality by Wickedness",
+          "rendu": "09.html"
+        },
+        {
+          "file": "010-ix-concerning-a-civil-principality.md",
+          "title": "IX: Concerning a Civil Principality",
+          "rendu": "10.html"
+        },
+        {
+          "file": "011-x-concerning-the-way-in-which-the-strength-of-al.md",
+          "title": "X: Concerning the Way in Which the Strength of All Principalities Ought to Be Measured",
+          "rendu": "11.html"
+        },
+        {
+          "file": "012-xi-concerning-ecclesiastical-principalities.md",
+          "title": "XI: Concerning Ecclesiastical Principalities",
+          "rendu": "12.html"
+        },
+        {
+          "file": "013-xii-how-many-kinds-of-soldiery-there-are-and-con.md",
+          "title": "XII: How Many Kinds of Soldiery There Are, and Concerning Mercenaries",
+          "rendu": "13.html"
+        },
+        {
+          "file": "014-xiii-concerning-auxiliaries-mixed-soldiery-and-o.md",
+          "title": "XIII: Concerning Auxiliaries, Mixed Soldiery, and One’s Own",
+          "rendu": "14.html"
+        },
+        {
+          "file": "015-xiv-that-which-concerns-a-prince-on-the-subject-.md",
+          "title": "XIV: That Which Concerns a Prince on the Subject of the Art of War",
+          "rendu": "15.html"
+        },
+        {
+          "file": "016-xv-concerning-things-for-which-men-and-especiall.md",
+          "title": "XV: Concerning Things for Which Men, and Especially Princes, Are Praised or Blamed",
+          "rendu": "16.html"
+        },
+        {
+          "file": "017-xvi-concerning-liberality-and-meanness.md",
+          "title": "XVI: Concerning Liberality and Meanness",
+          "rendu": "17.html"
+        },
+        {
+          "file": "018-xvii-concerning-cruelty-and-clemency-and-whether.md",
+          "title": "XVII: Concerning Cruelty and Clemency, and Whether It Is Better to Be Loved Than Feared",
+          "rendu": "18.html"
+        },
+        {
+          "file": "019-xviii-concerning-the-way-in-which-princes-should.md",
+          "title": "XVIII: Concerning the Way in Which Princes Should Keep Faith",
+          "rendu": "19.html"
+        },
+        {
+          "file": "020-xix-that-one-should-avoid-being-despised-and-hat.md",
+          "title": "XIX: That One Should Avoid Being Despised and Hated",
+          "rendu": "20.html"
+        },
+        {
+          "file": "021-xx-are-fortresses-and-many-other-things-to-which.md",
+          "title": "XX: Are Fortresses, and Many Other Things to Which Princes Often Resort, Advantageous or Hurtful?",
+          "rendu": "21.html"
+        },
+        {
+          "file": "022-xxi-how-a-prince-should-conduct-himself-so-as-to.md",
+          "title": "XXI: How a Prince Should Conduct Himself So as to Gain Renown",
+          "rendu": "22.html"
+        },
+        {
+          "file": "023-xxii-concerning-the-secretaries-of-princes.md",
+          "title": "XXII: Concerning the Secretaries of Princes",
+          "rendu": "23.html"
+        },
+        {
+          "file": "024-xxiii-how-flatterers-should-be-avoided.md",
+          "title": "XXIII: How Flatterers Should Be Avoided",
+          "rendu": "24.html"
+        },
+        {
+          "file": "025-xxiv-why-the-princes-of-italy-have-lost-their-st.md",
+          "title": "XXIV: Why the Princes of Italy Have Lost Their States",
+          "rendu": "25.html"
+        },
+        {
+          "file": "026-xxv-what-fortune-can-effect-in-human-affairs-and.md",
+          "title": "XXV: What Fortune Can Effect in Human Affairs and How to Withstand Her",
+          "rendu": "26.html"
+        },
+        {
+          "file": "027-xxvi-an-exhortation-to-liberate-italy-from-the-b.md",
+          "title": "XXVI: An Exhortation to Liberate Italy from the Barbarians",
+          "rendu": "27.html"
+        }
+      ]
+    },
+    {
+      "cover": "cover.jpg",
+      "subjects": [
+        "Littérature",
+        "Anglais"
+      ],
+      "level": "Lycée",
+      "dir": "books/the-mummy",
+      "slug": "the-mummy",
+      "source": "the-mummy",
+      "title": "The Mummy!",
+      "author": "Jane C. Loudon",
+      "tagline": "",
+      "lang": "en",
+      "dir_texte": "ltr",
+      "look": "literature",
+      "accent": "#7a4a24",
+      "resume": "Jane C. Loudon, 1827. Domaine public.",
+      "droits": "domaine public",
+      "chapters": 33,
+      "built": true,
+      "chapterList": [
+        {
+          "file": "001-introduction.md",
+          "title": "Introduction",
+          "rendu": "01.html"
+        },
+        {
+          "file": "002-i.md",
+          "title": "I",
+          "rendu": "02.html"
+        },
+        {
+          "file": "003-ii.md",
+          "title": "II",
+          "rendu": "03.html"
+        },
+        {
+          "file": "004-iii.md",
+          "title": "III",
+          "rendu": "04.html"
+        },
+        {
+          "file": "005-iv.md",
+          "title": "IV",
+          "rendu": "05.html"
+        },
+        {
+          "file": "006-v.md",
+          "title": "V",
+          "rendu": "06.html"
+        },
+        {
+          "file": "007-vi.md",
+          "title": "VI",
+          "rendu": "07.html"
+        },
+        {
+          "file": "008-vii.md",
+          "title": "VII",
+          "rendu": "08.html"
+        },
+        {
+          "file": "009-viii.md",
+          "title": "VIII",
+          "rendu": "09.html"
+        },
+        {
+          "file": "010-ix.md",
+          "title": "IX",
+          "rendu": "10.html"
+        },
+        {
+          "file": "011-x.md",
+          "title": "X",
+          "rendu": "11.html"
+        },
+        {
+          "file": "012-xi.md",
+          "title": "XI",
+          "rendu": "12.html"
+        },
+        {
+          "file": "013-xii.md",
+          "title": "XII",
+          "rendu": "13.html"
+        },
+        {
+          "file": "014-xiii.md",
+          "title": "XIII",
+          "rendu": "14.html"
+        },
+        {
+          "file": "015-xiv.md",
+          "title": "XIV",
+          "rendu": "15.html"
+        },
+        {
+          "file": "016-xv.md",
+          "title": "XV",
+          "rendu": "16.html"
+        },
+        {
+          "file": "017-xvi.md",
+          "title": "XVI",
+          "rendu": "17.html"
+        },
+        {
+          "file": "018-xvii.md",
+          "title": "XVII",
+          "rendu": "18.html"
+        },
+        {
+          "file": "019-xviii.md",
+          "title": "XVIII",
+          "rendu": "19.html"
+        },
+        {
+          "file": "020-xix.md",
+          "title": "XIX",
+          "rendu": "20.html"
+        },
+        {
+          "file": "021-xx.md",
+          "title": "XX",
+          "rendu": "21.html"
+        },
+        {
+          "file": "022-xxi.md",
+          "title": "XXI",
+          "rendu": "22.html"
+        },
+        {
+          "file": "023-xxii.md",
+          "title": "XXII",
+          "rendu": "23.html"
+        },
+        {
+          "file": "024-xxiii.md",
+          "title": "XXIII",
+          "rendu": "24.html"
+        },
+        {
+          "file": "025-xxiv.md",
+          "title": "XXIV",
+          "rendu": "25.html"
+        },
+        {
+          "file": "026-xxv.md",
+          "title": "XXV",
+          "rendu": "26.html"
+        },
+        {
+          "file": "027-xxvi.md",
+          "title": "XXVI",
+          "rendu": "27.html"
+        },
+        {
+          "file": "028-xxvii.md",
+          "title": "XXVII",
+          "rendu": "28.html"
+        },
+        {
+          "file": "029-xxviii.md",
+          "title": "XXVIII",
+          "rendu": "29.html"
+        },
+        {
+          "file": "030-xxix.md",
+          "title": "XXIX",
+          "rendu": "30.html"
+        },
+        {
+          "file": "031-xxx.md",
+          "title": "XXX",
+          "rendu": "31.html"
+        },
+        {
+          "file": "032-xxxi.md",
+          "title": "XXXI",
+          "rendu": "32.html"
+        },
+        {
+          "file": "033-xxxii.md",
+          "title": "XXXII",
+          "rendu": "33.html"
         }
       ]
     }

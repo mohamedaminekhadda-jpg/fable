@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,6 +103,8 @@ body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
 /* FULL-SCREEN COVER */
 .book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
 .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
 @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
 html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
@@ -180,6 +182,9 @@ body[dir="rtl"] .lookup-panel.show{transform:none}
 .lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
 .lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
 .lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
 .lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
 .lookup-extract{font-size:15px;line-height:1.6}
 .lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
@@ -656,6 +661,10 @@ body[dir="rtl"] .dlg-speaker{text-align:left}
 .ch-canvas-fit{position:relative;width:100%;overflow:hidden}
 .ch-canvas{position:relative;transform-origin:top left}
 .layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
+/* Un element masque par l'auteur. Le livre construit ne le contient jamais —
+   le rendu s'arrete avant — et cette regle ne sert donc qu'a l'apercu de
+   Studio, ou il faut bien pouvoir le retrouver pour le rallumer. */
+.layout-item.li-masque{opacity:.28;filter:grayscale(1)}
 /* tables inside a recoloured layout element follow that element's ink/rule */
 .layout-item .md-table th,.layout-item table th{color:var(--ink)}
 .layout-item .md-table td,.layout-item table td{color:var(--ink-soft)}
@@ -937,6 +946,11 @@ video.iwt-img{width:100%}
 .iw-geo .iwgeo-l{fill:var(--ink);font-family:var(--mono);font-weight:700;paint-order:stroke fill;stroke:var(--paper-deep);stroke-width:3px}
 .iw-geo .iwgeo-m{fill:var(--ink-soft);font-family:var(--mono);paint-order:stroke fill;stroke:var(--paper-deep);stroke-width:3px}
 .iw-geo .iwgeo-note{margin-top:12px;font-size:13.5px;line-height:1.55;color:var(--ink-soft)}
+/* Le graphique : un paragraphe avant, une legende apres. La legende porte la
+   source ou la lecture a retenir — un graphique sans source ne prouve rien. */
+.iwch-intro{margin:0 0 12px;font-size:14.5px;line-height:1.6;color:var(--ink-soft)}
+.iwch-note{margin-top:10px;padding-top:9px;border-top:1px solid var(--rule);
+  font-size:13px;line-height:1.55;color:var(--ink-soft);font-style:italic}
 
 /* ── method (worked solution) ── */
 .iw-method .iwme-head{margin-bottom:10px}
@@ -3620,7 +3634,7 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
 </style>
 <script>(function(){try{var k="alice-in-wonderland_theme";var m=localStorage.getItem(k);if(!m){m="auto";if(m==='auto')m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(m==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
 </head>
-<body dir="ltr">
+<body dir="">
 
 <div class="ad-loader" id="adLoader" role="status" aria-label="Loading">
   <div class="ad-eye-wrap"><div class="ad-eye2"><div class="eye-outer"><div class="eye-white"><div class="eye-iris"><div class="eye-pupil"></div></div></div></div></div></div>
@@ -3636,7 +3650,7 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
 </div>
 
 <nav class="book-nav" id="bookNav">
-  <span class="nav-brand">Alice in Wonderland</span>
+  <span class="nav-brand"><bdi>Alice in Wonderland</bdi></span>
   <a class="nav-item" href="#toc">Contents</a>
   <a class="nav-item nav-key" id="answerKey" href="#" role="button" aria-pressed="false" title="Show every answer in the book">Answer key</a>
   <a class="nav-item nav-notes" id="notesTab" href="#">Notes<span class="nav-notes-count" id="notesCount" data-empty="1">0</span></a>
@@ -3663,7 +3677,7 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
   <div class="hl-tool-div"></div>
   <button class="hl-note-btn" id="hlNoteAdd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span id="hlNoteAddLabel">Note</span></button>
   <div class="hl-tool-div"></div>
-  <button class="hl-look-btn" id="hlDefine" title="Define (dictionary)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v17H6a2 2 0 0 0-2 2z"></path><path d="M12 3h6a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2h-6"></path></svg></button>
+  <button class="hl-look-btn" id="hlDefine" title="Dictionary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v17H6a2 2 0 0 0-2 2z"></path><path d="M12 3h6a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2h-6"></path></svg></button>
   <button class="hl-look-btn" id="hlWiki" title="Wikipedia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18"></path></svg></button>
 </div>
 <div class="lookup-backdrop" id="lookupBackdrop"></div>
@@ -4384,11 +4398,11 @@ cover.addEventListener('mouseleave', () => {
   <div class="toc-inner">
     <div class="toc-eyebrow">Table of Contents</div>
     <div class="toc-bigtitle"><span class="toc-after">Alice in</span><span class="toc-demo">Wonderland</span></div>
-    <div class="toc-byline">by Lewis Carroll</div>
+    <div class="toc-byline">by <bdi>Lewis Carroll</bdi></div>
     <div class="toc-list">
 <a class="toc-row" href="#chapter-01" data-num="01" data-cnum="1" data-title="A map of the world" data-blurb="" data-egg="">
   <div class="toc-num">01</div>
-  <div class="toc-rowtitle">A map of the world</div>
+  <div class="toc-rowtitle"><bdi>A map of the world</bdi></div>
   <div class="toc-arrow">→</div>
 </a>
     </div>
@@ -4402,7 +4416,7 @@ cover.addEventListener('mouseleave', () => {
   </div>
 </section>
 
-<div class="book-chapter" id="chapter-01" data-cnum="1" data-ctitle="A map of the world">
+<div class="book-chapter" id="chapter-01" data-cnum="1" data-ctag="Ch. 1" data-ctitle="A map of the world">
 <header class="opener">
   <div class="ch-number">Chapter 1</div>
   <h1 class="ch-title">A map of the world</h1>
@@ -5448,7 +5462,7 @@ cover.addEventListener('mouseleave', () => {
 </main>
 </div>
 
-<div class="book-back-fs" id="backcover" style="--cover-aspect:2 / 3"><iframe class="back-frame" data-role="backcover" scrolling="no" title="Back Cover" srcdoc="<!DOCTYPE html>
+<div class="book-back-fs" id="backcover" style="--cover-aspect:2 / 3"><iframe class="back-frame" data-role="backcover" scrolling="no" title="Back cover" srcdoc="<!DOCTYPE html>
 <html lang=&quot;en&quot;>
 <head>
 <script>try{if(!parent.document.documentElement.classList.contains('dark')){document.documentElement.classList.add('light');}}catch(e){}</script>
@@ -5947,10 +5961,14 @@ setTimeout(showSmile, 3500);
 </body>
 </html>
 "></iframe></div>
-<script>window.__BOOK__={"geo":{},"key":"alice-in-wonderland","title":"Alice in Wonderland","author":"Lewis Carroll","labels":{"empty":"Select any passage to highlight it and keep a note. They’ll collect here."}};</script>
+<script>window.__BOOK__={"geo":{},"key":"alice-in-wonderland","title":"Alice in Wonderland","author":"Lewis Carroll","lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"\u003cb>Click\u003c/b> any chapter to jump straight in — or \u003cb>hover\u003c/b> a row to preview its summary.","hintNoteHtml":"\u003cb>Select\u003c/b> any passage to highlight it — or attach a private \u003cb>note\u003c/b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"},"lex":[],"labels":{"empty":"Select any passage to highlight it and keep a note. They’ll collect here."}};</script>
 <script>
 (function(){
 var CFG = window.__BOOK__ || {};
+/* Les mots du bandeau, dans la langue du livre (voir lib/i18n.js). Sans
+   tableau on rend la clef : on voit tout de suite ce qui manque. */
+var CTBL = CFG.i18n || {};
+function CT(k){ return CTBL[k] || k; }
 var K = CFG.key || 'book';
 var LBL = CFG.labels || {};
 
@@ -6525,8 +6543,8 @@ if('IntersectionObserver' in window && _links.length){
     var eyeSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
     var penSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>';
     var HINTS={
-      contents:{kicker:'Contents', icon:eyeSvg, html:'<b>Click</b> any chapter to jump straight in \u2014 or <b>hover</b> a row to preview its summary.', anchor:function(){return document.querySelector('.toc-row');}, place:'below'},
-      note:    {kicker:'Marginalia', icon:penSvg, html:'<b>Select</b> any passage to highlight it \u2014 or attach a private <b>note</b>. They all collect in the Notes tab.', anchor:function(){return document.getElementById('notesTab')||document.querySelector('.toc-row');}, place:'below'}
+      contents:{kicker:CT('contents'), icon:eyeSvg, html:CT('hintContentsHtml'), anchor:function(){return document.querySelector('.toc-row');}, place:'below'},
+      note:    {kicker:CT('marginalia'), icon:penSvg, html:CT('hintNoteHtml'), anchor:function(){return document.getElementById('notesTab')||document.querySelector('.toc-row');}, place:'below'}
     };
     var ORDER=['contents','note'].filter(function(id){return HINTS[id];});
     var active=null, queue=[], raf;
@@ -6830,39 +6848,153 @@ if('IntersectionObserver' in window && _links.length){
 })();
 })();
 
-/* ───────── Dictionary + Wikipedia lookup (select a word → toolbar) ───────── */
+/* ───────── Lookup: this book's own lexicon first, then the web ─────────
+   Pourquoi le lexique d'abord. Les blocs « glossary » des chapitres sont deja
+   dans la page (window.__BOOK__.lex) : c'est instantane, ca marche hors ligne
+   — un livre sur GitHub Pages ou dans l'APK n'a aucune API a appeler — et
+   surtout c'est le sens DANS CE CHAPITRE. Aucun dictionnaire ne dira que
+   « fast », chez les baleiniers, veut dire retenu par le harpon.
+   Le web ne sert plus que pour ce que le livre ne glose pas. */
 (function(){
   var panel=document.getElementById('lookupPanel'); if(!panel)return;
   var body=document.getElementById('lookupBody'), titleEl=document.getElementById('lookupTitle'), bd=document.getElementById('lookupBackdrop');
+  var B=window.__BOOK__||{}, LEX=(B.lex||[]), I=(B.i18n||{});
+  /* La langue du livre commande l'edition de Wikipedia et du dictionnaire.
+     Avant, les deux etaient codees en dur sur « en » : dans un livre arabe le
+     bouton disait « القاموس » et interrogeait le dictionnaire anglais. */
+  var LANG=String(B.lang||'en').slice(0,2).toLowerCase();
+  function t(k,d){ return I[k]||d; }
   var word='';
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function cap(){ try{ var s=window.getSelection().toString().trim(); if(s)word=s; }catch(e){} }
   var defB=document.getElementById('hlDefine'), wikiB=document.getElementById('hlWiki');
   [defB,wikiB].forEach(function(b){ if(b)b.addEventListener('mousedown',function(e){ e.preventDefault(); cap(); }); });
-  function open(t){ titleEl.textContent=t; panel.classList.add('show'); panel.setAttribute('aria-hidden','false'); bd.classList.add('show'); }
+  function open(x){ titleEl.textContent=x; panel.classList.add('show'); panel.setAttribute('aria-hidden','false'); bd.classList.add('show'); }
   function close(){ panel.classList.remove('show'); panel.setAttribute('aria-hidden','true'); bd.classList.remove('show'); }
   document.getElementById('lookupClose').addEventListener('click',close); bd.addEventListener('click',close);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel.classList.contains('show'))close(); });
-  function firstWord(s){ s=(s||'').trim(); var out=''; for(var i=0;i<s.length;i++){ var c=s.charAt(i); if(c===' ')break; if((c>='a'&&c<='z')||(c>='A'&&c<='Z')||c==='-')out+=c; } return out; }
-  function loading(){ body.innerHTML='<div class="lookup-loading">Looking up "'+esc(word)+'"…</div>'; }
-  if(defB)defB.addEventListener('click',function(){ if(!word)return; open('Dictionary'); loading(); define(); });
-  if(wikiB)wikiB.addEventListener('click',function(){ if(!word)return; open('Wikipedia'); loading(); wiki(); });
-  function define(){ var w=firstWord(word)||word;
-    fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(w)).then(function(r){ if(!r.ok)throw 0; return r.json(); }).then(function(d){
-      var e0=d[0]||{}, ph=''; (e0.phonetics||[]).forEach(function(p){ if(!ph&&p.text)ph=p.text; }); if(!ph&&e0.phonetic)ph=e0.phonetic;
-      var html='<div class="lookup-word">'+esc(e0.word||w)+'</div>'+(ph?'<div class="lookup-phon">'+esc(ph)+'</div>':'');
+
+  /* On enleve la ponctuation autour de la selection SANS lister les lettres
+     permises. L'ancienne version ne gardait que a-z et A-Z, ce qui cherchait
+     « nave » pour « naive » et ne laissait rien d'un mot arabe. */
+  var AVANT=/^[\s\u2018\u2019'"\u201c\u201d\u00ab\u00bb(\[\u2014\u2013\-.,;:!?\u00bf\u00a1]+/;
+  var APRES=/[\s\u2018\u2019'"\u201c\u201d\u00ab\u00bb)\]\u2014\u2013\-.,;:!?]+$/;
+  function propre(s){ return String(s||'').replace(/\s+/g,' ').replace(AVANT,'').replace(APRES,'').trim(); }
+  function premierMot(s){ return propre(propre(s).split(' ')[0]); }
+
+  /* ── le lexique du livre ── */
+  function cle(s){ return propre(s).toLowerCase().replace(/\u2019/g,"'"); }
+  var INDEX={};
+  for(var li=0; li<LEX.length; li++){ var k=cle(LEX[li].t); if(k){ (INDEX[k]=INDEX[k]||[]).push(LEX[li]); } }
+
+  /* Un lemmatiseur de poche. Le lexique glose « crowds » sous « crowd » ;
+     sans cela toute forme flechie manquait sa definition. On ne tente que des
+     retraits surs, et INDEX tranche : une forme inventee ne trouve rien. */
+  var SUFFIXES=[["'s",''],['s',''],['es',''],['ies','y'],['ed',''],['ed','e'],['d',''],['ing',''],['ing','e'],['ly',''],['est',''],['er','']];
+  function formes(w){
+    var out=[w], l=w.toLowerCase(), n;
+    for(var i=0;i<SUFFIXES.length;i++){ var sf=SUFFIXES[i][0];
+      if(l.length>sf.length+2 && l.slice(-sf.length)===sf){ n=l.slice(0,l.length-sf.length)+SUFFIXES[i][1]; if(out.indexOf(n)<0)out.push(n); } }
+    return out;
+  }
+  function chercheLexique(sel){
+    var essais=[propre(sel)], pm=premierMot(sel);
+    if(pm && essais.indexOf(pm)<0) essais.push(pm);
+    for(var i=0;i<essais.length;i++){ if(!essais[i])continue;
+      var fs=formes(essais[i]);
+      for(var j=0;j<fs.length;j++){ var h=INDEX[cle(fs[j])]; if(h&&h.length)return h; } }
+    return null;
+  }
+  /* Le chapitre qu'on est en train de lire : c'est lui qui decide quel sens
+     montrer en premier quand un mot est glose a plusieurs endroits. */
+  function chapitreEnCours(){
+    var els=document.querySelectorAll('.book-chapter'), best='', dist=1e9;
+    for(var i=0;i<els.length;i++){ var r=els[i].getBoundingClientRect();
+      if(r.bottom>0 && r.top<window.innerHeight){ var d=Math.abs(r.top); if(d<dist){dist=d;best=els[i].id;} } }
+    return best;
+  }
+  function montreLexique(hits, mot){
+    var ici=chapitreEnCours();
+    var ord=hits.slice().sort(function(a,b){ return (b.c===ici?1:0)-(a.c===ici?1:0); });
+    var h='<div class="lookup-word">'+esc(ord[0].t)+'</div>';
+    if(ord[0].g) h+='<div class="lookup-phon">'+esc(ord[0].g)+'</div>';
+    h+='<div class="lookup-pos">'+esc(t('lookupInBook','In this book'))+'</div>';
+    for(var i=0;i<ord.length && i<3;i++){
+      h+='<p class="lookup-def">'+esc(ord[i].d)+(ord[i].n?'<span class="lookup-src">'+esc(ord[i].n)+'</span>':'')+'</p>'; }
+    h+='<a class="lookup-link" href="'+esc(urlRecherche(mot))+'" target="_blank" rel="noopener">'+esc(t('wikipedia','Wikipedia'))+' →</a>';
+    body.innerHTML=h;
+  }
+
+  /* ── le web, en second ── */
+  function urlRecherche(w){ return 'https://'+LANG+'.wikipedia.org/w/index.php?search='+encodeURIComponent(w); }
+  /* Un appel SANS delai maximum laissait le panneau sur « Recherche… » pour
+     toujours : api.dictionaryapi.dev est un service benevole, et quand il ne
+     repond pas il ne repond pas — il ne refuse pas. C'est ce que l'auteur
+     voyait comme « ca ne marche pas tout le temps ». */
+  function recupere(u, ms){
+    var ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var fini=false, minuteur=setTimeout(function(){ if(!fini&&ctl)ctl.abort(); }, ms||6000);
+    return fetch(u, ctl?{signal:ctl.signal}:undefined).then(function(r){
+      fini=true; clearTimeout(minuteur); if(!r.ok)throw 0; return r.json();
+    },function(e){ fini=true; clearTimeout(minuteur); throw e; });
+  }
+  function rien(mot, hits){
+    if(hits){ montreLexique(hits,mot); return; }
+    body.innerHTML='<div class="lookup-empty">'+esc(t('lookupNone','Nothing found for'))+' "'+esc(mot)+'". '
+      +'<a class="lookup-link" href="'+esc(urlRecherche(mot))+'" target="_blank" rel="noopener">'+esc(t('lookupSearch','Search'))+' →</a></div>';
+  }
+  function loading(){ body.innerHTML='<div class="lookup-loading">'+esc(t('lookupLoading','Looking up…'))+'</div>'; }
+
+  if(defB)defB.addEventListener('click',function(){ if(!word)return; open(t('dictionary','Dictionary')); definir(); });
+  if(wikiB)wikiB.addEventListener('click',function(){ if(!word)return; open(t('wikipedia','Wikipedia')); loading(); wiki(); });
+
+  function definir(){
+    var mot=propre(word)||word;
+    /* Le livre sait : on n'appelle personne, et ca marche dans l'avion. */
+    var hits=chercheLexique(mot);
+    if(hits){ montreLexique(hits,mot); return; }
+    loading();
+    var q=premierMot(mot)||mot;
+    /* Court, et pour cause : api.dictionaryapi.dev ne repond plus, et quand il
+       repondait c'etait sans en-tete CORS — donc inutilisable depuis une page.
+       On lui laisse sa chance s'il revient, mais on ne fait plus attendre le
+       lecteur six secondes pour rien. */
+    recupere('https://api.dictionaryapi.dev/api/v2/entries/'+LANG+'/'+encodeURIComponent(q), 2500).then(function(d){
+      var e0=(d&&d[0])||{}, ph=''; (e0.phonetics||[]).forEach(function(x){ if(!ph&&x.text)ph=x.text; }); if(!ph&&e0.phonetic)ph=e0.phonetic;
+      var html='<div class="lookup-word">'+esc(e0.word||q)+'</div>'+(ph?'<div class="lookup-phon">'+esc(ph)+'</div>':'');
       (e0.meanings||[]).forEach(function(m){ html+='<div class="lookup-pos">'+esc(m.partOfSpeech||'')+'</div>';
         (m.definitions||[]).slice(0,4).forEach(function(df){ html+='<p class="lookup-def">'+esc(df.definition||'')+(df.example?'<span class="lookup-eg">"'+esc(df.example)+'"</span>':'')+'</p>'; }); });
-      html+='<a class="lookup-link" href="https://www.google.com/search?q=define+'+encodeURIComponent(w)+'" target="_blank" rel="noopener">More →</a>';
+      if(!(e0.meanings||[]).length)throw 0;
+      html+='<a class="lookup-link" href="'+esc(urlRecherche(q))+'" target="_blank" rel="noopener">'+esc(t('lookupSearch','Search'))+' →</a>';
       body.innerHTML=html;
-    }).catch(function(){ body.innerHTML='<div class="lookup-empty">No dictionary entry for "'+esc(w)+'". <a class="lookup-link" href="https://www.google.com/search?q=define+'+encodeURIComponent(w)+'" target="_blank" rel="noopener">Search →</a></div>'; }); }
-  function wiki(){ var t=(word||'').trim();
-    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(t)).then(function(r){ if(!r.ok)throw 0; return r.json(); }).then(function(d){
-      if(d.type&&d.type.indexOf('not_found')>=0)throw 0;
+    }).catch(function(){
+      /* Plutot qu'un cul-de-sac : Wikipedia repond en moins d'une seconde. */
+      loading(); wiki();
+    });
+  }
+
+  /* Wikipedia par la RECHERCHE, pas par le titre exact. « page/summary/<titre> »
+     ne resout qu'un nom d'article precis : « whale » repondait 200 mais
+     « the Manhattoes » repondait 404, alors que la recherche le trouve. */
+  function wiki(){
+    var mot=propre(word)||word;
+    recupere('https://'+LANG+'.wikipedia.org/w/api.php?action=query&list=search&srsearch='
+      +encodeURIComponent(mot)+'&srlimit=1&format=json&origin=*').then(function(d){
+      var h=d&&d.query&&d.query.search&&d.query.search[0]; if(!h)throw 0;
+      return recupere('https://'+LANG+'.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(h.title));
+    }).then(function(d){
+      if(d&&d.type&&d.type.indexOf('not_found')>=0)throw 0;
       var img=(d.thumbnail&&d.thumbnail.source)?'<img class="lookup-img" src="'+esc(d.thumbnail.source)+'" alt="">':'';
-      var link=(d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page)||('https://en.wikipedia.org/wiki/'+encodeURIComponent(t));
-      body.innerHTML='<div class="lookup-word">'+esc(d.title||t)+'</div>'+(d.description?'<div class="lookup-phon">'+esc(d.description)+'</div>':'')+img+'<div class="lookup-extract">'+esc(d.extract||'')+'</div><a class="lookup-link" href="'+esc(link)+'" target="_blank" rel="noopener">Read on Wikipedia →</a>';
-    }).catch(function(){ body.innerHTML='<div class="lookup-empty">No Wikipedia article for "'+esc(t)+'". <a class="lookup-link" href="https://en.wikipedia.org/w/index.php?search='+encodeURIComponent(t)+'" target="_blank" rel="noopener">Search →</a></div>'; }); }
+      var lien=(d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page)||urlRecherche(mot);
+      body.innerHTML='<div class="lookup-word">'+esc(d.title||mot)+'</div>'
+        +(d.description?'<div class="lookup-phon">'+esc(d.description)+'</div>':'')+img
+        +'<div class="lookup-extract">'+esc(d.extract||'')+'</div>'
+        +'<a class="lookup-link" href="'+esc(lien)+'" target="_blank" rel="noopener">'+esc(t('wikipedia','Wikipedia'))+' →</a>';
+    }).catch(function(){
+      /* Pas de reseau : si le livre glose le mot, on le montre quand meme. */
+      rien(mot, chercheLexique(mot));
+    });
+  }
 })();
 </script>
 <script>
@@ -6873,6 +7005,12 @@ if('IntersectionObserver' in window && _links.length){
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function cvar(n,f){var v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||f;}
   function pal(){return [cvar('--accent','#8c2f2a'),cvar('--gold','#c9a054'),cvar('--teal','#5fa39b'),cvar('--slate','#6b7089'),'#7ea0d6','#7ec496','#d27870','#b08440'];}
+  /* Les mots que le lecteur voit, dans la langue du livre. Le tableau arrive
+     par window.__BOOK__.i18n, deja reduit a cette langue. Sans lui on garde le
+     francais : c'est la langue de reference de ce fichier, et un mot en trop
+     vaut mieux qu'un bouton vide. */
+  var IWL=(window.__BOOK__&&window.__BOOK__.i18n)||{};
+  function T(k,d){ return IWL[k]||d||k; }
   function hash(s){var h=0,i=0;s=String(s||'');for(;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h);}
   /* Inline formatting for labels written inside a widget's settings. The text is
      escaped first, so an author can format but cannot inject markup:
@@ -6907,9 +7045,14 @@ if('IntersectionObserver' in window && _links.length){
     var P=pal(), type=c.chartType||'bar', labels=c.labels||[];
     var series=(c.series||[]).map(function(s,i){return {name:s.name||('Series '+(i+1)),color:s.color||P[i%P.length],data:(s.data||[]).map(Number),on:true};});
     box.className='iw iw-card';
-    box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'');
+    box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')
+      +(c.intro?'<p class="iwch-intro">'+esc(c.intro)+'</p>':'');
     var wrap=el('div','iw-chart'), legend=el('div','iw-legend');
     box.appendChild(wrap); box.appendChild(legend);
+    /* La legende du graphique, sous la figure : ce que le lecteur doit en
+       retenir, ou la source des chiffres. Un graphique sans source n'est pas
+       une preuve. */
+    if(c.note){ var cap=el('div','iwch-note'); cap.textContent=c.note; box.appendChild(cap); }
     function draw(){
       var W=wrap.clientWidth||640, H=c.height||300;
       var svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'">';
@@ -6947,7 +7090,8 @@ if('IntersectionObserver' in window && _links.length){
   R.timeline=function(box,c){
     var evs=c.events||[]; var horiz=c.layout==='horizontal';
     box.className='iw iw-card iw-timeline'+(c.layout==='alternate'?' iwt-alt':'')+(horiz?' iwt-horiz':'');
-    if(!evs.length){box.innerHTML='';return;}
+    if(!evs.filter(function(e){return e&&(e.date||e.title||e.body||e.media);}).length){
+      box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iw-err">Ajoute au moins une date et son titre.</div>'; return; }
     function item(e){
       var media=e.media?'<div class="iwt-media">'+mediaEl(e.media,'iwt-img')+'</div>':'';
       return '<div class="iwt-item"><div class="iwt-marker"><span'+(e.color?' style="background:'+esc(e.color)+'"':'')+'></span></div><div class="iwt-content">'+
@@ -6982,6 +7126,10 @@ if('IntersectionObserver' in window && _links.length){
   /* ── universal stat card: image + facts + animated stat bars ── */
   R.statcard=function(box,c){
     box.className='iw iw-card iw-statcard';
+    if(!c.title&&!c.kicker&&!c.body&&!c.image
+      &&!(c.info||[]).some(function(r){return r&&(r.label||r.value);})
+      &&!(c.stats||[]).some(function(r){return r&&(r.label||r.value);})){
+      box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iw-err">Donne au moins un titre, ou une ligne de chiffres.</div>'; return; }
     if(c.accent)box.style.setProperty('--isc-accent',c.accent);
     var img=c.image?'<div class="isc-img"><img src="'+esc(c.image)+'" alt="'+esc(c.title||'')+'" loading="lazy"></div>':'';
     var facts=(c.info||[]).filter(function(r){return r&&(r.label||r.value);}).map(function(r){
@@ -7013,9 +7161,9 @@ if('IntersectionObserver' in window && _links.length){
     var saved={assign:{},labels:{}}; try{var s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s)saved=s;}catch(e){}
     var rows=tiers.map(function(t,ti){ var lbl=(saved.labels&&saved.labels[ti]!=null)?saved.labels[ti]:(t.label||'');
       return '<div class="iwtl-row"><div class="iwtl-label" contenteditable="true" data-ti="'+ti+'" style="background:'+esc(t.color||'#888')+'">'+esc(lbl)+'</div><div class="iwtl-drop" data-tier="'+ti+'"></div></div>';}).join('');
-    var quizBar=c.quiz?'<div class="iwtl-quizbar"><button class="iw-btn iwtl-check">Vérifier</button><button class="iwtl-show">Montrer</button><span class="iwtl-score"></span></div>':'';
+    var quizBar=c.quiz?'<div class="iwtl-quizbar"><button class="iw-btn iwtl-check">'+T('check','Vérifier')+'</button><button class="iwtl-show">'+T('show','Montrer')+'</button><span class="iwtl-score"></span></div>':'';
     box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iwtl-board">'+rows+'</div>'+
-      '<div class="iwtl-poolh">Non classés — faites glisser vers le haut</div><div class="iwtl-drop iwtl-pool" data-tier="pool"></div>'+quizBar+'<button class="iwtl-reset">Recommencer</button>';
+      '<div class="iwtl-poolh">Non classés — faites glisser vers le haut</div><div class="iwtl-drop iwtl-pool" data-tier="pool"></div>'+quizBar+'<button class="iwtl-reset">'+T('reset','Recommencer')+'</button>';
     var pool=box.querySelector('.iwtl-pool');
     function zoneAt(x,y){ var el=document.elementFromPoint(x,y); while(el&&el!==box){ if(el.classList&&el.classList.contains('iwtl-drop'))return el; el=el.parentNode; } return null; }
     function save(){ var a={}; box.querySelectorAll('.iwtl-drop').forEach(function(z){ var t=z.getAttribute('data-tier'); z.querySelectorAll('.iwtl-chip').forEach(function(ch){ a[ch.getAttribute('data-i')]=t; }); });
@@ -7038,7 +7186,7 @@ if('IntersectionObserver' in window && _links.length){
       function tierOf(chip){ var z=chip.parentNode; while(z&&z!==box){ if(z.classList&&z.classList.contains('iwtl-drop')){ var t=z.getAttribute('data-tier'); return t==='pool'?null:+t; } z=z.parentNode; } return null; }
       box.querySelector('.iwtl-check').addEventListener('click',function(){ var right=0,total=0;
         items.forEach(function(it,idx){ if(it.correct==null||it.correct==='')return; total++; var chip=box.querySelector('.iwtl-chip[data-i="'+idx+'"]'); if(!chip)return; var ok=tierOf(chip)===+it.correct; chip.classList.toggle('iwtl-correct',ok); chip.classList.toggle('iwtl-wrong',!ok); if(ok)right++; });
-        var s=box.querySelector('.iwtl-score'); s.textContent=total?(right+' / '+total+' correct'):'Set correct tiers in Studio'; s.className='iwtl-score '+(total&&right===total?'ok':'no'); });
+        var s=box.querySelector('.iwtl-score'); s.textContent=total?(right+' / '+total+' bien placés'):'Indiquez le bon rang dans Studio'; s.className='iwtl-score '+(total&&right===total?'ok':'no'); });
       box.querySelector('.iwtl-show').addEventListener('click',function(){ items.forEach(function(it,idx){ if(it.correct==null||it.correct==='')return; var chip=box.querySelector('.iwtl-chip[data-i="'+idx+'"]'), z=box.querySelector('.iwtl-drop[data-tier="'+it.correct+'"]'); if(chip&&z){ z.appendChild(chip); chip.classList.remove('iwtl-wrong'); chip.classList.add('iwtl-correct'); } }); save(); });
     }
   };
@@ -7214,6 +7362,8 @@ if('IntersectionObserver' in window && _links.length){
   R.diagram=function(box,c){
     box.className='iw iw-card iw-diagram';
     var pins=(c.pins||[]).filter(function(p){return p&&(p.label||p.desc);});
+    if(!c.image&&!pins.length){
+      box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iw-err">Choisis une image, puis pose des repères dessus.</div>'; return; }
     var img=c.image?'<img class="iwd-img" src="'+esc(c.image)+'" alt="'+esc(c.title||'')+'">':'';
     var pinEls=pins.map(function(p,i){ return '<button class="iwd-pin" data-i="'+i+'" style="left:'+(parseFloat(p.x)||50)+'%;top:'+(parseFloat(p.y)||50)+'%">'+(i+1)+'</button>'; }).join('');
     // With no image the wrapper is an inline-block around nothing, so it collapses
@@ -7235,17 +7385,17 @@ if('IntersectionObserver' in window && _links.length){
   };
 
   /* ── interactive periodic table ── */
-  var IWPT=[[1,'H','Hydrogen',1.008,'nonmetal',1,1],[2,'He','Helium',4.0026,'noble',18,1],
-   [3,'Li','Lithium',6.94,'alkali',1,2],[4,'Be','Beryllium',9.0122,'alkaline',2,2],[5,'B','Boron',10.81,'metalloid',13,2],[6,'C','Carbon',12.011,'nonmetal',14,2],[7,'N','Nitrogen',14.007,'nonmetal',15,2],[8,'O','Oxygen',15.999,'nonmetal',16,2],[9,'F','Fluorine',18.998,'halogen',17,2],[10,'Ne','Neon',20.18,'noble',18,2],
-   [11,'Na','Sodium',22.99,'alkali',1,3],[12,'Mg','Magnesium',24.305,'alkaline',2,3],[13,'Al','Aluminium',26.982,'post',13,3],[14,'Si','Silicon',28.085,'metalloid',14,3],[15,'P','Phosphorus',30.974,'nonmetal',15,3],[16,'S','Sulfur',32.06,'nonmetal',16,3],[17,'Cl','Chlorine',35.45,'halogen',17,3],[18,'Ar','Argon',39.948,'noble',18,3],
-   [19,'K','Potassium',39.098,'alkali',1,4],[20,'Ca','Calcium',40.078,'alkaline',2,4],[21,'Sc','Scandium',44.956,'transition',3,4],[22,'Ti','Titanium',47.867,'transition',4,4],[23,'V','Vanadium',50.942,'transition',5,4],[24,'Cr','Chromium',51.996,'transition',6,4],[25,'Mn','Manganese',54.938,'transition',7,4],[26,'Fe','Iron',55.845,'transition',8,4],[27,'Co','Cobalt',58.933,'transition',9,4],[28,'Ni','Nickel',58.693,'transition',10,4],[29,'Cu','Copper',63.546,'transition',11,4],[30,'Zn','Zinc',65.38,'transition',12,4],[31,'Ga','Gallium',69.723,'post',13,4],[32,'Ge','Germanium',72.63,'metalloid',14,4],[33,'As','Arsenic',74.922,'metalloid',15,4],[34,'Se','Selenium',78.971,'nonmetal',16,4],[35,'Br','Bromine',79.904,'halogen',17,4],[36,'Kr','Krypton',83.798,'noble',18,4],
-   [37,'Rb','Rubidium',85.468,'alkali',1,5],[38,'Sr','Strontium',87.62,'alkaline',2,5],[39,'Y','Yttrium',88.906,'transition',3,5],[40,'Zr','Zirconium',91.224,'transition',4,5],[41,'Nb','Niobium',92.906,'transition',5,5],[42,'Mo','Molybdenum',95.95,'transition',6,5],[43,'Tc','Technetium',98,'transition',7,5],[44,'Ru','Ruthenium',101.07,'transition',8,5],[45,'Rh','Rhodium',102.91,'transition',9,5],[46,'Pd','Palladium',106.42,'transition',10,5],[47,'Ag','Silver',107.87,'transition',11,5],[48,'Cd','Cadmium',112.41,'transition',12,5],[49,'In','Indium',114.82,'post',13,5],[50,'Sn','Tin',118.71,'post',14,5],[51,'Sb','Antimony',121.76,'metalloid',15,5],[52,'Te','Tellurium',127.6,'metalloid',16,5],[53,'I','Iodine',126.9,'halogen',17,5],[54,'Xe','Xenon',131.29,'noble',18,5],
-   [55,'Cs','Caesium',132.91,'alkali',1,6],[56,'Ba','Barium',137.33,'alkaline',2,6],[72,'Hf','Hafnium',178.49,'transition',4,6],[73,'Ta','Tantalum',180.95,'transition',5,6],[74,'W','Tungsten',183.84,'transition',6,6],[75,'Re','Rhenium',186.21,'transition',7,6],[76,'Os','Osmium',190.23,'transition',8,6],[77,'Ir','Iridium',192.22,'transition',9,6],[78,'Pt','Platinum',195.08,'transition',10,6],[79,'Au','Gold',196.97,'transition',11,6],[80,'Hg','Mercury',200.59,'transition',12,6],[81,'Tl','Thallium',204.38,'post',13,6],[82,'Pb','Lead',207.2,'post',14,6],[83,'Bi','Bismuth',208.98,'post',15,6],[84,'Po','Polonium',209,'post',16,6],[85,'At','Astatine',210,'halogen',17,6],[86,'Rn','Radon',222,'noble',18,6],
-   [87,'Fr','Francium',223,'alkali',1,7],[88,'Ra','Radium',226,'alkaline',2,7],[104,'Rf','Rutherfordium',267,'transition',4,7],[105,'Db','Dubnium',268,'transition',5,7],[106,'Sg','Seaborgium',269,'transition',6,7],[107,'Bh','Bohrium',270,'transition',7,7],[108,'Hs','Hassium',269,'transition',8,7],[109,'Mt','Meitnerium',278,'transition',9,7],[110,'Ds','Darmstadtium',281,'transition',10,7],[111,'Rg','Roentgenium',282,'transition',11,7],[112,'Cn','Copernicium',285,'transition',12,7],[113,'Nh','Nihonium',286,'post',13,7],[114,'Fl','Flerovium',289,'post',14,7],[115,'Mc','Moscovium',290,'post',15,7],[116,'Lv','Livermorium',293,'post',16,7],[117,'Ts','Tennessine',294,'halogen',17,7],[118,'Og','Oganesson',294,'noble',18,7],
-   [57,'La','Lanthanum',138.91,'lanthanide',3,9],[58,'Ce','Cerium',140.12,'lanthanide',4,9],[59,'Pr','Praseodymium',140.91,'lanthanide',5,9],[60,'Nd','Neodymium',144.24,'lanthanide',6,9],[61,'Pm','Promethium',145,'lanthanide',7,9],[62,'Sm','Samarium',150.36,'lanthanide',8,9],[63,'Eu','Europium',151.96,'lanthanide',9,9],[64,'Gd','Gadolinium',157.25,'lanthanide',10,9],[65,'Tb','Terbium',158.93,'lanthanide',11,9],[66,'Dy','Dysprosium',162.5,'lanthanide',12,9],[67,'Ho','Holmium',164.93,'lanthanide',13,9],[68,'Er','Erbium',167.26,'lanthanide',14,9],[69,'Tm','Thulium',168.93,'lanthanide',15,9],[70,'Yb','Ytterbium',173.05,'lanthanide',16,9],[71,'Lu','Lutetium',174.97,'lanthanide',17,9],
-   [89,'Ac','Actinium',227,'actinide',3,10],[90,'Th','Thorium',232.04,'actinide',4,10],[91,'Pa','Protactinium',231.04,'actinide',5,10],[92,'U','Uranium',238.03,'actinide',6,10],[93,'Np','Neptunium',237,'actinide',7,10],[94,'Pu','Plutonium',244,'actinide',8,10],[95,'Am','Americium',243,'actinide',9,10],[96,'Cm','Curium',247,'actinide',10,10],[97,'Bk','Berkelium',247,'actinide',11,10],[98,'Cf','Californium',251,'actinide',12,10],[99,'Es','Einsteinium',252,'actinide',13,10],[100,'Fm','Fermium',257,'actinide',14,10],[101,'Md','Mendelevium',258,'actinide',15,10],[102,'No','Nobelium',259,'actinide',16,10],[103,'Lr','Lawrencium',266,'actinide',17,10]];
+  var IWPT=[[1,'H','Hydrogène',1.008,'nonmetal',1,1],[2,'He','Hélium',4.0026,'noble',18,1],
+   [3,'Li','Lithium',6.94,'alkali',1,2],[4,'Be','Béryllium',9.0122,'alkaline',2,2],[5,'B','Bore',10.81,'metalloid',13,2],[6,'C','Carbone',12.011,'nonmetal',14,2],[7,'N','Azote',14.007,'nonmetal',15,2],[8,'O','Oxygène',15.999,'nonmetal',16,2],[9,'F','Fluor',18.998,'halogen',17,2],[10,'Ne','Néon',20.18,'noble',18,2],
+   [11,'Na','Sodium',22.99,'alkali',1,3],[12,'Mg','Magnésium',24.305,'alkaline',2,3],[13,'Al','Aluminium',26.982,'post',13,3],[14,'Si','Silicium',28.085,'metalloid',14,3],[15,'P','Phosphore',30.974,'nonmetal',15,3],[16,'S','Soufre',32.06,'nonmetal',16,3],[17,'Cl','Chlore',35.45,'halogen',17,3],[18,'Ar','Argon',39.948,'noble',18,3],
+   [19,'K','Potassium',39.098,'alkali',1,4],[20,'Ca','Calcium',40.078,'alkaline',2,4],[21,'Sc','Scandium',44.956,'transition',3,4],[22,'Ti','Titane',47.867,'transition',4,4],[23,'V','Vanadium',50.942,'transition',5,4],[24,'Cr','Chrome',51.996,'transition',6,4],[25,'Mn','Manganèse',54.938,'transition',7,4],[26,'Fe','Fer',55.845,'transition',8,4],[27,'Co','Cobalt',58.933,'transition',9,4],[28,'Ni','Nickel',58.693,'transition',10,4],[29,'Cu','Cuivre',63.546,'transition',11,4],[30,'Zn','Zinc',65.38,'transition',12,4],[31,'Ga','Gallium',69.723,'post',13,4],[32,'Ge','Germanium',72.63,'metalloid',14,4],[33,'As','Arsenic',74.922,'metalloid',15,4],[34,'Se','Sélénium',78.971,'nonmetal',16,4],[35,'Br','Brome',79.904,'halogen',17,4],[36,'Kr','Krypton',83.798,'noble',18,4],
+   [37,'Rb','Rubidium',85.468,'alkali',1,5],[38,'Sr','Strontium',87.62,'alkaline',2,5],[39,'Y','Yttrium',88.906,'transition',3,5],[40,'Zr','Zirconium',91.224,'transition',4,5],[41,'Nb','Niobium',92.906,'transition',5,5],[42,'Mo','Molybdène',95.95,'transition',6,5],[43,'Tc','Technétium',98,'transition',7,5],[44,'Ru','Ruthénium',101.07,'transition',8,5],[45,'Rh','Rhodium',102.91,'transition',9,5],[46,'Pd','Palladium',106.42,'transition',10,5],[47,'Ag','Argent',107.87,'transition',11,5],[48,'Cd','Cadmium',112.41,'transition',12,5],[49,'In','Indium',114.82,'post',13,5],[50,'Sn','Étain',118.71,'post',14,5],[51,'Sb','Antimoine',121.76,'metalloid',15,5],[52,'Te','Tellure',127.6,'metalloid',16,5],[53,'I','Iode',126.9,'halogen',17,5],[54,'Xe','Xénon',131.29,'noble',18,5],
+   [55,'Cs','Césium',132.91,'alkali',1,6],[56,'Ba','Baryum',137.33,'alkaline',2,6],[72,'Hf','Hafnium',178.49,'transition',4,6],[73,'Ta','Tantale',180.95,'transition',5,6],[74,'W','Tungstène',183.84,'transition',6,6],[75,'Re','Rhénium',186.21,'transition',7,6],[76,'Os','Osmium',190.23,'transition',8,6],[77,'Ir','Iridium',192.22,'transition',9,6],[78,'Pt','Platine',195.08,'transition',10,6],[79,'Au','Or',196.97,'transition',11,6],[80,'Hg','Mercure',200.59,'transition',12,6],[81,'Tl','Thallium',204.38,'post',13,6],[82,'Pb','Plomb',207.2,'post',14,6],[83,'Bi','Bismuth',208.98,'post',15,6],[84,'Po','Polonium',209,'post',16,6],[85,'At','Astate',210,'halogen',17,6],[86,'Rn','Radon',222,'noble',18,6],
+   [87,'Fr','Francium',223,'alkali',1,7],[88,'Ra','Radium',226,'alkaline',2,7],[104,'Rf','Rutherfordium',267,'transition',4,7],[105,'Db','Dubnium',268,'transition',5,7],[106,'Sg','Seaborgium',269,'transition',6,7],[107,'Bh','Bohrium',270,'transition',7,7],[108,'Hs','Hassium',269,'transition',8,7],[109,'Mt','Meitnérium',278,'transition',9,7],[110,'Ds','Darmstadtium',281,'transition',10,7],[111,'Rg','Roentgenium',282,'transition',11,7],[112,'Cn','Copernicium',285,'transition',12,7],[113,'Nh','Nihonium',286,'post',13,7],[114,'Fl','Flérovium',289,'post',14,7],[115,'Mc','Moscovium',290,'post',15,7],[116,'Lv','Livermorium',293,'post',16,7],[117,'Ts','Tennesse',294,'halogen',17,7],[118,'Og','Oganesson',294,'noble',18,7],
+   [57,'La','Lanthane',138.91,'lanthanide',3,9],[58,'Ce','Cérium',140.12,'lanthanide',4,9],[59,'Pr','Praséodyme',140.91,'lanthanide',5,9],[60,'Nd','Néodyme',144.24,'lanthanide',6,9],[61,'Pm','Prométhium',145,'lanthanide',7,9],[62,'Sm','Samarium',150.36,'lanthanide',8,9],[63,'Eu','Europium',151.96,'lanthanide',9,9],[64,'Gd','Gadolinium',157.25,'lanthanide',10,9],[65,'Tb','Terbium',158.93,'lanthanide',11,9],[66,'Dy','Dysprosium',162.5,'lanthanide',12,9],[67,'Ho','Holmium',164.93,'lanthanide',13,9],[68,'Er','Erbium',167.26,'lanthanide',14,9],[69,'Tm','Thulium',168.93,'lanthanide',15,9],[70,'Yb','Ytterbium',173.05,'lanthanide',16,9],[71,'Lu','Lutécium',174.97,'lanthanide',17,9],
+   [89,'Ac','Actinium',227,'actinide',3,10],[90,'Th','Thorium',232.04,'actinide',4,10],[91,'Pa','Protactinium',231.04,'actinide',5,10],[92,'U','Uranium',238.03,'actinide',6,10],[93,'Np','Neptunium',237,'actinide',7,10],[94,'Pu','Plutonium',244,'actinide',8,10],[95,'Am','Américium',243,'actinide',9,10],[96,'Cm','Curium',247,'actinide',10,10],[97,'Bk','Berkélium',247,'actinide',11,10],[98,'Cf','Californium',251,'actinide',12,10],[99,'Es','Einsteinium',252,'actinide',13,10],[100,'Fm','Fermium',257,'actinide',14,10],[101,'Md','Mendélévium',258,'actinide',15,10],[102,'No','Nobélium',259,'actinide',16,10],[103,'Lr','Lawrencium',266,'actinide',17,10]];
   var IWPTCAT={alkali:'#f2a65a',alkaline:'#f6d365',transition:'#7fb3d5',post:'#7fd1ae',metalloid:'#5fa39b',nonmetal:'#a8d38d',halogen:'#e9c46a',noble:'#c3aed6',lanthanide:'#f4a3b8',actinide:'#ef8f7e'};
-  var IWPTNAME={alkali:'Alkali metal',alkaline:'Alkaline earth metal',transition:'Transition metal',post:'Post-transition metal',metalloid:'Metalloid',nonmetal:'Nonmetal',halogen:'Halogen',noble:'Noble gas',lanthanide:'Lanthanide',actinide:'Actinide'};
+  var IWPTNAME={alkali:'Métal alcalin',alkaline:'Métal alcalino-terreux',transition:'Métal de transition',post:'Métal pauvre',metalloid:'Métalloïde',nonmetal:'Non-métal',halogen:'Halogène',noble:'Gaz noble',lanthanide:'Lanthanide',actinide:'Actinide'};
   // Electron configuration + shell (couche) distribution, computed from Z (Aufbau).
   function iwEconf(z){ var order=[[1,'s',2],[2,'s',2],[2,'p',6],[3,'s',2],[3,'p',6],[4,'s',2],[3,'d',10],[4,'p',6],[5,'s',2],[4,'d',10],[5,'p',6],[6,'s',2],[4,'f',14],[5,'d',10],[6,'p',6],[7,'s',2],[5,'f',14],[6,'d',10],[7,'p',6]];
     var left=z, parts=[], shells=[]; for(var i=0;i<order.length&&left>0;i++){ var n=order[i][0], take=Math.min(order[i][2],left); left-=take; parts.push(n+order[i][1]+'<sup>'+take+'</sup>'); shells[n-1]=(shells[n-1]||0)+take; }
@@ -7262,7 +7412,7 @@ if('IntersectionObserver' in window && _links.length){
     function shown(e){ return !only || only[String(e[1]).toLowerCase()] || only[String(e[0])]; }
     var cells=IWPT.map(function(e){ return '<button class="iwp-el'+(shown(e)?'':' iwp-dim')+'" data-z="'+e[0]+'" style="grid-column:'+e[5]+';grid-row:'+e[6]+';background:'+(IWPTCAT[e[4]]||'#ccc')+'"><span class="iwp-z">'+e[0]+'</span><span class="iwp-sym">'+e[1]+'</span><span class="iwp-nm">'+esc(e[2])+'</span></button>'; }).join('');
     var letters=['K','L','M','N','O','P','Q'];
-    box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iwp-scroll"><div class="iwp-grid">'+cells+'</div></div><div class="iwp-info" data-info>Tap any element to see its atom &amp; details.</div>';
+    box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iwp-scroll"><div class="iwp-grid">'+cells+'</div></div><div class="iwp-info" data-info>Touchez un élément pour voir son atome et sa fiche.</div>';
     var info=box.querySelector('[data-info]');
     function fact(l,v){ return '<div class="iwp-f"><dt>'+l+'</dt><dd>'+v+'</dd></div>'; }
     box.querySelectorAll('.iwp-el').forEach(function(b){ b.addEventListener('click',function(){ var z=+b.getAttribute('data-z'), e=null; for(var i=0;i<IWPT.length;i++){ if(IWPT[i][0]===z){e=IWPT[i];break;} } if(!e)return;
@@ -7483,7 +7633,7 @@ if('IntersectionObserver' in window && _links.length){
       (skills.length?'<div class="iwme-skills"><b>'+esc(c.skillsLabel||'Savoir-faire')+'</b><ul>'+
         skills.map(function(s){ return '<li>'+iwRT(s)+'</li>'; }).join('')+'</ul></div>':'')+
       '<ol class="iwme-steps">'+body+'</ol>'+
-      (reveal?'<div class="iwme-actions"><button type="button" class="iw-btn" data-me="next">Étape suivante</button><button type="button" class="iwm-qbtn" data-me="all">Tout afficher</button><button type="button" class="iwm-qbtn" data-me="reset">Recommencer</button></div>':'')+
+      (reveal?'<div class="iwme-actions"><button type="button" class="iw-btn" data-me="next">Étape suivante</button><button type="button" class="iwm-qbtn" data-me="all">Tout afficher</button><button type="button" class="iwm-qbtn" data-me="reset">'+T('reset','Recommencer')+'</button></div>':'')+
       (c.answer?'<div class="iwme-ans'+(reveal?' hid':'')+'" data-ans><span>'+esc(c.answerLabel||'Résultat')+'</span><math xmlns="http://www.w3.org/1998/Math/MathML">'+texToMML(c.answer)+'</math></div>':'');
     if(!reveal)return;
     var at=0, steps=box.querySelectorAll('.iwme-step'), ans=box.querySelector('[data-ans]');
@@ -8352,7 +8502,7 @@ if('IntersectionObserver' in window && _links.length){
       '<span class="iwrx-arrow">'+(c.conditions?'<em>'+esc(c.conditions)+'</em>':'')+arrow+'</span>'+
       side(Rr,'r')+'</div>'+
       '<div class="iwrx-bal" data-bal></div>'+
-      (quiz?'<div class="iwrx-actions"><button type="button" class="iw-btn" data-rx="check">Vérifier</button><button type="button" class="iwm-qbtn" data-rx="show">Montrer</button><button type="button" class="iwm-qbtn" data-rx="reset">Effacer</button></div>':'')+
+      (quiz?'<div class="iwrx-actions"><button type="button" class="iw-btn" data-rx="check">'+T('check','Vérifier')+'</button><button type="button" class="iwm-qbtn" data-rx="show">'+T('show','Montrer')+'</button><button type="button" class="iwm-qbtn" data-rx="reset">'+T('clear','Effacer')+'</button></div>':'')+
       (c.note?'<div class="iwrx-note">'+esc(c.note)+'</div>':'');
     var bal=box.querySelector('[data-bal]');
     function coefOf(list,key,i){
@@ -8462,7 +8612,7 @@ if('IntersectionObserver' in window && _links.length){
         (q.points?'<span class="iwsrc-pts">'+esc(q.points)+' pt</span>':'')+'</div>'+
         (q.hint?'<div class="iwsrc-hint">'+esc(q.hint)+'</div>':'')+
         '<textarea class="iwsrc-ans" rows="'+(parseInt(q.lines,10)||2)+'" placeholder="Ta réponse…"></textarea>'+
-        (q.answer?'<div class="iwsrc-rev"><button type="button" class="iwm-qbtn" data-rev="'+i+'">Voir la réponse</button>'+
+        (q.answer?'<div class="iwsrc-rev"><button type="button" class="iwm-qbtn" data-rev="'+i+'">'+T('showAnswer','Voir la réponse')+'</button>'+
           '<div class="iwsrc-model" hidden>'+esc(q.answer)+'</div></div>':'')+'</li>'; }).join('');
     box.innerHTML=(c.kicker?'<div class="iwsrc-kick">'+esc(c.kicker)+'</div>':'')+
       (c.title?'<h3 class="iwsrc-title">'+esc(c.title)+'</h3>':'')+
@@ -8868,8 +9018,33 @@ if('IntersectionObserver' in window && _links.length){
           return r;
         } };
     }
-    function markerShape(sh,x,y,r,col){
+    /* -- les trames ------------------------------------------------------
+       La tuile est dimensionnee d'apres la VUE COURANTE, pas en unites de
+       carte : une trame en unites de carte grossit quand on recadre ou qu'on
+       zoome -- fines hachures sur un planisphere, bandes de dix pixels sur le
+       Maghreb recadre. Rapportee a la vue, elle garde toujours la meme finesse
+       a l'ecran.
+       L'identifiant est passe de l'exterieur : chaque carte d'un livre a le
+       sien, sinon deux cartes d'une meme page se voleraient leurs motifs. */
+    var TEX={hachures:1,croix:1,points:1,briques:1};
+    function texDef(id,t,col,vw){
+      var u=Math.max(2,(vw||1000)/125), k=u/8;
+      var c=String(col).split('"').join('');
+      var g='<rect width="'+u+'" height="'+u+'" fill="'+c+'" opacity=".20"/>';
+      if(t==='points') g+='<circle cx="'+(4*k)+'" cy="'+(4*k)+'" r="'+(1.5*k)+'" fill="'+c+'"/>';
+      else if(t==='briques') g+='<path d="M0 '+(4*k)+'h'+u+'M'+(4*k)+' 0v'+(4*k)+'M'+(2*k)+' '+(4*k)+'v'+(4*k)
+        +'" stroke="'+c+'" stroke-width="'+(1.2*k)+'" fill="none"/>';
+      else g+='<path d="'+(t==='croix'?('M0 '+u+'L'+u+' 0M0 0L'+u+' '+u):('M0 '+u+'L'+u+' 0'))
+        +'" stroke="'+c+'" stroke-width="'+(1.6*k)+'" fill="none"/>';
+      return '<pattern id="'+id+'" width="'+u+'" height="'+u+'" patternUnits="userSpaceOnUse">'+g+'</pattern>';
+    }
+    function markerShape(sh,x,y,r,col,img){
       var st=' stroke="var(--paper)" stroke-width="'+(r*0.26).toFixed(2)+'"';
+      /* Un pictogramme a soi. Il remplace la forme dessinee : c'est ce qu'il
+         faut pour les pictogrammes de securite, un logo, le symbole d'une
+         discipline. Centre sur le point, comme les autres formes, et sans
+         deformation — preserveAspectRatio, sinon un carre devient un oeuf. */
+      if(sh==='image'&&img) return '<image href="'+img+'" x="'+(x-r*1.4)+'" y="'+(y-r*1.4)+'" width="'+(r*2.8)+'" height="'+(r*2.8)+'" preserveAspectRatio="xMidYMid meet"/>';
       if(sh==='square') return '<rect x="'+(x-r)+'" y="'+(y-r)+'" width="'+(2*r)+'" height="'+(2*r)+'" rx="'+(r*0.22)+'" fill="'+col+'"'+st+'/>';
       if(sh==='triangle') return '<path d="M'+x+' '+(y-r*1.15)+'L'+(x+r)+' '+(y+r*0.8)+'L'+(x-r)+' '+(y+r*0.8)+'Z" fill="'+col+'"'+st+'/>';
       if(sh==='star') return '<path d="'+star(x,y,r,r*0.45,5)+'" fill="'+col+'"'+st+'/>';
@@ -8878,24 +9053,10 @@ if('IntersectionObserver' in window && _links.length){
       return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+col+'"'+st+'/>';
     }
 
-    /* ── textures ─────────────────────────────────────────────────────── */
-    var TEX={hachures:1,croix:1,points:1,briques:1};
+    /* TEX et texDef viennent de shapes.js : l'editeur de Studio dessine ses
+       trames avec le meme code, si bien qu'une region hachuree sur le canevas
+       est hachuree sur la page. */
     function texId(t,col){ return UID+'-t'+hash(t+'|'+col); }
-    /* La tuile est dimensionnee d'apres la VUE COURANTE, pas en unites de carte.
-       Une trame en unites de carte grossit quand on recadre ou qu'on zoome : sur
-       un planisphere on voyait de fines hachures, et sur le Maghreb recadre les
-       memes hachures devenaient des bandes de dix pixels. Rapportee a la vue,
-       elle garde toujours la meme finesse a l'ecran. */
-    function texDef(t,col,vw){
-      var id=texId(t,col), u=Math.max(2,(vw||1000)/125), k=u/8;
-      var g='<rect width="'+u+'" height="'+u+'" fill="'+esc(col)+'" opacity=".20"/>';
-      if(t==='points') g+='<circle cx="'+(4*k)+'" cy="'+(4*k)+'" r="'+(1.5*k)+'" fill="'+esc(col)+'"/>';
-      else if(t==='briques') g+='<path d="M0 '+(4*k)+'h'+u+'M'+(4*k)+' 0v'+(4*k)+'M'+(2*k)+' '+(4*k)+'v'+(4*k)
-        +'" stroke="'+esc(col)+'" stroke-width="'+(1.2*k)+'" fill="none"/>';
-      else g+='<path d="'+(t==='croix'?('M0 '+u+'L'+u+' 0M0 0L'+u+' '+u):('M0 '+u+'L'+u+' 0'))
-        +'" stroke="'+esc(col)+'" stroke-width="'+(1.6*k)+'" fill="none"/>';
-      return '<pattern id="'+id+'" width="'+u+'" height="'+u+'" patternUnits="userSpaceOnUse">'+g+'</pattern>';
-    }
     function fillOf(p){
       if(!p||!p.color) return null;
       return (p.texture&&TEX[p.texture])?'url(#'+texId(p.texture,p.color)+')':p.color;
@@ -8999,7 +9160,7 @@ if('IntersectionObserver' in window && _links.length){
       if(!pts.length) return '';
       if(it.kind==='marker'){
         var p0=pts[0], r=+it.r||9, sh=it.shape||'disc';
-        o='<g'+tag+'>'+markerShape(sh,p0[0],p0[1],r,col)
+        o='<g'+tag+'>'+markerShape(sh,p0[0],p0[1],r,col,it.img)
           +(it.label?txtAt(p0[0],p0[1]-r-fs(6),it.label):'')+'</g>';
         return o;
       }
@@ -9167,7 +9328,7 @@ if('IntersectionObserver' in window && _links.length){
         var f=col;
         if(e.texture&&TEX[e.texture]){
           var lid=texId(e.texture,e.color||'#888')+'l';
-          s+='<defs>'+texDef(e.texture,e.color||'#888',560).replace('id="'+texId(e.texture,e.color||'#888')+'"','id="'+lid+'"')+'</defs>';
+          s+='<defs>'+texDef(lid,e.texture,e.color||'#888',560)+'</defs>';
           f='url(#'+lid+')';
         }
         s+='<rect x="2" y="2" width="22" height="12" rx="2.5" fill="'+f+'" stroke="'+col+'" stroke-width="1"/>';
@@ -9196,6 +9357,42 @@ if('IntersectionObserver' in window && _links.length){
           dash:k.dash,shape:k.shape,width:k.width,text:k.label,cat:k.cat||''});
       });
       (LG.notes||[]).forEach(function(n){ if(n&&n.text) rows.push({type:'note',text:n.text,cat:n.cat||''}); });
+      /* Regrouper ce qui porte la meme couleur.
+         Sur une carte thematique, dix pays de la meme teinte disent UNE chose —
+         « pays exportateurs » — et non dix. La legende les listait un par un,
+         ce qui la rendait illisible et faisait perdre la lecture. Reunis, ils
+         donnent une ligne, sous le nom que l'auteur choisit ; faute de nom, on
+         enumere, ce qui reste plus court que dix lignes.
+         Le quiz ne se regroupe pas : chaque pastille y est cliquable, et deux
+         reponses fondues en une n'en seraient plus une. */
+      if(iwBool(LG.groupByColor,false)&&!quizOn){
+        var noms={};
+        (LG.colorNames||[]).forEach(function(c){
+          if(c&&c.color) noms[String(c.color).toLowerCase()]=c.label||''; });
+        var vus={}, fondu=[];
+        rows.forEach(function(r){
+          if(r.type!=='area'||!r.color){ fondu.push(r); return; }
+          /* La clef est la COULEUR SEULE, sans le remplissage.
+             L'auteur demande « ces regions ont la meme couleur, mets-les
+             ensemble » ; deux teintes identiques dont l'une est hachuree
+             restaient separees, et le regroupement paraissait ne rien faire.
+             La ligne fusionnee garde le remplissage de la premiere. */
+          var k=String(r.color).toLowerCase();
+          if(!vus[k]){
+            var copie={}; for(var q in r) if(Object.prototype.hasOwnProperty.call(r,q)) copie[q]=r[q];
+            copie.membres=[r.text]; vus[k]=copie; fondu.push(copie);
+          } else if(vus[k].membres.indexOf(r.text)<0) vus[k].membres.push(r.text);
+        });
+        fondu.forEach(function(r){
+          if(!r.membres) return;
+          var nom=noms[String(r.color).toLowerCase()];
+          /* Une seule region gardee seule : son propre nom, jamais un nom de
+             groupe qui ferait croire a un ensemble. */
+          r.text=(r.membres.length>1&&nom)?nom:r.membres.join(', ');
+          delete r.membres;
+        });
+        rows=fondu;
+      }
       return rows;
     }
     function legendHtml(st){
@@ -9281,7 +9478,7 @@ if('IntersectionObserver' in window && _links.length){
       // les trames, une fois la vue connue : leur finesse en depend
       var defs='', seen={};
       parts.forEach(function(p){ if(p.texture&&TEX[p.texture]&&p.color&&!seen[p.texture+p.color]){
-        seen[p.texture+p.color]=1; defs+=texDef(p.texture,p.color,view.w); } });
+        seen[p.texture+p.color]=1; defs+=texDef(texId(p.texture,p.color),p.texture,p.color,view.w); } });
       var body='<defs>'+defs+'</defs>';
       if(src.inner){
         body+='<g class="iwm-land">'+src.inner+'</g>';
@@ -9330,8 +9527,8 @@ if('IntersectionObserver' in window && _links.length){
       var qbar=desBlancs
         ? '<div class="iwm-quiz">'+(QC.prompt?'<span>'+iwRT(QC.prompt)+'</span>':'')
           +'<button type="button" class="iwm-qbtn" data-q="check">Verifier</button>'
-          +'<button type="button" class="iwm-qbtn" data-q="show">Montrer</button>'
-          +'<button type="button" class="iwm-qbtn" data-q="reset">Effacer</button>'
+          +'<button type="button" class="iwm-qbtn" data-q="show">'+T('show','Montrer')+'</button>'
+          +'<button type="button" class="iwm-qbtn" data-q="reset">'+T('clear','Effacer')+'</button>'
           +'<span class="iwm-qscore" data-qscore></span></div>'
         : '';
 
@@ -9492,8 +9689,8 @@ if('IntersectionObserver' in window && _links.length){
     function cell(txt,img){ var h=''; if(img)h+='<img class="iwx-img" src="'+esc(img)+'" alt="'+esc(txt||'')+'">'; if(txt!=null&&txt!=='')h+='<span class="iwx-txt">'+esc(txt)+'</span>'; return h||'<span class="iwx-txt">·</span>'; }
     box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+
       '<div class="iwx-grid"><div class="iwx-col iwx-left"></div></div>'+
-      '<div class="iwx-bankwrap"><div class="iwx-banklabel">Drag a match into each slot — or tap one, then tap a slot.</div><div class="iwx-bank"></div></div>'+
-      '<div class="iwx-actions"><button class="iw-btn iwx-check">Vérifier</button><button class="iw-btn iwx-reset" style="background:transparent;color:var(--slate);border:1px solid var(--rule)">Effacer</button><span class="iwx-msg"></span></div>';
+      '<div class="iwx-bankwrap"><div class="iwx-banklabel">Glissez chaque étiquette dans sa case — ou touchez-en une, puis la case.</div><div class="iwx-bank"></div></div>'+
+      '<div class="iwx-actions"><button class="iw-btn iwx-check">'+T('check','Vérifier')+'</button><button class="iw-btn iwx-reset" style="background:transparent;color:var(--slate);border:1px solid var(--rule)">'+T('clear','Effacer')+'</button><span class="iwx-msg"></span></div>';
     var L=box.querySelector('.iwx-left'), bank=box.querySelector('.iwx-bank'), msg=box.querySelector('.iwx-msg');
     var order=pairs.map(function(p,i){return i;});
     for(var i=order.length-1;i>0;i--){var j=hash('m'+i+(pairs[i].right||pairs[i].rightImg||''))%(i+1);var t=order[i];order[i]=order[j];order[j]=t;}
@@ -9526,7 +9723,7 @@ if('IntersectionObserver' in window && _links.length){
     bank.addEventListener('drop',function(e){ e.preventDefault(); if(dragPair!=null)toBank(dragPair); });
     box.querySelector('.iwx-check').addEventListener('click',function(){ var all=true,ok=0;
       box.querySelectorAll('.iwx-slot').forEach(function(s,i){ var good=placed[i]===i; s.classList.toggle('ok',good); s.classList.toggle('no',!good); if(good)ok++;else all=false; });
-      msg.textContent=all?(c.successMsg||'Perfect — every pair matched!'):((c.failMsg||'Not quite — try again.')+' ('+ok+'/'+pairs.length+')'); msg.className='iwx-msg '+(all?'ok':'no'); });
+      msg.textContent=all?(c.successMsg||'Parfait — toutes les paires y sont !'):((c.failMsg||'Pas encore — réessayez.')+' ('+ok+'/'+pairs.length+')'); msg.className='iwx-msg '+(all?'ok':'no'); });
     box.querySelector('.iwx-reset').addEventListener('click',function(){ placed={}; sel=null; clearMsg(); render(); });
     render();
   };
@@ -9579,7 +9776,7 @@ if('IntersectionObserver' in window && _links.length){
         else { b.classList.toggle('done',voted); b.textContent=o; }
         if(!voted)b.addEventListener('click',function(){ st.counts[i]++; st.voted=i; try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){} render(); });
         oe.appendChild(b); });
-      foot.textContent = st.voted>=0 ? (c.results==='private'?'Thanks for voting.':(total+' vote'+(total!==1?'s':'')+' so far')) : 'Tap an option to vote.'; }
+      foot.textContent = st.voted>=0 ? (c.results==='private'?'Merci pour votre vote.':(total+' vote'+(total!==1?'s':'')+' pour l’instant')) : 'Touchez une réponse pour voter.'; }
     render();
   };
 
@@ -10704,6 +10901,9 @@ if('IntersectionObserver' in window && _links.length){
   /* ── full custom HTML embed ── */
   R.embed=function(box,c){
     box.className='iw iw-embed';
+    if(!(c.html||'').trim()){
+      box.className='iw iw-card iw-embed';
+      box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+'<div class="iw-err">Colle ici le code HTML à afficher.</div>'; return; }
     var f=el('iframe','iw-embed-frame'); f.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
     f.style.height=((c.height||420))+'px'; box.appendChild(f); f.srcdoc=c.html||'';
   };
@@ -10721,7 +10921,7 @@ if('IntersectionObserver' in window && _links.length){
       fl.addEventListener('click',function(){fl.classList.toggle('on');});
       fl.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();fl.classList.toggle('on');}});
     } else if(mode==='scratch'){
-      box.innerHTML=title+'<div class="iwr-scratch"><div class="iwr-under">'+back+'</div><canvas class="iwr-cv"></canvas><div class="iwr-hint">'+(front||'Scratch to reveal')+'</div></div>';
+      box.innerHTML=title+'<div class="iwr-scratch"><div class="iwr-under">'+back+'</div><canvas class="iwr-cv"></canvas><div class="iwr-hint">'+(front||'Grattez pour découvrir')+'</div></div>';
       initScratch(box,c);
     } else {
       box.innerHTML=title+'<button class="iwr-head" aria-expanded="false">'+(front||'Reveal')+'<span class="iwr-chev">▾</span></button><div class="iwr-body" hidden>'+back+'</div>';
@@ -10936,9 +11136,9 @@ if('IntersectionObserver' in window && _links.length){
       iwMeta(c)+
       (c.intro?'<div class="iwex-intro">'+esc(c.intro)+'</div>':'')+
       '<ol class="iwex-list">'+body+'</ol>'+
-      '<div class="iwex-actions"><button type="button" class="iw-btn" data-ex="check">Vérifier</button>'+
+      '<div class="iwex-actions"><button type="button" class="iw-btn" data-ex="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-ex="sol">Corrigé</button>'+
-      '<button type="button" class="iwm-qbtn" data-ex="reset">Effacer</button>'+
+      '<button type="button" class="iwm-qbtn" data-ex="reset">'+T('clear','Effacer')+'</button>'+
       '<span class="iwex-score"></span></div>'+
       (c.note?'<div class="iwex-note">'+esc(c.note)+'</div>':'');
     var qs=box.querySelectorAll('.iwex-q');
@@ -11005,7 +11205,7 @@ if('IntersectionObserver' in window && _links.length){
       '<button type="button" class="iwm-qbtn" data-f="next">›</button></div>'+
       '<div class="iwfc-judge"><button type="button" class="iw-btn iwfc-yes" data-f="known">Je savais</button>'+
       '<button type="button" class="iwm-qbtn iwfc-no" data-f="again">À revoir</button>'+
-      '<button type="button" class="iwm-qbtn" data-f="restart">Recommencer</button></div>'+
+      '<button type="button" class="iwm-qbtn" data-f="restart">'+T('reset','Recommencer')+'</button></div>'+
       '<div class="iwfc-stat"></div>'+(c.note?'<div class="iwfc-note">'+esc(c.note)+'</div>':'');
     var deck=[], at=0, known=0, again=0, flipped=false;
     var cardEl=box.querySelector('.iwfc-card');
@@ -11102,9 +11302,9 @@ if('IntersectionObserver' in window && _links.length){
     box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+
       (c.intro?'<div class="iword-intro">'+esc(c.intro)+'</div>':'')+
       '<ol class="iword-list"></ol>'+
-      '<div class="iword-actions"><button type="button" class="iw-btn" data-o="check">Vérifier</button>'+
-      '<button type="button" class="iwm-qbtn" data-o="show">Montrer</button>'+
-      '<button type="button" class="iwm-qbtn" data-o="reset">Recommencer</button>'+
+      '<div class="iword-actions"><button type="button" class="iw-btn" data-o="check">'+T('check','Vérifier')+'</button>'+
+      '<button type="button" class="iwm-qbtn" data-o="show">'+T('show','Montrer')+'</button>'+
+      '<button type="button" class="iwm-qbtn" data-o="reset">'+T('reset','Recommencer')+'</button>'+
       '<span class="iword-score"></span></div>'+
       (c.note?'<div class="iword-note">'+esc(c.note)+'</div>':'');
     var list=box.querySelector('.iword-list');
@@ -11819,8 +12019,8 @@ if('IntersectionObserver' in window && _links.length){
       '<span class="iwnuc-arrow">→</span>'+
       Rr.map(function(s,i){ return nuc(s,'r',i); }).join('<span class="iwnuc-op">+</span>')+'</div>'+
       '<div class="iwnuc-bal" data-bal></div>'+
-      (quiz?'<div class="iwnuc-actions"><button type="button" class="iw-btn" data-nu="check">Vérifier</button>'+
-        '<button type="button" class="iwm-qbtn" data-nu="show">Montrer</button></div>':'')+
+      (quiz?'<div class="iwnuc-actions"><button type="button" class="iw-btn" data-nu="check">'+T('check','Vérifier')+'</button>'+
+        '<button type="button" class="iwm-qbtn" data-nu="show">'+T('show','Montrer')+'</button></div>':'')+
       (c.note?'<div class="iwnuc-note">'+esc(c.note)+'</div>':'');
     var bal=box.querySelector('[data-bal]');
     function report(){
@@ -11960,9 +12160,9 @@ if('IntersectionObserver' in window && _links.length){
       '</div>'+
       '<div class="iwlb-pool" data-pool>'+ord.map(function(i){
         return '<button type="button" class="iwlb-c" draggable="true" data-c="'+i+'">'+esc(T[i].label)+'</button>'; }).join('')+'</div>'+
-      '<div class="iwlb-actions"><button type="button" class="iw-btn" data-l="check">Vérifier</button>'+
+      '<div class="iwlb-actions"><button type="button" class="iw-btn" data-l="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-l="show">Corrigé</button>'+
-      '<button type="button" class="iwm-qbtn" data-l="reset">Recommencer</button>'+
+      '<button type="button" class="iwm-qbtn" data-l="reset">'+T('reset','Recommencer')+'</button>'+
       '<span class="iwlb-score"></span></div>'+
       (c.note?'<div class="iwlb-note">'+esc(c.note)+'</div>':'');
     var pool=box.querySelector('[data-pool]'), score=box.querySelector('.iwlb-score');
@@ -12158,7 +12358,7 @@ if('IntersectionObserver' in window && _links.length){
       (c.intro?'<div class="iwiq-intro">'+esc(c.intro)+'</div>':'')+
       '<div class="iwiq-wrap"></div>'+
       '<div class="iwiq-read" data-read></div>'+
-      '<div class="iwiq-actions"><button type="button" class="iw-btn" data-q="check">Vérifier</button>'+
+      '<div class="iwiq-actions"><button type="button" class="iw-btn" data-q="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button>'+
       '<span class="iwiq-score"></span></div>'+
       '<div class="iwiq-tip">Faites glisser les deux poignées ; cliquez une poignée pour passer de <b>●</b> incluse à <b>○</b> exclue puis à <b>→</b> infinie.</div>'+
@@ -12359,7 +12559,7 @@ if('IntersectionObserver' in window && _links.length){
         return '<button type="button" class="iwcj-tab'+(i===0?' on':'')+'" data-t="'+i+'">'+esc(t.name||('Temps '+(i+1)))+'</button>'; }).join('')+'</div>':
         (tenses[0].name?'<div class="iwcj-one">'+esc(tenses[0].name)+'</div>':''))+
       '<div class="iwcj-body"></div>'+
-      (drill?'<div class="iwcj-actions"><button type="button" class="iw-btn" data-cj="check">Vérifier</button>'+
+      (drill?'<div class="iwcj-actions"><button type="button" class="iw-btn" data-cj="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwcj-score"></span></div>':'')+
       (c.note?'<div class="iwcj-note">'+esc(c.note)+'</div>':'');
     var body=box.querySelector('.iwcj-body'), score=box.querySelector('.iwcj-score');
@@ -12431,7 +12631,7 @@ if('IntersectionObserver' in window && _links.length){
       ((c.bank!==false&&shown.length)?'<div class="iwcz-bank">'+shown.map(function(w){
         return '<button type="button" class="iwcz-chip">'+esc(w)+'</button>'; }).join('')+'</div>':'')+
       '<div class="iwcz-text">'+out+'</div>'+
-      (gaps.length?'<div class="iwcz-actions"><button type="button" class="iw-btn" data-cz="check">Vérifier</button>'+
+      (gaps.length?'<div class="iwcz-actions"><button type="button" class="iw-btn" data-cz="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwcz-score"></span></div>':'')+
       (c.note?'<div class="iwcz-note">'+esc(c.note)+'</div>':'');
     var score=box.querySelector('.iwcz-score');
@@ -12493,7 +12693,7 @@ if('IntersectionObserver' in window && _links.length){
       '<div class="iwst-row">'+chips+'</div>'+
       ((c.legend!==false&&nats.length)?'<div class="iwst-legend">'+nats.map(function(n){
         return '<span class="iwst-lg"><i style="background:'+esc(byNat[n])+'"></i>'+esc(n)+'</span>'; }).join('')+'</div>':'')+
-      (quiz?'<div class="iwst-actions"><button type="button" class="iw-btn" data-st="check">Vérifier</button>'+
+      (quiz?'<div class="iwst-actions"><button type="button" class="iw-btn" data-st="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwst-score"></span></div>':'')+
       (c.note?'<div class="iwst-note">'+esc(c.note)+'</div>':'');
     if(!quiz)return;
@@ -12579,7 +12779,7 @@ if('IntersectionObserver' in window && _links.length){
       (c.intro?'<div class="iwcw-intro">'+esc(c.intro)+'</div>':'')+
       '<div class="iwcw-wrap"><table class="iwcw-grid"><tbody>'+rows+'</tbody></table>'+
       '<div class="iwcw-clues">'+clues(across,'Horizontalement')+clues(down,'Verticalement')+'</div></div>'+
-      '<div class="iwcw-actions"><button type="button" class="iw-btn" data-cw="check">Vérifier</button>'+
+      '<div class="iwcw-actions"><button type="button" class="iw-btn" data-cw="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwcw-score"></span></div>'+
       (c.note?'<div class="iwcw-note">'+esc(c.note)+'</div>':'');
     var score=box.querySelector('.iwcw-score');
@@ -12734,7 +12934,7 @@ if('IntersectionObserver' in window && _links.length){
       (c.intro?'<div class="iwck-intro">'+esc(c.intro)+'</div>':'')+
       '<div class="iwck-wrap">'+panel()+'</div>'+ask+
       (mode==='show'?'<div class="iwck-read"><b>'+digital(t0.h,t0.m)+'</b><span>'+esc(words(t0.h,t0.m))+'</span></div>':
-        '<div class="iwck-actions"><button type="button" class="iw-btn" data-ck="check">Vérifier</button>'+
+        '<div class="iwck-actions"><button type="button" class="iw-btn" data-ck="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwck-score"></span></div>')+
       (c.note?'<div class="iwck-note">'+esc(c.note)+'</div>':'');
     if(mode==='show')return;
@@ -12842,7 +13042,7 @@ if('IntersectionObserver' in window && _links.length){
       (fill?'<div class="iwpv-ask">Écrivez <b>'+esc(raw||'0')+'</b> dans le tableau.</div>':'')+
       '<div class="iwpv-scroll"><table class="iwpv-t"><thead><tr>'+head1+'</tr><tr>'+head2+'</tr></thead>'+
       '<tbody><tr>'+row+'</tr></tbody></table></div>'+
-      (fill?'<div class="iwpv-actions"><button type="button" class="iw-btn" data-pv="check">Vérifier</button>'+
+      (fill?'<div class="iwpv-actions"><button type="button" class="iw-btn" data-pv="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwpv-score"></span></div>':'')+
       ((c.decompose!==false&&parts.length)?'<div class="iwpv-dec"><span>Décomposition</span><b>'+esc(ip)+(fp?','+esc(fp):'')+
         ' = '+parts.join(' + ')+'</b></div>':'')+
@@ -12985,7 +13185,7 @@ if('IntersectionObserver' in window && _links.length){
     box.innerHTML=(c.title?'<div class="iw-title">'+esc(c.title)+'</div>':'')+
       (c.intro?'<div class="iwpo-intro">'+esc(c.intro)+'</div>':'')+
       '<div class="iwpo-grid" style="--pw:'+W+'">'+html+'</div>'+extra+
-      (blank?'<div class="iwpo-actions"><button type="button" class="iw-btn" data-po="check">Vérifier</button>'+
+      (blank?'<div class="iwpo-actions"><button type="button" class="iw-btn" data-po="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwpo-score"></span></div>':'')+
       (c.note?'<div class="iwpo-note">'+esc(c.note)+'</div>':'');
     if(!blank)return;
@@ -13115,7 +13315,7 @@ if('IntersectionObserver' in window && _links.length){
           var want=conv(iwNum(d.value)||0,a,b);
           return '<div class="iwuc-dr"><span>'+esc(String(d.value))+' '+esc(units[a])+' =</span>'+
             '<input type="text" inputmode="decimal" data-a="'+want+'" aria-label="résultat"><em>'+esc(units[b])+'</em></div>'; }).join('')+
-        '<div class="iwuc-actions"><button type="button" class="iw-btn" data-uc="check">Vérifier</button>'+
+        '<div class="iwuc-actions"><button type="button" class="iw-btn" data-uc="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwuc-score"></span></div></div>':'')+
       (c.note?'<div class="iwuc-note">'+esc(c.note)+'</div>':'');
     var vin=box.querySelector('.iwuc-v'), fs=box.querySelector('.iwuc-f'), ts=box.querySelector('.iwuc-t2');
@@ -13701,7 +13901,7 @@ if('IntersectionObserver' in window && _links.length){
       (steps.length?'<div class="iwal-act"><button type="button" class="iwm-qbtn" data-al="prev">◂</button>'+
         '<span class="iwal-n"></span><button type="button" class="iwm-qbtn" data-al="next">▸</button>'+
         '<button type="button" class="iw-btn" data-al="all">Tout dérouler</button>'+
-        (fill?'<button type="button" class="iw-btn" data-al="check">Vérifier</button>'+
+        (fill?'<button type="button" class="iw-btn" data-al="check">'+T('check','Vérifier')+'</button>'+
           '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwal-score"></span>':'')+
         '</div>':'')+
       (c.note?'<div class="iwal-note">'+iwRT(c.note)+'</div>':'');
@@ -13797,7 +13997,7 @@ if('IntersectionObserver' in window && _links.length){
       (c.intro?'<div class="iwav-intro">'+iwRT(c.intro)+'</div>':'')+
       '<div class="iwav-eq">'+iwRT(eq)+'</div>'+
       '<div class="iwav-tw"><table class="iwav-t"><thead>'+head+'</thead><tbody>'+rowI+rowE+rowF+'</tbody></table></div>'+
-      (fill?'<div class="iwav-actions"><button type="button" class="iw-btn" data-av="check">Vérifier</button>'+
+      (fill?'<div class="iwav-actions"><button type="button" class="iw-btn" data-av="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwav-score"></span></div>':'')+
       ((c.conclusion!==false)?'<div class="iwav-say'+(fill?' hid':'')+'"><b>x<sub>max</sub> = '+esc(num(xmax))+' '+esc(unit)+'</b>'+
         (limit?' — le réactif limitant est <b>'+iwRT(limit.name)+'</b>.':'')+
@@ -13822,15 +14022,15 @@ if('IntersectionObserver' in window && _links.length){
   /* ── hazard: the SGH diamonds and the H/P statements ─────────────────────
      Drawn rather than photographed, so they stay sharp and weigh nothing. */
   var SGH={
-    explosif:['SGH01','Explosif','<circle cx="0" cy="2" r="7"/><path d="M0-9 2-4 7-6 4-1 9 1 4 3 6 8 1 5-1 10-3 5-8 8-6 3-11 1-6-1-9-6-4-4z" fill="currentColor" stroke="none"/>'],
+    explosif:['SGH01','Explosif','<circle cx="0" cy="5" r="6.5" fill="currentColor" stroke="none"/><path d="M0-12 1.6-6 6-8.5 3.6-4 9-3 4 0z" fill="currentColor" stroke="none"/><path d="M-9-6l2.5 2M-11 1l3 .6M8-9l-2 2.5" stroke-width="1.5"/>'],
     inflammable:['SGH02','Inflammable','<path d="M0-11c2 5-3 6-3 10 0 3 2 5 3 7 1-2 4-3 4-6 0-2-1-3-1-3 3 2 5 5 5 8 0 5-4 9-8 9s-9-4-9-9c0-8 9-9 9-16z" fill="currentColor" stroke="none"/>'],
     comburant:['SGH03','Comburant','<circle cx="0" cy="6" r="6"/><path d="M0-11c1 5-4 7-4 11 0 3 2 5 4 6 2-1 4-3 4-6 0-4-5-6-4-11z" fill="currentColor" stroke="none"/>'],
-    gaz:['SGH04','Gaz sous pression','<rect x="-5" y="-9" width="10" height="20" rx="5"/><path d="M-5-2h10M-2-11h4v2h-4z" fill="currentColor" stroke="none"/>'],
-    corrosif:['SGH05','Corrosif','<path d="M-11-9h6v5l-4 8h-4z" fill="currentColor" stroke="none"/><path d="M2-9h6v5l4 8h-4z" fill="currentColor" stroke="none"/><path d="M-13 8h9M4 8h9" stroke-width="2.4"/><path d="M-8 5v3M9 5v3" stroke-width="1.4"/><path d="M-3 10c0 3 3 4 6 4h5" stroke-width="2"/>'],
+    gaz:['SGH04','Gaz sous pression','<path d="M-5.5-6c0-2 1.4-3.4 5.5-3.4S5.5-8 5.5-6v13a5.5 5.5 0 0 1-11 0z" fill="currentColor" stroke="none"/><path d="M-2-12.5h4v3.2h-4z" fill="currentColor" stroke="none"/><path d="M-5.5-3.5h11" stroke="#fff" stroke-width="1.3"/>'],
+    corrosif:['SGH05','Corrosif','<path d="M-9.6-9.6l3.1-1.7 4.2 7.8-3.1 1.7z" fill="currentColor" stroke="none"/><path d="M-4.8-1.4l-1.1 3.1M-6.4-.8l-.7 2.1" stroke-width="1.3"/><path d="M-15 5.5h11.5l-1.8-2.6-1.7 1.6-1.8-1.9-1.7 1.7-1.6-1.4z" fill="currentColor" stroke="none"/><path d="M-15 5.5h11.5v3.4H-15z" fill="currentColor" stroke="none"/><path d="M9.6-9.6l-3.1-1.7-4.2 7.8 3.1 1.7z" fill="currentColor" stroke="none"/><path d="M4.8-1.4l1.1 3.1M6.4-.8l.7 2.1" stroke-width="1.3"/><path d="M4.6 5.2c-.5-2 .8-2.9 1.7-1.6l1 1.5V-.6c0-1.8 2.4-1.8 2.4 0v3.9c0-1.7 2.3-1.7 2.3 0v.8c0-1.5 2.1-1.5 2.1.1v3.1c0 2.6-1.7 4.3-4.4 4.3-2.3 0-3.4-.9-4.2-2.6z" fill="currentColor" stroke="none"/>'],
     toxique:['SGH06','Toxique','<circle cx="0" cy="-3" r="7"/><circle cx="-2.6" cy="-4" r="1.6" fill="currentColor" stroke="none"/><circle cx="2.6" cy="-4" r="1.6" fill="currentColor" stroke="none"/><path d="M-2 1h4" stroke-width="1.4"/><path d="M-9 7 9 13M9 7-9 13" stroke-width="2.2"/>'],
     nocif:['SGH07','Nocif / irritant','<path d="M0-9v12" stroke-width="3.4"/><circle cx="0" cy="8" r="2" fill="currentColor" stroke="none"/>'],
-    sante:['SGH08','Danger pour la santé','<path d="M-6-10h12v9l-3 3v9h-6v-9l-3-3z"/><path d="M2-2 12 3 2 8" stroke-width="1.6"/><path d="M6 3h7" stroke-width="1.6"/>'],
-    environnement:['SGH09','Danger pour l’environnement','<path d="M-11 4h22" stroke-width="1.6"/><path d="M-9-8c4 0 6 3 6 6s-2 6-6 6" stroke-width="1.6"/><path d="M-9-8v12" stroke-width="1.6"/><path d="M1 8c3-4 8-4 10 0-2 4-7 4-10 0z"/><circle cx="8" cy="8" r=".9" fill="currentColor" stroke="none"/><path d="M1 8-3 5v6z" fill="currentColor" stroke="none"/>'],
+    sante:['SGH08','Danger pour la santé','<circle cx="0" cy="-9" r="4" fill="currentColor" stroke="none"/><path d="M-2.4-6.4h4.8v4.6h-4.8z" fill="currentColor" stroke="none"/><path d="M-10 13c0-8.6 3.9-13.2 10-13.2s10 4.6 10 13.2z" fill="currentColor" stroke="none"/><path d="M0 2.2l1.7 3.4 3.8-.6-2.1 3.2 2.1 3.2-3.8-.6L0 14.2l-1.7-3.4-3.8.6 2.1-3.2-2.1-3.2 3.8.6z" fill="#fff" stroke="none"/>'],
+    environnement:['SGH09','Danger pour l’environnement','<path d="M-14 1.5h28" stroke-width="1.5"/><path d="M-7.5 1.5v-13" stroke-width="2.2"/><path d="M-7.5-8.4l-4.2-3.1M-7.5-4.6l4-3M-7.5-11.2l3-2.2" stroke-width="1.5"/><path d="M2.5 8.5c3.4-4.2 9-4.2 11.5 0-2.5 4.2-8.1 4.2-11.5 0z" fill="currentColor" stroke="none"/><path d="M2.5 8.5-2 5.2v6.6z" fill="currentColor" stroke="none"/><path d="M9.2 7.1l2 2M11.2 7.1l-2 2" stroke="#fff" stroke-width="1.15"/>'],
   };
   R.hazard=function(box,c){
     box.className='iw iw-card iw-hz';
@@ -13880,7 +14080,7 @@ if('IntersectionObserver' in window && _links.length){
           '<div class="iwtf-opts">'+opts.map(function(o,oi){
             return '<label class="iwtf-o"><input type="radio" name="tf'+uid+'_'+i+'" value="'+oi+'"><span>'+esc(o)+'</span></label>'; }).join('')+'</div>'+
           (s.quote?'<div class="iwtf-j" hidden><b>Justification</b> '+iwRT(s.quote)+'</div>':'')+'</li>'; }).join('')+'</ol>'+
-      '<div class="iwtf-actions"><button type="button" class="iw-btn" data-tf="check">Vérifier</button>'+
+      '<div class="iwtf-actions"><button type="button" class="iw-btn" data-tf="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button><span class="iwtf-score"></span></div>'+
       (c.note?'<div class="iwtf-note">'+iwRT(c.note)+'</div>':'');
     var score=box.querySelector('.iwtf-score');
@@ -14298,9 +14498,9 @@ if('IntersectionObserver' in window && _links.length){
       '<div class="iwsb-bins">'+bins.map(function(b,i){
         return '<div class="iwsb-bin" data-bin="'+esc(b.label)+'" style="--bc:'+esc(b.color)+'">'+
           '<div class="iwsb-bh">'+esc(b.label)+'</div><div class="iwsb-drop" data-bin="'+esc(b.label)+'"></div></div>'; }).join('')+'</div>'+
-      '<div class="iwsb-actions"><button type="button" class="iw-btn" data-sb="check">Vérifier</button>'+
+      '<div class="iwsb-actions"><button type="button" class="iw-btn" data-sb="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button>'+
-      '<button type="button" class="iwm-qbtn" data-sb="reset">Recommencer</button><span class="iwsb-score"></span></div>'+
+      '<button type="button" class="iwm-qbtn" data-sb="reset">'+T('reset','Recommencer')+'</button><span class="iwsb-score"></span></div>'+
       (c.note?'<div class="iwsb-note">'+esc(c.note)+'</div>':'');
     var pool=box.querySelector('.iwsb-pool'), score=box.querySelector('.iwsb-score'), sel=null;
     function chipEl(x){
@@ -14380,7 +14580,7 @@ if('IntersectionObserver' in window && _links.length){
       (c.intro?'<div class="iwrb-intro">'+esc(c.intro)+'</div>':'')+
       '<div class="iwrb-scroll"><table class="iwrb-t"><thead><tr><th class="iwrb-ch">Critère</th>'+head+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
       '<div class="iwrb-out"><div class="iwrb-track"><i></i></div><b class="iwrb-mark">—</b>'+
-      '<button type="button" class="iwm-qbtn" data-rb="reset">Effacer</button></div>'+
+      '<button type="button" class="iwm-qbtn" data-rb="reset">'+T('clear','Effacer')+'</button></div>'+
       (c.note?'<div class="iwrb-note">'+esc(c.note)+'</div>':'');
     var mark=box.querySelector('.iwrb-mark'), bar=box.querySelector('.iwrb-track i');
     function paint(){
@@ -15989,7 +16189,7 @@ if('IntersectionObserver' in window && _links.length){
           '<div class="iwsf-why" hidden><b>'+esc(r.ans)+'</b>'+(r.why?' — '+iwRT(r.why):'')+
             (r.note?' '+iwRT(r.note):'')+'</div>'+
           '</div>'; }).join('')+'</div>'+
-      '<div class="iwsf-actions"><button type="button" class="iw-btn" data-sf="check">Vérifier</button>'+
+      '<div class="iwsf-actions"><button type="button" class="iw-btn" data-sf="check">'+T('check','Vérifier')+'</button>'+
       '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button>'+
       '<span class="iwsf-score"></span></div>'+
       (c.note?'<div class="iwsf-note">'+iwRT(c.note)+'</div>':'');
@@ -16673,7 +16873,7 @@ if('IntersectionObserver' in window && _links.length){
         '</label><div class="iwin-in"><input type="text" inputmode="decimal" autocomplete="off" '+
         'spellcheck="false" aria-label="Valeur lue"><span class="iwin-u">'+esc(unit)+'</span>'+
         '<i class="iwin-mark"></i></div>'+
-        '<div class="iwin-actions"><button type="button" class="iw-btn" data-in="check">Vérifier</button>'+
+        '<div class="iwin-actions"><button type="button" class="iw-btn" data-in="check">'+T('check','Vérifier')+'</button>'+
         '<button type="button" class="iwm-qbtn" data-q="show">Corrigé</button></div>'+
         '<div class="iwin-why" hidden></div></div>'
         :'<div class="iwin-ask"><div class="iwin-shown"><b>'+iwFrFix(val,dec)+'</b> '+esc(unit)+'</div></div>')+
@@ -16791,7 +16991,7 @@ if('IntersectionObserver' in window && _links.length){
     box.innerHTML=(c.title?'<div class="iw-title">'+iwRT(c.title)+'</div>':'')+
       (c.intro?'<div class="iwkc-intro">'+iwRT(c.intro)+'</div>':'')+
       (walk?'<div class="iwkc-walk"><div class="iwkc-trail"></div><div class="iwkc-now"></div>'+
-        '<button type="button" class="iwm-qbtn iwkc-again" hidden>Recommencer</button></div>'
+        '<button type="button" class="iwm-qbtn iwkc-again" hidden>'+T('reset','Recommencer')+'</button></div>'
         :'<div class="iwkc-list">'+steps.map(function(s){
           return '<div class="iwkc-row"><span class="iwkc-id">'+esc(s.id)+'</span><div>'+
             (s.ask?'<div class="iwkc-ask">'+iwRT(s.ask)+'</div>':'')+
@@ -17192,7 +17392,7 @@ if('IntersectionObserver' in window && _links.length){
 
   function hydrate(box){ if(box.dataset.iwReady)return; box.dataset.iwReady='1';
     var fn=R[box.dataset.iw], cfg={}; try{cfg=JSON.parse(box.dataset.cfg||'{}');}catch(e){}
-    if(fn){ try{ fn(box,cfg); iwAutoAnswers(box); }catch(e){ box.className='iw iw-card'; box.innerHTML='<div class="iw-err">Could not render this '+esc(box.dataset.iw)+' block.</div>'; } } }
+    if(fn){ try{ fn(box,cfg); iwAutoAnswers(box); }catch(e){ box.className='iw iw-card'; box.innerHTML='<div class="iw-err">Cet élément n’a pas pu s’afficher ('+esc(box.dataset.iw)+').</div>'; } } }
   function init(){ document.querySelectorAll('.iw[data-iw]').forEach(hydrate);
     var kb=document.getElementById('answerKey');
     if(kb&&!kb.__wired){ kb.__wired=1;

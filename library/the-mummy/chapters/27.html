@@ -1,0 +1,910 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><base href="__JAGUAR_BASE__"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,0,900;9..144,1,400;9..144,1,700&amp;family=Spline+Sans+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Amiri+Quran&family=Reem+Kufi&display=swap" rel="stylesheet"><style>:root{
+--ink:#1a2238;--ink-soft:#3d4663;--paper:#f4f1ea;--paper-deep:#ebe6db;--oxblood:#8c2f2a;--oxblood-soft:#b05750;--accent:#8c2f2a;--accent-soft:#b05750;--gold:#c9a054;--slate:#6b7089;--rule:#d8d1c2;--nav-active:#5DCAA5;--teal:#5DCAA5;
+--nav-bg:#1a2238;
+--nav-text:#f4f1ea;
+--hl-amber:#ecc15a;
+--hl-rose:#d27870;
+--hl-mint:#7ec496;
+--hl-sky:#7ea0d6;
+--serif:'Fraunces', Georgia, serif;
+--mono:'Spline Sans Mono', monospace;
+}
+html.dark{
+--ink:#ece7da;--ink-soft:#b6b2a6;--paper:#14161c;--paper-deep:#1d2029;--oxblood:#c75d54;--oxblood-soft:#dd857c;--accent:#c75d54;--accent-soft:#dd857c;--gold:#cda05a;--slate:#9095a6;--rule:rgba(255,255,255,.12);--nav-active:#5fa39b;--teal:#5fa39b;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+
+/* NAV (always dark by design) */
+.book-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nav-bg);display:flex;align-items:center;padding:0 18px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--accent);transform:translateY(-100%);transition:transform .35s ease}
+.book-nav.visible{transform:translateY(0)}
+.book-nav::-webkit-scrollbar{display:none}
+.nav-brand{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--nav-text);padding:12px 14px 12px 0;border-right:1px solid rgba(244,241,234,.15);margin-right:8px;white-space:nowrap;flex-shrink:0}
+.nav-item{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:13px 10px;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;flex-shrink:0}
+.nav-item:hover{color:var(--nav-text)}
+.nav-item.active{color:var(--nav-active);border-bottom-color:var(--nav-active)}
+
+/* THEME TOGGLE */
+.theme-toggle{position:relative;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;padding:0;margin-left:auto;flex-shrink:0;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.theme-toggle:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.theme-toggle svg{width:15px;height:15px;display:block}
+.theme-toggle .ic-sun{display:none}
+html.dark .theme-toggle .ic-sun{display:block}
+html.dark .theme-toggle .ic-moon{display:none}
+body[dir="rtl"] .theme-toggle{margin-left:0;margin-right:auto}
+
+/* RTL */
+body[dir="rtl"] .book-nav{flex-direction:row-reverse}
+body[dir="rtl"] .book-chapter,body[dir="rtl"] .toc-inner{direction:rtl;text-align:right}
+body[dir="rtl"] .toc-row{direction:rtl}
+body[dir="rtl"] .pull{border-left:none;border-right:3px solid var(--accent);padding-left:0;padding-right:28px}
+body[dir="rtl"] .toc-arrow{transform:scaleX(-1)}
+body[dir="rtl"] .section-marker::after{margin-left:0}
+body[dir="rtl"] .toc-part::after{margin-left:0}
+
+/* READING-PROGRESS BAR */
+.read-progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:600;background:linear-gradient(90deg,var(--accent),var(--gold));box-shadow:0 0 10px rgba(140,47,42,.45);transition:width .1s linear}
+body[dir="rtl"] .read-progress{left:auto;right:0}
+
+/* REVEAL / OPENER ANIMATIONS (IntersectionObserver-driven) */
+.js-anim .reveal{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .9s cubic-bezier(.22,.61,.36,1),filter .85s ease;will-change:opacity,transform}
+.js-anim .reveal.in{opacity:1;transform:none;filter:none}
+/* entrance variants — set via data-anim, only BEFORE reveal so .in always wins */
+.js-anim .reveal[data-anim="scale"]:not(.in){transform:scale(.93)}
+.js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(-46px)}
+.js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(46px)}
+.js-anim .reveal[data-anim="rise"]:not(.in){transform:translateY(40px)}
+.js-anim .reveal[data-anim="blur"]:not(.in){filter:blur(12px);transform:translateY(14px)}
+.js-anim .reveal[data-anim="fade"]:not(.in){transform:none}
+.js-anim .reveal[data-anim="zoom"]:not(.in){transform:scale(1.06)}
+body[dir="rtl"] .js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(46px)}
+body[dir="rtl"] .js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(-46px)}
+.js-anim .opener>*{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.61,.36,1)}
+.js-anim .opener.opener-in>*{opacity:1;transform:none}
+.js-anim .opener.opener-in .ch-eyebrow{transition-delay:.05s}
+.js-anim .opener.opener-in .ch-number{transition-delay:.18s}
+.js-anim .opener.opener-in .ch-title{transition-delay:.30s}
+.js-anim .opener.opener-in .ch-standfirst{transition-delay:.44s}
+.js-anim .section-marker::after{transform:scaleX(0);transform-origin:left center;transition:transform 1s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .section-marker.in::after{transform:scaleX(1)}
+body[dir="rtl"] .js-anim .section-marker::after{transform-origin:right center}
+.js-anim .pull{position:relative;border-left-color:transparent}
+.js-anim .pull::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .85s cubic-bezier(.22,.61,.36,1) .1s}
+.js-anim .pull.in::before{transform:scaleY(1)}
+body[dir="rtl"] .js-anim .pull{border-right-color:transparent}
+body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
+.js-anim .verdict{position:relative;overflow:hidden}
+.js-anim .verdict::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .95s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .verdict.in::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1 !important;transform:none !important;transition:none}
+  html{scroll-behavior:auto}
+  .js-anim .opener>*{opacity:1;transform:none}
+  .js-anim .section-marker::after{transform:scaleX(1)}
+  .js-anim .pull::before,.js-anim .verdict::before{transform:scaleY(1)}
+  .read-progress{display:none}
+}
+
+/* FULL-SCREEN COVER */
+.book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
+
+/* INTERACTIVE TOC */
+.book-toc{min-height:100vh;background:var(--paper);position:relative;padding:90px 0 80px}
+.toc-inner{max-width:760px;margin:0 auto;padding:0 32px}
+.toc-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+.toc-bigtitle{margin-bottom:4px}
+.toc-after{display:inline-block;font-style:italic;font-weight:400;font-size:clamp(28px,5vw,44px);color:var(--ink-soft);letter-spacing:-.02em}
+.toc-demo{display:block;font-weight:700;font-size:clamp(46px,9vw,82px);text-transform:uppercase;letter-spacing:-.04em;line-height:.9;color:var(--ink)}
+.toc-byline{font-style:italic;font-size:17px;color:var(--slate);margin-bottom:44px}
+.toc-part{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:34px 0 10px;display:flex;align-items:center;gap:14px}
+.toc-part::after{content:'';flex:1;height:1px;background:var(--rule)}
+.toc-list{position:relative}
+a.toc-row{display:grid;grid-template-columns:54px 1fr 30px;gap:0 16px;align-items:center;padding:18px 16px;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background .2s,padding .2s,color .2s;border-radius:3px;position:relative}
+a.toc-row:first-child{border-top:1px solid var(--rule)}
+a.toc-row:hover{background:var(--ink);color:var(--paper);padding-left:24px}
+a.toc-row:hover .toc-num{color:var(--gold)}
+a.toc-row:hover .toc-arrow{opacity:1;transform:translateX(0);color:var(--nav-active)}
+.toc-num{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.05em}
+.toc-rowtitle{font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.toc-arrow{font-size:18px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+
+/* TOC HOVER PANEL (dark popover) */
+.toc-panel{position:fixed;width:340px;background:var(--nav-bg);color:var(--nav-text);border-radius:6px;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);z-index:400;pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .22s ease,transform .22s ease;border-top:3px solid var(--accent)}
+.toc-panel.show{opacity:1;transform:translateY(0) scale(1)}
+.tp-num{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:8px;font-weight:600}
+.tp-title{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+.tp-blurb{font-size:15px;line-height:1.6;color:rgba(244,241,234,.85);font-style:italic;margin-bottom:18px}
+.tp-egg-divider{width:32px;height:2px;background:var(--gold);margin-bottom:14px;opacity:.6}
+.tp-egg{font-size:13.5px;line-height:1.55;color:rgba(244,241,234,.7)}
+.tp-blurb:empty,.tp-egg:empty,.tp-egg-divider.hide{display:none}
+@media(max-width:820px){.toc-panel{display:none !important}}
+
+/* HIGHLIGHTS & NOTES */
+.nav-notes{display:inline-flex;align-items:center;gap:7px}
+.nav-notes-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--gold);color:var(--nav-bg);font-size:9px;font-weight:700;letter-spacing:0;line-height:1}
+.nav-notes-count[data-empty="1"]{display:none}
+mark.hl{background:transparent;color:inherit;border-radius:2px;padding:.05em 0;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:filter .15s ease}
+mark.hl:hover{filter:brightness(.93)}
+mark.hl-amber{background:rgba(240,196,90,.50);box-shadow:inset 0 -.5em 0 -.35em rgba(176,132,40,.55)}
+mark.hl-rose{background:rgba(214,120,112,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(160,70,62,.5)}
+mark.hl-mint{background:rgba(125,196,150,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(54,120,82,.5)}
+mark.hl-sky{background:rgba(126,160,214,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(60,96,160,.5)}
+mark.hl.has-note::after{content:'';display:inline-block;width:5px;height:5px;margin:0 1px 0 2px;border-radius:50%;background:var(--accent);vertical-align:.5em}
+@keyframes hlFlash{0%{box-shadow:0 0 0 0 rgba(201,160,84,0)}18%{box-shadow:0 0 0 4px rgba(201,160,84,.55)}100%{box-shadow:0 0 0 0 rgba(201,160,84,0)}}
+mark.hl-flash{animation:hlFlash 1.6s ease}
+.hl-toolbar{position:fixed;z-index:560;display:flex;align-items:center;background:var(--nav-bg);border-radius:30px;padding:7px 10px;box-shadow:0 12px 34px rgba(0,0,0,.34);opacity:0;transform:translateY(6px) scale(.96);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
+.hl-toolbar.show{opacity:1;transform:none;pointer-events:auto}
+.hl-swatch{width:22px;height:22px;border-radius:50%;margin:0 4px;cursor:pointer;border:2px solid rgba(244,241,234,0);box-shadow:0 0 0 1px rgba(0,0,0,.18) inset;transition:transform .12s ease}
+.hl-swatch:hover{transform:scale(1.18)}
+.hl-tool-div{width:1px;height:20px;background:rgba(244,241,234,.18);margin:0 8px}
+.hl-note-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--nav-text);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 6px 4px 2px}
+.hl-note-btn:hover{color:var(--gold)}
+.hl-note-btn svg{width:13px;height:13px}
+.hl-look-btn{background:none;border:0;cursor:pointer;color:var(--nav-text);padding:4px 5px;display:inline-flex;align-items:center}
+.hl-look-btn:hover{color:var(--gold)}
+.hl-look-btn svg{width:16px;height:16px}
+/* dictionary / wikipedia lookup panel */
+.lookup-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.lookup-backdrop.show{opacity:1;pointer-events:auto}
+.lookup-panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.lookup-panel.show{transform:none}
+body[dir="rtl"] .lookup-panel{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .lookup-panel.show{transform:none}
+.lookup-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lookup-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.lookup-close{background:none;border:0;color:#f4f1ea;font-size:26px;line-height:1;cursor:pointer;opacity:.7}
+.lookup-close:hover{opacity:1}
+.lookup-body{flex:1;overflow-y:auto;padding:18px 22px 40px}
+.lookup-word{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:2px}
+.lookup-phon{font-family:var(--mono);font-size:13px;color:#9aa0b0;margin-bottom:14px}
+.lookup-pos{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+.lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
+.lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
+.lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
+.lookup-extract{font-size:15px;line-height:1.6}
+.lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
+.lookup-loading,.lookup-empty{color:#9aa0b0;font-size:14px;padding:10px 0}
+.hl-noteedit{position:fixed;z-index:570;width:300px;background:var(--nav-bg);color:var(--nav-text);border-radius:9px;padding:15px 15px 13px;box-shadow:0 18px 50px rgba(0,0,0,.42);opacity:0;transform:translateY(8px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+.hl-noteedit.show{opacity:1;transform:none;pointer-events:auto}
+.hl-ne-colors{display:flex;gap:8px;margin-bottom:11px}
+.hl-ne-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset;border:2px solid transparent;transition:transform .12s ease}
+.hl-ne-dot:hover{transform:scale(1.15)}
+.hl-ne-dot.sel{border-color:var(--nav-text)}
+.hl-noteedit textarea{width:100%;min-height:84px;resize:vertical;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);border-radius:6px;color:var(--nav-text);font-family:var(--serif);font-size:15px;line-height:1.5;padding:10px 11px;outline:none}
+.hl-noteedit textarea::placeholder{color:rgba(244,241,234,.38);font-style:italic}
+.hl-noteedit textarea:focus{border-color:var(--gold)}
+.hl-ne-actions{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.hl-ne-del{background:none;border:0;color:rgba(244,241,234,.5);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:4px}
+.hl-ne-del:hover{color:#d27870}
+.hl-ne-save{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 16px;border-radius:5px}
+.hl-ne-save:hover{filter:brightness(1.08)}
+.notes-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.notes-backdrop.show{opacity:1;pointer-events:auto}
+.notes-drawer{position:fixed;top:0;right:0;height:100%;width:min(424px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.notes-drawer.show{transform:none}
+body[dir="rtl"] .notes-drawer{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .notes-drawer.show{transform:none}
+.notes-head{display:flex;align-items:flex-start;justify-content:space-between;padding:30px 28px 22px;border-bottom:1px solid rgba(244,241,234,.1)}
+.notes-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+.notes-h1{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.notes-close{background:none;border:0;color:rgba(244,241,234,.55);font-size:26px;line-height:1;cursor:pointer;padding:0 2px;margin-top:-2px}
+.notes-close:hover{color:#f4f1ea}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px 40px}
+.notes-empty{padding:48px 22px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:16px;line-height:1.6;font-family:var(--serif)}
+.note-card{position:relative;display:grid;grid-template-columns:4px 1fr;gap:15px;padding:17px 14px 16px;border-radius:8px;cursor:pointer;transition:background .18s ease;margin-bottom:4px}
+.note-card:hover{background:rgba(244,241,234,.055)}
+.note-bar{border-radius:3px}
+.note-bar.c-amber{background:var(--hl-amber)}.note-bar.c-rose{background:var(--hl-rose)}.note-bar.c-mint{background:var(--hl-mint)}.note-bar.c-sky{background:var(--hl-sky)}
+.note-excerpt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;color:rgba(244,241,234,.92);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-body{font-size:14px;line-height:1.55;color:#cdd2df;margin-bottom:10px;white-space:pre-wrap}
+.note-meta{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,234,.42)}
+.note-meta .nm-ch{color:var(--gold)}
+.note-del{position:absolute;top:12px;right:8px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:0;transition:opacity .15s ease}
+body[dir="rtl"] .note-del{right:auto;left:8px}
+.note-card:hover .note-del{opacity:1}
+.note-del:hover{color:#d27870}
+@media(max-width:600px){.hl-noteedit{width:calc(100vw - 24px)}}
+@media(max-width:600px),(pointer:coarse){
+  .hl-toolbar{padding:9px 12px;border-radius:34px}
+  .hl-swatch{width:30px;height:30px;margin:0 5px}
+  .hl-note-btn{font-size:11px;padding:8px 8px 8px 4px}
+  .hl-note-btn svg{width:16px;height:16px}
+  .hl-tool-div{height:24px;margin:0 9px}
+  .hl-noteedit{max-height:min(72vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 14px}
+  .hl-ne-dot{width:26px;height:26px}
+  .hl-noteedit textarea{font-size:16px;min-height:96px}
+  .hl-ne-save{padding:11px 20px;font-size:11px}
+  .hl-ne-del{padding:8px 6px;font-size:11px}
+  .notes-close{font-size:32px;padding:4px 6px}
+}
+
+/* CHAPTER WRAPPER + BREAK */
+.book-chapter{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px;position:relative}
+.chapter-break{max-width:var(--content-width,720px);margin:0 auto;padding:50px 28px;display:flex;align-items:center;justify-content:center;gap:16px}
+.chapter-break::before,.chapter-break::after{content:'';flex:1;height:1px;background:var(--rule)}
+.chapter-break::after{content:'◆';flex:0;color:var(--accent);font-size:11px}
+
+/* INTERSTITIAL EMBED */
+.interstitial-embed{margin:0;padding:72px 16px;background:#0e0e0e;display:flex;justify-content:center;align-items:center}
+.interstitial-embed iframe{width:min(560px,90vw);aspect-ratio:3/4;border:0;display:block;background:#0e0e0e;box-shadow:0 30px 70px rgba(0,0,0,.55);color-scheme:light}
+
+/* BACK COVER */
+.book-back-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.back-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+
+/* DARK-MODE adjustments (blocks that use --ink as a *background* need a real dark fill) */
+html.dark .book-toc{background:#101218}
+html.dark .chapter-break::before,html.dark .chapter-break::after{background:var(--rule)}
+html.dark .verdict,html.dark .arg-head,html.dark .case-head{background:#0b0c11;color:var(--ink)}
+html.dark .case-stat{background:var(--paper-deep)}
+
+/* EYE-OPENING LOADER */
+.ad-loader{position:fixed;inset:0;z-index:9000;background:radial-gradient(120% 92% at 50% 42%,#1b1815 0%,#121110 56%,#0b0a09 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .8s ease;overflow:hidden}
+.ad-loader.gone{opacity:0;pointer-events:none}
+.ad-loader-custom{padding:0;gap:0;background:#0e0e0e}
+.ad-loader-frame{width:100%;height:100%;border:0;display:block}
+.ad-eye-wrap{position:relative;width:320px;max-width:82vw;display:flex;align-items:center;justify-content:center}
+.ad-loader-logo{width:200px;max-width:64vw;height:auto;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5));animation:adLogoIn 1s ease forwards,adLogoPulse 2.4s 1s ease-in-out infinite}
+@keyframes adLogoIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
+@keyframes adLogoPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.82}}
+.ad-eye2{width:100%;transform-origin:center;transform:scaleY(.04);animation:adEyeOpen 1.9s cubic-bezier(.5,.05,.2,1) forwards}
+.ad-eye2 .eye-outer{width:100%;aspect-ratio:2.8/1;background:#0b0b0d;border-radius:50%;box-shadow:0 0 55px 6px rgba(150,142,124,.32);display:flex;align-items:center;justify-content:center}
+.ad-eye2 .eye-white{width:68%;aspect-ratio:2.5/1;background:#f0ebe0;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ad-eye2 .eye-iris{width:44%;aspect-ratio:1;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;animation:adIrisLook 6s 1.05s ease-in-out infinite}
+.ad-eye2 .eye-pupil{width:40%;aspect-ratio:1;background:#0d0d0d;border-radius:50%}
+@keyframes adEyeOpen{0%{transform:scaleY(.04)}45%{transform:scaleY(1)}57%{transform:scaleY(.12)}70%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+@keyframes adIrisLook{0%,100%{transform:translateX(0)}22%{transform:translateX(-24%)}48%{transform:translateX(20%)}74%{transform:translateX(-8%)}}
+.ad-loader-cap{font-family:var(--mono);font-size:11px;letter-spacing:.46em;text-transform:uppercase;color:rgba(244,241,234,.62);opacity:0;animation:adCapIn .9s 1.25s ease forwards;padding-left:.46em;text-align:center}
+.ad-loader-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);opacity:0;animation:adCapIn .9s 1.55s ease forwards}
+@keyframes adCapIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .ad-eye2{animation:none;transform:none}
+  .ad-eye2 .eye-iris,.ad-loader-cap,.ad-loader-sub{animation:none;opacity:1}
+}
+
+/* COACHMARKS */
+.ad-coach{position:fixed;z-index:585;width:284px;max-width:calc(100vw - 28px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(201,160,84,.28);border-radius:11px;padding:16px 17px 14px;box-shadow:0 20px 56px rgba(0,0,0,.5);opacity:0;transform:translateY(8px) scale(.97);transition:opacity .26s ease,transform .26s ease;pointer-events:none}
+.ad-coach.show{opacity:1;transform:none;pointer-events:auto}
+.ad-coach .cm-k{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:9px}
+.ad-coach .cm-k svg{width:14px;height:14px;flex-shrink:0}
+.ad-coach .cm-t{font-family:var(--serif);font-size:16px;line-height:1.52;color:rgba(244,241,234,.94)}
+.ad-coach .cm-t b{color:#ecc15a;font-weight:600;font-style:italic}
+.ad-coach .cm-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.ad-coach .cm-step{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(244,241,234,.42)}
+.ad-coach .cm-got{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:9px 16px;border-radius:5px}
+.ad-coach .cm-got:hover{filter:brightness(1.08)}
+.ad-coach .cm-arrow{position:absolute;width:13px;height:13px;background:var(--nav-bg);border:1px solid rgba(201,160,84,.28);transform:rotate(45deg)}
+.ad-coach[data-place="below"] .cm-arrow{top:-7px;border-right:0;border-bottom:0}
+.ad-coach[data-place="above"] .cm-arrow{bottom:-7px;border-left:0;border-top:0}
+
+/* SHARE QUOTE CARD + EXPORT NOTES */
+.notes-actions{display:flex;gap:8px;margin-top:12px}
+.notes-actions .na-btn{flex:1;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);color:#f4f1ea;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.notes-actions .na-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notes-actions .na-btn svg{width:13px;height:13px}
+.note-share{position:absolute;top:12px;right:30px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;padding:4px;opacity:0;transition:opacity .15s}
+body[dir="rtl"] .note-share{right:auto;left:30px}
+.note-card:hover .note-share{opacity:1}
+.note-share:hover{color:var(--gold)}
+.note-share svg{width:15px;height:15px;display:block}
+/* share modal */
+.share-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.78);z-index:700;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.share-backdrop.show{opacity:1;pointer-events:auto}
+.share-box{background:#151b2c;border-radius:14px;padding:22px;max-width:520px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.55);transform:translateY(12px) scale(.98);transition:transform .25s ease}
+.share-backdrop.show .share-box{transform:none}
+.share-box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.share-box-title{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.share-box-close{background:none;border:0;color:rgba(244,241,234,.5);font-size:26px;line-height:1;cursor:pointer}
+.share-box-close:hover{color:#f4f1ea}
+.share-canvas-wrap{border-radius:10px;overflow:hidden;background:#0e0e0e;margin-bottom:16px}
+.share-canvas-wrap canvas{width:100%;height:auto;display:block}
+.share-box-actions{display:flex;gap:10px}
+.share-box-actions button{flex:1;border:0;border-radius:8px;padding:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.share-dl{background:var(--gold);color:#151b2c;font-weight:700}
+.share-dl:hover{filter:brightness(1.08)}
+.share-copy{background:rgba(244,241,234,.08);color:#f4f1ea;border:1px solid rgba(244,241,234,.18) !important}
+.share-copy:hover{border-color:var(--gold) !important;color:var(--gold)}
+
+/* NAV TOOL BUTTONS (search, font size, spread) — match the theme toggle */
+.nav-tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* Le bouton « See for yourself » : discret dans la barre, il s'allume au survol.
+   Le libellé disparaît sous 720 px et il ne reste que la marque — sur un
+   téléphone la barre doit d'abord servir à lire le livre. */
+.nav-sfy{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--nav-text);opacity:.72;border:1px solid rgba(244,241,234,.22);border-radius:999px;padding:5px 11px 5px 9px;font-size:11.5px;letter-spacing:.02em;white-space:nowrap;transition:opacity .16s,border-color .16s,background .16s}
+.nav-sfy svg{width:17px;height:17px;flex-shrink:0}
+.nav-sfy:hover,.nav-sfy:focus-visible{opacity:1;border-color:var(--nav-active);background:rgba(244,241,234,.08)}
+.nav-sfy:focus-visible{outline:2px solid var(--nav-active);outline-offset:2px}
+@media (max-width:720px){.nav-sfy span{display:none}.nav-sfy{padding:5px 8px;gap:0}}
+body[dir="rtl"] .nav-tools{margin-left:0;margin-right:auto}
+.nav-tools .theme-toggle{margin-left:0}
+body[dir="rtl"] .nav-tools .theme-toggle{margin-right:0}
+.nav-btn{position:relative;height:34px;min-width:34px;padding:0 9px;border-radius:17px;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;transition:background .2s,border-color .2s,color .2s;font-family:var(--mono);font-size:12px;flex-shrink:0}
+.nav-btn:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.nav-btn.active{border-color:var(--nav-active);color:var(--nav-active)}
+.nav-btn svg{width:15px;height:15px;display:block}
+.nav-fontsize{display:inline-flex;align-items:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);border-radius:17px;overflow:hidden}
+.nav-fontsize button{background:none;border:0;color:var(--nav-text);cursor:pointer;height:32px;width:30px;font-family:var(--serif);line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.nav-fontsize button:hover{color:var(--gold)}
+.nav-fontsize .fs-sm{font-size:12px}.nav-fontsize .fs-lg{font-size:17px}
+.nav-fontsize .fs-div{width:1px;height:18px;background:rgba(244,241,234,.18)}
+
+/* SEARCH PANEL */
+.search-panel{position:fixed;top:0;left:0;right:0;z-index:320;transform:translateY(-100%);transition:transform .28s ease;background:var(--nav-bg);box-shadow:0 12px 34px rgba(0,0,0,.34)}
+.search-panel.show{transform:translateY(0)}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;max-width:860px;margin:0 auto}
+.search-bar svg.s-ic{width:17px;height:17px;color:rgba(244,241,234,.55);flex-shrink:0}
+.search-bar input{flex:1;background:transparent;border:0;outline:none;color:var(--nav-text);font-family:var(--serif);font-size:18px}
+.search-bar input::placeholder{color:rgba(244,241,234,.4)}
+.search-count{font-family:var(--mono);font-size:11px;color:rgba(244,241,234,.5);letter-spacing:.08em;white-space:nowrap}
+.search-bar .s-btn{background:rgba(244,241,234,.08);border:0;color:var(--nav-text);width:30px;height:30px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.search-bar .s-btn:hover{color:var(--gold)}
+.search-results{max-width:860px;margin:0 auto;max-height:min(56vh,520px);overflow-y:auto;padding:0 16px 14px}
+.sr-group{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:12px 4px 8px}
+.sr-item{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:11px 12px;cursor:pointer;color:rgba(244,241,234,.9);font-family:var(--serif);font-size:15px;line-height:1.5}
+body[dir="rtl"] .sr-item{text-align:right}
+.sr-item:hover,.sr-item.current{background:rgba(244,241,234,.07)}
+.sr-item .sr-ch{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--nav-active);margin-bottom:4px;display:block}
+.sr-item mark{background:rgba(201,160,84,.5);color:#fff;border-radius:2px}
+.sr-empty{color:rgba(244,241,234,.45);font-style:italic;padding:18px 12px;font-size:15px}
+mark.search-hit{background:rgba(201,160,84,.42);color:inherit;border-radius:2px;box-shadow:inset 0 -.5em 0 -.35em rgba(201,160,84,.5)}
+mark.search-hit.current{background:var(--gold);color:#1a2238;box-shadow:none}
+
+/* TWO-PAGE SPREAD VIEW + PAGE FLIP */
+body.spread-active{overflow:hidden}
+body.spread-active .read-progress{display:none}
+.spread-stage{position:fixed;top:48px;left:0;right:0;bottom:0;z-index:250;background:var(--paper);display:none;perspective:2400px}
+.spread-stage.show{display:block}
+.spread-viewport{position:absolute;inset:0;overflow:hidden}
+.spread-pages{height:100%;column-fill:auto;padding:40px 56px;transition:transform .5s cubic-bezier(.4,.0,.2,1);transform:translateX(0);box-sizing:border-box}
+.spread-pages .book-chapter{max-width:none;margin:0;padding:0;font-size:calc(18px * var(--reading-scale))}
+.spread-pages .opener{padding:0 0 28px;break-inside:avoid}
+.spread-pages .ch-title{font-size:34px}
+.spread-pages .lead::first-letter{float:none;font-size:inherit;padding:0;color:var(--accent)}
+.spread-pages .reveal{opacity:1 !important;transform:none !important}
+.spread-pages .verdict{margin:28px 0}
+.spread-pages .interstitial-embed,.spread-pages .chapter-break{display:none}
+.spread-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule);pointer-events:none;z-index:2}
+.spread-nav{position:absolute;top:0;bottom:0;width:18%;z-index:3;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.spread-nav:hover{opacity:1}
+.spread-prev{left:0}.spread-next{right:0}
+.spread-nav .arr{width:42px;height:42px;border-radius:50%;background:var(--nav-bg);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.spread-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--slate);background:var(--paper);padding:4px 12px;border-radius:20px;border:1px solid var(--rule)}
+/* content-bearing page-flip: clones of the real pages turn around the spine */
+.spread-flip{position:absolute;inset:0;z-index:5;pointer-events:none;perspective:2200px;display:none}
+.flip-win{position:absolute;top:0;bottom:0;overflow:hidden;background:var(--paper)}
+.flip-right{left:50%;right:0}
+.flip-left{left:0;right:50%}
+.flip-inner{position:absolute;top:0;bottom:0;width:200%}
+.flip-right .flip-inner{left:-100%}
+.flip-left .flip-inner{left:0}
+.flip-cover{z-index:1}
+.flip-leaf{z-index:2;backface-visibility:hidden;transform:rotateY(0deg);box-shadow:0 0 30px rgba(0,0,0,.28)}
+.flip-leaf.leaf-fwd{transform-origin:left center}
+.flip-leaf.leaf-back{transform-origin:right center}
+/* curl shading on the turning page surface */
+.flip-shade{position:absolute;inset:0;pointer-events:none;z-index:3}
+.leaf-fwd .flip-shade{background:linear-gradient(90deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+.leaf-back .flip-shade{background:linear-gradient(270deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+@media (prefers-reduced-motion: reduce){.spread-pages{transition:none}.spread-flip{display:none !important}}
+@media(max-width:720px){
+  .spread-pages{column-gap:0 !important;padding:30px 26px}
+  .spread-divider{display:none}
+}
+
+/* BOOKMARKS — silk ribbon + dropdown */
+.nav-btn-count{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--gold);color:var(--nav-bg);font-family:var(--mono);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.nav-btn-count[data-empty="1"]{display:none}
+.bm-ribbon{position:absolute;left:-16px;width:26px;height:62px;z-index:40;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-soft) 55%,var(--accent));box-shadow:2px 3px 9px rgba(0,0,0,.30);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);transition:filter .15s ease,transform .15s ease}
+.bm-ribbon::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:3px;height:32px;border-radius:2px;background:rgba(255,255,255,.38)}
+.bm-ribbon:hover{filter:brightness(1.1);transform:translateY(2px)}
+.bm-ribbon.bm-new{animation:bmDrop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bmDrop{0%{transform:translateY(-72px) rotate(-5deg);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.bm-ribbon.bm-leave{animation:bmLeave .35s ease forwards}
+@keyframes bmLeave{to{transform:translateY(-72px) rotate(-5deg);opacity:0}}
+body[dir="rtl"] .bm-ribbon{left:auto;right:-16px}
+@media(max-width:760px){.bm-ribbon{left:-6px;width:20px;height:50px}body[dir="rtl"] .bm-ribbon{right:-6px;left:auto}}
+.bm-panel{position:fixed;top:50px;z-index:330;width:300px;max-width:calc(100vw - 24px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(244,241,234,.14);border-radius:11px;box-shadow:0 18px 52px rgba(0,0,0,.46);padding:9px;opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.bm-panel.show{opacity:1;transform:none;pointer-events:auto}
+.bm-add,.bm-resume{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:8px;padding:11px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.bm-add{background:var(--accent);color:#fff}.bm-add:hover{filter:brightness(1.1)}
+.bm-add svg{width:14px;height:14px}
+.bm-resume{background:rgba(244,241,234,.08);color:var(--nav-text);border:1px solid rgba(244,241,234,.16);margin-top:7px}
+.bm-resume:hover{border-color:var(--gold);color:var(--gold)}
+.bm-list{max-height:46vh;overflow-y:auto;margin-top:8px}
+.bm-empty{padding:18px 12px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:14px;font-family:var(--serif)}
+.bm-item{display:grid;grid-template-columns:7px 1fr;gap:11px;padding:10px 24px 10px 10px;border-radius:8px;cursor:pointer;position:relative}
+.bm-item:hover{background:rgba(244,241,234,.07)}
+.bm-item .bm-bar{border-radius:3px;background:var(--accent)}
+.bm-item .bm-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.bm-item .bm-snip{font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.45;color:rgba(244,241,234,.9);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bm-item .bm-x{position:absolute;top:8px;right:7px;background:none;border:0;color:rgba(244,241,234,.34);cursor:pointer;font-size:15px;line-height:1;padding:2px;opacity:0}
+.bm-item:hover .bm-x{opacity:1}.bm-item .bm-x:hover{color:var(--accent)}
+.bm-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--nav-bg);color:var(--nav-text);padding:11px 20px;border-radius:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;box-shadow:0 14px 38px rgba(0,0,0,.42);opacity:0;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:620;display:inline-flex;align-items:center;gap:9px}
+.bm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bm-toast svg{width:15px;height:15px;color:var(--gold)}
+
+/* RESPONSIVE + PRINT */
+@media(max-width:600px){
+  .book-chapter{padding:0 18px}
+  .toc-inner{padding:0 20px}
+  a.toc-row{grid-template-columns:40px 1fr 24px}
+  .toc-rowtitle{font-size:18px}
+}
+/* the answer-key switch in the nav */
+.nav-item.nav-key.on{color:var(--gold);font-weight:600}
+.nav-item.nav-key.on::before{content:"✓ ";font-size:.9em}
+
+@media print{
+  .book-nav,.read-progress,.ad-loader,.ad-coach,.hl-toolbar,.hl-noteedit,.notes-drawer,.notes-backdrop,.interstitial-embed{display:none !important}
+  .chapter-break{break-after:page}
+  .reveal{opacity:1 !important;transform:none !important}
+
+  /* ── paper ──────────────────────────────────────────────────────────
+     A book is read on a screen and photocopied on paper. Printing keeps
+     whatever state the reader is in — so the answer-key switch decides
+     whether you get the worksheet or its correction out of the same file. */
+  @page{margin:16mm 14mm}
+  html,html.dark{
+    --paper:#fff;--paper-deep:#f4f4f4;--ink:#111;--ink-soft:#333;--slate:#555;--rule:#bbb;
+    background:#fff !important;color:#111 !important}
+  html.dark body,body{background:#fff !important;color:#111 !important}
+  .book-chapter{padding:0 !important}
+
+  /* keep a figure, a table or a widget whole on one page where it fits */
+  .iw,figure,.md-table,.evidence,.case,.argument,.stat,.notes{break-inside:avoid}
+  h2,h3,.subhead,.section-marker{break-after:avoid}
+
+  /* controls mean nothing on paper — the content they act on stays */
+  .iw-btn,.iwm-qbtn,.iw3d-tools,.iw3d-hint,.iwglo-bar,.iwfc-bar,.iwfc-judge,
+  .iword-btns,.iwlb-actions,.iwiq-actions,.iwiq-tip,.iwex-actions,.iwsrc-rev,
+  .iwrx-actions,.iwnuc-actions,.iwm-quiz,.iwtl-quizbar,.iwtl-reset,.iwx-actions,
+  .iwq-actions,.figure-nav,.iwopt-ctl,input[type=range],
+  .iwwv-ctl,.iwfr-btns,.iwcj-tabs{display:none !important}
+
+  /* answer spaces print as ruled boxes, not as browser widgets.
+     Note the bare input selectors: the crossword, the posed operation and the
+     numeration table use an input with maxlength and no type attribute, so
+     input[type=text] never reaches them. */
+  input[type=text],input[type=search],input[type=number],textarea,select,
+  .iwpo-c input,.iwcw-c input,.iwpv-c input,
+  .iwq-blank,.iwex-a,.iwnuc-in,.iwm-qin{
+    border:1px solid #999 !important;background:#fff !important;color:#111 !important;
+    box-shadow:none !important;-webkit-appearance:none;appearance:none}
+  .iwcw-c input{border:0 !important}   /* the cell already has one */
+
+  /* a ticked radio in the marking grid is drawn with a box-shadow, and browsers
+     drop backgrounds when printing — give it an ink fill that survives */
+  .iw-rb input:checked+i{background:#111 !important;box-shadow:inset 0 0 0 3.5px #fff !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* the Sankey labels are white on coloured bands, so the bands have to print */
+  .iw-en .iwen-svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* only the open tense of a conjugation prints; the other tabs are gone above */
+
+  /* a flip card printed edge-on is a blank rectangle — lay both faces flat */
+  .iw-fc .iwfc-card{height:auto !important;perspective:none !important}
+  .iw-fc .iwfc-inner{transform:none !important;transform-style:flat !important;position:static !important}
+  .iw-fc .iwfc-face{position:static !important;backface-visibility:visible !important;
+    transform:none !important;border:1px solid #999;margin-bottom:6px;page-break-inside:avoid}
+  .iw-fc .iwfc-front{background:#f4f4f4 !important;color:#111 !important}
+  .iw-fc .iwfc-front i{display:none}
+
+  /* anything hidden behind a disclosure opens up */
+  details{display:block}
+  details>summary{list-style:none;font-weight:600}
+  details>*{display:block !important}
+  .iwme-step.hid,.iwme-ans.hid{opacity:1 !important;display:list-item !important}
+  .iwsrc-model[hidden],.iwex-sol[hidden],.iwex-hint[hidden]{display:block !important}
+
+  /* the reader's own frame */
+  .rawhtml-frame,.iw-embed-frame{border:1px solid #bbb}
+  a{color:#111 !important;text-decoration:none}
+}
+
+
+/* reading typography lives on the chapter wrapper so it doesn't touch nav/TOC */
+.book-chapter{font-size:19px;line-height:1.78;padding-bottom:130px;text-rendering:optimizeLegibility}
+.book-chapter p{margin-bottom:26px}
+.book-chapter em{font-style:italic}
+.book-chapter strong{font-weight:600;color:var(--ink)}
+.book-chapter a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* chapter opener */
+.opener{padding:120px 0 70px;border-bottom:1px solid var(--rule);margin-bottom:64px}
+.ch-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;font-weight:500}
+.ch-number{font-family:var(--mono);font-size:15px;color:var(--slate);letter-spacing:.1em;margin-bottom:10px}
+.ch-title{font-size:58px;line-height:1.04;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
+.ch-standfirst{font-size:23px;line-height:1.5;color:var(--ink-soft);font-weight:400;font-style:italic;max-width:92%}
+
+/* drop cap on the lead paragraph */
+.lead::first-letter{font-size:76px;line-height:.72;float:left;font-weight:600;padding:8px 14px 0 0;color:var(--accent)}
+body[dir="rtl"] .lead::first-letter{float:right;padding:8px 0 0 14px}
+
+/* section marker */
+.section-marker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:64px 0 24px;display:flex;align-items:center;gap:16px}
+.section-marker::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+/* pull quote */
+.pull{font-size:30px;line-height:1.3;font-weight:500;color:var(--ink);margin:56px 0;padding-left:28px;border-left:3px solid var(--accent);letter-spacing:-.01em}
+
+/* verdict (ink panel) */
+.verdict{background:var(--ink);color:var(--paper);margin:60px -28px;padding:60px 48px;border-radius:3px}
+.verdict p{font-size:29px;line-height:1.4;font-weight:500;letter-spacing:-.01em;margin-bottom:0}
+.verdict .accent{color:var(--gold)}
+
+/* evidence box */
+.evidence{background:var(--paper-deep);border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:3px;padding:30px 32px 26px;margin:44px 0}
+.evidence-label{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.evidence-figure{font-family:var(--serif);font-size:46px;line-height:1.05;font-weight:600;color:var(--accent);letter-spacing:-.02em;margin-bottom:14px}
+.evidence-body{font-size:18px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px}
+.evidence-body p{margin-bottom:14px}.evidence-body p:last-child{margin-bottom:0}
+.evidence-label:first-child{margin-top:0}
+.evidence-source{font-family:var(--mono);font-size:12px;color:var(--slate);letter-spacing:.04em;padding-top:14px;border-top:1px solid var(--rule)}
+.evidence-source sup{color:var(--accent);font-weight:600}
+
+/* case-study card */
+.case{border:1px solid var(--rule);border-radius:3px;margin:44px 0;overflow:hidden}
+.case-head{background:var(--ink);color:var(--paper);padding:22px 30px}
+.case-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px}
+.case-name{font-size:26px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
+.case-body{padding:26px 30px 28px;background:var(--paper-deep)}
+.case-body p{margin-bottom:18px;font-size:18px}
+.case-body p:last-child{margin-bottom:0}
+.case-stat{font-family:var(--mono);font-size:14px;color:var(--ink);font-weight:500;background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:4px 10px;display:inline-block;margin:0 6px 8px 0}
+
+/* argument card (his vs mine) */
+.argument{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin:52px 0}
+.arg-head{background:var(--ink);color:var(--paper);padding:16px 28px;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600}
+.arg-side{padding:24px 28px;border-top:1px solid var(--rule);display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;background:var(--paper-deep)}
+.arg-side:first-of-type{border-top:none}
+.arg-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding-top:3px;line-height:1.4}
+.arg-label.his{color:var(--slate)}
+.arg-label.mine{color:var(--accent)}
+.arg-text{font-size:17px;line-height:1.6;color:var(--ink-soft)}
+
+/* footnote markers + endnotes */
+sup.fn{font-family:var(--mono);font-size:.62em;color:var(--accent);font-weight:600;vertical-align:super;cursor:pointer;padding:0 1px}
+.notes{margin-top:90px;padding-top:34px;border-top:1px solid var(--rule)}
+.notes-title{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:24px}
+.note{display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:14px;line-height:1.5;color:var(--ink-soft);margin-bottom:14px;font-family:var(--serif)}
+.note-num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;padding-top:2px}
+.note a{color:var(--slate);text-decoration:underline;text-underline-offset:2px}
+
+/* dialogue */
+.dialogue{margin:44px 0;padding-left:22px;border-left:2px solid var(--rule)}
+.dlg-line{display:grid;grid-template-columns:minmax(80px,140px) 1fr;gap:18px;align-items:baseline;margin-bottom:18px}
+.dlg-speaker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;padding-top:4px;text-align:right}
+.dlg-text{font-size:19px;line-height:1.6;color:var(--ink)}
+.dlg-aside{font-style:italic;color:var(--slate);font-size:16px;margin:6px 0 18px;padding-left:0}
+body[dir="rtl"] .dialogue{padding-left:0;padding-right:22px;border-left:none;border-right:2px solid var(--rule)}
+body[dir="rtl"] .dlg-speaker{text-align:left}
+@media(max-width:600px){.dlg-line{grid-template-columns:1fr;gap:2px}.dlg-speaker{text-align:left;padding-top:0}}
+
+/* closing line */
+.closer{font-size:27px;line-height:1.42;font-weight:500;color:var(--ink);margin:70px 0 0;padding:38px 0 0;border-top:3px double var(--ink);letter-spacing:-.01em}
+.closer .accent{color:var(--accent)}
+
+/* epigraph (opening quote) */
+.epigraph{margin:40px 0 52px;text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
+.epigraph-text{font-size:24px;line-height:1.45;font-style:italic;color:var(--ink-soft);letter-spacing:-.01em}
+.epigraph-cite{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-top:18px}
+
+/* figure (one or many images + caption) */
+.figure{margin:44px 0;text-align:center}
+.figure-imgs{display:flex;justify-content:center;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.figure-item{margin:0;display:flex;flex-direction:column;align-items:center;max-width:100%}
+.figure-item img{max-width:100%;height:auto;border-radius:3px;display:block}
+.figure-item-cap{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--slate);margin-top:7px;line-height:1.45}
+/* solo: one centred image */
+.figure-single .figure-item{margin-left:auto;margin-right:auto}
+/* row: side by side, equal share unless an image sets its own % */
+.figure-row .figure-imgs{flex-wrap:nowrap}
+.figure-row .figure-item{flex:1 1 0;min-width:0}
+.figure-row .figure-item img{width:100%;object-fit:cover}
+/* column: stacked vertically */
+.figure-column .figure-imgs{flex-direction:column;flex-wrap:nowrap;align-items:center}
+.figure-column .figure-item{width:100%}
+/* grid: multi-column */
+.figure-grid .figure-imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.figure-grid .figure-item{width:100%}
+.figure-grid .figure-item img{width:100%}
+/* carousel: a draggable strip with arrows + fading edges */
+.figure-carousel-wrap{position:relative}
+.figure-carousel .figure-scroll{overflow-x:auto;overflow-y:hidden;cursor:grab;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.figure-carousel .figure-scroll::-webkit-scrollbar{display:none;height:0;width:0}
+.figure-carousel .figure-scroll.drag{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.figure-carousel .figure-imgs{flex-wrap:nowrap;justify-content:flex-start;width:max-content;padding:2px}
+.figure-carousel .figure-item{flex:0 0 auto;width:300px}
+.figure-carousel .figure-item img{width:100%}
+.figure-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.18);transition:opacity .25s,background .15s}
+.figure-nav:hover{background:var(--paper-deep)}
+.figure-nav-l{left:6px}.figure-nav-r{right:6px}
+.figure-carousel-wrap.at-start .figure-nav-l,.figure-carousel-wrap.at-end .figure-nav-r,.figure-carousel-wrap.no-scroll .figure-nav{opacity:0;pointer-events:none}
+.figure-small{max-width:300px;margin-left:auto;margin-right:auto}
+.figure-medium{max-width:520px;margin-left:auto;margin-right:auto}
+.figure-large{max-width:780px;margin-left:auto;margin-right:auto}
+.figure-full{max-width:100%}
+.figure-carousel.figure-small,.figure-carousel.figure-medium,.figure-carousel.figure-large{max-width:none}
+.figure-cap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--slate);margin-top:12px;line-height:1.5}
+@media(max-width:600px){.figure-row .figure-imgs{flex-wrap:wrap}}
+
+/* free-form chapter canvas (Layout mode) */
+.book-chapter.canvas-chapter{max-width:none;margin:0;padding:0}
+/* keep the chapter opener (title) in the centred reading column even though the canvas is full-width */
+.book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
+.ch-canvas-main{margin:0;padding:0}
+.ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+.ch-canvas{position:relative;transform-origin:top left}
+.layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
+/* Un element masque par l'auteur. Le livre construit ne le contient jamais —
+   le rendu s'arrete avant — et cette regle ne sert donc qu'a l'apercu de
+   Studio, ou il faut bien pouvoir le retrouver pour le rallumer. */
+.layout-item.li-masque{opacity:.28;filter:grayscale(1)}
+/* tables inside a recoloured layout element follow that element's ink/rule */
+.layout-item .md-table th,.layout-item table th{color:var(--ink)}
+.layout-item .md-table td,.layout-item table td{color:var(--ink-soft)}
+.layout-item table th,.layout-item table td,.layout-item .md-table-bordered table,.layout-item .md-table-bordered th,.layout-item .md-table-bordered td{border-color:var(--rule)}
+.layout-item>*{min-height:0}
+.layout-item>:first-child{margin-top:0}
+.layout-item>:last-child{margin-bottom:0}
+.layout-item img{max-width:100%}
+.layout-item .figure{margin:0;flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.layout-item .figure-imgs{flex:1 1 auto;min-height:0;align-items:center}
+.layout-item .figure-item img{max-height:100%;object-fit:contain}
+.layout-item .media{margin:0}
+.layout-item .media-el,.layout-item video{max-height:100%}
+/* canvas content is positioned, not scroll-revealed — always show it */
+.ch-canvas .reveal{opacity:1!important;transform:none!important}
+
+/* Arabic / Quran passage */
+.arabic-text{direction:rtl;text-align:right;font-family:'Amiri','Scheherazade New',serif;font-size:1.5em;line-height:2.15;color:var(--ink);margin:34px 0}
+.arabic-text[data-font="quran"]{font-family:'Amiri Quran','Amiri',serif;font-size:1.7em;line-height:2.5;text-align:center}
+.arabic-text[data-font="kufi"]{font-family:'Reem Kufi','Amiri',serif}
+
+/* raw HTML — isolated in a sandboxed iframe so it can't affect the page */
+.rawhtml{margin:40px 0}
+.rawhtml-frame{width:100%;border:0;display:block;background:transparent;min-height:24px}
+.layout-item .rawhtml{margin:0}
+.layout-item .rawhtml-frame{height:100%}
+
+/* media (audio / video) */
+.media{margin:44px 0;text-align:center}
+.media-el{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+video.media-el{width:100%;background:#000;border:1px solid var(--rule)}
+.media-audio{width:100%;height:44px}
+
+/* images inside prose tables */
+.book-chapter table img{max-width:150px;height:auto;border-radius:4px;vertical-align:middle;display:inline-block}
+
+/* callout / aside note */
+.callout{background:var(--paper-deep);border-left:3px solid var(--gold);border-radius:3px;padding:22px 26px;margin:40px 0;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+.callout p{margin-bottom:14px}.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+body[dir="rtl"] .callout{border-left:none;border-right:3px solid var(--gold)}
+
+/* subheading */
+.subhead{font-size:27px;line-height:1.2;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:52px 0 18px}
+
+/* verse / poem */
+.verse{font-style:italic;font-size:19px;line-height:1.7;color:var(--ink);margin:40px 0;padding-left:28px;border-left:1px solid var(--rule);white-space:pre-wrap}
+body[dir="rtl"] .verse{border-left:none;border-right:1px solid var(--rule);padding-left:0;padding-right:28px}
+
+/* scene break (within a chapter) */
+.scene-break{display:flex;align-items:center;justify-content:center;gap:14px;margin:54px 0;color:var(--accent);font-size:12px}
+.scene-break::before,.scene-break::after{content:'';width:46px;height:1px;background:var(--rule)}
+
+/* stat (single big figure) */
+.stat{margin:44px 0;text-align:center}
+.stat-figure{font-size:64px;line-height:1;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+.stat-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin-top:12px}
+
+/* letter / epistolary */
+.letter{background:var(--paper-deep);border:1px solid var(--rule);border-radius:3px;padding:34px 38px;margin:44px 0;font-size:18px;line-height:1.7;color:var(--ink-soft)}
+.letter p{margin-bottom:18px}.letter p:last-child{margin-bottom:0}
+
+/* tables */
+.book-chapter table{width:100%;border-collapse:collapse;margin:40px 0;font-size:16px}
+.book-chapter th,.book-chapter td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.book-chapter th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:600}
+.book-chapter td{color:var(--ink-soft)}
+body[dir="rtl"] .book-chapter th,body[dir="rtl"] .book-chapter td{text-align:right}
+/* table outline styles (the :::table wrapper) */
+.md-table{margin:40px 0}
+.md-table table{margin:0}
+.md-table-bordered table{border:1px solid var(--rule)}
+.md-table-bordered th,.md-table-bordered td{border:1px solid var(--rule)}
+.md-table-striped th,.md-table-striped td{border-bottom:0}
+.md-table-striped tbody tr:nth-child(odd) td{background:var(--paper-deep)}
+.md-table-minimal th,.md-table-minimal td{border-bottom:0}
+.md-table-minimal th{border-bottom:2px solid var(--rule)}
+.md-table-boxed{border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.md-table-boxed th,.md-table-boxed td{padding:12px 16px}
+.md-table-boxed th{background:var(--paper-deep)}
+.md-table-boxed td{border-bottom:1px solid var(--rule)}
+.md-table-boxed tr:last-child td{border-bottom:0}
+
+/* lists */
+.book-chapter ul,.book-chapter ol{margin:0 0 26px 1.3em}
+.book-chapter li{margin-bottom:9px;line-height:1.7}
+
+@media (max-width:600px){
+  .book-chapter{font-size:18px}
+  .epigraph-text{font-size:20px}
+  .subhead{font-size:22px}
+  .stat-figure{font-size:48px}
+  .letter{padding:24px 22px}
+  .ch-title{font-size:40px}
+  .ch-standfirst{font-size:20px;max-width:100%}
+  .opener{padding:70px 0 48px}
+  .pull{font-size:24px}
+  .verdict{margin:48px -20px;padding:44px 28px}
+  .verdict p{font-size:23px}
+  .arg-side{grid-template-columns:1fr;gap:6px}
+  .closer{font-size:23px}
+  .lead::first-letter{font-size:62px}
+}
+
+/* ── reader font-size control: --reading-scale multiplies the prose sizes ── */
+:root{--reading-scale:1}
+.book-chapter{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .ch-standfirst{font-size:calc(23px * var(--reading-scale))}
+.book-chapter .pull{font-size:calc(30px * var(--reading-scale))}
+.book-chapter .verdict p{font-size:calc(29px * var(--reading-scale))}
+.book-chapter .evidence-body{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .case-body p{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .dlg-text{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .callout{font-size:calc(17px * var(--reading-scale))}
+.book-chapter .letter{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .closer{font-size:calc(27px * var(--reading-scale))}
+.book-chapter .verse{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .epigraph-text{font-size:calc(24px * var(--reading-scale))}
+@media (max-width:600px){ .book-chapter{font-size:calc(18px * var(--reading-scale))} }
+
+
+
+
+html,body{margin:0;background:var(--paper)}</style></head>
+<body><div class="book-chapter canvas-chapter" id="chap"><main class="ch-canvas-main"><div class="ch-canvas" style="width:760px;height:1000px">
+<p class="reveal">Whilst these scenes were taking place in Spain, Elvira was beginning to discover, in England, that it was not quite so delightful to be a Queen as she had previously imagined. The contending parties in the state had been roused into action by the late struggle, and party spirit is of all others the most difficult to conquer. Besides this, the choice of Elvira having been rather a matter of feeling than of judgment, men felt dissatisfied at having suffered themselves to be hurried away by their passions, and, as is usual in such cases, they were disposed to vent the ill-humour they felt at their own conduct upon everything which chanced to fall in their way. Thus, even the best measures of Elvira’s government were warmly criticised; and as she unfortunately altered some of her laws in consequence of these objections, the critics were encouraged to proceed; and fancying her compliance to be the result of weakness, when it was, in fact, only produced by her natural candour and love of justice, the people became more outrageous and troublesome with every concession that was made to them.</p>
+<p class="reveal">Elvira’s intentions were excellent, but by unfortunately wishing to please everyone, she destroyed their effect. This made her councils vacillating, and her measures uncertain: nothing indeed but the strength of mind and commanding genius of Edmund, joined to his complete devotion to her cause, could have prevented the ruin of her government almost in the moment of its formation. From a mistaken motive of generosity, she had retained in her council those lords who had most vehemently opposed her, though, in compliance with the wishes of Edmund, they were shorn of their beams. This was a fatal error; half measures are always dangerous: the lords in question should have been discarded altogether, or retained in their former seats; as it was, Elvira had made them enemies, and yet left them the power to sting her.</p>
+<p class="reveal">The emissaries of Rosabella were also very active, and the ferment of the public mind excessive. The taste the people had just enjoyed of power, had only been enough to make them long for more. They had only just began to relish its sweets, when the dish was snatched away from them; though, if it had been left them to devour, they would have soon been cloyed and disgusted with its taste. Discontents became general, disturbances arose, which were no sooner quelled in one quarter than they broke out in another, and these petty insurrections, though almost too trivial to mention, were excessively annoying. For trifling inconveniences, like a host of flies buzzing round a nervous man on a sultry day, are often more irritating to the temper, than serious grievances; and the noble mind of Edmund was wearied in subduing such paltry enemies.</p>
+<p class="reveal">“They want employment,” said he one day to the Queen, after reading a dispatch containing an account of one of the most vexatious of these tumults; “you must build bridges and cut canals to amuse them.”</p>
+<p class="reveal">The active mind of Elvira caught eagerly at the idea, and she vainly fancied her name would be handed down to posterity as one of the greatest of Queens, who, though in the bloom of youth and pride of beauty, did not hesitate to sacrifice herself for the good of her people, and to devote that time to their welfare and the improvement of her kingdom, which others of her age and rank wasted in mere amusements.</p>
+<p class="reveal">Delighted with the thought, Elvira did not delay a moment before she prepared to put it in practice; and she was found for several days together constantly surrounded by her counsellors, and seated at a table absolutely loaded with papers, which she was busily employed in inspecting and arranging.</p>
+<p class="reveal">Plans for the erection of public buildings, for hospitals, bridges, museums, and churches, schemes for new manufactories, hints for establishments conducive to the public good, and sketches of discoveries which were to produce wonders, lay in heaps before her; mixed with addresses of compliments, votes of thanks, complaints of grievances, petitions, secret informations; and in short all that multifarious collection of paper, with which a monarch is sure to be surrounded who is said to be anxious to ameliorate the condition of his people, or who is unhappily reported to possess a genius for improvement.</p>
+<p class="reveal">Unfortunate is the man possessed of power, of whom such reports are current. He is directly surrounded by projectors, each presenting a scheme more futile than that of his predecessor; and discontented dependants, each bringing a long list of grievances, half of which are imaginary, but which have been conjured up by the complainants that they may not lose the precious right they enjoy of complaining.</p>
+<p class="reveal">Unhappy he whose fate obliges him to decide between the rival claimants! certain alike to be blamed, if he give or refuse; if he accept, or if he reject!</p>
+<p class="reveal">Elvira had not yet found the evils of power; but she now tasted of its sweets, and was enchanted. It seemed to her the most delightful thing in the world to hold in her hands the destinies of thousands of her fellow-creatures; and she thought not of the heavy responsibility it entailed, nor how often her path would be followed by curses instead of blessings. Someone has said that every time a sovereign confers a favour, he makes one ungrateful subject and nine discontented ones; but Elvira and Edmund as yet had not discovered the truth of this maxim. Since their present plan had been suggested, everything with them had been the couleur de rose. I say, them, for Edmund was associated with Elvira in all these gigantic schemes of improvement; for as he had conceived the first idea of them, so it was he only who could carry them into execution. His active mind required something to employ it; and the same strong feelings which had formerly been devoted to love and glory, were now turned into another channel.</p>
+<p class="reveal">The energies of Elvira’s mind had also been awakened by the struggle for the crown, and the passion inspired in her breast by the youthful stranger; and she now felt that she could not quietly return again to the commonplace stillness of everyday life. The passions when once roused from their dormant state, must have something to occupy them, or they will prey upon themselves. Thus we generally see great warriors, or statesmen, or in fact any class of men who have passed their lives in activity, wither away when forced to the dullness of an obscure retirement; their minds and bodies decay alike from want of stimulants to call them into action.</p>
+<p class="reveal">The improvement of her people supplied this stimulus to the mind of Elvira﻿—but alas! she entered upon it rather with passion than judgment, and had not patience to wait to see her plans gradually carried into effect: No﻿—no﻿—she could not endure anything slow: with her everything must be done by a coup de main; and as the people and the buildings were so stupid as not to be made perfect by the first attempt, she was continually disappointed and discouraged. In fact, by attempting to do too much, she did nothing.</p>
+<p class="reveal">When Elvira ascended the throne, she determined no public act should take place without the approbation of her council; and these noble lords were one day debating upon the propriety of a new road, that was proposed to intersect the entire kingdom at right angles, when Lord Gustavus de Montfort rose to oppose it, upon the ground of the injury it would do to private property if carried into effect.</p>
+<p class="reveal">Elvira could not endure Lord Gustavus: his cold, prudent, calculating manner, without a single spark of imagination, disgusted her beyond description; and the only good quality he possessed, that of being indefatigable in following up his point, completed her abhorrence. Wit and eloquence were quite thrown away upon him, for he understood neither the one nor the other; and when any new or brilliant scheme crossed Elvira’s imagination, and she described it to her council with all the fire of genius and animation, there he sat with his calm, cold unvarying countenance, ready to damp it with a doubt. Lord Maysworth also was her aversion; his narrow mind, which could only take in such trifles as escape the observation of men of genius; his mean and paltry spirit, and his grovelling ambition, were all her detestation; whilst Lord Noodle and Lord Doodle, who, though ciphers in themselves, yet, like their prototypes, prodigiously increased the weight of the figures placed before them, completed the group.</p>
+<p class="reveal">Much, however, as Elvira disliked these members of her council, she felt unequal to resist their combined influence; and she was just upon the point of being teased into their opinions contrary to her own judgment, when Lord Edmund entered the room. Indescribable was the effect produced by his presence; for indeed his commanding talents swayed all before them; and Elvira could not help smiling when she saw her counsellors of state shake their wise heads, and imagine they were assisting the debate with their wisdom, whilst, in fact, they were mere tools in his powerful hands. It is true they were the agents that produced the intended effect; but his was the master-spirit which set them in motion, and taught them where to go. His powerful intellect caught in an instant the comparative merits and disadvantages of the plan now in discussion, and his nod decided its fate; whilst the council, though they implicitly obeyed his will, had not the least idea that they were doing so; as he had the address so to form his opinions, as to let each person imagine them the suggestions of his own breast.</p>
+<p class="reveal">Whilst the principal personages in the cabinet, fancying they were leading, were thus blindly led, the nonentities of course followed in their train, and our old friends, the lords of ancient family, were perfectly astonished when they heard the magnificent plans and sagacious councils attributed to them, and sat quite lost in admiration of their own wisdom, whilst their little heads and enormous perriwigs kept bobbing with at least threefold their accustomed rapidity.</p>
+<p class="reveal">Elvira’s accession to the throne had induced both her father and Sir Ambrose to leave the country; the Duke inhabiting his former palace, and Sir Ambrose taking possession of a moveable house in its immediate neighbourhood, where the worthy Baronet found himself perfectly happy in the society of his old friend, and his pretty niece.</p>
+<p class="reveal">“I begin to repent that my daughter is a Queen,” said the Duke to Sir Ambrose, one night after supper, when the whole party were sitting cosily round the fire in Sir Ambrose’s library. “I have not half the enjoyments I used to have when I could have more of her society. Now when I see her, it is but for an instant, and she can scarcely stay to ask me how I do, before she flies off to some of her new plans of improvement.”</p>
+<p class="reveal">“The face of the country will be quite changed in a few years, if all the plans of the Queen prosper,” said Father Morris in his usual smooth hypocritical manner.</p>
+<p class="reveal">“I hope not!” cried Sir Ambrose; “I hope it’s no treason, Duke﻿—but I must confess I wish your daughter had never been Queen, if she can’t leave things as they are.”</p>
+<p class="reveal">“I am pretty much of your opinion: they are such wildgoose schemes too that she takes into her head!” said the Duke piteously. “Only imagine, Sir Ambrose, she showed me this morning a plan for making aerial bridges to convey heavy weights from one steeple to another; a machine for stamping shoes and boots at one blow out of a solid piece of leather; a steam-engine for milking cows; and an elastic summerhouse that might be folded up so as to be put into a man’s pocket!”</p>
+<p class="reveal">“It is really provoking; and Edmund is quite as scheming and visionary. I absolutely think, if we were both to die, they would not feel more than a temporary uneasiness at our loss, their minds are so completely occupied in these gigantic projects.”</p>
+<p class="reveal">“I fear so indeed; all things were otherwise formerly, I remember the time,” etc.</p>
+<p class="reveal">But why detail their reminiscences; it may be easily imagined how comfortably two old men would amuse themselves over a good fire, commenting on the glorious days when they were young; when all went right, or, what was nearly the same thing, when all appeared to them to do so; quite forgetting that age has other eyes than youth, and that the change was in themselves, not the times: we have other things to attend to. Clara was at a splendid party given by Elvira, and Father Morris soon left the Duke’s library to join her.</p>
+<p class="reveal">It was a ball; and the splendid court of Claudia seemed yet more brilliant under the reign of her successor. It was the first time Clara had ever been at court, and the effect the gorgeous magnificence of the scene had upon her was powerful in the extreme. She forgot her cares, her sadness, and her love﻿—all seemed enchantment; and the old lady, who acted as her chaperone, was quite horrorized at her gaucherie.</p>
+<p class="reveal">Brilliant as all was, however, the lovely goddess of the temple far exceeded even the splendour of the shrine; and the beholders gazed upon her with indescribable rapture. Beautiful as the fairy image of a dream; kind, affable, and condescending, Elvira glided through the crowd, followed by her suite to the concert-room. Here, all that the imagination of man could devise of harmony, enchanted the ears. But harsh was every other sound to that which stole upon the senses when Elvira was induced to forget her rank and mingle her voice with the music.</p>
+<p class="reveal">Elvira’s singing was perfection: “clear as a trumpet with a silver sound;” the round full notes now swelled upon the ear in liquid melody, and then died away, soft and sweet, yet distinct even in their faintest strains. Prince Ferdinand was at her side, and his ardent gaze bespoke the intenseness of his admiration. Elvira had not before seen him since the night when her conversation with him had so powerfully excited the jealousy of Edmund; and as she now observed his manner had again attracted Edmund’s attention, she blushed yet more deeply than before.</p>
+<p class="reveal">Edmund saw her blushes; and stung almost to madness by the sight, rushed violently out of the room.</p>
+<p class="reveal">The night was cold and damp, a drizzling mist fell fast, and that peculiar chill which marks the first approaches of winter, hung in the air; but Lord Edmund thought not of the weather, and he strode bareheaded through the palace-gardens with hurried steps and the actions of a maniac; whilst the thick gloom which pervaded the sky, contrasted fearfully with the brilliantly illuminated apartment he had just quitted. The gloominess of the scene, however, harmonized well with Edmund’s feelings; he felt soothed insensibly; and though he still stalked moodily backwards and forwards, he became gradually more calm.</p>
+<p class="reveal">“Ungrateful woman,” thought he, “to treat me thus! Does she not owe everything to me? I could bear her coldness; I could resign her to a throne; but the idea of her loving another drives me to distraction!﻿—Curses on that fiend! that detested Mummy! It must be by his infernal arts that Ferdinand has triumphed: for Elvira evidently loves him, her blushes tell her passion: and Elvira﻿—the cold, the chaste Elvira could never give her love thus﻿—thus almost unsolicited, and at first sight, if it were not the work of magic. The fiend threatened to be revenged when I refused his proferred aid, and spurned him from me; his impious arts have prospered, and I am wretched, yet still I do not repent, and still if he knelt before me I would trample him beneath my feet. By Heaven, I would risk my soul for vengeance on that demon!”</p>
+<p class="reveal">As he spoke, his eyes fell upon a thicket near him, and he fancied he saw the figure of a man, half obscured by the mist, emerge from its gloomy recesses. He gazed intently, and the figure glided slowly on with catlike, creeping steps. The mind of Edmund was worked up to frenzy﻿—he almost fancied a demon had appeared obedient to his wish, to receive his pledge, and work his bidding. “Speak!” cried he, in a voice that sounded fearfully amidst the surrounding stillness﻿—“Speak! art thou a demon, or a mortal?”</p>
+<p class="reveal">All was silent: the figure glided on; and Lord Edmund, oppressed by supernatural terrors, and shuddering at the sound of his own voice, could bear no more; he darted upon the figure, and grasping it roughly, he exclaimed, “Man or devil, I fear thee not, and thus will I grapple with thee.”</p>
+<p class="reveal">“Gently, my son,” replied the well-known voice of Father Morris; “in what have I offended you?”</p>
+<p class="reveal">“Pardon, holy father,” returned Edmund, “I knew you not﻿—I knew not what I did﻿—my passion blinded me.”</p>
+<p class="reveal">“And what has caused this passion? The mind of Edmund is too noble to be lightly moved.”</p>
+<p class="reveal">“Oh, talk not of the nobleness of my mind, father! I feel I am but a poor weak worm. Nobleness belongs to God alone; ’tis blasphemy to apply the term to man.”</p>
+<p class="reveal">“Tell me your grievances: they must, I am sure, be great, or they would not thus affect you. It is my holy office to console affliction. Speak then, my son; for remember, that though joy is doubled by being partaken, grief is lessened by being shared, and woe robbed of half its bitterness.”</p>
+<p class="reveal">“I have little to confess, father. I was weak and foolish; but Elvira﻿—”</p>
+<p class="reveal">“And are you astonished at a woman’s fickleness? Light as the eider down, and unstable as the changing wind, inconstancy is natural to the sex﻿—they crave incessantly for novelty;﻿—and as vanity is their only real passion, if that be gratified they ask no more.”</p>
+<p class="reveal">“And has not Elvira’s vanity been gratified even to satiety? Have I not idolized, worshipped her? Was it not my power that made her what she is? And is this my reward? To be scorned, deserted, laughed at!﻿—and for what? A stranger!﻿—a boy!﻿—my prisoner!”</p>
+<p class="reveal">“Whom do you mean?” asked the friar.</p>
+<p class="reveal">“Prince Ferdinand,” returned Edmund.</p>
+<p class="reveal">“Impossible!” cried Father Morris, starting with well-feigned astonishment. “Elvira cannot, surely, love Prince Ferdinand! And yet, now I recollect, I saw her talking to him, even now, with an appearance of deep interest, when I passed through her splendid chambers.”</p>
+<p class="reveal">“Damnation!” exclaimed Lord Edmund vehemently, driven to distraction by this speech; for strange to tell, though we may be certain of the reality of our own sufferings, they always seem to come with double poignancy when we hear them related by another.</p>
+<p class="reveal">“Calm yourself, my son,” said Father Morris in his silky tones, eyeing him with about as much compassion as an angler feels for the writhing of a worm upon his hook. “These bursts of passion are unworthy of you.”</p>
+<p class="reveal">“Oh, father!” cried Edmund, softened almost into tears, “you know not how I loved that woman. Your grave, serious feelings, disciplined by the restraint of a cloister, mortified by your renunciation of all earthly pleasures, can form no idea of the depth and fierceness of mine. Your passions, father, are dead within you; subdued by holy penitence to calmness; but mine rage with the fury of a volcano, and destroy me! Oh that my fond attachment, my long devoted services, my adoration, should be thus rewarded. Yes﻿—my adoration, for I have adored her, father! I worshipped her like a goddess; and though I doted on her charms, and would have endured unheard-of torments to have been blessed with their possession, yet, did I not sacrifice my hopes?﻿—did I not relinquish the treasure when just within my grasp, because her happiness was dearer to me than my own? And now to see her lavish her favours on that boy! She smiled upon him, father, and he dared to take her hand and press it to his lips. I saw him kiss it, not with the calm respect of a kneeling subject, but with the fervour, the impassioned ardour of a lover; and then he looked at her﻿—curses on the thought!﻿—and she did not reprove; but, casting down her eyes, softly blushed consent. Damnation! I cannot endure it.”</p>
+<p class="reveal">“Passion, my son, entails its own punishment. You see everything with a jaundiced eye. Elvira’s nature is gentle and yielding; she feared to hurt his feelings by her harshness. ’Tis but the natural consequence of that very softness you so often have admired. Why should you quarrel with it now? ’tis still the same that charmed you, save that it is now extended to another, and will be soon, no doubt, to all the world. Elvira has been educated in retirement, and, seeing only yourself and Edric, you thought her conduct was the effect of partiality for you, when in fact it was but her natural manner. She is now upon a larger theatre; and you must expect to see myriads of kneeling victims worship her beauty, and pay homage at her feet! And do you suppose she will be displeased at their attention? No; she is far too gentle; she has no firmness; and the same submission she now pays to you, she will, if you offend her, easily transfer to another. She is not formed to govern; she would obey and be happy; but the weight of government would overwhelm her if she were left alone to sustain it. Shake off, then, these selfish feelings, and be again yourself. You have often said, you only wished her happiness; and if that be the case, even if she should really love Prince Ferdinand, you ought to rejoice to see her in his arms.”</p>
+<p class="reveal">“Sooner would I perish, sooner would I involve all in one universal ruin! But it is impossible; she scarcely knows him.”</p>
+<p class="reveal">“And if it were so, still you would be wrong to blame Elvira for what, in fact, she cannot help. Her yielding softness is the defect of her character.”</p>
+<p class="reveal">“Fool that I was! that very softness caught me, and my fond heart fell captive to its chains. But it was folly, infatuation! I see my error; Rosabella has more character. She <em>can</em> love.”</p>
+<p class="reveal">Lord Edmund crossed his arms upon his breast and was soon lost in a reverie, which Father Morris was careful not to interrupt, but which was broken by the approach of Trevors, his lordship’s aid-de-camp and secretary.</p>
+<p class="reveal">“What do you want?” asked Lord Edmund, sternly.</p>
+<p class="reveal">“I came to seek your Lordship. I feared you were unwell, as I missed your Lordship from the party.”</p>
+<p class="reveal">“You missed me!” repeated Lord Edmund, bitterly. “<em>You</em> missed me! and did no one else discover my absence? Was it so marked that my servant could observe it, and yet no one else?”</p>
+<p class="reveal">“Did not the Queen inquire for Lord Edmund?” asked Father Morris.</p>
+<p class="reveal">“I did not hear her Majesty,” replied Trevors.</p>
+<p class="reveal">“How was she engaged? what was she doing?” demanded Lord Edmund.</p>
+<p class="reveal">“She was sitting, talking to Prince Ferdinand, my Lord.”</p>
+<p class="reveal">Lord Edmund gnashed his teeth together, grinding them with fury, and rushed back to the house without speaking, whilst Trevors followed at an humble distance.</p>
+<p class="reveal">“He has it!” cried Father Morris triumphantly﻿—“he has it, and he is mine forever!”</p>
+<p class="reveal">Several days elapsed from this period before Elvira again saw Lord Edmund. She was surprised at his absence; as indeed he was so interwoven in her schemes and plans, that nothing went on well without him.</p>
+<p class="reveal">“Will your Majesty have the goodness to affix the royal seal to this ordinance?” asked Lord Gustavus one morning.</p>
+<p class="reveal">“I don’t know,” replied Elvira. “I can’t tell what to do. I wish Lord Edmund were here.”</p>
+<p class="reveal">“He may soon be sent for,” said Lord Gustavus pompously; “though, with all due deference to your Majesty’s better judgment, it does not appear to me that his presence is exactly requisite.”</p>
+<p class="reveal">Lord Edmund, however, was summoned, and he came. But oh! how changed since Elvira had seen him last! His face looked pale and thin, his cheeks were sunken, and his eyes hollow and heavy, whilst his deep voice sounded hoarse and unnatural. Passion had passed through his soul, and withered as it went. Elvira’s heart smote her as she gazed upon him.</p>
+<p class="reveal">“You have been ill, Edmund!” said she, in tones of melting softness. “Why was I not informed! Surely you could not think I would willingly neglect you? Could you judge so harshly of me?”</p>
+<p class="reveal">The firm breast of Edmund softened as she spoke, and tears swam in his eyes as he struggled to reply with calmness﻿—yes, tears; the brave, the warlike Edmund, whose strength of mind and firmness had resisted unequalled dangers, now trembled before a woman.</p>
+<p class="reveal">“You must have some advice,” continued Elvira. “Dr. Coleman, Dr. Hardman, can you not prescribe for your patient?”</p>
+<p class="reveal">“His Lordship appears feverish,” said Dr. Coleman. “No doubt he has rested ill.”</p>
+<p class="reveal">“Yes﻿—yes,” rejoined Dr. Hardman, with a malignant smile. “His Lordship’s eyes betray his want of rest.”</p>
+<p class="reveal">“I have been slightly indisposed,” said Lord Edmund, rallying his spirits to speak: “but I am better. Is there anything in which my services can be useful to your Majesty?”</p>
+<p class="reveal">“Her Majesty wishes you to inspect this bill,” replied Lord Gustavus solemnly, “before she gives it her royal assent.”</p>
+<p class="reveal">Lord Edmund’s eyes sparkled. “Then she still thinks my opinion of importance,” thought he.</p>
+<p class="reveal">“Lord Edmund’s illness, I hope, is passed,” said Dr. Hardman maliciously; “for he certainly looks better even since he came into the room.”</p>
+<p class="reveal">Lord Edmund was better; a sudden revulsion of feeling had taken place within him, and hope was again illumined in his bosom. Passion again rushed through his soul. “She must, she shall, be mine,” thought he, whilst fire flashed from his eyes. “She loves me, and she shall yet be my wife. The hated law which prevents her marriage shall be repealed. Difficulties only increase the value of the prize, and they vanish before a determined spirit. What! shall I, before whose arm whole nations have fallen vanquished, shrink like a coward from the first trouble which assails me! Oh, no! I will not be so weak; opposition shall only animate my courage. Treasures would be scarcely worth acceptance if they lay beneath one’s feet﻿—a brave man spurns an easy victory! I will exert my powers, and Elvira shall be mine.”</p>
+<p class="reveal">Father Morris was at the levee, and he watched with anxious eyes the fluctuations in Edmund’s expressive countenance. “Perdition seize her beauty!” muttered he; “with one look she undoes whole months of labour. But he shall yet be mine﻿—Cheops has sworn he shall﻿—and Rosabella shall be Queen. Be the Mummy mortal or fiend, he is resistless; he has unbounded power over the human heart, and what he wills must be accomplished.”</p>
+<p class="reveal">Some weeks elapsed, during which Lord Edmund, restored to his former influence in the government, laboured assiduously to prepare the minds of the people for abolishing the law which prevented the marriage of the Queen. With the greatest care he endeavoured to make Elvira popular. For this purpose he persuaded her to remit those burdens which weighed most heavily upon the people, replacing them by taxes levied in a more indirect way; for the mass of a population seldom grumbles at taxation, unless it see the trifles for which it pays; and men do not regard the giving double the real value of a commodity a tenth part so much, as paying even a small direct sum for the use of any of the common necessaries of life.</p>
+<p class="reveal">By judiciously acting upon this principle, Edmund made himself adored; and whispers even were buzzed about, lamenting that he was not King. This was the point to which Edmund had wished to bring the people; and he pursued his plan by supporting the poor against the rich, and rigorously punishing the magistrates or officers of justice who attempted to be guilty of oppression. The multitude generally hate those entrusted with the execution of the laws, perhaps upon the same principle as the bleeding culprit abhors the sight of the whip that has flogged him; and their natural conceit and presumption were flattered by the attention paid to their complaints; till, by his judicious management, Lord Edmund found he had obtained the entire devotion of the mob, and could wield them at his pleasure.</p>
+<p class="reveal">Time rolled on, and winter had already wrapped its frozen mantle round the world, when one day Father Morris abruptly entered the apartment of Rosabella. “It is all over,” cried he, as he threw himself in despair upon a couch. “Edmund has obtained the consent of the people for the Queen to marry, and no doubt in a few weeks he will be the husband of Elvira!”</p>
+<p class="reveal">“The husband of Elvira!” cried Rosabella, her eyes flashing fire, and her cheeks glowing, whilst every fibre quivered with agitation, and her fine features bespoke the tremendous passions of a demon. “Then may everlasting misery attend the fiend that has deceived us; that has led us on step by step to our destruction, and is perhaps even now mocking our despair! Yes, yes,” continued she, as the fiendish laugh of Cheops rang in her ears, and his detested form stood again before her﻿—“I expected this; you come to enjoy your triumph and mock our credulity; but know, this arm is yet powerful enough to revenge my wrongs; it shall annihilate my rival; and thou, wretch! detested hideous wretch! thou too shall feel its vengeance!”</p>
+<p class="reveal">“This to your friend!” said Cheops with a bitter smile: “fie! fie! How blind is human reason when the passions intervene!﻿—All is for the best﻿—have patience; wait a little, and my promises will yet be accomplished.”</p>
+<p class="reveal">“If Elvira had died,” murmured Father Morris, a dark frown gathering upon his brow.</p>
+<p class="reveal">“You would not be now alive,” said the Mummy. “But fear not, all is as you can wish.”</p>
+<p class="reveal">“As we can wish?” cried Rosabella indignantly.</p>
+<p class="reveal">“Yes, as you can wish,” returned Cheops firmly. “Edmund has obtained permission for Elvira to marry any natural born subject of the realm; but she will not wed him, for she loves another, and that other is a foreigner. He will be enraged at her refusal, and jealousy will alienate him from her cause. He will then naturally espouse that of her rival from ambition and revenge. Rosabella will be Queen, and the law which prevented the marriage of the Sovereign being abolished, Edmund will become her husband﻿—if not from love, at least from ambition.”</p>
+<p class="reveal">“O Cheops! ’tis useless to resist﻿—we are thy slaves﻿—do with us as thou wilt.”</p>
+<p class="reveal">“Say rather you are slaves of your own passions,” murmured the Mummy; and they parted.</p>
+<p class="reveal">It was a clear frosty day in December, when Elvira, scarcely knowing why, wandered into the garden belonging to her splendid palace of Somerset House; and, entering a pavilion, reclined upon a couch placed opposite to a window which commanded a view of the river. The pavillion was decorated with the utmost taste. Its windows, opening to the ground, were shaded with curtains of gossamer net, lined with pink; the walls were beautifully painted, and divided into panels by highly ornamented columns; books, drawings, and musical instruments were scattered around; whilst tripods, supporting vases filled with the rarest exotic flowers, shed sweet fragrance through the air; and the carpet was so soft and thick, that it felt like moss beneath the feet.</p>
+<p class="reveal">Even in this temple of luxury, however, its fair possessor was not happy. She sighed as she surveyed the gorgeous refinement around her, and felt forcibly the insufficiency of greatness. Listlessly she turned her eyes upon the figures painted upon the walls: they represented the loves of Mars and Venus: they were exquisitely painted: the artist had given to the life the tender modesty of the goddess, and the ardent passion of her lover. Elvira gazed upon his glowing countenance and sparkling eyes; and then, looking down, sighed yet more heavily than before.</p>
+<p class="reveal">She dismissed her attendants, retaining only Emma; and long her eyes were fixed on vacancy, and her mind absorbed in mournful contemplations; when suddenly she was startled by the entrance of a page, and the appearance of Lord Edmund Montagu, who followed almost at the moment of the page’s repeating his name: his countenance beaming joy, and hope dancing in his eyes.</p>
+<p class="reveal">“Oh, Elvira!” he cried, “you are now mine﻿—mine forever! The people permit you to marry. The lords in council have signed the law; the people have proclaimed it with acclamations. You are free! you are no longer debarred from the inestimable pleasures of domestic life﻿—you are independent﻿—you may marry any natural born subject of the realm, and will you now be mine?”</p>
+<p class="reveal">“And so relinquish my independence the moment I obtain it,” said Elvira, smiling.</p>
+<p class="reveal">“Oh, my loved! my adored Elvira! consent to make me happy! Believe me you shall be free, and still as much a Queen as at this moment.”</p>
+<p class="reveal">“Edmund!” said Elvira seriously, “you deserve more than I can give you; for I will not insult you by supposing you would be satisfied with the possession of my crown without my heart;﻿—and that it is not in my power to bestow.”</p>
+<p class="reveal">“My dearest Elvira, you but fancy this. I know your feelings are warm, your sensibility acute, and your generosity unbounded﻿—can you then want a heart?”</p>
+<p class="reveal">“Alas, no! but I have discovered I possess one, only in time to know also that I have given it to another.”</p>
+<p class="reveal">“And is that other a youth and a stranger?” asked her lover, gasping for breath.</p>
+<p class="reveal">“He is,” replied Elvira, blushing, and looking down.</p>
+<p class="reveal">“Then, indeed, I am wretched!” cried Lord Edmund; and, striking his clenched hand vehemently against his forehead, he darted out of the room.</p>
+<p class="reveal">Elvira gazed after him with a feeling almost amounting to horror. Terrified at the strength of the passions she had awakened, she appeared stupified, and stood looking like a child who had accidentally cut the string which confined the wheels of some powerful machinery, on hearing its fearful clatter above its head.</p>
+<p class="reveal">“Oh, madam, madam!” cried Emma, wringing her hands, “what will become of us? Your Majesty has offended Lord Edmund forever.”</p>
+<p class="reveal">“Peace, Emma!” said Elvira, “you forget my rank﻿—I will not be dictated to.”</p>
+<p class="reveal">“Pardon me, dear madam, you know I love you, and﻿—”</p>
+<p class="reveal">“I know, also, that you presume upon my love. Begone!”</p>
+<p class="reveal">Emma obeyed, and Elvira was left alone.</p>
+<p class="reveal">Dreadfully agitated, and quite unable to compose herself or arrange the chaos of her thoughts, she walked to the windows of the pavilion, and, opening one of them, looked out upon the gardens. It is already said that these delightful grounds were thrown open to the public; but, in consequence of the ease with which they might be enjoyed, a few half-pay officers, attorneys without clients, physicians without patients, clergymen looking out for livings, hissed players, disappointed authors and discarded servants, alone strolled through their romantic walks, and paused occasionally to gaze upon the beautiful works of art with which they were decorated. The English were now decidedly the first sculptors in the world. Chemical preparations alone being used to supply light and heat, smoke was unknown, and the atmosphere being no longer thick and cloudy, marble bore exposure to it without material injury. Besides this, perhaps no nation in the world produced more beautiful models of male and female beauty than England; and now that the women had long thrown off those deformers of the human shape ycleped stays, their forms developed themselves into perfect symmetry. Elvira, however, thought not of the gardens, nor of the works of art they contained; yet as she stood at the window, though absorbed in her own reflections, her eyes rested upon the exquisite statues before her. The inanimate marble seemed endowed with soul and spirit, whilst the graceful forms it represented seemed to pause only for a moment, and to be ready to start again into life and action after a short repose﻿—in short, they appeared to breathe; and the spectator felt almost surprised, when his eye had turned from them, to find them still in the same attitude when he looked again.</p>
+<p class="reveal">The river was frozen, and persons glided along it in glittering <em>traineux</em>, or skated gracefully with infinite variety of movement; whilst, every now and then, a steam-percussion moveable bridge shot across the stream, loaded with goods and passengers, collapsing again the instant its burden was safely landed on the other side.</p>
+<p class="reveal">Pleased with the busy scene around her, Elvira stood and gazed, till half her troubles seemed to vanish, and a pleasing train of thought crept over her mind. “What have I done?” thought she﻿—“and yet I do not repent.﻿—No, no! I could not act otherwise. The noble and devoted love of Edmund deserved my warmest gratitude, and I have done right to own the truth to him, painful as it has been to me to do so, rather than torture his generous bosom by exciting hopes I never meant to realize. Yes, I have done right,” repeated she aloud; “and I am perfectly satisfied with my conduct.”</p>
+<p class="reveal">“Then you have reason to be contented,” said the deep voice of Cheops, immediately behind her; “for few indeed are the mortals who can say that with justice!”</p>
+<p class="reveal">The solemn tones of the Mummy sank like a foreboding of evil upon the heart of Elvira, and she shuddered involuntarily.</p>
+<p class="reveal">“You think I have done wrong then?” said she.</p>
+<p class="reveal">“I did not say that,” returned he calmly.﻿—“But had I not known the sex, I might perchance have felt surprised that you should avow, unasked for, a secret to Lord Edmund, which you have sedulously endeavoured to keep concealed even from me.”</p>
+<p class="reveal">“Alas,” cried Elvira, “my motives﻿—”</p>
+<p class="reveal">“Were those of a woman,” interrupted Cheops; “a being fated to work mischief. I do not blame you; for you have only acted according to your natural instinct.”</p>
+<p class="reveal">“What do you mean?” asked Elvira, turning pale and trembling, for the words of the Mummy created an undefinable dread upon her mind.</p>
+<p class="reveal">“Listen!” said Cheops, “and I will tell you.﻿—If you had confided your secret to me, it would have produced good, for I should have aided your passion, and I cannot give assistance unless it be required;﻿—but by telling it to Lord Edmund you have produced evil, for he mistakes your lover for another, and the consequences may be fatal. Thus, it is clear that you could not have done otherwise than as you have; for when was a woman known to hesitate between good and evil, and not choose the latter?”</p>
+<p class="reveal">“Mistakes my lover for another!” exclaimed Elvira. “For God’s sake, explain yourself!”</p>
+<p class="reveal">“He thinks you meant Prince Ferdinand,” said the Mummy coldly, “and he is now seeking him in order to destroy him.”</p>
+<p class="reveal">“Oh, God!﻿—Oh, God!” cried Elvira in the bitterest agony: “what will become of me? where is Edmund! Let me fly to implore him to spare the prince!”</p>
+<p class="reveal">“It does not appear to me,” said Cheops still more calmly, “that your endeavours to preserve him are at all likely to produce the effect you wish; for, as Lord Edmund already believes you love the prince, and as that belief is the reason of his hatred, your showing a violent anxiety for his welfare does not appear to me exactly the mode most calculated to destroy his suspicions.”</p>
+<p class="reveal">“True! true!” cried Elvira, wringing her hands. “Alas! alas! what will become of me?” whilst, as she spoke, a piercing cry rang in her ears, and a sudden rush of all the persons in the gardens took place towards one particular spot. Scarcely knowing what she did, Elvira followed the crowd, and shrieked with indescribable terror as she heard the clashing of swords. Pale and trembling, she hurried forward, and arrived just as Prince Ferdinand, uttering a deep groan, fell beneath the sword of Lord Edmund. Elvira screamed, and throwing herself upon the body, endeavoured in vain to revive it, quite forgetting in the excess of her agitation the crowd which surrounded her, and the interpretation that might be put upon her behaviour. One sole idea occupied her mind, and chilled it with horror: it was, that her imprudence had most probably deprived a fellow-creature of existence.</p>
+<p class="reveal">Lord Edmund in the meantime stood in statue-like insensibility, gazing upon her with feelings of unutterable anguish. Her grief, her violent emotion, seemed to confirm the passion she had avowed; and if she loved, his exertions had only paved the way for the success of his rival. The thought was madness. Lord Edmund gnashed his teeth, his countenance changed, blood gushed in torrents from his side, for he too was wounded, and he leant fainting against a tree.</p>
+<p class="reveal">The confusion which now prevailed was indescribable. It was high treason to draw a sword in the precincts of the royal palace; and the guards, who were instantly assembled, took the offenders into custody. They were both incapable of offering any resistance, and they were hurried away to prison amidst the exclamations of the mob. Elvira had fainted, and she was carried back to the palace; whilst the whispered speculations of the crowd, upon the strangeness of the scene, arose in half-stifled murmurs like the distant roar of ocean. The attention of the spectators, however, was soon fixed upon the poor old Duke of Cornwall. He had stood bending forwards﻿—his hands clasped, and his eyes riveted upon his daughter during the whole of her ineffectual attempts to revive the prince. The old man seemed turned to stone: he neither moved, nor spoke; his glassy eyes were set, and his livid lips slightly quivered; at last he uttered a faint groan, and fell senseless into the arms of his attendants in a fit of apoplexy. The spectators thought him dead, and fancied his heart had broken, on discovering this unexpected weakness on the part of his adored daughter.</p>
+<p class="reveal">Everyone was powerfully affected, and everyone seemed bursting to speak; though no one knew exactly what he might venture to say. Lord Gustavus looked stern, Lord Maysworth important, and Dr. Hardman sly; whilst the Lords Noodle and Doodle shook their little heads, till they seemed in imminent danger of becoming separated from their bodies. Rosabella’s heart alone swelled with rapture, and her eyes beamed with ill-concealed triumph.</p>
+<p class="reveal">“The Mummy was right,” thought she;﻿—“Elvira must fall, and Edmund will be mine.”</p>
+
+</div></main></div>
+<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
+</body></html>

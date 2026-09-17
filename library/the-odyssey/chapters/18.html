@@ -1,0 +1,1449 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><base href="__JAGUAR_BASE__"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,0,900;9..144,1,400;9..144,1,700&amp;family=Spline+Sans+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Amiri+Quran&family=Reem+Kufi&display=swap" rel="stylesheet"><style>:root{
+--ink:#1a2238;--ink-soft:#3d4663;--paper:#f4f1ea;--paper-deep:#ebe6db;--oxblood:#8c2f2a;--oxblood-soft:#b05750;--accent:#8c2f2a;--accent-soft:#b05750;--gold:#c9a054;--slate:#6b7089;--rule:#d8d1c2;--nav-active:#5DCAA5;--teal:#5DCAA5;
+--nav-bg:#1a2238;
+--nav-text:#f4f1ea;
+--hl-amber:#ecc15a;
+--hl-rose:#d27870;
+--hl-mint:#7ec496;
+--hl-sky:#7ea0d6;
+--serif:'Fraunces', Georgia, serif;
+--mono:'Spline Sans Mono', monospace;
+}
+html.dark{
+--ink:#ece7da;--ink-soft:#b6b2a6;--paper:#14161c;--paper-deep:#1d2029;--oxblood:#c75d54;--oxblood-soft:#dd857c;--accent:#c75d54;--accent-soft:#dd857c;--gold:#cda05a;--slate:#9095a6;--rule:rgba(255,255,255,.12);--nav-active:#5fa39b;--teal:#5fa39b;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+
+/* NAV (always dark by design) */
+.book-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nav-bg);display:flex;align-items:center;padding:0 18px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--accent);transform:translateY(-100%);transition:transform .35s ease}
+.book-nav.visible{transform:translateY(0)}
+.book-nav::-webkit-scrollbar{display:none}
+.nav-brand{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--nav-text);padding:12px 14px 12px 0;border-right:1px solid rgba(244,241,234,.15);margin-right:8px;white-space:nowrap;flex-shrink:0}
+.nav-item{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:13px 10px;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;flex-shrink:0}
+.nav-item:hover{color:var(--nav-text)}
+.nav-item.active{color:var(--nav-active);border-bottom-color:var(--nav-active)}
+
+/* THEME TOGGLE */
+.theme-toggle{position:relative;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;padding:0;margin-left:auto;flex-shrink:0;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.theme-toggle:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.theme-toggle svg{width:15px;height:15px;display:block}
+.theme-toggle .ic-sun{display:none}
+html.dark .theme-toggle .ic-sun{display:block}
+html.dark .theme-toggle .ic-moon{display:none}
+body[dir="rtl"] .theme-toggle{margin-left:0;margin-right:auto}
+
+/* RTL */
+body[dir="rtl"] .book-nav{flex-direction:row-reverse}
+body[dir="rtl"] .book-chapter,body[dir="rtl"] .toc-inner{direction:rtl;text-align:right}
+body[dir="rtl"] .toc-row{direction:rtl}
+body[dir="rtl"] .pull{border-left:none;border-right:3px solid var(--accent);padding-left:0;padding-right:28px}
+body[dir="rtl"] .toc-arrow{transform:scaleX(-1)}
+body[dir="rtl"] .section-marker::after{margin-left:0}
+body[dir="rtl"] .toc-part::after{margin-left:0}
+
+/* READING-PROGRESS BAR */
+.read-progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:600;background:linear-gradient(90deg,var(--accent),var(--gold));box-shadow:0 0 10px rgba(140,47,42,.45);transition:width .1s linear}
+body[dir="rtl"] .read-progress{left:auto;right:0}
+
+/* REVEAL / OPENER ANIMATIONS (IntersectionObserver-driven) */
+.js-anim .reveal{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .9s cubic-bezier(.22,.61,.36,1),filter .85s ease;will-change:opacity,transform}
+.js-anim .reveal.in{opacity:1;transform:none;filter:none}
+/* entrance variants — set via data-anim, only BEFORE reveal so .in always wins */
+.js-anim .reveal[data-anim="scale"]:not(.in){transform:scale(.93)}
+.js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(-46px)}
+.js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(46px)}
+.js-anim .reveal[data-anim="rise"]:not(.in){transform:translateY(40px)}
+.js-anim .reveal[data-anim="blur"]:not(.in){filter:blur(12px);transform:translateY(14px)}
+.js-anim .reveal[data-anim="fade"]:not(.in){transform:none}
+.js-anim .reveal[data-anim="zoom"]:not(.in){transform:scale(1.06)}
+body[dir="rtl"] .js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(46px)}
+body[dir="rtl"] .js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(-46px)}
+.js-anim .opener>*{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.61,.36,1)}
+.js-anim .opener.opener-in>*{opacity:1;transform:none}
+.js-anim .opener.opener-in .ch-eyebrow{transition-delay:.05s}
+.js-anim .opener.opener-in .ch-number{transition-delay:.18s}
+.js-anim .opener.opener-in .ch-title{transition-delay:.30s}
+.js-anim .opener.opener-in .ch-standfirst{transition-delay:.44s}
+.js-anim .section-marker::after{transform:scaleX(0);transform-origin:left center;transition:transform 1s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .section-marker.in::after{transform:scaleX(1)}
+body[dir="rtl"] .js-anim .section-marker::after{transform-origin:right center}
+.js-anim .pull{position:relative;border-left-color:transparent}
+.js-anim .pull::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .85s cubic-bezier(.22,.61,.36,1) .1s}
+.js-anim .pull.in::before{transform:scaleY(1)}
+body[dir="rtl"] .js-anim .pull{border-right-color:transparent}
+body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
+.js-anim .verdict{position:relative;overflow:hidden}
+.js-anim .verdict::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .95s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .verdict.in::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1 !important;transform:none !important;transition:none}
+  html{scroll-behavior:auto}
+  .js-anim .opener>*{opacity:1;transform:none}
+  .js-anim .section-marker::after{transform:scaleX(1)}
+  .js-anim .pull::before,.js-anim .verdict::before{transform:scaleY(1)}
+  .read-progress{display:none}
+}
+
+/* FULL-SCREEN COVER */
+.book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
+
+/* INTERACTIVE TOC */
+.book-toc{min-height:100vh;background:var(--paper);position:relative;padding:90px 0 80px}
+.toc-inner{max-width:760px;margin:0 auto;padding:0 32px}
+.toc-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+.toc-bigtitle{margin-bottom:4px}
+.toc-after{display:inline-block;font-style:italic;font-weight:400;font-size:clamp(28px,5vw,44px);color:var(--ink-soft);letter-spacing:-.02em}
+.toc-demo{display:block;font-weight:700;font-size:clamp(46px,9vw,82px);text-transform:uppercase;letter-spacing:-.04em;line-height:.9;color:var(--ink)}
+.toc-byline{font-style:italic;font-size:17px;color:var(--slate);margin-bottom:44px}
+.toc-part{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:34px 0 10px;display:flex;align-items:center;gap:14px}
+.toc-part::after{content:'';flex:1;height:1px;background:var(--rule)}
+.toc-list{position:relative}
+a.toc-row{display:grid;grid-template-columns:54px 1fr 30px;gap:0 16px;align-items:center;padding:18px 16px;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background .2s,padding .2s,color .2s;border-radius:3px;position:relative}
+a.toc-row:first-child{border-top:1px solid var(--rule)}
+a.toc-row:hover{background:var(--ink);color:var(--paper);padding-left:24px}
+a.toc-row:hover .toc-num{color:var(--gold)}
+a.toc-row:hover .toc-arrow{opacity:1;transform:translateX(0);color:var(--nav-active)}
+.toc-num{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.05em}
+.toc-rowtitle{font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.toc-arrow{font-size:18px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+
+/* TOC HOVER PANEL (dark popover) */
+.toc-panel{position:fixed;width:340px;background:var(--nav-bg);color:var(--nav-text);border-radius:6px;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);z-index:400;pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .22s ease,transform .22s ease;border-top:3px solid var(--accent)}
+.toc-panel.show{opacity:1;transform:translateY(0) scale(1)}
+.tp-num{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:8px;font-weight:600}
+.tp-title{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+.tp-blurb{font-size:15px;line-height:1.6;color:rgba(244,241,234,.85);font-style:italic;margin-bottom:18px}
+.tp-egg-divider{width:32px;height:2px;background:var(--gold);margin-bottom:14px;opacity:.6}
+.tp-egg{font-size:13.5px;line-height:1.55;color:rgba(244,241,234,.7)}
+.tp-blurb:empty,.tp-egg:empty,.tp-egg-divider.hide{display:none}
+@media(max-width:820px){.toc-panel{display:none !important}}
+
+/* HIGHLIGHTS & NOTES */
+.nav-notes{display:inline-flex;align-items:center;gap:7px}
+.nav-notes-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--gold);color:var(--nav-bg);font-size:9px;font-weight:700;letter-spacing:0;line-height:1}
+.nav-notes-count[data-empty="1"]{display:none}
+mark.hl{background:transparent;color:inherit;border-radius:2px;padding:.05em 0;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:filter .15s ease}
+mark.hl:hover{filter:brightness(.93)}
+mark.hl-amber{background:rgba(240,196,90,.50);box-shadow:inset 0 -.5em 0 -.35em rgba(176,132,40,.55)}
+mark.hl-rose{background:rgba(214,120,112,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(160,70,62,.5)}
+mark.hl-mint{background:rgba(125,196,150,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(54,120,82,.5)}
+mark.hl-sky{background:rgba(126,160,214,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(60,96,160,.5)}
+mark.hl.has-note::after{content:'';display:inline-block;width:5px;height:5px;margin:0 1px 0 2px;border-radius:50%;background:var(--accent);vertical-align:.5em}
+@keyframes hlFlash{0%{box-shadow:0 0 0 0 rgba(201,160,84,0)}18%{box-shadow:0 0 0 4px rgba(201,160,84,.55)}100%{box-shadow:0 0 0 0 rgba(201,160,84,0)}}
+mark.hl-flash{animation:hlFlash 1.6s ease}
+.hl-toolbar{position:fixed;z-index:560;display:flex;align-items:center;background:var(--nav-bg);border-radius:30px;padding:7px 10px;box-shadow:0 12px 34px rgba(0,0,0,.34);opacity:0;transform:translateY(6px) scale(.96);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
+.hl-toolbar.show{opacity:1;transform:none;pointer-events:auto}
+.hl-swatch{width:22px;height:22px;border-radius:50%;margin:0 4px;cursor:pointer;border:2px solid rgba(244,241,234,0);box-shadow:0 0 0 1px rgba(0,0,0,.18) inset;transition:transform .12s ease}
+.hl-swatch:hover{transform:scale(1.18)}
+.hl-tool-div{width:1px;height:20px;background:rgba(244,241,234,.18);margin:0 8px}
+.hl-note-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--nav-text);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 6px 4px 2px}
+.hl-note-btn:hover{color:var(--gold)}
+.hl-note-btn svg{width:13px;height:13px}
+.hl-look-btn{background:none;border:0;cursor:pointer;color:var(--nav-text);padding:4px 5px;display:inline-flex;align-items:center}
+.hl-look-btn:hover{color:var(--gold)}
+.hl-look-btn svg{width:16px;height:16px}
+/* dictionary / wikipedia lookup panel */
+.lookup-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.lookup-backdrop.show{opacity:1;pointer-events:auto}
+.lookup-panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.lookup-panel.show{transform:none}
+body[dir="rtl"] .lookup-panel{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .lookup-panel.show{transform:none}
+.lookup-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lookup-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.lookup-close{background:none;border:0;color:#f4f1ea;font-size:26px;line-height:1;cursor:pointer;opacity:.7}
+.lookup-close:hover{opacity:1}
+.lookup-body{flex:1;overflow-y:auto;padding:18px 22px 40px}
+.lookup-word{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:2px}
+.lookup-phon{font-family:var(--mono);font-size:13px;color:#9aa0b0;margin-bottom:14px}
+.lookup-pos{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+.lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
+.lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
+.lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
+.lookup-extract{font-size:15px;line-height:1.6}
+.lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
+.lookup-loading,.lookup-empty{color:#9aa0b0;font-size:14px;padding:10px 0}
+.hl-noteedit{position:fixed;z-index:570;width:300px;background:var(--nav-bg);color:var(--nav-text);border-radius:9px;padding:15px 15px 13px;box-shadow:0 18px 50px rgba(0,0,0,.42);opacity:0;transform:translateY(8px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+.hl-noteedit.show{opacity:1;transform:none;pointer-events:auto}
+.hl-ne-colors{display:flex;gap:8px;margin-bottom:11px}
+.hl-ne-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset;border:2px solid transparent;transition:transform .12s ease}
+.hl-ne-dot:hover{transform:scale(1.15)}
+.hl-ne-dot.sel{border-color:var(--nav-text)}
+.hl-noteedit textarea{width:100%;min-height:84px;resize:vertical;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);border-radius:6px;color:var(--nav-text);font-family:var(--serif);font-size:15px;line-height:1.5;padding:10px 11px;outline:none}
+.hl-noteedit textarea::placeholder{color:rgba(244,241,234,.38);font-style:italic}
+.hl-noteedit textarea:focus{border-color:var(--gold)}
+.hl-ne-actions{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.hl-ne-del{background:none;border:0;color:rgba(244,241,234,.5);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:4px}
+.hl-ne-del:hover{color:#d27870}
+.hl-ne-save{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 16px;border-radius:5px}
+.hl-ne-save:hover{filter:brightness(1.08)}
+.notes-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.notes-backdrop.show{opacity:1;pointer-events:auto}
+.notes-drawer{position:fixed;top:0;right:0;height:100%;width:min(424px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.notes-drawer.show{transform:none}
+body[dir="rtl"] .notes-drawer{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .notes-drawer.show{transform:none}
+.notes-head{display:flex;align-items:flex-start;justify-content:space-between;padding:30px 28px 22px;border-bottom:1px solid rgba(244,241,234,.1)}
+.notes-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+.notes-h1{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.notes-close{background:none;border:0;color:rgba(244,241,234,.55);font-size:26px;line-height:1;cursor:pointer;padding:0 2px;margin-top:-2px}
+.notes-close:hover{color:#f4f1ea}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px 40px}
+.notes-empty{padding:48px 22px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:16px;line-height:1.6;font-family:var(--serif)}
+.note-card{position:relative;display:grid;grid-template-columns:4px 1fr;gap:15px;padding:17px 14px 16px;border-radius:8px;cursor:pointer;transition:background .18s ease;margin-bottom:4px}
+.note-card:hover{background:rgba(244,241,234,.055)}
+.note-bar{border-radius:3px}
+.note-bar.c-amber{background:var(--hl-amber)}.note-bar.c-rose{background:var(--hl-rose)}.note-bar.c-mint{background:var(--hl-mint)}.note-bar.c-sky{background:var(--hl-sky)}
+.note-excerpt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;color:rgba(244,241,234,.92);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-body{font-size:14px;line-height:1.55;color:#cdd2df;margin-bottom:10px;white-space:pre-wrap}
+.note-meta{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,234,.42)}
+.note-meta .nm-ch{color:var(--gold)}
+.note-del{position:absolute;top:12px;right:8px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:0;transition:opacity .15s ease}
+body[dir="rtl"] .note-del{right:auto;left:8px}
+.note-card:hover .note-del{opacity:1}
+.note-del:hover{color:#d27870}
+@media(max-width:600px){.hl-noteedit{width:calc(100vw - 24px)}}
+@media(max-width:600px),(pointer:coarse){
+  .hl-toolbar{padding:9px 12px;border-radius:34px}
+  .hl-swatch{width:30px;height:30px;margin:0 5px}
+  .hl-note-btn{font-size:11px;padding:8px 8px 8px 4px}
+  .hl-note-btn svg{width:16px;height:16px}
+  .hl-tool-div{height:24px;margin:0 9px}
+  .hl-noteedit{max-height:min(72vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 14px}
+  .hl-ne-dot{width:26px;height:26px}
+  .hl-noteedit textarea{font-size:16px;min-height:96px}
+  .hl-ne-save{padding:11px 20px;font-size:11px}
+  .hl-ne-del{padding:8px 6px;font-size:11px}
+  .notes-close{font-size:32px;padding:4px 6px}
+}
+
+/* CHAPTER WRAPPER + BREAK */
+.book-chapter{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px;position:relative}
+.chapter-break{max-width:var(--content-width,720px);margin:0 auto;padding:50px 28px;display:flex;align-items:center;justify-content:center;gap:16px}
+.chapter-break::before,.chapter-break::after{content:'';flex:1;height:1px;background:var(--rule)}
+.chapter-break::after{content:'◆';flex:0;color:var(--accent);font-size:11px}
+
+/* INTERSTITIAL EMBED */
+.interstitial-embed{margin:0;padding:72px 16px;background:#0e0e0e;display:flex;justify-content:center;align-items:center}
+.interstitial-embed iframe{width:min(560px,90vw);aspect-ratio:3/4;border:0;display:block;background:#0e0e0e;box-shadow:0 30px 70px rgba(0,0,0,.55);color-scheme:light}
+
+/* BACK COVER */
+.book-back-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.back-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+
+/* DARK-MODE adjustments (blocks that use --ink as a *background* need a real dark fill) */
+html.dark .book-toc{background:#101218}
+html.dark .chapter-break::before,html.dark .chapter-break::after{background:var(--rule)}
+html.dark .verdict,html.dark .arg-head,html.dark .case-head{background:#0b0c11;color:var(--ink)}
+html.dark .case-stat{background:var(--paper-deep)}
+
+/* EYE-OPENING LOADER */
+.ad-loader{position:fixed;inset:0;z-index:9000;background:radial-gradient(120% 92% at 50% 42%,#1b1815 0%,#121110 56%,#0b0a09 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .8s ease;overflow:hidden}
+.ad-loader.gone{opacity:0;pointer-events:none}
+.ad-loader-custom{padding:0;gap:0;background:#0e0e0e}
+.ad-loader-frame{width:100%;height:100%;border:0;display:block}
+.ad-eye-wrap{position:relative;width:320px;max-width:82vw;display:flex;align-items:center;justify-content:center}
+.ad-loader-logo{width:200px;max-width:64vw;height:auto;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5));animation:adLogoIn 1s ease forwards,adLogoPulse 2.4s 1s ease-in-out infinite}
+@keyframes adLogoIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
+@keyframes adLogoPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.82}}
+.ad-eye2{width:100%;transform-origin:center;transform:scaleY(.04);animation:adEyeOpen 1.9s cubic-bezier(.5,.05,.2,1) forwards}
+.ad-eye2 .eye-outer{width:100%;aspect-ratio:2.8/1;background:#0b0b0d;border-radius:50%;box-shadow:0 0 55px 6px rgba(150,142,124,.32);display:flex;align-items:center;justify-content:center}
+.ad-eye2 .eye-white{width:68%;aspect-ratio:2.5/1;background:#f0ebe0;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ad-eye2 .eye-iris{width:44%;aspect-ratio:1;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;animation:adIrisLook 6s 1.05s ease-in-out infinite}
+.ad-eye2 .eye-pupil{width:40%;aspect-ratio:1;background:#0d0d0d;border-radius:50%}
+@keyframes adEyeOpen{0%{transform:scaleY(.04)}45%{transform:scaleY(1)}57%{transform:scaleY(.12)}70%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+@keyframes adIrisLook{0%,100%{transform:translateX(0)}22%{transform:translateX(-24%)}48%{transform:translateX(20%)}74%{transform:translateX(-8%)}}
+.ad-loader-cap{font-family:var(--mono);font-size:11px;letter-spacing:.46em;text-transform:uppercase;color:rgba(244,241,234,.62);opacity:0;animation:adCapIn .9s 1.25s ease forwards;padding-left:.46em;text-align:center}
+.ad-loader-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);opacity:0;animation:adCapIn .9s 1.55s ease forwards}
+@keyframes adCapIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .ad-eye2{animation:none;transform:none}
+  .ad-eye2 .eye-iris,.ad-loader-cap,.ad-loader-sub{animation:none;opacity:1}
+}
+
+/* COACHMARKS */
+.ad-coach{position:fixed;z-index:585;width:284px;max-width:calc(100vw - 28px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(201,160,84,.28);border-radius:11px;padding:16px 17px 14px;box-shadow:0 20px 56px rgba(0,0,0,.5);opacity:0;transform:translateY(8px) scale(.97);transition:opacity .26s ease,transform .26s ease;pointer-events:none}
+.ad-coach.show{opacity:1;transform:none;pointer-events:auto}
+.ad-coach .cm-k{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:9px}
+.ad-coach .cm-k svg{width:14px;height:14px;flex-shrink:0}
+.ad-coach .cm-t{font-family:var(--serif);font-size:16px;line-height:1.52;color:rgba(244,241,234,.94)}
+.ad-coach .cm-t b{color:#ecc15a;font-weight:600;font-style:italic}
+.ad-coach .cm-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.ad-coach .cm-step{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(244,241,234,.42)}
+.ad-coach .cm-got{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:9px 16px;border-radius:5px}
+.ad-coach .cm-got:hover{filter:brightness(1.08)}
+.ad-coach .cm-arrow{position:absolute;width:13px;height:13px;background:var(--nav-bg);border:1px solid rgba(201,160,84,.28);transform:rotate(45deg)}
+.ad-coach[data-place="below"] .cm-arrow{top:-7px;border-right:0;border-bottom:0}
+.ad-coach[data-place="above"] .cm-arrow{bottom:-7px;border-left:0;border-top:0}
+
+/* SHARE QUOTE CARD + EXPORT NOTES */
+.notes-actions{display:flex;gap:8px;margin-top:12px}
+.notes-actions .na-btn{flex:1;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);color:#f4f1ea;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.notes-actions .na-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notes-actions .na-btn svg{width:13px;height:13px}
+.note-share{position:absolute;top:12px;right:30px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;padding:4px;opacity:0;transition:opacity .15s}
+body[dir="rtl"] .note-share{right:auto;left:30px}
+.note-card:hover .note-share{opacity:1}
+.note-share:hover{color:var(--gold)}
+.note-share svg{width:15px;height:15px;display:block}
+/* share modal */
+.share-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.78);z-index:700;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.share-backdrop.show{opacity:1;pointer-events:auto}
+.share-box{background:#151b2c;border-radius:14px;padding:22px;max-width:520px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.55);transform:translateY(12px) scale(.98);transition:transform .25s ease}
+.share-backdrop.show .share-box{transform:none}
+.share-box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.share-box-title{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.share-box-close{background:none;border:0;color:rgba(244,241,234,.5);font-size:26px;line-height:1;cursor:pointer}
+.share-box-close:hover{color:#f4f1ea}
+.share-canvas-wrap{border-radius:10px;overflow:hidden;background:#0e0e0e;margin-bottom:16px}
+.share-canvas-wrap canvas{width:100%;height:auto;display:block}
+.share-box-actions{display:flex;gap:10px}
+.share-box-actions button{flex:1;border:0;border-radius:8px;padding:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.share-dl{background:var(--gold);color:#151b2c;font-weight:700}
+.share-dl:hover{filter:brightness(1.08)}
+.share-copy{background:rgba(244,241,234,.08);color:#f4f1ea;border:1px solid rgba(244,241,234,.18) !important}
+.share-copy:hover{border-color:var(--gold) !important;color:var(--gold)}
+
+/* NAV TOOL BUTTONS (search, font size, spread) — match the theme toggle */
+.nav-tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* Le bouton « See for yourself » : discret dans la barre, il s'allume au survol.
+   Le libellé disparaît sous 720 px et il ne reste que la marque — sur un
+   téléphone la barre doit d'abord servir à lire le livre. */
+.nav-sfy{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--nav-text);opacity:.72;border:1px solid rgba(244,241,234,.22);border-radius:999px;padding:5px 11px 5px 9px;font-size:11.5px;letter-spacing:.02em;white-space:nowrap;transition:opacity .16s,border-color .16s,background .16s}
+.nav-sfy svg{width:17px;height:17px;flex-shrink:0}
+.nav-sfy:hover,.nav-sfy:focus-visible{opacity:1;border-color:var(--nav-active);background:rgba(244,241,234,.08)}
+.nav-sfy:focus-visible{outline:2px solid var(--nav-active);outline-offset:2px}
+@media (max-width:720px){.nav-sfy span{display:none}.nav-sfy{padding:5px 8px;gap:0}}
+body[dir="rtl"] .nav-tools{margin-left:0;margin-right:auto}
+.nav-tools .theme-toggle{margin-left:0}
+body[dir="rtl"] .nav-tools .theme-toggle{margin-right:0}
+.nav-btn{position:relative;height:34px;min-width:34px;padding:0 9px;border-radius:17px;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;transition:background .2s,border-color .2s,color .2s;font-family:var(--mono);font-size:12px;flex-shrink:0}
+.nav-btn:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.nav-btn.active{border-color:var(--nav-active);color:var(--nav-active)}
+.nav-btn svg{width:15px;height:15px;display:block}
+.nav-fontsize{display:inline-flex;align-items:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);border-radius:17px;overflow:hidden}
+.nav-fontsize button{background:none;border:0;color:var(--nav-text);cursor:pointer;height:32px;width:30px;font-family:var(--serif);line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.nav-fontsize button:hover{color:var(--gold)}
+.nav-fontsize .fs-sm{font-size:12px}.nav-fontsize .fs-lg{font-size:17px}
+.nav-fontsize .fs-div{width:1px;height:18px;background:rgba(244,241,234,.18)}
+
+/* SEARCH PANEL */
+.search-panel{position:fixed;top:0;left:0;right:0;z-index:320;transform:translateY(-100%);transition:transform .28s ease;background:var(--nav-bg);box-shadow:0 12px 34px rgba(0,0,0,.34)}
+.search-panel.show{transform:translateY(0)}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;max-width:860px;margin:0 auto}
+.search-bar svg.s-ic{width:17px;height:17px;color:rgba(244,241,234,.55);flex-shrink:0}
+.search-bar input{flex:1;background:transparent;border:0;outline:none;color:var(--nav-text);font-family:var(--serif);font-size:18px}
+.search-bar input::placeholder{color:rgba(244,241,234,.4)}
+.search-count{font-family:var(--mono);font-size:11px;color:rgba(244,241,234,.5);letter-spacing:.08em;white-space:nowrap}
+.search-bar .s-btn{background:rgba(244,241,234,.08);border:0;color:var(--nav-text);width:30px;height:30px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.search-bar .s-btn:hover{color:var(--gold)}
+.search-results{max-width:860px;margin:0 auto;max-height:min(56vh,520px);overflow-y:auto;padding:0 16px 14px}
+.sr-group{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:12px 4px 8px}
+.sr-item{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:11px 12px;cursor:pointer;color:rgba(244,241,234,.9);font-family:var(--serif);font-size:15px;line-height:1.5}
+body[dir="rtl"] .sr-item{text-align:right}
+.sr-item:hover,.sr-item.current{background:rgba(244,241,234,.07)}
+.sr-item .sr-ch{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--nav-active);margin-bottom:4px;display:block}
+.sr-item mark{background:rgba(201,160,84,.5);color:#fff;border-radius:2px}
+.sr-empty{color:rgba(244,241,234,.45);font-style:italic;padding:18px 12px;font-size:15px}
+mark.search-hit{background:rgba(201,160,84,.42);color:inherit;border-radius:2px;box-shadow:inset 0 -.5em 0 -.35em rgba(201,160,84,.5)}
+mark.search-hit.current{background:var(--gold);color:#1a2238;box-shadow:none}
+
+/* TWO-PAGE SPREAD VIEW + PAGE FLIP */
+body.spread-active{overflow:hidden}
+body.spread-active .read-progress{display:none}
+.spread-stage{position:fixed;top:48px;left:0;right:0;bottom:0;z-index:250;background:var(--paper);display:none;perspective:2400px}
+.spread-stage.show{display:block}
+.spread-viewport{position:absolute;inset:0;overflow:hidden}
+.spread-pages{height:100%;column-fill:auto;padding:40px 56px;transition:transform .5s cubic-bezier(.4,.0,.2,1);transform:translateX(0);box-sizing:border-box}
+.spread-pages .book-chapter{max-width:none;margin:0;padding:0;font-size:calc(18px * var(--reading-scale))}
+.spread-pages .opener{padding:0 0 28px;break-inside:avoid}
+.spread-pages .ch-title{font-size:34px}
+.spread-pages .lead::first-letter{float:none;font-size:inherit;padding:0;color:var(--accent)}
+.spread-pages .reveal{opacity:1 !important;transform:none !important}
+.spread-pages .verdict{margin:28px 0}
+.spread-pages .interstitial-embed,.spread-pages .chapter-break{display:none}
+.spread-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule);pointer-events:none;z-index:2}
+.spread-nav{position:absolute;top:0;bottom:0;width:18%;z-index:3;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.spread-nav:hover{opacity:1}
+.spread-prev{left:0}.spread-next{right:0}
+.spread-nav .arr{width:42px;height:42px;border-radius:50%;background:var(--nav-bg);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.spread-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--slate);background:var(--paper);padding:4px 12px;border-radius:20px;border:1px solid var(--rule)}
+/* content-bearing page-flip: clones of the real pages turn around the spine */
+.spread-flip{position:absolute;inset:0;z-index:5;pointer-events:none;perspective:2200px;display:none}
+.flip-win{position:absolute;top:0;bottom:0;overflow:hidden;background:var(--paper)}
+.flip-right{left:50%;right:0}
+.flip-left{left:0;right:50%}
+.flip-inner{position:absolute;top:0;bottom:0;width:200%}
+.flip-right .flip-inner{left:-100%}
+.flip-left .flip-inner{left:0}
+.flip-cover{z-index:1}
+.flip-leaf{z-index:2;backface-visibility:hidden;transform:rotateY(0deg);box-shadow:0 0 30px rgba(0,0,0,.28)}
+.flip-leaf.leaf-fwd{transform-origin:left center}
+.flip-leaf.leaf-back{transform-origin:right center}
+/* curl shading on the turning page surface */
+.flip-shade{position:absolute;inset:0;pointer-events:none;z-index:3}
+.leaf-fwd .flip-shade{background:linear-gradient(90deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+.leaf-back .flip-shade{background:linear-gradient(270deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+@media (prefers-reduced-motion: reduce){.spread-pages{transition:none}.spread-flip{display:none !important}}
+@media(max-width:720px){
+  .spread-pages{column-gap:0 !important;padding:30px 26px}
+  .spread-divider{display:none}
+}
+
+/* BOOKMARKS — silk ribbon + dropdown */
+.nav-btn-count{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--gold);color:var(--nav-bg);font-family:var(--mono);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.nav-btn-count[data-empty="1"]{display:none}
+.bm-ribbon{position:absolute;left:-16px;width:26px;height:62px;z-index:40;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-soft) 55%,var(--accent));box-shadow:2px 3px 9px rgba(0,0,0,.30);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);transition:filter .15s ease,transform .15s ease}
+.bm-ribbon::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:3px;height:32px;border-radius:2px;background:rgba(255,255,255,.38)}
+.bm-ribbon:hover{filter:brightness(1.1);transform:translateY(2px)}
+.bm-ribbon.bm-new{animation:bmDrop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bmDrop{0%{transform:translateY(-72px) rotate(-5deg);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.bm-ribbon.bm-leave{animation:bmLeave .35s ease forwards}
+@keyframes bmLeave{to{transform:translateY(-72px) rotate(-5deg);opacity:0}}
+body[dir="rtl"] .bm-ribbon{left:auto;right:-16px}
+@media(max-width:760px){.bm-ribbon{left:-6px;width:20px;height:50px}body[dir="rtl"] .bm-ribbon{right:-6px;left:auto}}
+.bm-panel{position:fixed;top:50px;z-index:330;width:300px;max-width:calc(100vw - 24px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(244,241,234,.14);border-radius:11px;box-shadow:0 18px 52px rgba(0,0,0,.46);padding:9px;opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.bm-panel.show{opacity:1;transform:none;pointer-events:auto}
+.bm-add,.bm-resume{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:8px;padding:11px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.bm-add{background:var(--accent);color:#fff}.bm-add:hover{filter:brightness(1.1)}
+.bm-add svg{width:14px;height:14px}
+.bm-resume{background:rgba(244,241,234,.08);color:var(--nav-text);border:1px solid rgba(244,241,234,.16);margin-top:7px}
+.bm-resume:hover{border-color:var(--gold);color:var(--gold)}
+.bm-list{max-height:46vh;overflow-y:auto;margin-top:8px}
+.bm-empty{padding:18px 12px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:14px;font-family:var(--serif)}
+.bm-item{display:grid;grid-template-columns:7px 1fr;gap:11px;padding:10px 24px 10px 10px;border-radius:8px;cursor:pointer;position:relative}
+.bm-item:hover{background:rgba(244,241,234,.07)}
+.bm-item .bm-bar{border-radius:3px;background:var(--accent)}
+.bm-item .bm-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.bm-item .bm-snip{font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.45;color:rgba(244,241,234,.9);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bm-item .bm-x{position:absolute;top:8px;right:7px;background:none;border:0;color:rgba(244,241,234,.34);cursor:pointer;font-size:15px;line-height:1;padding:2px;opacity:0}
+.bm-item:hover .bm-x{opacity:1}.bm-item .bm-x:hover{color:var(--accent)}
+.bm-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--nav-bg);color:var(--nav-text);padding:11px 20px;border-radius:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;box-shadow:0 14px 38px rgba(0,0,0,.42);opacity:0;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:620;display:inline-flex;align-items:center;gap:9px}
+.bm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bm-toast svg{width:15px;height:15px;color:var(--gold)}
+
+/* RESPONSIVE + PRINT */
+@media(max-width:600px){
+  .book-chapter{padding:0 18px}
+  .toc-inner{padding:0 20px}
+  a.toc-row{grid-template-columns:40px 1fr 24px}
+  .toc-rowtitle{font-size:18px}
+}
+/* the answer-key switch in the nav */
+.nav-item.nav-key.on{color:var(--gold);font-weight:600}
+.nav-item.nav-key.on::before{content:"✓ ";font-size:.9em}
+
+@media print{
+  .book-nav,.read-progress,.ad-loader,.ad-coach,.hl-toolbar,.hl-noteedit,.notes-drawer,.notes-backdrop,.interstitial-embed{display:none !important}
+  .chapter-break{break-after:page}
+  .reveal{opacity:1 !important;transform:none !important}
+
+  /* ── paper ──────────────────────────────────────────────────────────
+     A book is read on a screen and photocopied on paper. Printing keeps
+     whatever state the reader is in — so the answer-key switch decides
+     whether you get the worksheet or its correction out of the same file. */
+  @page{margin:16mm 14mm}
+  html,html.dark{
+    --paper:#fff;--paper-deep:#f4f4f4;--ink:#111;--ink-soft:#333;--slate:#555;--rule:#bbb;
+    background:#fff !important;color:#111 !important}
+  html.dark body,body{background:#fff !important;color:#111 !important}
+  .book-chapter{padding:0 !important}
+
+  /* keep a figure, a table or a widget whole on one page where it fits */
+  .iw,figure,.md-table,.evidence,.case,.argument,.stat,.notes{break-inside:avoid}
+  h2,h3,.subhead,.section-marker{break-after:avoid}
+
+  /* controls mean nothing on paper — the content they act on stays */
+  .iw-btn,.iwm-qbtn,.iw3d-tools,.iw3d-hint,.iwglo-bar,.iwfc-bar,.iwfc-judge,
+  .iword-btns,.iwlb-actions,.iwiq-actions,.iwiq-tip,.iwex-actions,.iwsrc-rev,
+  .iwrx-actions,.iwnuc-actions,.iwm-quiz,.iwtl-quizbar,.iwtl-reset,.iwx-actions,
+  .iwq-actions,.figure-nav,.iwopt-ctl,input[type=range],
+  .iwwv-ctl,.iwfr-btns,.iwcj-tabs{display:none !important}
+
+  /* answer spaces print as ruled boxes, not as browser widgets.
+     Note the bare input selectors: the crossword, the posed operation and the
+     numeration table use an input with maxlength and no type attribute, so
+     input[type=text] never reaches them. */
+  input[type=text],input[type=search],input[type=number],textarea,select,
+  .iwpo-c input,.iwcw-c input,.iwpv-c input,
+  .iwq-blank,.iwex-a,.iwnuc-in,.iwm-qin{
+    border:1px solid #999 !important;background:#fff !important;color:#111 !important;
+    box-shadow:none !important;-webkit-appearance:none;appearance:none}
+  .iwcw-c input{border:0 !important}   /* the cell already has one */
+
+  /* a ticked radio in the marking grid is drawn with a box-shadow, and browsers
+     drop backgrounds when printing — give it an ink fill that survives */
+  .iw-rb input:checked+i{background:#111 !important;box-shadow:inset 0 0 0 3.5px #fff !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* the Sankey labels are white on coloured bands, so the bands have to print */
+  .iw-en .iwen-svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* only the open tense of a conjugation prints; the other tabs are gone above */
+
+  /* a flip card printed edge-on is a blank rectangle — lay both faces flat */
+  .iw-fc .iwfc-card{height:auto !important;perspective:none !important}
+  .iw-fc .iwfc-inner{transform:none !important;transform-style:flat !important;position:static !important}
+  .iw-fc .iwfc-face{position:static !important;backface-visibility:visible !important;
+    transform:none !important;border:1px solid #999;margin-bottom:6px;page-break-inside:avoid}
+  .iw-fc .iwfc-front{background:#f4f4f4 !important;color:#111 !important}
+  .iw-fc .iwfc-front i{display:none}
+
+  /* anything hidden behind a disclosure opens up */
+  details{display:block}
+  details>summary{list-style:none;font-weight:600}
+  details>*{display:block !important}
+  .iwme-step.hid,.iwme-ans.hid{opacity:1 !important;display:list-item !important}
+  .iwsrc-model[hidden],.iwex-sol[hidden],.iwex-hint[hidden]{display:block !important}
+
+  /* the reader's own frame */
+  .rawhtml-frame,.iw-embed-frame{border:1px solid #bbb}
+  a{color:#111 !important;text-decoration:none}
+}
+
+
+/* reading typography lives on the chapter wrapper so it doesn't touch nav/TOC */
+.book-chapter{font-size:19px;line-height:1.78;padding-bottom:130px;text-rendering:optimizeLegibility}
+.book-chapter p{margin-bottom:26px}
+.book-chapter em{font-style:italic}
+.book-chapter strong{font-weight:600;color:var(--ink)}
+.book-chapter a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* chapter opener */
+.opener{padding:120px 0 70px;border-bottom:1px solid var(--rule);margin-bottom:64px}
+.ch-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;font-weight:500}
+.ch-number{font-family:var(--mono);font-size:15px;color:var(--slate);letter-spacing:.1em;margin-bottom:10px}
+.ch-title{font-size:58px;line-height:1.04;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
+.ch-standfirst{font-size:23px;line-height:1.5;color:var(--ink-soft);font-weight:400;font-style:italic;max-width:92%}
+
+/* drop cap on the lead paragraph */
+.lead::first-letter{font-size:76px;line-height:.72;float:left;font-weight:600;padding:8px 14px 0 0;color:var(--accent)}
+body[dir="rtl"] .lead::first-letter{float:right;padding:8px 0 0 14px}
+
+/* section marker */
+.section-marker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:64px 0 24px;display:flex;align-items:center;gap:16px}
+.section-marker::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+/* pull quote */
+.pull{font-size:30px;line-height:1.3;font-weight:500;color:var(--ink);margin:56px 0;padding-left:28px;border-left:3px solid var(--accent);letter-spacing:-.01em}
+
+/* verdict (ink panel) */
+.verdict{background:var(--ink);color:var(--paper);margin:60px -28px;padding:60px 48px;border-radius:3px}
+.verdict p{font-size:29px;line-height:1.4;font-weight:500;letter-spacing:-.01em;margin-bottom:0}
+.verdict .accent{color:var(--gold)}
+
+/* evidence box */
+.evidence{background:var(--paper-deep);border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:3px;padding:30px 32px 26px;margin:44px 0}
+.evidence-label{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.evidence-figure{font-family:var(--serif);font-size:46px;line-height:1.05;font-weight:600;color:var(--accent);letter-spacing:-.02em;margin-bottom:14px}
+.evidence-body{font-size:18px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px}
+.evidence-body p{margin-bottom:14px}.evidence-body p:last-child{margin-bottom:0}
+.evidence-label:first-child{margin-top:0}
+.evidence-source{font-family:var(--mono);font-size:12px;color:var(--slate);letter-spacing:.04em;padding-top:14px;border-top:1px solid var(--rule)}
+.evidence-source sup{color:var(--accent);font-weight:600}
+
+/* case-study card */
+.case{border:1px solid var(--rule);border-radius:3px;margin:44px 0;overflow:hidden}
+.case-head{background:var(--ink);color:var(--paper);padding:22px 30px}
+.case-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px}
+.case-name{font-size:26px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
+.case-body{padding:26px 30px 28px;background:var(--paper-deep)}
+.case-body p{margin-bottom:18px;font-size:18px}
+.case-body p:last-child{margin-bottom:0}
+.case-stat{font-family:var(--mono);font-size:14px;color:var(--ink);font-weight:500;background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:4px 10px;display:inline-block;margin:0 6px 8px 0}
+
+/* argument card (his vs mine) */
+.argument{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin:52px 0}
+.arg-head{background:var(--ink);color:var(--paper);padding:16px 28px;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600}
+.arg-side{padding:24px 28px;border-top:1px solid var(--rule);display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;background:var(--paper-deep)}
+.arg-side:first-of-type{border-top:none}
+.arg-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding-top:3px;line-height:1.4}
+.arg-label.his{color:var(--slate)}
+.arg-label.mine{color:var(--accent)}
+.arg-text{font-size:17px;line-height:1.6;color:var(--ink-soft)}
+
+/* footnote markers + endnotes */
+sup.fn{font-family:var(--mono);font-size:.62em;color:var(--accent);font-weight:600;vertical-align:super;cursor:pointer;padding:0 1px}
+.notes{margin-top:90px;padding-top:34px;border-top:1px solid var(--rule)}
+.notes-title{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:24px}
+.note{display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:14px;line-height:1.5;color:var(--ink-soft);margin-bottom:14px;font-family:var(--serif)}
+.note-num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;padding-top:2px}
+.note a{color:var(--slate);text-decoration:underline;text-underline-offset:2px}
+
+/* dialogue */
+.dialogue{margin:44px 0;padding-left:22px;border-left:2px solid var(--rule)}
+.dlg-line{display:grid;grid-template-columns:minmax(80px,140px) 1fr;gap:18px;align-items:baseline;margin-bottom:18px}
+.dlg-speaker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;padding-top:4px;text-align:right}
+.dlg-text{font-size:19px;line-height:1.6;color:var(--ink)}
+.dlg-aside{font-style:italic;color:var(--slate);font-size:16px;margin:6px 0 18px;padding-left:0}
+body[dir="rtl"] .dialogue{padding-left:0;padding-right:22px;border-left:none;border-right:2px solid var(--rule)}
+body[dir="rtl"] .dlg-speaker{text-align:left}
+@media(max-width:600px){.dlg-line{grid-template-columns:1fr;gap:2px}.dlg-speaker{text-align:left;padding-top:0}}
+
+/* closing line */
+.closer{font-size:27px;line-height:1.42;font-weight:500;color:var(--ink);margin:70px 0 0;padding:38px 0 0;border-top:3px double var(--ink);letter-spacing:-.01em}
+.closer .accent{color:var(--accent)}
+
+/* epigraph (opening quote) */
+.epigraph{margin:40px 0 52px;text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
+.epigraph-text{font-size:24px;line-height:1.45;font-style:italic;color:var(--ink-soft);letter-spacing:-.01em}
+.epigraph-cite{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-top:18px}
+
+/* figure (one or many images + caption) */
+.figure{margin:44px 0;text-align:center}
+.figure-imgs{display:flex;justify-content:center;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.figure-item{margin:0;display:flex;flex-direction:column;align-items:center;max-width:100%}
+.figure-item img{max-width:100%;height:auto;border-radius:3px;display:block}
+.figure-item-cap{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--slate);margin-top:7px;line-height:1.45}
+/* solo: one centred image */
+.figure-single .figure-item{margin-left:auto;margin-right:auto}
+/* row: side by side, equal share unless an image sets its own % */
+.figure-row .figure-imgs{flex-wrap:nowrap}
+.figure-row .figure-item{flex:1 1 0;min-width:0}
+.figure-row .figure-item img{width:100%;object-fit:cover}
+/* column: stacked vertically */
+.figure-column .figure-imgs{flex-direction:column;flex-wrap:nowrap;align-items:center}
+.figure-column .figure-item{width:100%}
+/* grid: multi-column */
+.figure-grid .figure-imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.figure-grid .figure-item{width:100%}
+.figure-grid .figure-item img{width:100%}
+/* carousel: a draggable strip with arrows + fading edges */
+.figure-carousel-wrap{position:relative}
+.figure-carousel .figure-scroll{overflow-x:auto;overflow-y:hidden;cursor:grab;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.figure-carousel .figure-scroll::-webkit-scrollbar{display:none;height:0;width:0}
+.figure-carousel .figure-scroll.drag{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.figure-carousel .figure-imgs{flex-wrap:nowrap;justify-content:flex-start;width:max-content;padding:2px}
+.figure-carousel .figure-item{flex:0 0 auto;width:300px}
+.figure-carousel .figure-item img{width:100%}
+.figure-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.18);transition:opacity .25s,background .15s}
+.figure-nav:hover{background:var(--paper-deep)}
+.figure-nav-l{left:6px}.figure-nav-r{right:6px}
+.figure-carousel-wrap.at-start .figure-nav-l,.figure-carousel-wrap.at-end .figure-nav-r,.figure-carousel-wrap.no-scroll .figure-nav{opacity:0;pointer-events:none}
+.figure-small{max-width:300px;margin-left:auto;margin-right:auto}
+.figure-medium{max-width:520px;margin-left:auto;margin-right:auto}
+.figure-large{max-width:780px;margin-left:auto;margin-right:auto}
+.figure-full{max-width:100%}
+.figure-carousel.figure-small,.figure-carousel.figure-medium,.figure-carousel.figure-large{max-width:none}
+.figure-cap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--slate);margin-top:12px;line-height:1.5}
+@media(max-width:600px){.figure-row .figure-imgs{flex-wrap:wrap}}
+
+/* free-form chapter canvas (Layout mode) */
+.book-chapter.canvas-chapter{max-width:none;margin:0;padding:0}
+/* keep the chapter opener (title) in the centred reading column even though the canvas is full-width */
+.book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
+.ch-canvas-main{margin:0;padding:0}
+.ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+.ch-canvas{position:relative;transform-origin:top left}
+.layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
+/* Un element masque par l'auteur. Le livre construit ne le contient jamais —
+   le rendu s'arrete avant — et cette regle ne sert donc qu'a l'apercu de
+   Studio, ou il faut bien pouvoir le retrouver pour le rallumer. */
+.layout-item.li-masque{opacity:.28;filter:grayscale(1)}
+/* tables inside a recoloured layout element follow that element's ink/rule */
+.layout-item .md-table th,.layout-item table th{color:var(--ink)}
+.layout-item .md-table td,.layout-item table td{color:var(--ink-soft)}
+.layout-item table th,.layout-item table td,.layout-item .md-table-bordered table,.layout-item .md-table-bordered th,.layout-item .md-table-bordered td{border-color:var(--rule)}
+.layout-item>*{min-height:0}
+.layout-item>:first-child{margin-top:0}
+.layout-item>:last-child{margin-bottom:0}
+.layout-item img{max-width:100%}
+.layout-item .figure{margin:0;flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.layout-item .figure-imgs{flex:1 1 auto;min-height:0;align-items:center}
+.layout-item .figure-item img{max-height:100%;object-fit:contain}
+.layout-item .media{margin:0}
+.layout-item .media-el,.layout-item video{max-height:100%}
+/* canvas content is positioned, not scroll-revealed — always show it */
+.ch-canvas .reveal{opacity:1!important;transform:none!important}
+
+/* Arabic / Quran passage */
+.arabic-text{direction:rtl;text-align:right;font-family:'Amiri','Scheherazade New',serif;font-size:1.5em;line-height:2.15;color:var(--ink);margin:34px 0}
+.arabic-text[data-font="quran"]{font-family:'Amiri Quran','Amiri',serif;font-size:1.7em;line-height:2.5;text-align:center}
+.arabic-text[data-font="kufi"]{font-family:'Reem Kufi','Amiri',serif}
+
+/* raw HTML — isolated in a sandboxed iframe so it can't affect the page */
+.rawhtml{margin:40px 0}
+.rawhtml-frame{width:100%;border:0;display:block;background:transparent;min-height:24px}
+.layout-item .rawhtml{margin:0}
+.layout-item .rawhtml-frame{height:100%}
+
+/* media (audio / video) */
+.media{margin:44px 0;text-align:center}
+.media-el{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+video.media-el{width:100%;background:#000;border:1px solid var(--rule)}
+.media-audio{width:100%;height:44px}
+
+/* images inside prose tables */
+.book-chapter table img{max-width:150px;height:auto;border-radius:4px;vertical-align:middle;display:inline-block}
+
+/* callout / aside note */
+.callout{background:var(--paper-deep);border-left:3px solid var(--gold);border-radius:3px;padding:22px 26px;margin:40px 0;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+.callout p{margin-bottom:14px}.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+body[dir="rtl"] .callout{border-left:none;border-right:3px solid var(--gold)}
+
+/* subheading */
+.subhead{font-size:27px;line-height:1.2;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:52px 0 18px}
+
+/* verse / poem */
+.verse{font-style:italic;font-size:19px;line-height:1.7;color:var(--ink);margin:40px 0;padding-left:28px;border-left:1px solid var(--rule);white-space:pre-wrap}
+body[dir="rtl"] .verse{border-left:none;border-right:1px solid var(--rule);padding-left:0;padding-right:28px}
+
+/* scene break (within a chapter) */
+.scene-break{display:flex;align-items:center;justify-content:center;gap:14px;margin:54px 0;color:var(--accent);font-size:12px}
+.scene-break::before,.scene-break::after{content:'';width:46px;height:1px;background:var(--rule)}
+
+/* stat (single big figure) */
+.stat{margin:44px 0;text-align:center}
+.stat-figure{font-size:64px;line-height:1;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+.stat-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin-top:12px}
+
+/* letter / epistolary */
+.letter{background:var(--paper-deep);border:1px solid var(--rule);border-radius:3px;padding:34px 38px;margin:44px 0;font-size:18px;line-height:1.7;color:var(--ink-soft)}
+.letter p{margin-bottom:18px}.letter p:last-child{margin-bottom:0}
+
+/* tables */
+.book-chapter table{width:100%;border-collapse:collapse;margin:40px 0;font-size:16px}
+.book-chapter th,.book-chapter td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.book-chapter th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:600}
+.book-chapter td{color:var(--ink-soft)}
+body[dir="rtl"] .book-chapter th,body[dir="rtl"] .book-chapter td{text-align:right}
+/* table outline styles (the :::table wrapper) */
+.md-table{margin:40px 0}
+.md-table table{margin:0}
+.md-table-bordered table{border:1px solid var(--rule)}
+.md-table-bordered th,.md-table-bordered td{border:1px solid var(--rule)}
+.md-table-striped th,.md-table-striped td{border-bottom:0}
+.md-table-striped tbody tr:nth-child(odd) td{background:var(--paper-deep)}
+.md-table-minimal th,.md-table-minimal td{border-bottom:0}
+.md-table-minimal th{border-bottom:2px solid var(--rule)}
+.md-table-boxed{border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.md-table-boxed th,.md-table-boxed td{padding:12px 16px}
+.md-table-boxed th{background:var(--paper-deep)}
+.md-table-boxed td{border-bottom:1px solid var(--rule)}
+.md-table-boxed tr:last-child td{border-bottom:0}
+
+/* lists */
+.book-chapter ul,.book-chapter ol{margin:0 0 26px 1.3em}
+.book-chapter li{margin-bottom:9px;line-height:1.7}
+
+@media (max-width:600px){
+  .book-chapter{font-size:18px}
+  .epigraph-text{font-size:20px}
+  .subhead{font-size:22px}
+  .stat-figure{font-size:48px}
+  .letter{padding:24px 22px}
+  .ch-title{font-size:40px}
+  .ch-standfirst{font-size:20px;max-width:100%}
+  .opener{padding:70px 0 48px}
+  .pull{font-size:24px}
+  .verdict{margin:48px -20px;padding:44px 28px}
+  .verdict p{font-size:23px}
+  .arg-side{grid-template-columns:1fr;gap:6px}
+  .closer{font-size:23px}
+  .lead::first-letter{font-size:62px}
+}
+
+/* ── reader font-size control: --reading-scale multiplies the prose sizes ── */
+:root{--reading-scale:1}
+.book-chapter{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .ch-standfirst{font-size:calc(23px * var(--reading-scale))}
+.book-chapter .pull{font-size:calc(30px * var(--reading-scale))}
+.book-chapter .verdict p{font-size:calc(29px * var(--reading-scale))}
+.book-chapter .evidence-body{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .case-body p{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .dlg-text{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .callout{font-size:calc(17px * var(--reading-scale))}
+.book-chapter .letter{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .closer{font-size:calc(27px * var(--reading-scale))}
+.book-chapter .verse{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .epigraph-text{font-size:calc(24px * var(--reading-scale))}
+@media (max-width:600px){ .book-chapter{font-size:calc(18px * var(--reading-scale))} }
+
+
+
+
+html,body{margin:0;background:var(--paper)}</style></head>
+<body><div class="book-chapter canvas-chapter" id="chap"><main class="ch-canvas-main"><div class="ch-canvas" style="width:760px;height:1000px">
+<div class="epigraph reveal" data-anim="blur"><div class="epigraph-text">Meeting of Telemachus and Penelope, Ulysses conducted by Eumaeus to the palace, where he is known by the dog Argus, who dies on seeing him﻿—Entrance of Ulysses among the suitors﻿—Assault made by Antinoüs upon Ulysses﻿—Ulysses sent for by Penelope.</div></div><div class="verse reveal" data-anim="fade">Now when the rosy-fingered Morn looked forth﻿—
+The daughter of the Dawn﻿—Telemachus,
+The dear son of the great Ulysses, bound
+The shapely sandals underneath his feet,
+And took the massive spear that fitted well
+His grasp, and, as he stood in act to go
+Up to the town, bespake the swineherd thus:﻿—</div><div class="verse reveal" data-anim="fade">“Father, I hasten to the town, that there
+My mother may behold me; for I think
+She will not cease to grieve, and fear, and weep,
+Till her eyes rest on me. I leave with thee
+The charge of leading our unfortunate guest
+Into the city, there to beg his bread.
+Whoever will may give him food and drink.
+All men I cannot feed, and I have cares
+Enough already. If he chafe at this,
+The worse for him. I like to speak my mind.”</div><div class="verse reveal" data-anim="fade">And thus Ulysses, the sagacious, spake:
+“Nor do I wish, my friend, to loiter here.
+Better it is for one like me to beg
+In town than in the country. In the town,
+Whoever chooses will bestow his dole;
+But here, if I remain about the stalls,
+I am no longer of an age to do
+All that a master may require. Go thou;
+This man, at thy command, will lead me hence,
+As soon as I have warmed me at the fire,
+And the air grows milder. This keen morning-cold
+May end me, and the way, ye say, is long.”</div><div class="verse reveal" data-anim="fade">He ended; from the lodge Telemachus
+Passed quickly, meditating to destroy
+The suitors. Coming to his stately home,
+He leaned his spear against a column’s shaft,
+And, crossing the stone threshold, entered in.
+First Eurycleia, who had been his nurse,
+Beheld him, as she spread the beautiful thrones
+With skins, and ran to him with weeping eyes;
+And round him other handmaids of the house
+Of resolute Ulysses thronged. They gave
+Fond welcome, kissing him upon the brow
+And shoulders. Issuing from her chamber next
+The chaste Penelope, like Dian’s self
+In beauty, or like golden Venus, came,
+And, weeping, threw her arms about her son,
+And kissed him on his forehead and on both
+His glorious eyes, and said, amidst her tears:﻿—</div><div class="verse reveal" data-anim="fade">“Light of my eyes! O my Telemachus!
+Art thou, then, come? I never thought again
+To see thee, when I heard thou hadst embarked
+For Pylos﻿—secretly, and knowing me
+Unwilling﻿—in the hope to gather there
+Some tidings of thy father. Tell me now
+All that has happened, all that thou hast seen.”</div><div class="verse reveal" data-anim="fade">And thus discreet Telemachus replied:
+“Nay, mother, waken not my griefs again,
+Nor move my heart to rage. I have just now
+Escaped a cruel death. But go and bathe,
+And put fresh garments on, and when thou com’st
+Into thy chamber with thy maidens, make
+A vow to all the gods that thou wilt burn
+A sacrifice of chosen hecatombs
+When Jupiter shall have avenged our wrongs.
+Now must I hasten to the marketplace
+In quest of one who came with me a guest
+From Pylos. Him, with all my faithful crew,
+I sent before me to this port, and bade
+Piraeus lead him to his own abode,
+There to be lodged and honored till I came.”</div><div class="verse reveal" data-anim="fade">He spake, nor flew his words unheeded by.
+The princess bathed, and put fresh garments on,
+And vowed to all the gods a sacrifice
+Of chosen hecatombs when Jupiter
+Should punish the wrongdoers. While she prayed,
+Telemachus went forth, his spear in hand.
+Two fleet dogs followed him. Minerva shed
+A godlike beauty o’er his form and face,
+And all the people wondered as he came.
+The suitors thronged around him with smooth words,
+Yet plotting mischief in their hearts. He turned
+From their assembly hastily, and took
+His place where Mentor sat with Antiphus,
+And Halitherses﻿—all his father’s friends
+And his from the beginning. While they asked
+Of all that he had seen, Piraeus came,
+The famous spearman, bringing through the town
+The stranger with him to the marketplace.
+Nor long Telemachus delayed, but came
+To meet his guest, and then Piraeus said:﻿—</div><div class="verse reveal" data-anim="fade">“Telemachus, despatch to where I dwell
+Thy serving-women; I would send to thee,
+At once, the gifts which Menelaus gave.”</div><div class="verse reveal" data-anim="fade">And then discreet Telemachus replied:
+“We know not yet, Piraeus, what may be
+The event; and if the suitors privily
+Should slay me in the palace, and divide
+The inheritance among them, I prefer
+That thou, instead of them, shouldst have the gifts;
+But should they meet the fate which I have planned,
+And be cut off, then shalt thou gladly bring
+The treasures, which I gladly will receive.”</div><div class="verse reveal" data-anim="fade">So spake the prince, and to the palace led
+The unhappy man, his guest. When now they reached
+The stately pile, they both laid down their cloaks
+Upon the benches, and betook themselves
+To the well-polished baths. The attendant maids
+There ministered and smoothed their limbs with oil,
+And each received a tunic at their hands,
+And fleecy mantle. Then they left the baths
+And took their seats. A damsel came, and poured
+Water from a fair ewer wrought of gold
+Into a silver basin for their hands,
+And spread a polished table near their seats;
+And there the matron of the household placed
+Bread, and the many dishes which her stores
+Supplied. The queen was seated opposite,
+Beside a column of the pile, and twirled
+A slender spindle, while the son and guest
+Put forth their hands and shared the meal prepared.
+And when the calls of hunger and of thirst
+Had ceased, thus spake the sage Penelope:﻿—</div><div class="verse reveal" data-anim="fade">“Telemachus, when I again go up
+Into my chamber, I shall lay me down
+Upon the couch which, since Ulysses sailed
+For Troy with Atreus’ sons, has been to me
+A couch of mourning, sprinkled with my tears.
+And now thou hast not chosen to reveal,
+Ere yet the haughty suitors throng again
+Into these halls, what in thy voyage thou
+Hast haply heard concerning his return.”</div><div class="verse reveal" data-anim="fade">And thus discreet Telemachus replied:
+“Then, mother, will I truly tell thee all.
+We went to Pylos, and saw Nestor there,
+The shepherd of the people. Kindly he
+Received me in his stately home, as one
+Might welcome back a wandering son returned
+From foreign lands. Such welcome I received
+Both from the king and his illustrious sons.
+But he had heard, he said, from living man,
+No tidings of the much-enduring chief
+Ulysses, whether he were yet alive
+Or dead. He therefore sent me with his steeds
+And chariot to the court of Atreus’ son,
+The warlike Menelaus. There I saw
+The Argive Helen, for whose sake the Greeks
+And Trojans, by the appointment of the gods,
+Suffered so much. The valiant king inquired
+What wish of mine had brought me to the town
+Of hallowed Lacedaemon. I replied,
+And truly told him all, and everything
+In order. Then he answered me, and said:﻿—</div><div class="verse reveal" data-anim="fade">“ ‘So then! these men, unwarlike as they are,
+Aspire to occupy a brave man’s bed,
+As when a hart hath left two suckling fawns,
+Just born, asleep in a strong lion’s lair,
+And roams for pasturage the mountain slopes
+And grassy lawns, the lion suddenly
+Comes back, and makes a cruel end of both,
+So will Ulysses bring a sudden doom
+Upon the suitors. Would to Father Jove,
+And Pallas, and Apollo, that the chief,
+Returning mighty, as he was when once
+In well-built Lesbos, at a wrestling-match,
+He rose to strive with Philomelides,
+And threw him heavily, and all the Greeks
+Rejoiced﻿—would he might come as then he was!
+Short-lived would then the suitors be, and taste
+A bitter marriage-feast. But now, to come
+To what thou hast inquired, I will not seek
+To turn from it, and talk of other things,
+Nor will deceive. Of all that I was told
+By the Ancient of the Deep, whose words are true,
+I will not hide a single word from thee.
+He saw thy father in an isle, he said,
+A prey to wasting sorrows, and detained,
+Unwilling, in the palace of the nymph
+Calypso. To the country of his birth
+He cannot come; no ships are there with oars
+And crew to bear him o’er the great wide sea.’</div><div class="verse reveal" data-anim="fade">“Thus Menelaus, mighty with the spear,
+The son of Atreus, said. And having now
+Fulfilled my errand, I returned. The gods
+Gave favoring winds, and sent me swiftly home.”</div><div class="verse reveal" data-anim="fade">He ended, and the queen was deeply moved.
+Then Theoclymenus, the godlike, said:﻿—</div><div class="verse reveal" data-anim="fade">“O gracious consort of Laertes’ son,
+King Menelaus knew not all. Hear now
+What I shall say﻿—for I will prophesy,
+And truly, nor will keep back aught from thee.
+Let Jupiter, the mightiest of the gods,
+And this thy hospitable board, and this
+The hearth of great Ulysses, where I find
+A refuge, be my witnesses, that now
+Ulysses is in his own land again,
+And sits or walks observant of the deeds
+Of wrong, and planning vengeance, yet to fall
+On all the suitors; such the augury
+Which I beheld when in the gallant barque
+I sat and told it to Telemachus.”</div><div class="verse reveal" data-anim="fade">And thus the sage Penelope replied:
+“O stranger! may thy saying be fulfilled!
+Then shalt thou have such thanks and such rewards
+That all who greet thee shall rejoice with thee.”</div><div class="verse reveal" data-anim="fade">So talked they with each other. In the space
+Before the palace of Ulysses stood
+The suitors, pleased with hurling quoits and spears
+On the smooth pavement, where their insolence
+So oft was seen. But when the supper-hour
+Was near, and from the fields the cattle came,
+Driven by the herdsmen, Medon﻿—he whom most
+They liked of all the heralds, and who sat
+Among them at the feast﻿—bespake them thus:﻿—</div><div class="verse reveal" data-anim="fade">“Youths! since ye now have had your pastime here,
+Come in, and help prepare the evening meal;
+At the due hour a banquet is not ill.”</div><div class="verse reveal" data-anim="fade">He spake; the suitors hearkened and obeyed,
+And rose, and came into the halls, and laid
+Their cloaks upon the benches and the thrones,
+And slaughtered well-fed sheep and fading goats,
+And made a victim of a pampered brawn,
+And a stalled ox, preparing for the feast.
+Meantime Ulysses and that noble hind
+The swineherd hastened to begin their walk
+To town, and thus the master swineherd spake:﻿—</div><div class="verse reveal" data-anim="fade">“Since, stranger, ’tis thy wish to pass today
+Into the city, as my master bade﻿—
+Though I by far prefer that thou remain
+A guardian of the stalls, yet much I fear
+My master, and am sure that he would chide,
+And harsh the upbraidings of a master are﻿—
+Let us depart; the day is now far spent,
+And chill will be the air of eventide.”</div><div class="verse reveal" data-anim="fade">Ulysses, the sagacious, answered thus:
+“Enough; I know; thy words are heard by one
+Who understands them. Let us then depart.
+Lead thou the way; and if thou hast a staff,
+Cut from the wood to lean on, give it me,
+Since, as thou say’st, we have a slippery road.”</div><div class="verse reveal" data-anim="fade">He spake, and o’er his shoulders flung a scrip,
+Old, cracked, and hanging by a twisted thong.
+Eumaeus gave the staff he asked, and both
+Went forth; the dogs and herdsmen stayed to guard
+The lodge. The swineherd led his master on
+Townward, a squalid beggar to the sight,
+And aged, leaning on a staff, and wrapped
+In sordid rags. There by the rugged way,
+As they drew near the town, they passed a fount
+Wrought by the hand of man, and pouring forth
+Its pleasant streams, from which the citizens
+Drew water. Ithacus and Neritus
+Founded it with Polyctor, and a grove
+Of alders feeding on the moistened earth
+Grew round it on all sides. The ice-cold rill
+Gushed from a lofty rock, upon whose brow
+An altar stood, at which the passersby
+Worshipped, and laid their offerings for the Nymphs.
+There did Melanthius, son of Dolius, meet
+The twain, as he was driving to the town
+The finest goats of all the flocks, to make
+A banquet for the suitors; with him went
+Two shepherds, following the flock. As soon
+As he beheld Eumaeus and his guest,
+He railed at them with rude and violent words,
+That made the anger of Ulysses rise.</div><div class="verse reveal" data-anim="fade">“See that vile fellow lead the vile about!
+Thus ever doth some god join like with like.
+Thou worthless swineherd! whither wouldst thou take
+This hungry, haunting beggar-man, this pest
+Of feasts, who at the posts of many a door
+Against them rubs his shoulders, asking crusts,
+Tripods or cauldrons never. Shouldst thou leave
+The wretch to me, to watch my stalls, and sweep
+The folds, and bring fresh branches to the kids,
+He might by drinking whey get stouter thighs.
+But he has learned no good, and will refuse
+To work; he better likes to stroll about
+With that insatiable stomach, asking alms
+To fill it. Let me tell thee what is sure
+To happen to him, should he ever come
+Into the palace of the glorious chief
+Ulysses. Many a footstool will be flung
+Around him by the hands of those who sit
+As guests, and they will tear the fellow’s sides.”</div><div class="verse reveal" data-anim="fade">He spake, and in his folly thrust his heel
+Against the hero’s thigh. The blow moved not
+Ulysses from his path, nor swerved he aught,
+But meditated whether with a blow
+Of his good staff to take the fellow’s life,
+Or lift him in the air and dash his head
+Against the ground. Yet he endured the affront
+And checked his wrath. The swineherd spake, and chid
+The offender, and thus prayed with lifted hands:﻿—</div><div class="verse reveal" data-anim="fade">“Nymphs of the fountain, born to Jupiter!
+If e’er in sacrifice Ulysses burned
+To you the thighs of lambs and goats, o’erlaid
+With fat, be pleased to grant the prayer I make,
+That, guided by some deity, the chief
+May yet return. Then thy rude boasts would cease.
+Melanthius, which thou utterest in thy way
+From place to place while wandering through the town.
+Unfaithful shepherds make a perishing flock.”</div><div class="verse reveal" data-anim="fade">Melanthius, keeper of the goats, rejoined:
+“ ’Tis wonderful how flippant is the cur,
+And shrewd! But I shall carry him on board
+A good black ship, far off from Ithaca,
+And there will sell him for a goodly price.
+Would that Apollo of the silver bow
+Might in the palace slay Telemachus
+This very hour, or that the suitors might,
+As certainly as that the day which brings
+Ulysses to his home will never dawn!”</div><div class="verse reveal" data-anim="fade">He spake, and left them there. They followed on
+Slowly. Melanthius hastened, and was soon
+At the king’s palace gate, and, entering, took
+A seat right opposite Eurymachus,
+Whose favorite he was. The attendants there
+Brought meats, the matron of the household bread,
+And both were set before them. Meantime stopped
+Ulysses with the noble swineherd near
+The palace, for around them in the air
+Came the sweet murmurs of a lyre. Just then
+Phemius, the minstrel, had begun his song,
+Ulysses took the swineherd’s hand, and said:﻿—</div><div class="verse reveal" data-anim="fade">“Eumaeus, this must be the noble pile
+In which Ulysses dwelt, for easily
+’Tis known among the others that are near.
+Rooms over rooms are here; around its court
+Are walls and battlements, and folding-doors
+Shut fast the entrance; no man may contemn
+Its strength. And I perceive that many guests
+Banquet within; the smoke of fat goes up,
+And the sweet lyre is heard; the gods have given
+Its music to accompany the feast.”</div><div class="verse reveal" data-anim="fade">And then, Eumaeus, thou didst make reply:
+“Thou speakest rightly, and in other things
+Thou art not slow of thought. Now let us think
+What we shall do. First enter, if thou wilt,
+The sumptuous rooms, while I remain without;
+Or, if it please thee, I will enter first,
+While thou remainest; yet delay not long,
+Lest someone, seeing thee, should deal a blow,
+Or drive thee hence. I pray thee, think of this.”</div><div class="verse reveal" data-anim="fade">Ulysses, the great sufferer, answered thus:
+“Enough; I know; thy words are heard by one
+Who understands them. Go before me, then,
+And leave me here. I am not quite unused
+To blows and stripes, and patient is my mood,
+For greatly have I suffered, both at sea
+And in the wars; and I submit to bear
+This also. But the stomach’s eagerness
+Is desperate, and is not to be withstood,
+And many are the mischiefs which it brings
+Upon the race of men; it fits out fleets
+That cross the barren deep arrayed for war,
+And carry death and woe to hostile realms.”</div><div class="verse reveal" data-anim="fade">So talked the twain. A dog was lying near,
+And lifted up his head and pricked his ears.
+’Twas Argus, which the much-enduring man
+Ulysses long before had reared, but left
+Untried, when for the hallowed town of Troy
+He sailed. The young men oft had led him forth
+In eager chase of wild goats, stags, and hares;
+But now, his master far away, he lay
+Neglected, just before the stable doors,
+Amid the droppings of the mules and beeves,
+Heaped high till carried to the spacious fields
+Of which Ulysses was the lord. There lay
+Argus, devoured with vermin. As he saw
+Ulysses drawing near, he wagged his tail
+And dropped his ears, but found that he could come
+No nearer to his master. Seeing this,
+Ulysses wiped away a tear unmarked
+By the good swineherd, whom he questioned thus:﻿—</div><div class="verse reveal" data-anim="fade">“Eumaeus, this I marvel at﻿—this dog,
+That lies upon the dunghill, beautiful
+In form, but whether in the chase as fleet
+As he is fairly shaped I cannot tell.
+Worthless, perchance, as house-dogs often are,
+Whose masters keep them for the sake of show.”</div><div class="verse reveal" data-anim="fade">And thus, Eumaeus, thou didst make reply:
+“The dog belongs to one who died afar.
+Had he the power of limb which once he had
+For feats of hunting when Ulysses sailed
+For Troy and left him, thou wouldst be amazed
+Both at his swiftness and his strength. No beast
+In the thick forest depths which once he saw,
+Or even tracked by footprints, could escape.
+And now he is a sufferer, since his lord
+Has perished far from his own land. No more
+The careless women heed the creature’s wants;
+For, when the master is no longer near,
+The servants cease from their appointed tasks,
+And on the day that one becomes a slave
+The Thunderer, Jove, takes half his worth away.”</div><div class="verse reveal" data-anim="fade">He spake, and, entering that fair dwelling-place,
+Passed through to where the illustrious suitors sat,
+While over Argus the black night of death
+Came suddenly as soon as he had seen
+Ulysses, absent now for twenty years.
+Telemachus, the godlike, was the first
+To mark the swineherd coming through the hall,
+And, nodding, called to him. The swineherd looked
+About him, and beheld a seat on which
+The carver of the feast was wont to sit,
+Distributing the meats. He bore it thence
+And placed it opposite Telemachus,
+And at his table. Then he sat him down,
+And thither came the herald, bringing him
+A portion of the feast, and gave him bread
+From the full canister. Soon after him
+Ulysses entered, seemingly an old
+And wretched beggar, propped upon a staff,
+And wrapped in sordid weeds. He sat him down
+On the ashen threshold, just within the doors,
+And leaned against a shaft of cypress-wood,
+Which some artificer had skilfully
+Wrought by a line, and smoothed. Telemachus
+Called to the swineherd, bade him come, and took
+A loaf that lay in the fair canister,
+And all the flesh which his two hands could grasp.</div><div class="verse reveal" data-anim="fade">“Bear this to yonder stranger; bid him go
+And ask a dole from every suitor here.
+No beggar should be bashful in his need.”</div><div class="verse reveal" data-anim="fade">He spake, the hind obeyed, and, drawing near
+Ulysses, said to him in winged words:﻿—</div><div class="verse reveal" data-anim="fade">“These from Telemachus, who bids thee ask
+A dole from every suitor, for he says
+No beggar should be bashful in his need.”</div><div class="verse reveal" data-anim="fade">Ulysses, the sagacious, answered thus:
+“May Jove, the sovereign, make Telemachus
+A happy man among the sons of men,
+And grant him all his heart desires in life!”</div><div class="verse reveal" data-anim="fade">He spake, and took the gift in both his hands,
+And laid it down upon his tattered scrip
+Close to his feet. Then, while the poet sang,
+He ate, and, just as he had supped, the bard
+Closed his divine recital. Then ensued
+Great clamor in the hall, but Pallas came
+And moved Ulysses to arise, and ask
+From every suitor there a dole of bread,
+That he might know the better from the worse,
+Though none were to be spared. From right to left
+He took his way, and asked of every man,
+With outstretched hand, as if he had been long
+A beggar. And they pitied him, and gave,
+And looked at him with wonder, and inquired
+One of another who he was, and whence.
+Then spake Melanthius, keeper of the goats:﻿—</div><div class="verse reveal" data-anim="fade">“Give ear, ye suitors of the illustrious queen.
+As to this stranger, I have seen him once.
+The swineherd brought him; but I know him not,
+And of what race he is I cannot tell.”</div><div class="verse reveal" data-anim="fade">He spake; Antinoüs chid the swineherd thus:
+“Why hast thou brought him, too well known thyself?
+Have we not vagabonds enough? enough
+Of sturdy beggars, pests of every feast.
+Or is it a light matter that they throng
+Hither to waste the substance of thy lord,
+And therefore thou art with this fellow here?”</div><div class="verse reveal" data-anim="fade">And thus, Eumaeus, thou didst make reply:
+“Antinoüs, high as is thy station, thou
+Hast spoken ill. What man goes ever forth
+To bid a stranger to his house, unless
+The stranger be of those whose office is
+To serve the people, be he seer, or leech,
+Or architect, or poet heaven-inspired,
+Whose song is gladly heard? All these are called
+To feasts wherever men are found; but none
+Call in the poor, to live upon their means.
+Antinoüs, thou, of all the suitor-train,
+Dost ever with the greatest harshness treat
+The servants of Ulysses, chiefly me.
+I heed it not while sage Penelope
+Dwells in the palace with her godlike son.”</div><div class="verse reveal" data-anim="fade">Then interposed discreet Telemachus:
+“Nay, have no strife of words with him, I pray.
+Antinoüs takes delight in bitter words,
+And rails, and stirs up railing in the rest.”
+And then he turned, and thus with winged words
+Bespake Antinoüs: “Truly thou dost care
+For me as might a father for a son,
+Bidding me drive a stranger from my door
+With violent words﻿—which God forbid. Take now
+Somewhat and give to him. I grudge it not,
+Nay, I advise it. Fear not to offend
+My mother, or displease a single one
+Of all the household of the godlike chief,
+Ulysses. But thou hast not thought of this.
+It suits thee best to feast and never give.”</div><div class="verse reveal" data-anim="fade">Antinoüs thus rejoined: “O utterer
+Of big and braggart words! Telemachus,
+If all the other suitors would bestow
+As much as I will, he would not be seen
+Within these halls for three months yet to come.”</div><div class="verse reveal" data-anim="fade">So speaking, he brought forward to the sight,
+From underneath the board, a stool, on which
+Rested his dainty feet. The others all
+Gave somewhat to Ulysses, till his scrip
+Was filled with meat and bread. Then as he went
+Back to the threshold, there to feast on what
+The Greeks had given him in his rounds, he stopped
+Beside Antinoüs, and bespake him thus:﻿—</div><div class="verse reveal" data-anim="fade">“Give somewhat also, friend. Thou dost not seem
+One of the humbler rank among the Greeks,
+But of the highest. Kingly is thy look;
+It therefore will become thee to bestow
+More freely than the rest, and I will sound
+Thy praise through all the earth. Mine too was once
+A happy lot, for I inhabited
+A palace filled with goods, and often gave
+To wanderers, whosoever they might be
+That sought me out, and in whatever need.
+And I had many servants, and large store
+Of everything by which men live at ease
+And are accounted rich. Saturnian Jove﻿—
+Such was his pleasure﻿—brought me low; for, moved
+By him, I joined me to a wandering band
+Of pirates, and to my perdition sailed
+Upon a distant voyage to the coast
+Of Egypt. In the river of that land
+I stationed my good ships, and bade my men
+Remain with them and watch them well. I placed
+Sentries upon the heights. Yet confident
+In their own strength, and rashly giving way
+To greed, my comrades ravaged the fair fields
+Of the Egyptians, slew them, and bore off
+Their wives and little ones. The rumor reached
+The city soon; the people heard the alarm
+And came together. With the dawn of day
+All the great plain was thronged with horse and foot,
+And gleamed with brass, while Jove, the Thunderer, sent
+A deadly fear into our ranks, where none
+Dared face the foe. On every side was death.
+The Egyptians hewed down many with the sword,
+And some they led away alive to toil
+For them in slavery. Me my captors gave
+Into a stranger’s hands, upon his way
+To Cyprus, where he reigned, a mighty king,
+Demetor, son of Jasus. Thence at last
+I came through many hardships to this isle.”</div><div class="verse reveal" data-anim="fade">Antinoüs lifted up his voice, and said:
+“What god hath sent this nuisance to disturb
+The banquet? Take thyself to the mid-hall,
+Far from thy table, else expect to see
+An Egypt and a Cyprus of a sort
+That thou wilt little like. Thou art a bold
+And shameless beggar. Thou dost take thy round
+And ask from each, and foolishly they give,
+And spare not nor consider; well supplied
+Is each, and freely gives what is not his.”</div><div class="verse reveal" data-anim="fade">Then sage Ulysses said as he withdrew:
+“ ’Tis strange; thy mind agrees not with thy form.
+Thou wouldst not give a suppliant even salt
+In thine own house﻿—thou who, while sitting here
+Fed at another’s table, canst not bear
+To give me bread from thy well-loaded board.”</div><div class="verse reveal" data-anim="fade">He spake. Antinoüs grew more angry still,
+And frowned and answered him with winged words:﻿—</div><div class="verse reveal" data-anim="fade">“Dealer in saucy words! I hardly think
+That thou wilt leave this palace unchastised.”</div><div class="verse reveal" data-anim="fade">He spake, and raised the footstool in his hand,
+And smote Ulysses on the lower part
+Of the right shoulder. Like a rock he stood,
+Unmoved beneath the blow Antinoüs gave,
+But shook his head in silence as he thought
+Of vengeance. Then, returning, he sat down
+Upon the threshold, where he laid his scrip
+Well filled, and thus bespake the suitor-train:﻿—</div><div class="verse reveal" data-anim="fade">“Hear me, ye suitors of the illustrious queen.
+Grief or resentment no man feels for blows
+Received by him while fighting for his own﻿—
+His beeves or white-woolled sheep. But this man here,
+Antinoüs, dealt that blow on me because
+I have an empty stomach; hunger brings
+Great mischiefs upon men. If there be gods
+Or furies who avenge the poor, may death
+O’ertake Antinoüs ere his marriage-day!”</div><div class="verse reveal" data-anim="fade">He ended. Then again Eupeithes’ son,
+Antinoüs, spake: “Eat, stranger, quietly;
+Sit still, or get thee hence; our young men else
+Who hear thy words will seize thee by the feet
+Or hands, and drag thee forth and flay thee there.”</div><div class="verse reveal" data-anim="fade">He spake, and greatly were the rest incensed,
+And one of those proud youths took up the word:﻿—</div><div class="verse reveal" data-anim="fade">“Antinoüs, it was ill of thee to smite
+That hapless wanderer. Madman! what if he
+Came down from heaven and were a god! The gods
+Put on the form of strangers from afar,
+And walk our towns in many different shapes,
+To mark the good and evil deeds of men.”</div><div class="verse reveal" data-anim="fade">Thus spake the suitors, but he heeded not
+Their words. Telemachus, who saw the blow,
+Felt his heart swell with anger and with grief,
+Yet from his eyelids fell no tear; he shook
+His head in silence, pondering to repay
+The wrong. Meantime the sage Penelope
+Heard of the stranger smitten in her halls,
+And thus bespake the maidens of her train:﻿—</div><div class="verse reveal" data-anim="fade">“Would that Apollo, mighty with the bow,
+Might smite thee also!” Then Eurynomè,
+The matron of the household, said in turn:</div><div class="verse reveal" data-anim="fade">“O, were our prayers but heard, not one of these
+Should look upon the golden morn again!”</div><div class="verse reveal" data-anim="fade">Then spake again the sage Penelope:
+“Mother, they all are hateful; every one
+Plots mischief, but Antinoüs most of all;
+And he is like black death, to be abhorred.
+A friendless stranger passes through these halls,
+Compelled by need, and asks an alms of each,
+And all the others give, and fill his scrip;
+Antinoüs flings a footstool, and the blow
+Bruises the shoulder of the suppliant man.”</div><div class="verse reveal" data-anim="fade">So talked they with each other where they sat
+In the queen’s chamber, mid the attendant train
+Of women, while meantime Ulysses took
+The evening meal. The queen then bade to call
+The noble swineherd, and bespake him thus:﻿—</div><div class="verse reveal" data-anim="fade">“My worthy friend Eumaeus, go and bring
+The stranger hither. I would speak with him,
+And ask if anywhere he saw or heard
+Aught of Ulysses; for he seems like one
+Whose wanderings have been in many lands.”</div><div class="verse reveal" data-anim="fade">And thus, Eumaeus, thou didst make reply:
+“Would that these Greeks, O queen, would hold their peace,
+Then might this stranger in thy hearing speak
+Words full of consolation. For three nights
+I had him with me, for three days I made
+My lodge his home﻿—for at the very first
+He came to me, escaping from his ship﻿—
+Nor when he left me had he told of all
+That he had suffered. As a hearer looks
+Upon a minstrel whom the gods have taught
+To sing the poems that delight all hearts,
+And, listening, longs to listen without end;
+So, as the stranger sat beneath my roof,
+He held me charmed. He was the ancestral friend,
+He said, of thy Ulysses, and his home
+Was Crete, where dwells the stock of Minos yet.
+From Crete he came, and much had suffered since,
+Driven on from place to place. And he had heard
+Some tidings of Ulysses yet alive﻿—
+So he affirmed﻿—in a rich region near
+The realm of the Thesprotians, and prepared
+To bring much riches to his native isle.”</div><div class="verse reveal" data-anim="fade">Then spake the sage Penelope again:
+“Go, call him hither, that he may relate
+His story in my presence. Let these men,
+As it may please them, sitting at our gates
+Or in our halls, amuse themselves, for light
+Are they of heart. Unwasted in their homes
+Lie their possessions, and their bread and wine
+Are only for their servants, while themselves
+Frequent our palace, day by day, and slay
+Our beeves and sheep and fatling goats, and feast,
+And drink abundantly the dark red wine,
+And all with lavish waste. No man is here,
+Such as Ulysses was, to drive away
+This pest from our abode. Should he return
+To his own land, he and his son would take
+Swift vengeance on the men who do him wrong.”</div><div class="verse reveal" data-anim="fade">She ended. Suddenly Telemachus
+Sneezed loudly, so that all the palace rang;
+And, laughing as she heard, Penelope
+Bespake Eumaeus thus with winged words:﻿—</div><div class="verse reveal" data-anim="fade">“Go, call the stranger. Dost thou not perceive
+My son has sneezed as to confirm my words.
+Not unfulfilled will now remain the doom
+That waits the suitors; none will now escape
+Death and the Fates. This further let me say,
+And thou remember it; if what he tells
+Be true, I will bestow on him a change
+Of fair attire, a tunic and a cloak.”</div><div class="verse reveal" data-anim="fade">She spake, the swineherd went, and, drawing near
+Ulysses, said to him in winged words:﻿—</div><div class="verse reveal" data-anim="fade">“Stranger and father, sage Penelope,
+The mother of the prince, hath sent for thee.
+Though sorrowing, she is minded to inquire
+What of her husband thou canst haply say;
+And should she find that all thy words are true,
+She will bestow a tunic and a cloak,
+Garments which much thou needest. For thy food,
+What will appease thy hunger thou wilt find
+Among the people; ask, and each will give.”</div><div class="verse reveal" data-anim="fade">Ulysses, much-enduring man, replied:
+“Eumaeus, faithfully will I declare
+All that I know to sage Penelope,
+The daughter of Icarius. Well I knew
+Her husband, and with like calamities
+We both have suffered. But I greatly dread
+This reckless suitor-crew, whose riotous acts
+And violence reach to the iron heavens.
+Even now, when that man dealt me, as I passed,
+A painful blow, though I had done no harm,
+None interposed, not even Telemachus,
+In my defence. Now, therefore, ask, I pray,
+Penelope that she will deign to wait
+Till sunset in her rooms, though strong her wish
+To hear my history. Of her husband then,
+And his return, she may inquire, while I
+Sit by the blazing hearth; for scant have been
+My garments, as thou knowest, since the day
+When first I came, a suppliant, to thy door.”</div><div class="verse reveal" data-anim="fade">He spake; the swineherd went, and as he crossed
+The threshold of Penelope she said:﻿—</div><div class="verse reveal" data-anim="fade">“Thou bringst him not, Eumaeus? What may be
+The wanderer’s scruple? Fear of someone here?
+Or in a palace is he filled with awe?
+To be a bashful beggar is most hard.”</div><div class="verse reveal" data-anim="fade">And thus, Eumaeus, thou didst answer her:
+“Rightly he speaks, and just as one would think
+Who shuns the encounter of disorderly men.
+He prays that thou wilt wait till set of sun;
+And better were it for thyself, O queen,
+To speak with him and hear his words alone.”</div><div class="verse reveal" data-anim="fade">Then spake discreet Penelope again:
+“Whoe’er may be the stranger, not unwise
+He seems; for nowhere among men are done
+Such deeds of wrong and outrage as by these.”</div><div class="verse reveal" data-anim="fade">She spake, and the good swineherd, having told
+The lady all, went forth among the crowd
+Of suitors, drawing near Telemachus,
+And bowed his head beside him that none else
+Might hear, and said to him in winged words:﻿—</div><div class="verse reveal" data-anim="fade">“I go, my friend, to tend the swine and guard
+What there thou hast, thy sustenance and mine.
+The charge of what is here belongs to thee.
+Be thy first care to save thyself, and watch
+To see that mischief overtake thee not﻿—
+For many are the Achaians plotting it,
+Whom Jove destroy ere we become their prey!”</div><div class="verse reveal" data-anim="fade">Then spake discreet Telemachus in turn:
+“So be it, father, and, when thou hast supped,
+Depart, but with the morning come, and bring
+Choice victims for the sacrifice. The care
+Of all things here is with the gods and me.”</div><div class="verse reveal" data-anim="fade">He spake; the swineherd sat him down again
+Upon his polished seat, and satisfied
+His appetite and thirst with food and wine.
+Then he departed to his herd, and left
+The palace and the court before it thronged
+With revellers, who gave the hour to song,
+And joined the dance; for evening now was come.</div>
+</div></main></div>
+<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
+</body></html>

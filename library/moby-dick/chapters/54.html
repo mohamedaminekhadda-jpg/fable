@@ -1,0 +1,789 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><base href="__JAGUAR_BASE__"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,700;9..144,0,900;9..144,1,400;9..144,1,700&amp;family=Spline+Sans+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Amiri+Quran&family=Reem+Kufi&display=swap" rel="stylesheet"><style>:root{
+--ink:#262a2d;--ink-soft:#4c545d;--paper:#f2efea;--paper-deep:#e6e2d9;--oxblood:#3a6b8c;--oxblood-soft:#658da5;--accent:#3a6b8c;--accent-soft:#658da5;--gold:#b59c73;--slate:#7d858c;--rule:#d1ccc0;--nav-active:#5dcaa5;--teal:#5DCAA5;
+--nav-bg:#262a2d;
+--nav-text:#f2efea;
+--hl-amber:#b59c73;
+--hl-rose:#a37272;
+--hl-mint:#5dcaa5;
+--hl-sky:#3a6b8c;
+--serif:'Fraunces', Georgia, serif;
+--mono:'Spline Sans Mono', monospace;
+}
+html.dark{
+--ink:#dcd7cc;--ink-soft:#a5a195;--paper:#13161a;--paper-deep:#1c2024;--oxblood:#5d8ba8;--oxblood-soft:#79a3bd;--accent:#5d8ba8;--accent-soft:#79a3bd;--gold:#b89f76;--slate:#8a9299;--rule:rgba(255,255,255,.08);--nav-active:#5fa39b;--teal:#5fa39b;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+
+/* NAV (always dark by design) */
+.book-nav{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--nav-bg);display:flex;align-items:center;padding:0 18px;overflow-x:auto;scrollbar-width:none;border-bottom:2px solid var(--accent);transform:translateY(-100%);transition:transform .35s ease}
+.book-nav.visible{transform:translateY(0)}
+.book-nav::-webkit-scrollbar{display:none}
+.nav-brand{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--nav-text);padding:12px 14px 12px 0;border-right:1px solid rgba(244,241,234,.15);margin-right:8px;white-space:nowrap;flex-shrink:0}
+.nav-item{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,241,234,.45);padding:13px 10px;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;flex-shrink:0}
+.nav-item:hover{color:var(--nav-text)}
+.nav-item.active{color:var(--nav-active);border-bottom-color:var(--nav-active)}
+
+/* THEME TOGGLE */
+.theme-toggle{position:relative;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;padding:0;margin-left:auto;flex-shrink:0;transition:background .2s ease,border-color .2s ease,color .2s ease}
+.theme-toggle:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.theme-toggle svg{width:15px;height:15px;display:block}
+.theme-toggle .ic-sun{display:none}
+html.dark .theme-toggle .ic-sun{display:block}
+html.dark .theme-toggle .ic-moon{display:none}
+body[dir="rtl"] .theme-toggle{margin-left:0;margin-right:auto}
+
+/* RTL */
+body[dir="rtl"] .book-nav{flex-direction:row-reverse}
+body[dir="rtl"] .book-chapter,body[dir="rtl"] .toc-inner{direction:rtl;text-align:right}
+body[dir="rtl"] .toc-row{direction:rtl}
+body[dir="rtl"] .pull{border-left:none;border-right:3px solid var(--accent);padding-left:0;padding-right:28px}
+body[dir="rtl"] .toc-arrow{transform:scaleX(-1)}
+body[dir="rtl"] .section-marker::after{margin-left:0}
+body[dir="rtl"] .toc-part::after{margin-left:0}
+
+/* READING-PROGRESS BAR */
+.read-progress{position:fixed;top:0;left:0;height:3px;width:0%;z-index:600;background:linear-gradient(90deg,var(--accent),var(--gold));box-shadow:0 0 10px rgba(140,47,42,.45);transition:width .1s linear}
+body[dir="rtl"] .read-progress{left:auto;right:0}
+
+/* REVEAL / OPENER ANIMATIONS (IntersectionObserver-driven) */
+.js-anim .reveal{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .9s cubic-bezier(.22,.61,.36,1),filter .85s ease;will-change:opacity,transform}
+.js-anim .reveal.in{opacity:1;transform:none;filter:none}
+/* entrance variants — set via data-anim, only BEFORE reveal so .in always wins */
+.js-anim .reveal[data-anim="scale"]:not(.in){transform:scale(.93)}
+.js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(-46px)}
+.js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(46px)}
+.js-anim .reveal[data-anim="rise"]:not(.in){transform:translateY(40px)}
+.js-anim .reveal[data-anim="blur"]:not(.in){filter:blur(12px);transform:translateY(14px)}
+.js-anim .reveal[data-anim="fade"]:not(.in){transform:none}
+.js-anim .reveal[data-anim="zoom"]:not(.in){transform:scale(1.06)}
+body[dir="rtl"] .js-anim .reveal[data-anim="left"]:not(.in){transform:translateX(46px)}
+body[dir="rtl"] .js-anim .reveal[data-anim="right"]:not(.in){transform:translateX(-46px)}
+.js-anim .opener>*{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.61,.36,1)}
+.js-anim .opener.opener-in>*{opacity:1;transform:none}
+.js-anim .opener.opener-in .ch-eyebrow{transition-delay:.05s}
+.js-anim .opener.opener-in .ch-number{transition-delay:.18s}
+.js-anim .opener.opener-in .ch-title{transition-delay:.30s}
+.js-anim .opener.opener-in .ch-standfirst{transition-delay:.44s}
+.js-anim .section-marker::after{transform:scaleX(0);transform-origin:left center;transition:transform 1s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .section-marker.in::after{transform:scaleX(1)}
+body[dir="rtl"] .js-anim .section-marker::after{transform-origin:right center}
+.js-anim .pull{position:relative;border-left-color:transparent}
+.js-anim .pull::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .85s cubic-bezier(.22,.61,.36,1) .1s}
+.js-anim .pull.in::before{transform:scaleY(1)}
+body[dir="rtl"] .js-anim .pull{border-right-color:transparent}
+body[dir="rtl"] .js-anim .pull::before{left:auto;right:0}
+.js-anim .verdict{position:relative;overflow:hidden}
+.js-anim .verdict::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .95s cubic-bezier(.22,.61,.36,1) .15s}
+.js-anim .verdict.in::before{transform:scaleY(1)}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1 !important;transform:none !important;transition:none}
+  html{scroll-behavior:auto}
+  .js-anim .opener>*{opacity:1;transform:none}
+  .js-anim .section-marker::after{transform:scaleX(1)}
+  .js-anim .pull::before,.js-anim .verdict::before{transform:scaleY(1)}
+  .read-progress{display:none}
+}
+
+/* FULL-SCREEN COVER */
+.book-cover-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.cover-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+/* Plein cadre : la couverture est composee pour l ecran, pas pour une affiche. */
+.book-cover-fs.is-fill .cover-frame,.book-back-fs.is-fill .back-frame{width:100vw;height:100vh;aspect-ratio:auto;max-width:none}
+.scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;animation:bob 2s ease-in-out infinite;z-index:50;pointer-events:none}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+html:not(.dark) .book-cover-fs,html:not(.dark) .book-back-fs{background:#e7e3d6}
+
+/* INTERACTIVE TOC */
+.book-toc{min-height:100vh;background:var(--paper);position:relative;padding:90px 0 80px}
+.toc-inner{max-width:760px;margin:0 auto;padding:0 32px}
+.toc-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+.toc-bigtitle{margin-bottom:4px}
+.toc-after{display:inline-block;font-style:italic;font-weight:400;font-size:clamp(28px,5vw,44px);color:var(--ink-soft);letter-spacing:-.02em}
+.toc-demo{display:block;font-weight:700;font-size:clamp(46px,9vw,82px);text-transform:uppercase;letter-spacing:-.04em;line-height:.9;color:var(--ink)}
+.toc-byline{font-style:italic;font-size:17px;color:var(--slate);margin-bottom:44px}
+.toc-part{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:34px 0 10px;display:flex;align-items:center;gap:14px}
+.toc-part::after{content:'';flex:1;height:1px;background:var(--rule)}
+.toc-list{position:relative}
+a.toc-row{display:grid;grid-template-columns:54px 1fr 30px;gap:0 16px;align-items:center;padding:18px 16px;border-bottom:1px solid var(--rule);text-decoration:none;color:inherit;transition:background .2s,padding .2s,color .2s;border-radius:3px;position:relative}
+a.toc-row:first-child{border-top:1px solid var(--rule)}
+a.toc-row:hover{background:var(--ink);color:var(--paper);padding-left:24px}
+a.toc-row:hover .toc-num{color:var(--gold)}
+a.toc-row:hover .toc-arrow{opacity:1;transform:translateX(0);color:var(--nav-active)}
+.toc-num{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.05em}
+.toc-rowtitle{font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.toc-arrow{font-size:18px;color:var(--accent);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+
+/* TOC HOVER PANEL (dark popover) */
+.toc-panel{position:fixed;width:340px;background:var(--nav-bg);color:var(--nav-text);border-radius:6px;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);z-index:400;pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .22s ease,transform .22s ease;border-top:3px solid var(--accent)}
+.toc-panel.show{opacity:1;transform:translateY(0) scale(1)}
+.tp-num{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--gold);margin-bottom:8px;font-weight:600}
+.tp-title{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1;margin-bottom:14px}
+.tp-blurb{font-size:15px;line-height:1.6;color:rgba(244,241,234,.85);font-style:italic;margin-bottom:18px}
+.tp-egg-divider{width:32px;height:2px;background:var(--gold);margin-bottom:14px;opacity:.6}
+.tp-egg{font-size:13.5px;line-height:1.55;color:rgba(244,241,234,.7)}
+.tp-blurb:empty,.tp-egg:empty,.tp-egg-divider.hide{display:none}
+@media(max-width:820px){.toc-panel{display:none !important}}
+
+/* HIGHLIGHTS & NOTES */
+.nav-notes{display:inline-flex;align-items:center;gap:7px}
+.nav-notes-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--gold);color:var(--nav-bg);font-size:9px;font-weight:700;letter-spacing:0;line-height:1}
+.nav-notes-count[data-empty="1"]{display:none}
+mark.hl{background:transparent;color:inherit;border-radius:2px;padding:.05em 0;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:filter .15s ease}
+mark.hl:hover{filter:brightness(.93)}
+mark.hl-amber{background:rgba(240,196,90,.50);box-shadow:inset 0 -.5em 0 -.35em rgba(176,132,40,.55)}
+mark.hl-rose{background:rgba(214,120,112,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(160,70,62,.5)}
+mark.hl-mint{background:rgba(125,196,150,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(54,120,82,.5)}
+mark.hl-sky{background:rgba(126,160,214,.42);box-shadow:inset 0 -.5em 0 -.35em rgba(60,96,160,.5)}
+mark.hl.has-note::after{content:'';display:inline-block;width:5px;height:5px;margin:0 1px 0 2px;border-radius:50%;background:var(--accent);vertical-align:.5em}
+@keyframes hlFlash{0%{box-shadow:0 0 0 0 rgba(201,160,84,0)}18%{box-shadow:0 0 0 4px rgba(201,160,84,.55)}100%{box-shadow:0 0 0 0 rgba(201,160,84,0)}}
+mark.hl-flash{animation:hlFlash 1.6s ease}
+.hl-toolbar{position:fixed;z-index:560;display:flex;align-items:center;background:var(--nav-bg);border-radius:30px;padding:7px 10px;box-shadow:0 12px 34px rgba(0,0,0,.34);opacity:0;transform:translateY(6px) scale(.96);transition:opacity .16s ease,transform .16s ease;pointer-events:none}
+.hl-toolbar.show{opacity:1;transform:none;pointer-events:auto}
+.hl-swatch{width:22px;height:22px;border-radius:50%;margin:0 4px;cursor:pointer;border:2px solid rgba(244,241,234,0);box-shadow:0 0 0 1px rgba(0,0,0,.18) inset;transition:transform .12s ease}
+.hl-swatch:hover{transform:scale(1.18)}
+.hl-tool-div{width:1px;height:20px;background:rgba(244,241,234,.18);margin:0 8px}
+.hl-note-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:var(--nav-text);font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 6px 4px 2px}
+.hl-note-btn:hover{color:var(--gold)}
+.hl-note-btn svg{width:13px;height:13px}
+.hl-look-btn{background:none;border:0;cursor:pointer;color:var(--nav-text);padding:4px 5px;display:inline-flex;align-items:center}
+.hl-look-btn:hover{color:var(--gold)}
+.hl-look-btn svg{width:16px;height:16px}
+/* dictionary / wikipedia lookup panel */
+.lookup-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.lookup-backdrop.show{opacity:1;pointer-events:auto}
+.lookup-panel{position:fixed;top:0;right:0;height:100%;width:min(400px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.lookup-panel.show{transform:none}
+body[dir="rtl"] .lookup-panel{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .lookup-panel.show{transform:none}
+.lookup-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.lookup-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.lookup-close{background:none;border:0;color:#f4f1ea;font-size:26px;line-height:1;cursor:pointer;opacity:.7}
+.lookup-close:hover{opacity:1}
+.lookup-body{flex:1;overflow-y:auto;padding:18px 22px 40px}
+.lookup-word{font-family:var(--serif);font-size:26px;font-weight:600;margin-bottom:2px}
+.lookup-phon{font-family:var(--mono);font-size:13px;color:#9aa0b0;margin-bottom:14px}
+.lookup-pos{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+.lookup-def{font-size:15px;line-height:1.55;margin:0 0 8px;padding-left:16px;position:relative}
+.lookup-def:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.lookup-eg{color:#9aa0b0;font-style:italic;font-size:13.5px;margin:2px 0 0}
+/* D'ou vient la definition : le chapitre qui glose le mot. Bloc, pas span,
+   sinon le titre se colle au dernier mot de la definition. */
+.lookup-src{display:block;color:#9aa0b0;font-style:italic;font-size:12.5px;margin:4px 0 0;opacity:.85}
+.lookup-img{width:100%;border-radius:10px;margin-bottom:14px;display:block}
+.lookup-extract{font-size:15px;line-height:1.6}
+.lookup-link{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--gold)}
+.lookup-loading,.lookup-empty{color:#9aa0b0;font-size:14px;padding:10px 0}
+.hl-noteedit{position:fixed;z-index:570;width:300px;background:var(--nav-bg);color:var(--nav-text);border-radius:9px;padding:15px 15px 13px;box-shadow:0 18px 50px rgba(0,0,0,.42);opacity:0;transform:translateY(8px);transition:opacity .18s ease,transform .18s ease;pointer-events:none}
+.hl-noteedit.show{opacity:1;transform:none;pointer-events:auto}
+.hl-ne-colors{display:flex;gap:8px;margin-bottom:11px}
+.hl-ne-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;box-shadow:0 0 0 1px rgba(0,0,0,.2) inset;border:2px solid transparent;transition:transform .12s ease}
+.hl-ne-dot:hover{transform:scale(1.15)}
+.hl-ne-dot.sel{border-color:var(--nav-text)}
+.hl-noteedit textarea{width:100%;min-height:84px;resize:vertical;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);border-radius:6px;color:var(--nav-text);font-family:var(--serif);font-size:15px;line-height:1.5;padding:10px 11px;outline:none}
+.hl-noteedit textarea::placeholder{color:rgba(244,241,234,.38);font-style:italic}
+.hl-noteedit textarea:focus{border-color:var(--gold)}
+.hl-ne-actions{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+.hl-ne-del{background:none;border:0;color:rgba(244,241,234,.5);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:4px}
+.hl-ne-del:hover{color:#d27870}
+.hl-ne-save{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:8px 16px;border-radius:5px}
+.hl-ne-save:hover{filter:brightness(1.08)}
+.notes-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.62);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.notes-backdrop.show{opacity:1;pointer-events:auto}
+.notes-drawer{position:fixed;top:0;right:0;height:100%;width:min(424px,92vw);background:#151b2c;color:#f4f1ea;z-index:610;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .36s cubic-bezier(.36,.02,.1,1);box-shadow:-22px 0 64px rgba(0,0,0,.46)}
+.notes-drawer.show{transform:none}
+body[dir="rtl"] .notes-drawer{right:auto;left:0;transform:translateX(-102%)}
+body[dir="rtl"] .notes-drawer.show{transform:none}
+.notes-head{display:flex;align-items:flex-start;justify-content:space-between;padding:30px 28px 22px;border-bottom:1px solid rgba(244,241,234,.1)}
+.notes-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+.notes-h1{font-family:var(--serif);font-size:25px;font-weight:600;letter-spacing:-.01em}
+.notes-close{background:none;border:0;color:rgba(244,241,234,.55);font-size:26px;line-height:1;cursor:pointer;padding:0 2px;margin-top:-2px}
+.notes-close:hover{color:#f4f1ea}
+.notes-list{flex:1;overflow-y:auto;padding:14px 20px 40px}
+.notes-empty{padding:48px 22px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:16px;line-height:1.6;font-family:var(--serif)}
+.note-card{position:relative;display:grid;grid-template-columns:4px 1fr;gap:15px;padding:17px 14px 16px;border-radius:8px;cursor:pointer;transition:background .18s ease;margin-bottom:4px}
+.note-card:hover{background:rgba(244,241,234,.055)}
+.note-bar{border-radius:3px}
+.note-bar.c-amber{background:var(--hl-amber)}.note-bar.c-rose{background:var(--hl-rose)}.note-bar.c-mint{background:var(--hl-mint)}.note-bar.c-sky{background:var(--hl-sky)}
+.note-excerpt{font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.5;color:rgba(244,241,234,.92);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-body{font-size:14px;line-height:1.55;color:#cdd2df;margin-bottom:10px;white-space:pre-wrap}
+.note-meta{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,241,234,.42)}
+.note-meta .nm-ch{color:var(--gold)}
+.note-del{position:absolute;top:12px;right:8px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;font-size:16px;line-height:1;padding:4px;opacity:0;transition:opacity .15s ease}
+body[dir="rtl"] .note-del{right:auto;left:8px}
+.note-card:hover .note-del{opacity:1}
+.note-del:hover{color:#d27870}
+@media(max-width:600px){.hl-noteedit{width:calc(100vw - 24px)}}
+@media(max-width:600px),(pointer:coarse){
+  .hl-toolbar{padding:9px 12px;border-radius:34px}
+  .hl-swatch{width:30px;height:30px;margin:0 5px}
+  .hl-note-btn{font-size:11px;padding:8px 8px 8px 4px}
+  .hl-note-btn svg{width:16px;height:16px}
+  .hl-tool-div{height:24px;margin:0 9px}
+  .hl-noteedit{max-height:min(72vh,420px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 14px}
+  .hl-ne-dot{width:26px;height:26px}
+  .hl-noteedit textarea{font-size:16px;min-height:96px}
+  .hl-ne-save{padding:11px 20px;font-size:11px}
+  .hl-ne-del{padding:8px 6px;font-size:11px}
+  .notes-close{font-size:32px;padding:4px 6px}
+}
+
+/* CHAPTER WRAPPER + BREAK */
+.book-chapter{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px;position:relative}
+.chapter-break{max-width:var(--content-width,720px);margin:0 auto;padding:50px 28px;display:flex;align-items:center;justify-content:center;gap:16px}
+.chapter-break::before,.chapter-break::after{content:'';flex:1;height:1px;background:var(--rule)}
+.chapter-break::after{content:'◆';flex:0;color:var(--accent);font-size:11px}
+
+/* INTERSTITIAL EMBED */
+.interstitial-embed{margin:0;padding:72px 16px;background:#0e0e0e;display:flex;justify-content:center;align-items:center}
+.interstitial-embed iframe{width:min(560px,90vw);aspect-ratio:3/4;border:0;display:block;background:#0e0e0e;box-shadow:0 30px 70px rgba(0,0,0,.55);color-scheme:light}
+
+/* BACK COVER */
+.book-back-fs{width:100vw;height:100vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.back-frame{height:100vh;width:auto;aspect-ratio:var(--cover-aspect,2/3);max-width:100vw;border:none;display:block}
+
+/* DARK-MODE adjustments (blocks that use --ink as a *background* need a real dark fill) */
+html.dark .book-toc{background:#101218}
+html.dark .chapter-break::before,html.dark .chapter-break::after{background:var(--rule)}
+html.dark .verdict,html.dark .arg-head,html.dark .case-head{background:#0b0c11;color:var(--ink)}
+html.dark .case-stat{background:var(--paper-deep)}
+
+/* EYE-OPENING LOADER */
+.ad-loader{position:fixed;inset:0;z-index:9000;background:radial-gradient(120% 92% at 50% 42%,#1b1815 0%,#121110 56%,#0b0a09 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .8s ease;overflow:hidden}
+.ad-loader.gone{opacity:0;pointer-events:none}
+.ad-loader-custom{padding:0;gap:0;background:#0e0e0e}
+.ad-loader-frame{width:100%;height:100%;border:0;display:block}
+.ad-eye-wrap{position:relative;width:320px;max-width:82vw;display:flex;align-items:center;justify-content:center}
+.ad-loader-logo{width:200px;max-width:64vw;height:auto;display:block;filter:drop-shadow(0 10px 30px rgba(0,0,0,.5));animation:adLogoIn 1s ease forwards,adLogoPulse 2.4s 1s ease-in-out infinite}
+@keyframes adLogoIn{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
+@keyframes adLogoPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.82}}
+.ad-eye2{width:100%;transform-origin:center;transform:scaleY(.04);animation:adEyeOpen 1.9s cubic-bezier(.5,.05,.2,1) forwards}
+.ad-eye2 .eye-outer{width:100%;aspect-ratio:2.8/1;background:#0b0b0d;border-radius:50%;box-shadow:0 0 55px 6px rgba(150,142,124,.32);display:flex;align-items:center;justify-content:center}
+.ad-eye2 .eye-white{width:68%;aspect-ratio:2.5/1;background:#f0ebe0;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.ad-eye2 .eye-iris{width:44%;aspect-ratio:1;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;position:absolute;animation:adIrisLook 6s 1.05s ease-in-out infinite}
+.ad-eye2 .eye-pupil{width:40%;aspect-ratio:1;background:#0d0d0d;border-radius:50%}
+@keyframes adEyeOpen{0%{transform:scaleY(.04)}45%{transform:scaleY(1)}57%{transform:scaleY(.12)}70%{transform:scaleY(1)}100%{transform:scaleY(1)}}
+@keyframes adIrisLook{0%,100%{transform:translateX(0)}22%{transform:translateX(-24%)}48%{transform:translateX(20%)}74%{transform:translateX(-8%)}}
+.ad-loader-cap{font-family:var(--mono);font-size:11px;letter-spacing:.46em;text-transform:uppercase;color:rgba(244,241,234,.62);opacity:0;animation:adCapIn .9s 1.25s ease forwards;padding-left:.46em;text-align:center}
+.ad-loader-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--accent);opacity:0;animation:adCapIn .9s 1.55s ease forwards}
+@keyframes adCapIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .ad-eye2{animation:none;transform:none}
+  .ad-eye2 .eye-iris,.ad-loader-cap,.ad-loader-sub{animation:none;opacity:1}
+}
+
+/* COACHMARKS */
+.ad-coach{position:fixed;z-index:585;width:284px;max-width:calc(100vw - 28px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(201,160,84,.28);border-radius:11px;padding:16px 17px 14px;box-shadow:0 20px 56px rgba(0,0,0,.5);opacity:0;transform:translateY(8px) scale(.97);transition:opacity .26s ease,transform .26s ease;pointer-events:none}
+.ad-coach.show{opacity:1;transform:none;pointer-events:auto}
+.ad-coach .cm-k{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:9px}
+.ad-coach .cm-k svg{width:14px;height:14px;flex-shrink:0}
+.ad-coach .cm-t{font-family:var(--serif);font-size:16px;line-height:1.52;color:rgba(244,241,234,.94)}
+.ad-coach .cm-t b{color:#ecc15a;font-weight:600;font-style:italic}
+.ad-coach .cm-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.ad-coach .cm-step{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:rgba(244,241,234,.42)}
+.ad-coach .cm-got{background:var(--gold);border:0;color:var(--nav-bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:9px 16px;border-radius:5px}
+.ad-coach .cm-got:hover{filter:brightness(1.08)}
+.ad-coach .cm-arrow{position:absolute;width:13px;height:13px;background:var(--nav-bg);border:1px solid rgba(201,160,84,.28);transform:rotate(45deg)}
+.ad-coach[data-place="below"] .cm-arrow{top:-7px;border-right:0;border-bottom:0}
+.ad-coach[data-place="above"] .cm-arrow{bottom:-7px;border-left:0;border-top:0}
+
+/* SHARE QUOTE CARD + EXPORT NOTES */
+.notes-actions{display:flex;gap:8px;margin-top:12px}
+.notes-actions .na-btn{flex:1;background:rgba(244,241,234,.06);border:1px solid rgba(244,241,234,.16);color:#f4f1ea;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:9px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.notes-actions .na-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notes-actions .na-btn svg{width:13px;height:13px}
+.note-share{position:absolute;top:12px;right:30px;background:none;border:0;color:rgba(244,241,234,.32);cursor:pointer;padding:4px;opacity:0;transition:opacity .15s}
+body[dir="rtl"] .note-share{right:auto;left:30px}
+.note-card:hover .note-share{opacity:1}
+.note-share:hover{color:var(--gold)}
+.note-share svg{width:15px;height:15px;display:block}
+/* share modal */
+.share-backdrop{position:fixed;inset:0;background:rgba(9,11,18,.78);z-index:700;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.share-backdrop.show{opacity:1;pointer-events:auto}
+.share-box{background:#151b2c;border-radius:14px;padding:22px;max-width:520px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.55);transform:translateY(12px) scale(.98);transition:transform .25s ease}
+.share-backdrop.show .share-box{transform:none}
+.share-box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.share-box-title{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.share-box-close{background:none;border:0;color:rgba(244,241,234,.5);font-size:26px;line-height:1;cursor:pointer}
+.share-box-close:hover{color:#f4f1ea}
+.share-canvas-wrap{border-radius:10px;overflow:hidden;background:#0e0e0e;margin-bottom:16px}
+.share-canvas-wrap canvas{width:100%;height:auto;display:block}
+.share-box-actions{display:flex;gap:10px}
+.share-box-actions button{flex:1;border:0;border-radius:8px;padding:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.share-dl{background:var(--gold);color:#151b2c;font-weight:700}
+.share-dl:hover{filter:brightness(1.08)}
+.share-copy{background:rgba(244,241,234,.08);color:#f4f1ea;border:1px solid rgba(244,241,234,.18) !important}
+.share-copy:hover{border-color:var(--gold) !important;color:var(--gold)}
+
+/* NAV TOOL BUTTONS (search, font size, spread) — match the theme toggle */
+.nav-tools{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+/* Le bouton « See for yourself » : discret dans la barre, il s'allume au survol.
+   Le libellé disparaît sous 720 px et il ne reste que la marque — sur un
+   téléphone la barre doit d'abord servir à lire le livre. */
+.nav-sfy{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--nav-text);opacity:.72;border:1px solid rgba(244,241,234,.22);border-radius:999px;padding:5px 11px 5px 9px;font-size:11.5px;letter-spacing:.02em;white-space:nowrap;transition:opacity .16s,border-color .16s,background .16s}
+.nav-sfy svg{width:17px;height:17px;flex-shrink:0}
+.nav-sfy:hover,.nav-sfy:focus-visible{opacity:1;border-color:var(--nav-active);background:rgba(244,241,234,.08)}
+.nav-sfy:focus-visible{outline:2px solid var(--nav-active);outline-offset:2px}
+@media (max-width:720px){.nav-sfy span{display:none}.nav-sfy{padding:5px 8px;gap:0}}
+body[dir="rtl"] .nav-tools{margin-left:0;margin-right:auto}
+.nav-tools .theme-toggle{margin-left:0}
+body[dir="rtl"] .nav-tools .theme-toggle{margin-right:0}
+.nav-btn{position:relative;height:34px;min-width:34px;padding:0 9px;border-radius:17px;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);color:var(--nav-text);cursor:pointer;transition:background .2s,border-color .2s,color .2s;font-family:var(--mono);font-size:12px;flex-shrink:0}
+.nav-btn:hover{background:rgba(244,241,234,.14);border-color:rgba(201,160,84,.55);color:var(--gold)}
+.nav-btn.active{border-color:var(--nav-active);color:var(--nav-active)}
+.nav-btn svg{width:15px;height:15px;display:block}
+.nav-fontsize{display:inline-flex;align-items:center;background:rgba(244,241,234,.07);border:1px solid rgba(244,241,234,.18);border-radius:17px;overflow:hidden}
+.nav-fontsize button{background:none;border:0;color:var(--nav-text);cursor:pointer;height:32px;width:30px;font-family:var(--serif);line-height:1;display:inline-flex;align-items:center;justify-content:center}
+.nav-fontsize button:hover{color:var(--gold)}
+.nav-fontsize .fs-sm{font-size:12px}.nav-fontsize .fs-lg{font-size:17px}
+.nav-fontsize .fs-div{width:1px;height:18px;background:rgba(244,241,234,.18)}
+
+/* SEARCH PANEL */
+.search-panel{position:fixed;top:0;left:0;right:0;z-index:320;transform:translateY(-100%);transition:transform .28s ease;background:var(--nav-bg);box-shadow:0 12px 34px rgba(0,0,0,.34)}
+.search-panel.show{transform:translateY(0)}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;max-width:860px;margin:0 auto}
+.search-bar svg.s-ic{width:17px;height:17px;color:rgba(244,241,234,.55);flex-shrink:0}
+.search-bar input{flex:1;background:transparent;border:0;outline:none;color:var(--nav-text);font-family:var(--serif);font-size:18px}
+.search-bar input::placeholder{color:rgba(244,241,234,.4)}
+.search-count{font-family:var(--mono);font-size:11px;color:rgba(244,241,234,.5);letter-spacing:.08em;white-space:nowrap}
+.search-bar .s-btn{background:rgba(244,241,234,.08);border:0;color:var(--nav-text);width:30px;height:30px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.search-bar .s-btn:hover{color:var(--gold)}
+.search-results{max-width:860px;margin:0 auto;max-height:min(56vh,520px);overflow-y:auto;padding:0 16px 14px}
+.sr-group{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:12px 4px 8px}
+.sr-item{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:11px 12px;cursor:pointer;color:rgba(244,241,234,.9);font-family:var(--serif);font-size:15px;line-height:1.5}
+body[dir="rtl"] .sr-item{text-align:right}
+.sr-item:hover,.sr-item.current{background:rgba(244,241,234,.07)}
+.sr-item .sr-ch{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--nav-active);margin-bottom:4px;display:block}
+.sr-item mark{background:rgba(201,160,84,.5);color:#fff;border-radius:2px}
+.sr-empty{color:rgba(244,241,234,.45);font-style:italic;padding:18px 12px;font-size:15px}
+mark.search-hit{background:rgba(201,160,84,.42);color:inherit;border-radius:2px;box-shadow:inset 0 -.5em 0 -.35em rgba(201,160,84,.5)}
+mark.search-hit.current{background:var(--gold);color:#1a2238;box-shadow:none}
+
+/* TWO-PAGE SPREAD VIEW + PAGE FLIP */
+body.spread-active{overflow:hidden}
+body.spread-active .read-progress{display:none}
+.spread-stage{position:fixed;top:48px;left:0;right:0;bottom:0;z-index:250;background:var(--paper);display:none;perspective:2400px}
+.spread-stage.show{display:block}
+.spread-viewport{position:absolute;inset:0;overflow:hidden}
+.spread-pages{height:100%;column-fill:auto;padding:40px 56px;transition:transform .5s cubic-bezier(.4,.0,.2,1);transform:translateX(0);box-sizing:border-box}
+.spread-pages .book-chapter{max-width:none;margin:0;padding:0;font-size:calc(18px * var(--reading-scale))}
+.spread-pages .opener{padding:0 0 28px;break-inside:avoid}
+.spread-pages .ch-title{font-size:34px}
+.spread-pages .lead::first-letter{float:none;font-size:inherit;padding:0;color:var(--accent)}
+.spread-pages .reveal{opacity:1 !important;transform:none !important}
+.spread-pages .verdict{margin:28px 0}
+.spread-pages .interstitial-embed,.spread-pages .chapter-break{display:none}
+.spread-divider{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule);pointer-events:none;z-index:2}
+.spread-nav{position:absolute;top:0;bottom:0;width:18%;z-index:3;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.spread-nav:hover{opacity:1}
+.spread-prev{left:0}.spread-next{right:0}
+.spread-nav .arr{width:42px;height:42px;border-radius:50%;background:var(--nav-bg);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.spread-counter{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:4;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--slate);background:var(--paper);padding:4px 12px;border-radius:20px;border:1px solid var(--rule)}
+/* content-bearing page-flip: clones of the real pages turn around the spine */
+.spread-flip{position:absolute;inset:0;z-index:5;pointer-events:none;perspective:2200px;display:none}
+.flip-win{position:absolute;top:0;bottom:0;overflow:hidden;background:var(--paper)}
+.flip-right{left:50%;right:0}
+.flip-left{left:0;right:50%}
+.flip-inner{position:absolute;top:0;bottom:0;width:200%}
+.flip-right .flip-inner{left:-100%}
+.flip-left .flip-inner{left:0}
+.flip-cover{z-index:1}
+.flip-leaf{z-index:2;backface-visibility:hidden;transform:rotateY(0deg);box-shadow:0 0 30px rgba(0,0,0,.28)}
+.flip-leaf.leaf-fwd{transform-origin:left center}
+.flip-leaf.leaf-back{transform-origin:right center}
+/* curl shading on the turning page surface */
+.flip-shade{position:absolute;inset:0;pointer-events:none;z-index:3}
+.leaf-fwd .flip-shade{background:linear-gradient(90deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+.leaf-back .flip-shade{background:linear-gradient(270deg,rgba(255,255,255,.14),rgba(255,255,255,0) 18%,rgba(0,0,0,.04) 62%,rgba(0,0,0,.22))}
+@media (prefers-reduced-motion: reduce){.spread-pages{transition:none}.spread-flip{display:none !important}}
+@media(max-width:720px){
+  .spread-pages{column-gap:0 !important;padding:30px 26px}
+  .spread-divider{display:none}
+}
+
+/* BOOKMARKS — silk ribbon + dropdown */
+.nav-btn-count{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--gold);color:var(--nav-bg);font-family:var(--mono);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+.nav-btn-count[data-empty="1"]{display:none}
+.bm-ribbon{position:absolute;left:-16px;width:26px;height:62px;z-index:40;cursor:pointer;background:linear-gradient(90deg,var(--accent),var(--accent-soft) 55%,var(--accent));box-shadow:2px 3px 9px rgba(0,0,0,.30);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);transition:filter .15s ease,transform .15s ease}
+.bm-ribbon::after{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:3px;height:32px;border-radius:2px;background:rgba(255,255,255,.38)}
+.bm-ribbon:hover{filter:brightness(1.1);transform:translateY(2px)}
+.bm-ribbon.bm-new{animation:bmDrop .55s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bmDrop{0%{transform:translateY(-72px) rotate(-5deg);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.bm-ribbon.bm-leave{animation:bmLeave .35s ease forwards}
+@keyframes bmLeave{to{transform:translateY(-72px) rotate(-5deg);opacity:0}}
+body[dir="rtl"] .bm-ribbon{left:auto;right:-16px}
+@media(max-width:760px){.bm-ribbon{left:-6px;width:20px;height:50px}body[dir="rtl"] .bm-ribbon{right:-6px;left:auto}}
+.bm-panel{position:fixed;top:50px;z-index:330;width:300px;max-width:calc(100vw - 24px);background:var(--nav-bg);color:var(--nav-text);border:1px solid rgba(244,241,234,.14);border-radius:11px;box-shadow:0 18px 52px rgba(0,0,0,.46);padding:9px;opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.bm-panel.show{opacity:1;transform:none;pointer-events:auto}
+.bm-add,.bm-resume{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:8px;padding:11px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.bm-add{background:var(--accent);color:#fff}.bm-add:hover{filter:brightness(1.1)}
+.bm-add svg{width:14px;height:14px}
+.bm-resume{background:rgba(244,241,234,.08);color:var(--nav-text);border:1px solid rgba(244,241,234,.16);margin-top:7px}
+.bm-resume:hover{border-color:var(--gold);color:var(--gold)}
+.bm-list{max-height:46vh;overflow-y:auto;margin-top:8px}
+.bm-empty{padding:18px 12px;text-align:center;color:rgba(244,241,234,.5);font-style:italic;font-size:14px;font-family:var(--serif)}
+.bm-item{display:grid;grid-template-columns:7px 1fr;gap:11px;padding:10px 24px 10px 10px;border-radius:8px;cursor:pointer;position:relative}
+.bm-item:hover{background:rgba(244,241,234,.07)}
+.bm-item .bm-bar{border-radius:3px;background:var(--accent)}
+.bm-item .bm-meta{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.bm-item .bm-snip{font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.45;color:rgba(244,241,234,.9);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bm-item .bm-x{position:absolute;top:8px;right:7px;background:none;border:0;color:rgba(244,241,234,.34);cursor:pointer;font-size:15px;line-height:1;padding:2px;opacity:0}
+.bm-item:hover .bm-x{opacity:1}.bm-item .bm-x:hover{color:var(--accent)}
+.bm-toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--nav-bg);color:var(--nav-text);padding:11px 20px;border-radius:24px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;box-shadow:0 14px 38px rgba(0,0,0,.42);opacity:0;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:620;display:inline-flex;align-items:center;gap:9px}
+.bm-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.bm-toast svg{width:15px;height:15px;color:var(--gold)}
+
+/* RESPONSIVE + PRINT */
+@media(max-width:600px){
+  .book-chapter{padding:0 18px}
+  .toc-inner{padding:0 20px}
+  a.toc-row{grid-template-columns:40px 1fr 24px}
+  .toc-rowtitle{font-size:18px}
+}
+/* the answer-key switch in the nav */
+.nav-item.nav-key.on{color:var(--gold);font-weight:600}
+.nav-item.nav-key.on::before{content:"✓ ";font-size:.9em}
+
+@media print{
+  .book-nav,.read-progress,.ad-loader,.ad-coach,.hl-toolbar,.hl-noteedit,.notes-drawer,.notes-backdrop,.interstitial-embed{display:none !important}
+  .chapter-break{break-after:page}
+  .reveal{opacity:1 !important;transform:none !important}
+
+  /* ── paper ──────────────────────────────────────────────────────────
+     A book is read on a screen and photocopied on paper. Printing keeps
+     whatever state the reader is in — so the answer-key switch decides
+     whether you get the worksheet or its correction out of the same file. */
+  @page{margin:16mm 14mm}
+  html,html.dark{
+    --paper:#fff;--paper-deep:#f4f4f4;--ink:#111;--ink-soft:#333;--slate:#555;--rule:#bbb;
+    background:#fff !important;color:#111 !important}
+  html.dark body,body{background:#fff !important;color:#111 !important}
+  .book-chapter{padding:0 !important}
+
+  /* keep a figure, a table or a widget whole on one page where it fits */
+  .iw,figure,.md-table,.evidence,.case,.argument,.stat,.notes{break-inside:avoid}
+  h2,h3,.subhead,.section-marker{break-after:avoid}
+
+  /* controls mean nothing on paper — the content they act on stays */
+  .iw-btn,.iwm-qbtn,.iw3d-tools,.iw3d-hint,.iwglo-bar,.iwfc-bar,.iwfc-judge,
+  .iword-btns,.iwlb-actions,.iwiq-actions,.iwiq-tip,.iwex-actions,.iwsrc-rev,
+  .iwrx-actions,.iwnuc-actions,.iwm-quiz,.iwtl-quizbar,.iwtl-reset,.iwx-actions,
+  .iwq-actions,.figure-nav,.iwopt-ctl,input[type=range],
+  .iwwv-ctl,.iwfr-btns,.iwcj-tabs{display:none !important}
+
+  /* answer spaces print as ruled boxes, not as browser widgets.
+     Note the bare input selectors: the crossword, the posed operation and the
+     numeration table use an input with maxlength and no type attribute, so
+     input[type=text] never reaches them. */
+  input[type=text],input[type=search],input[type=number],textarea,select,
+  .iwpo-c input,.iwcw-c input,.iwpv-c input,
+  .iwq-blank,.iwex-a,.iwnuc-in,.iwm-qin{
+    border:1px solid #999 !important;background:#fff !important;color:#111 !important;
+    box-shadow:none !important;-webkit-appearance:none;appearance:none}
+  .iwcw-c input{border:0 !important}   /* the cell already has one */
+
+  /* a ticked radio in the marking grid is drawn with a box-shadow, and browsers
+     drop backgrounds when printing — give it an ink fill that survives */
+  .iw-rb input:checked+i{background:#111 !important;box-shadow:inset 0 0 0 3.5px #fff !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* the Sankey labels are white on coloured bands, so the bands have to print */
+  .iw-en .iwen-svg{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* only the open tense of a conjugation prints; the other tabs are gone above */
+
+  /* a flip card printed edge-on is a blank rectangle — lay both faces flat */
+  .iw-fc .iwfc-card{height:auto !important;perspective:none !important}
+  .iw-fc .iwfc-inner{transform:none !important;transform-style:flat !important;position:static !important}
+  .iw-fc .iwfc-face{position:static !important;backface-visibility:visible !important;
+    transform:none !important;border:1px solid #999;margin-bottom:6px;page-break-inside:avoid}
+  .iw-fc .iwfc-front{background:#f4f4f4 !important;color:#111 !important}
+  .iw-fc .iwfc-front i{display:none}
+
+  /* anything hidden behind a disclosure opens up */
+  details{display:block}
+  details>summary{list-style:none;font-weight:600}
+  details>*{display:block !important}
+  .iwme-step.hid,.iwme-ans.hid{opacity:1 !important;display:list-item !important}
+  .iwsrc-model[hidden],.iwex-sol[hidden],.iwex-hint[hidden]{display:block !important}
+
+  /* the reader's own frame */
+  .rawhtml-frame,.iw-embed-frame{border:1px solid #bbb}
+  a{color:#111 !important;text-decoration:none}
+}
+
+
+/* reading typography lives on the chapter wrapper so it doesn't touch nav/TOC */
+.book-chapter{font-size:19px;line-height:1.78;padding-bottom:130px;text-rendering:optimizeLegibility}
+.book-chapter p{margin-bottom:26px}
+.book-chapter em{font-style:italic}
+.book-chapter strong{font-weight:600;color:var(--ink)}
+.book-chapter a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+
+/* chapter opener */
+.opener{padding:120px 0 70px;border-bottom:1px solid var(--rule);margin-bottom:64px}
+.ch-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;font-weight:500}
+.ch-number{font-family:var(--mono);font-size:15px;color:var(--slate);letter-spacing:.1em;margin-bottom:10px}
+.ch-title{font-size:58px;line-height:1.04;font-weight:600;letter-spacing:-.02em;margin-bottom:30px}
+.ch-standfirst{font-size:23px;line-height:1.5;color:var(--ink-soft);font-weight:400;font-style:italic;max-width:92%}
+
+/* drop cap on the lead paragraph */
+.lead::first-letter{font-size:76px;line-height:.72;float:left;font-weight:600;padding:8px 14px 0 0;color:var(--accent)}
+body[dir="rtl"] .lead::first-letter{float:right;padding:8px 0 0 14px}
+
+/* section marker */
+.section-marker{font-family:var(--mono);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--slate);margin:64px 0 24px;display:flex;align-items:center;gap:16px}
+.section-marker::after{content:"";flex:1;height:1px;background:var(--rule)}
+
+/* pull quote */
+.pull{font-size:30px;line-height:1.3;font-weight:500;color:var(--ink);margin:56px 0;padding-left:28px;border-left:3px solid var(--accent);letter-spacing:-.01em}
+
+/* verdict (ink panel) */
+.verdict{background:var(--ink);color:var(--paper);margin:60px -28px;padding:60px 48px;border-radius:3px}
+.verdict p{font-size:29px;line-height:1.4;font-weight:500;letter-spacing:-.01em;margin-bottom:0}
+.verdict .accent{color:var(--gold)}
+
+/* evidence box */
+.evidence{background:var(--paper-deep);border:1px solid var(--rule);border-top:3px solid var(--accent);border-radius:3px;padding:30px 32px 26px;margin:44px 0}
+.evidence-label{font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:16px}
+.evidence-figure{font-family:var(--serif);font-size:46px;line-height:1.05;font-weight:600;color:var(--accent);letter-spacing:-.02em;margin-bottom:14px}
+.evidence-body{font-size:18px;line-height:1.6;color:var(--ink-soft);margin-bottom:16px}
+.evidence-body p{margin-bottom:14px}.evidence-body p:last-child{margin-bottom:0}
+.evidence-label:first-child{margin-top:0}
+.evidence-source{font-family:var(--mono);font-size:12px;color:var(--slate);letter-spacing:.04em;padding-top:14px;border-top:1px solid var(--rule)}
+.evidence-source sup{color:var(--accent);font-weight:600}
+
+/* case-study card */
+.case{border:1px solid var(--rule);border-radius:3px;margin:44px 0;overflow:hidden}
+.case-head{background:var(--ink);color:var(--paper);padding:22px 30px}
+.case-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:8px}
+.case-name{font-size:26px;font-weight:600;line-height:1.15;letter-spacing:-.01em}
+.case-body{padding:26px 30px 28px;background:var(--paper-deep)}
+.case-body p{margin-bottom:18px;font-size:18px}
+.case-body p:last-child{margin-bottom:0}
+.case-stat{font-family:var(--mono);font-size:14px;color:var(--ink);font-weight:500;background:var(--paper);border:1px solid var(--rule);border-radius:2px;padding:4px 10px;display:inline-block;margin:0 6px 8px 0}
+
+/* argument card (his vs mine) */
+.argument{border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin:52px 0}
+.arg-head{background:var(--ink);color:var(--paper);padding:16px 28px;font-family:var(--mono);font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600}
+.arg-side{padding:24px 28px;border-top:1px solid var(--rule);display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:start;background:var(--paper-deep)}
+.arg-side:first-of-type{border-top:none}
+.arg-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;padding-top:3px;line-height:1.4}
+.arg-label.his{color:var(--slate)}
+.arg-label.mine{color:var(--accent)}
+.arg-text{font-size:17px;line-height:1.6;color:var(--ink-soft)}
+
+/* footnote markers + endnotes */
+sup.fn{font-family:var(--mono);font-size:.62em;color:var(--accent);font-weight:600;vertical-align:super;cursor:pointer;padding:0 1px}
+.notes{margin-top:90px;padding-top:34px;border-top:1px solid var(--rule)}
+.notes-title{font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--slate);margin-bottom:24px}
+.note{display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:14px;line-height:1.5;color:var(--ink-soft);margin-bottom:14px;font-family:var(--serif)}
+.note-num{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;padding-top:2px}
+.note a{color:var(--slate);text-decoration:underline;text-underline-offset:2px}
+
+/* dialogue */
+.dialogue{margin:44px 0;padding-left:22px;border-left:2px solid var(--rule)}
+.dlg-line{display:grid;grid-template-columns:minmax(80px,140px) 1fr;gap:18px;align-items:baseline;margin-bottom:18px}
+.dlg-speaker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;padding-top:4px;text-align:right}
+.dlg-text{font-size:19px;line-height:1.6;color:var(--ink)}
+.dlg-aside{font-style:italic;color:var(--slate);font-size:16px;margin:6px 0 18px;padding-left:0}
+body[dir="rtl"] .dialogue{padding-left:0;padding-right:22px;border-left:none;border-right:2px solid var(--rule)}
+body[dir="rtl"] .dlg-speaker{text-align:left}
+@media(max-width:600px){.dlg-line{grid-template-columns:1fr;gap:2px}.dlg-speaker{text-align:left;padding-top:0}}
+
+/* closing line */
+.closer{font-size:27px;line-height:1.42;font-weight:500;color:var(--ink);margin:70px 0 0;padding:38px 0 0;border-top:3px double var(--ink);letter-spacing:-.01em}
+.closer .accent{color:var(--accent)}
+
+/* epigraph (opening quote) */
+.epigraph{margin:40px 0 52px;text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
+.epigraph-text{font-size:24px;line-height:1.45;font-style:italic;color:var(--ink-soft);letter-spacing:-.01em}
+.epigraph-cite{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-top:18px}
+
+/* figure (one or many images + caption) */
+.figure{margin:44px 0;text-align:center}
+.figure-imgs{display:flex;justify-content:center;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.figure-item{margin:0;display:flex;flex-direction:column;align-items:center;max-width:100%}
+.figure-item img{max-width:100%;height:auto;border-radius:3px;display:block}
+.figure-item-cap{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--slate);margin-top:7px;line-height:1.45}
+/* solo: one centred image */
+.figure-single .figure-item{margin-left:auto;margin-right:auto}
+/* row: side by side, equal share unless an image sets its own % */
+.figure-row .figure-imgs{flex-wrap:nowrap}
+.figure-row .figure-item{flex:1 1 0;min-width:0}
+.figure-row .figure-item img{width:100%;object-fit:cover}
+/* column: stacked vertically */
+.figure-column .figure-imgs{flex-direction:column;flex-wrap:nowrap;align-items:center}
+.figure-column .figure-item{width:100%}
+/* grid: multi-column */
+.figure-grid .figure-imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.figure-grid .figure-item{width:100%}
+.figure-grid .figure-item img{width:100%}
+/* carousel: a draggable strip with arrows + fading edges */
+.figure-carousel-wrap{position:relative}
+.figure-carousel .figure-scroll{overflow-x:auto;overflow-y:hidden;cursor:grab;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}
+.figure-carousel .figure-scroll::-webkit-scrollbar{display:none;height:0;width:0}
+.figure-carousel .figure-scroll.drag{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.figure-carousel .figure-imgs{flex-wrap:nowrap;justify-content:flex-start;width:max-content;padding:2px}
+.figure-carousel .figure-item{flex:0 0 auto;width:300px}
+.figure-carousel .figure-item img{width:100%}
+.figure-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.18);transition:opacity .25s,background .15s}
+.figure-nav:hover{background:var(--paper-deep)}
+.figure-nav-l{left:6px}.figure-nav-r{right:6px}
+.figure-carousel-wrap.at-start .figure-nav-l,.figure-carousel-wrap.at-end .figure-nav-r,.figure-carousel-wrap.no-scroll .figure-nav{opacity:0;pointer-events:none}
+.figure-small{max-width:300px;margin-left:auto;margin-right:auto}
+.figure-medium{max-width:520px;margin-left:auto;margin-right:auto}
+.figure-large{max-width:780px;margin-left:auto;margin-right:auto}
+.figure-full{max-width:100%}
+.figure-carousel.figure-small,.figure-carousel.figure-medium,.figure-carousel.figure-large{max-width:none}
+.figure-cap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--slate);margin-top:12px;line-height:1.5}
+@media(max-width:600px){.figure-row .figure-imgs{flex-wrap:wrap}}
+
+/* free-form chapter canvas (Layout mode) */
+.book-chapter.canvas-chapter{max-width:none;margin:0;padding:0}
+/* keep the chapter opener (title) in the centred reading column even though the canvas is full-width */
+.book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
+.ch-canvas-main{margin:0;padding:0}
+.ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+.ch-canvas{position:relative;transform-origin:top left}
+.layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
+/* Un element masque par l'auteur. Le livre construit ne le contient jamais —
+   le rendu s'arrete avant — et cette regle ne sert donc qu'a l'apercu de
+   Studio, ou il faut bien pouvoir le retrouver pour le rallumer. */
+.layout-item.li-masque{opacity:.28;filter:grayscale(1)}
+/* tables inside a recoloured layout element follow that element's ink/rule */
+.layout-item .md-table th,.layout-item table th{color:var(--ink)}
+.layout-item .md-table td,.layout-item table td{color:var(--ink-soft)}
+.layout-item table th,.layout-item table td,.layout-item .md-table-bordered table,.layout-item .md-table-bordered th,.layout-item .md-table-bordered td{border-color:var(--rule)}
+.layout-item>*{min-height:0}
+.layout-item>:first-child{margin-top:0}
+.layout-item>:last-child{margin-bottom:0}
+.layout-item img{max-width:100%}
+.layout-item .figure{margin:0;flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.layout-item .figure-imgs{flex:1 1 auto;min-height:0;align-items:center}
+.layout-item .figure-item img{max-height:100%;object-fit:contain}
+.layout-item .media{margin:0}
+.layout-item .media-el,.layout-item video{max-height:100%}
+/* canvas content is positioned, not scroll-revealed — always show it */
+.ch-canvas .reveal{opacity:1!important;transform:none!important}
+
+/* Arabic / Quran passage */
+.arabic-text{direction:rtl;text-align:right;font-family:'Amiri','Scheherazade New',serif;font-size:1.5em;line-height:2.15;color:var(--ink);margin:34px 0}
+.arabic-text[data-font="quran"]{font-family:'Amiri Quran','Amiri',serif;font-size:1.7em;line-height:2.5;text-align:center}
+.arabic-text[data-font="kufi"]{font-family:'Reem Kufi','Amiri',serif}
+
+/* raw HTML — isolated in a sandboxed iframe so it can't affect the page */
+.rawhtml{margin:40px 0}
+.rawhtml-frame{width:100%;border:0;display:block;background:transparent;min-height:24px}
+.layout-item .rawhtml{margin:0}
+.layout-item .rawhtml-frame{height:100%}
+
+/* media (audio / video) */
+.media{margin:44px 0;text-align:center}
+.media-el{max-width:100%;display:block;margin:0 auto;border-radius:6px}
+video.media-el{width:100%;background:#000;border:1px solid var(--rule)}
+.media-audio{width:100%;height:44px}
+
+/* images inside prose tables */
+.book-chapter table img{max-width:150px;height:auto;border-radius:4px;vertical-align:middle;display:inline-block}
+
+/* callout / aside note */
+.callout{background:var(--paper-deep);border-left:3px solid var(--gold);border-radius:3px;padding:22px 26px;margin:40px 0;font-size:17px;line-height:1.6;color:var(--ink-soft)}
+.callout p{margin-bottom:14px}.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--ink)}
+body[dir="rtl"] .callout{border-left:none;border-right:3px solid var(--gold)}
+
+/* subheading */
+.subhead{font-size:27px;line-height:1.2;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:52px 0 18px}
+
+/* verse / poem */
+.verse{font-style:italic;font-size:19px;line-height:1.7;color:var(--ink);margin:40px 0;padding-left:28px;border-left:1px solid var(--rule);white-space:pre-wrap}
+body[dir="rtl"] .verse{border-left:none;border-right:1px solid var(--rule);padding-left:0;padding-right:28px}
+
+/* scene break (within a chapter) */
+.scene-break{display:flex;align-items:center;justify-content:center;gap:14px;margin:54px 0;color:var(--accent);font-size:12px}
+.scene-break::before,.scene-break::after{content:'';width:46px;height:1px;background:var(--rule)}
+
+/* stat (single big figure) */
+.stat{margin:44px 0;text-align:center}
+.stat-figure{font-size:64px;line-height:1;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+.stat-label{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--slate);margin-top:12px}
+
+/* letter / epistolary */
+.letter{background:var(--paper-deep);border:1px solid var(--rule);border-radius:3px;padding:34px 38px;margin:44px 0;font-size:18px;line-height:1.7;color:var(--ink-soft)}
+.letter p{margin-bottom:18px}.letter p:last-child{margin-bottom:0}
+
+/* tables */
+.book-chapter table{width:100%;border-collapse:collapse;margin:40px 0;font-size:16px}
+.book-chapter th,.book-chapter td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--rule)}
+.book-chapter th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:600}
+.book-chapter td{color:var(--ink-soft)}
+body[dir="rtl"] .book-chapter th,body[dir="rtl"] .book-chapter td{text-align:right}
+/* table outline styles (the :::table wrapper) */
+.md-table{margin:40px 0}
+.md-table table{margin:0}
+.md-table-bordered table{border:1px solid var(--rule)}
+.md-table-bordered th,.md-table-bordered td{border:1px solid var(--rule)}
+.md-table-striped th,.md-table-striped td{border-bottom:0}
+.md-table-striped tbody tr:nth-child(odd) td{background:var(--paper-deep)}
+.md-table-minimal th,.md-table-minimal td{border-bottom:0}
+.md-table-minimal th{border-bottom:2px solid var(--rule)}
+.md-table-boxed{border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.md-table-boxed th,.md-table-boxed td{padding:12px 16px}
+.md-table-boxed th{background:var(--paper-deep)}
+.md-table-boxed td{border-bottom:1px solid var(--rule)}
+.md-table-boxed tr:last-child td{border-bottom:0}
+
+/* lists */
+.book-chapter ul,.book-chapter ol{margin:0 0 26px 1.3em}
+.book-chapter li{margin-bottom:9px;line-height:1.7}
+
+@media (max-width:600px){
+  .book-chapter{font-size:18px}
+  .epigraph-text{font-size:20px}
+  .subhead{font-size:22px}
+  .stat-figure{font-size:48px}
+  .letter{padding:24px 22px}
+  .ch-title{font-size:40px}
+  .ch-standfirst{font-size:20px;max-width:100%}
+  .opener{padding:70px 0 48px}
+  .pull{font-size:24px}
+  .verdict{margin:48px -20px;padding:44px 28px}
+  .verdict p{font-size:23px}
+  .arg-side{grid-template-columns:1fr;gap:6px}
+  .closer{font-size:23px}
+  .lead::first-letter{font-size:62px}
+}
+
+/* ── reader font-size control: --reading-scale multiplies the prose sizes ── */
+:root{--reading-scale:1}
+.book-chapter{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .ch-standfirst{font-size:calc(23px * var(--reading-scale))}
+.book-chapter .pull{font-size:calc(30px * var(--reading-scale))}
+.book-chapter .verdict p{font-size:calc(29px * var(--reading-scale))}
+.book-chapter .evidence-body{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .case-body p{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .dlg-text{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .callout{font-size:calc(17px * var(--reading-scale))}
+.book-chapter .letter{font-size:calc(18px * var(--reading-scale))}
+.book-chapter .closer{font-size:calc(27px * var(--reading-scale))}
+.book-chapter .verse{font-size:calc(19px * var(--reading-scale))}
+.book-chapter .epigraph-text{font-size:calc(24px * var(--reading-scale))}
+@media (max-width:600px){ .book-chapter{font-size:calc(18px * var(--reading-scale))} }
+
+
+
+
+html,body{margin:0;background:var(--paper)}</style></head>
+<body><div class="book-chapter canvas-chapter" id="chap"><main class="ch-canvas-main"><div class="ch-canvas" style="width:760px;height:1000px">
+<div class="dialogue reveal" data-anim="fade"><div class="dlg-aside">(As told at the Golden Inn.)</div><div class="dlg-aside">(The Cape of Good Hope, and all the watery region round about there, is much like some noted four corners of a great highway, where you meet more travellers than in any other part.)</div><div class="dlg-aside">(It was not very long after speaking the <em>Goney</em> that another homeward-bound whaleman, the <em>Town-Ho</em>,<sup class="fn">1</sup> was encountered. She was manned almost wholly by Polynesians. In the short gam that ensued she gave us strong news of Moby Dick. To some the general interest in the White Whale was now wildly heightened by a circumstance of the <em>Town-Ho</em>’s story, which seemed obscurely to involve with the whale a certain wondrous, inverted visitation of one of those so called judgments of God which at times are said to overtake some men. This latter circumstance, with its own particular accompaniments, forming what may be called the secret part of the tragedy about to be narrated, never reached the ears of Captain Ahab or his mates. For that secret part of the story was unknown to the captain of the <em>Town-Ho</em> himself. It was the private property of three confederate white seamen of that ship, one of whom, it seems, communicated it to Tashtego with Romish injunctions of secrecy, but the following night Tashtego rambled in his sleep, and revealed so much of it in that way, that when he was wakened he could not well withhold the rest. Nevertheless, so potent an influence did this thing have on those seamen in the <em>Pequod</em> who came to the full knowledge of it, and by such a strange delicacy, to call it so, were they governed in this matter, that they kept the secret among themselves so that it never transpired abaft the <em>Pequod</em>’s mainmast. Interweaving in its proper place this darker thread with the story as publicly narrated on the ship, the whole of this strange affair I now proceed to put on lasting record.)</div><div class="dlg-aside">(For my humor’s sake, I shall preserve the style in which I once narrated it at Lima, to a lounging circle of my Spanish friends, one saint’s eve, smoking upon the thick-gilt tiled piazza of the Golden Inn. Of those fine cavaliers, the young Dons, Pedro and Sebastian, were on the closer terms with me; and hence the interluding questions they occasionally put, and which are duly answered at the time.)</div><div class="dlg-aside">(“Some two years prior to my first learning the events which I am about rehearsing to you, gentlemen, the <em>Town-Ho</em>, Sperm Whaler of Nantucket, was cruising in your Pacific here, not very many days’ sail eastward from the eaves of this good Golden Inn. She was somewhere to the northward of the Line. One morning upon handling the pumps, according to daily usage, it was observed that she made more water in her hold than common. They supposed a swordfish had stabbed her, gentlemen. But the captain, having some unusual reason for believing that rare good luck awaited him in those latitudes; and therefore being very averse to quit them, and the leak not being then considered at all dangerous, though, indeed, they could not find it after searching the hold as low down as was possible in rather heavy weather, the ship still continued her cruisings, the mariners working at the pumps at wide and easy intervals; but no good luck came; more days went by, and not only was the leak yet undiscovered, but it sensibly increased. So much so, that now taking some alarm, the captain, making all sail, stood away for the nearest harbor among the islands, there to have his hull hove out and repaired.)</div><div class="dlg-aside">(“Though no small passage was before her, yet, if the commonest chance favoured, he did not at all fear that his ship would founder by the way, because his pumps were of the best, and being periodically relieved at them, those six-and-thirty men of his could easily keep the ship free; never mind if the leak should double on her. In truth, well nigh the whole of this passage being attended by very prosperous breezes, the <em>Town-Ho</em> had all but certainly arrived in perfect safety at her port without the occurrence of the least fatality, had it not been for the brutal overbearing of Radney, the mate, a Vineyarder, and the bitterly provoked vengeance of Steelkilt, a Lakeman and desperado from Buffalo.)</div><div class="dlg-aside">(“ ‘Lakeman!﻿—Buffalo! Pray, what is a Lakeman, and where is Buffalo?’ said Don Sebastian, rising in his swinging mat of grass.)</div><div class="dlg-aside">(“On the eastern shore of our Lake Erie, Don; but﻿—I crave your courtesy﻿—may be, you shall soon hear further of all that. Now, gentlemen, in square-sail brigs and three-masted ships, well-nigh as large and stout as any that ever sailed out of your old Callao to far Manilla; this Lakeman, in the landlocked heart of our America, had yet been nurtured by all those agrarian freebooting impressions popularly connected with the open ocean. For in their interflowing aggregate, those grand freshwater seas of ours﻿—Erie, and Ontario, and Huron, and Superior, and Michigan﻿—possess an ocean-like expansiveness, with many of the ocean’s noblest traits; with many of its rimmed varieties of races and of climes. They contain round archipelagoes of romantic isles, even as the Polynesian waters do; in large part, are shored by two great contrasting nations, as the Atlantic is; they furnish long maritime approaches to our numerous territorial colonies from the East, dotted all round their banks; here and there are frowned upon by batteries, and by the goat-like craggy guns of lofty Mackinaw; they have heard the fleet thunderings of naval victories; at intervals, they yield their beaches to wild barbarians, whose red painted faces flash from out their peltry wigwams; for leagues and leagues are flanked by ancient and unentered forests, where the gaunt pines stand like serried lines of kings in Gothic genealogies; those same woods harboring wild Afric beasts of prey, and silken creatures whose exported furs give robes to Tartar Emperors; they mirror the paved capitals of Buffalo and Cleveland, as well as Winnebago villages; they float alike the full-rigged merchant ship, the armed cruiser of the State, the steamer, and the beech canoe; they are swept by Borean and dismasting blasts as direful as any that lash the salted wave; they know what shipwrecks are, for out of sight of land, however inland, they have drowned full many a midnight ship with all its shrieking crew. Thus, gentlemen, though an inlander, Steelkilt was wild-ocean born, and wild-ocean nurtured; as much of an audacious mariner as any. And for Radney, though in his infancy he may have laid him down on the lone Nantucket beach, to nurse at his maternal sea; though in after life he had long followed our austere Atlantic and your contemplative Pacific; yet was he quite as vengeful and full of social quarrel as the backwoods seaman, fresh from the latitudes of buck-horn handled Bowie knives. Yet was this Nantucketer a man with some good-hearted traits; and this Lakeman, a mariner, who though a sort of devil indeed, might yet by inflexible firmness, only tempered by that common decency of human recognition which is the meanest slave’s right; thus treated, this Steelkilt had long been retained harmless and docile. At all events, he had proved so thus far; but Radney was doomed and made mad, and Steelkilt﻿—but, gentlemen, you shall hear.)</div><div class="dlg-aside">(“It was not more than a day or two at the furthest after pointing her prow for her island haven, that the <em>Town-Ho</em>’s leak seemed again increasing, but only so as to require an hour or more at the pumps every day. You must know that in a settled and civilized ocean like our Atlantic, for example, some skippers think little of pumping their whole way across it; though of a still, sleepy night, should the officer of the deck happen to forget his duty in that respect, the probability would be that he and his shipmates would never again remember it, on account of all hands gently subsiding to the bottom. Nor in the solitary and savage seas far from you to the westward, gentlemen, is it altogether unusual for ships to keep clanging at their pump-handles in full chorus even for a voyage of considerable length; that is, if it lie along a tolerably accessible coast, or if any other reasonable retreat is afforded them. It is only when a leaky vessel is in some very out of the way part of those waters, some really landless latitude, that her captain begins to feel a little anxious.)</div><div class="dlg-aside">(“Much this way had it been with the <em>Town-Ho</em>; so when her leak was found gaining once more, there was in truth some small concern manifested by several of her company; especially by Radney the mate. He commanded the upper sails to be well hoisted, sheeted home anew, and every way expanded to the breeze. Now this Radney, I suppose, was as little of a coward, and as little inclined to any sort of nervous apprehensiveness touching his own person as any fearless, unthinking creature on land or on sea that you can conveniently imagine, gentlemen. Therefore when he betrayed this solicitude about the safety of the ship, some of the seamen declared that it was only on account of his being a part owner in her. So when they were working that evening at the pumps, there was on this head no small gamesomeness slyly going on among them, as they stood with their feet continually overflowed by the rippling clear water; clear as any mountain spring, gentlemen﻿—that bubbling from the pumps ran across the deck, and poured itself out in steady spouts at the lee scupper-holes.)</div><div class="dlg-aside">(“Now, as you well know, it is not seldom the case in this conventional world of ours﻿—watery or otherwise; that when a person placed in command over his fellow-men finds one of them to be very significantly his superior in general pride of manhood, straightway against that man he conceives an unconquerable dislike and bitterness; and if he have a chance he will pull down and pulverize that subaltern’s tower, and make a little heap of dust of it. Be this conceit of mine as it may, gentlemen, at all events Steelkilt was a tall and noble animal with a head like a Roman, and a flowing golden beard like the tasseled housings of your last viceroy’s snorting charger; and a brain, and a heart, and a soul in him, gentlemen, which had made Steelkilt Charlemagne, had he been born son to Charlemagne’s father. But Radney, the mate, was ugly as a mule; yet as hardy, as stubborn, as malicious. He did not love Steelkilt, and Steelkilt knew it.)</div><div class="dlg-aside">(“Espying the mate drawing near as he was toiling at the pump with the rest, the Lakeman affected not to notice him, but unawed, went on with his gay banterings.)</div><div class="dlg-aside">(“ ‘Aye, aye, my merry lads, it’s a lively leak this; hold a cannikin, one of ye, and let’s have a taste. By the Lord, it’s worth bottling! I tell ye what, men, old Rad’s investment must go for it! he had best cut away his part of the hull and tow it home. The fact is, boys, that swordfish only began the job; he’s come back again with a gang of ship-carpenters, sawfish, and filefish, and whatnot; and the whole posse of ’em are now hard at work cutting and slashing at the bottom; making improvements, I suppose. If old Rad were here now, I’d tell him to jump overboard and scatter ’em. They’re playing the devil with his estate, I can tell him. But he’s a simple old soul﻿—Rad, and a beauty too. Boys, they say the rest of his property is invested in looking-glasses. I wonder if he’d give a poor devil like me the model of his nose.’)</div><div class="dlg-aside">(“ ‘Damn your eyes! what’s that pump stopping for?’ roared Radney, pretending not to have heard the sailors’ talk. ‘Thunder away at it!’)</div><div class="dlg-aside">(“ ‘Aye, aye, sir,’ said Steelkilt, merry as a cricket. ‘Lively, boys, lively, now!’ And with that the pump clanged like fifty fire-engines; the men tossed their hats off to it, and ere long that peculiar gasping of the lungs was heard which denotes the fullest tension of life’s utmost energies.)</div><div class="dlg-aside">(“Quitting the pump at last, with the rest of his band, the Lakeman went forward all panting, and sat himself down on the windlass; his face fiery red, his eyes bloodshot, and wiping the profuse sweat from his brow. Now what cozening fiend it was, gentlemen, that possessed Radney to meddle with such a man in that corporeally exasperated state, I know not; but so it happened. Intolerably striding along the deck, the mate commanded him to get a broom and sweep down the planks, and also a shovel, and remove some offensive matters consequent upon allowing a pig to run at large.)</div><div class="dlg-aside">(“Now, gentlemen, sweeping a ship’s deck at sea is a piece of household work which in all times but raging gales is regularly attended to every evening; it has been known to be done in the case of ships actually foundering at the time. Such, gentlemen, is the inflexibility of sea-usages and the instinctive love of neatness in seamen; some of whom would not willingly drown without first washing their faces. But in all vessels this broom business is the prescriptive province of the boys, if boys there be aboard. Besides, it was the stronger men in the <em>Town-Ho</em> that had been divided into gangs, taking turns at the pumps; and being the most athletic seaman of them all, Steelkilt had been regularly assigned captain of one of the gangs; consequently he should have been freed from any trivial business not connected with truly nautical duties, such being the case with his comrades. I mention all these particulars so that you may understand exactly how this affair stood between the two men.)</div><div class="dlg-line"><div class="dlg-speaker">(“But there was more than this</div><div class="dlg-text">the order about the shovel was almost as plainly meant to sting and insult Steelkilt, as though Radney had spat in his face. Any man who has gone sailor in a whale-ship will understand this; and all this and doubtless much more, the Lakeman fully comprehended when the mate uttered his command. But as he sat still for a moment, and as he steadfastly looked into the mate’s malignant eye and perceived the stacks of powder-casks heaped up in him and the slow-match silently burning along towards them; as he instinctively saw all this, that strange forbearance and unwillingness to stir up the deeper passionateness in any already ireful being﻿—a repugnance most felt, when felt at all, by really valiant men even when aggrieved﻿—this nameless phantom feeling, gentlemen, stole over Steelkilt.)</div></div><div class="dlg-aside">(“Therefore, in his ordinary tone, only a little broken by the bodily exhaustion he was temporarily in, he answered him saying that sweeping the deck was not his business, and he would not do it. And then, without at all alluding to the shovel, he pointed to three lads as the customary sweepers; who, not being billeted at the pumps, had done little or nothing all day. To this, Radney replied with an oath, in a most domineering and outrageous manner unconditionally reiterating his command; meanwhile advancing upon the still seated Lakeman, with an uplifted cooper’s club hammer which he had snatched from a cask near by.)</div><div class="dlg-aside">(“Heated and irritated as he was by his spasmodic toil at the pumps, for all his first nameless feeling of forbearance the sweating Steelkilt could but ill brook this bearing in the mate; but somehow still smothering the conflagration within him, without speaking he remained doggedly rooted to his seat, till at last the incensed Radney shook the hammer within a few inches of his face, furiously commanding him to do his bidding.)</div><div class="dlg-aside">(“Steelkilt rose, and slowly retreating round the windlass, steadily followed by the mate with his menacing hammer, deliberately repeated his intention not to obey. Seeing, however, that his forbearance had not the slightest effect, by an awful and unspeakable intimation with his twisted hand he warned off the foolish and infatuated man; but it was to no purpose. And in this way the two went once slowly round the windlass; when, resolved at last no longer to retreat, bethinking him that he had now forborne as much as comported with his humor, the Lakeman paused on the hatches and thus spoke to the officer:)</div><div class="dlg-aside">(“ ‘Mr. Radney, I will not obey you. Take that hammer away, or look to yourself.’ But the predestinated mate coming still closer to him, where the Lakeman stood fixed, now shook the heavy hammer within an inch of his teeth; meanwhile repeating a string of insufferable maledictions. Retreating not the thousandth part of an inch; stabbing him in the eye with the unflinching poniard of his glance, Steelkilt, clenching his right hand behind him and creepingly drawing it back, told his persecutor that if the hammer but grazed his cheek he (Steelkilt) would murder him. But, gentlemen, the fool had been branded for the slaughter by the gods. Immediately the hammer touched the cheek; the next instant the lower jaw of the mate was stove in his head; he fell on the hatch spouting blood like a whale.)</div><div class="dlg-aside">(“Ere the cry could go aft Steelkilt was shaking one of the backstays leading far aloft to where two of his comrades were standing their mastheads. They were both Canallers.)</div><div class="dlg-aside">(“ ‘Canallers!’ cried Don Pedro. ‘We have seen many whale-ships in our harbours, but never heard of your Canallers. Pardon: who and what are they?’)</div><div class="dlg-aside">(“ ‘Canallers, Don, are the boatmen belonging to our grand Erie Canal. You must have heard of it.’)</div><div class="dlg-aside">(“ ‘Nay, Señor; hereabouts in this dull, warm, most lazy, and hereditary land, we know but little of your vigorous North.’)</div><div class="dlg-aside">(“ ‘Aye? Well then, Don, refill my cup. Your chicha’s very fine; and ere proceeding further I will tell ye what our Canallers are; for such information may throw sidelight upon my story.’)</div><div class="dlg-aside">(“For three hundred and sixty miles, gentlemen, through the entire breadth of the state of New York; through numerous populous cities and most thriving villages; through long, dismal, uninhabited swamps, and affluent, cultivated fields, unrivalled for fertility; by billiard-room and barroom; through the holy-of-holies of great forests; on Roman arches over Indian rivers; through sun and shade; by happy hearts or broken; through all the wide contrasting scenery of those noble Mohawk counties; and especially, by rows of snow-white chapels, whose spires stand almost like milestones, flows one continual stream of Venetianly corrupt and often lawless life. There’s your true Ashantee, gentlemen; there howl your pagans; where you ever find them, next door to you; under the long-flung shadow, and the snug patronising lee of churches. For by some curious fatality, as it is often noted of your metropolitan freebooters that they ever encamp around the halls of justice, so sinners, gentlemen, most abound in holiest vicinities.)</div><div class="dlg-aside">(“ ‘Is that a friar passing?’ said Don Pedro, looking downwards into the crowded piazza, with humorous concern.)</div><div class="dlg-aside">(“ ‘Well for our northern friend, Dame Isabella’s Inquisition wanes in Lima,’ laughed Don Sebastian. ‘Proceed, Señor.’)</div><div class="dlg-aside">(“ ‘A moment! Pardon!’ cried another of the company. ‘In the name of all us Limeese, I but desire to express to you, sir sailor, that we have by no means overlooked your delicacy in not substituting present Lima for distant Venice in your corrupt comparison. Oh! do not bow and look surprised; you know the proverb all along this coast﻿—“Corrupt as Lima.” It but bears out your saying, too; churches more plentiful than billiard-tables, and forever open﻿—and “Corrupt as Lima.” So, too, Venice; I have been there; the holy city of the blessed evangelist, St. Mark!﻿—St. Dominic, purge it! Your cup! Thanks: here I refill; now, you pour out again.’)</div><div class="dlg-aside">(“Freely depicted in his own vocation, gentlemen, the Canaller would make a fine dramatic hero, so abundantly and picturesquely wicked is he. Like Mark Antony, for days and days along his green-turfed, flowery Nile, he indolently floats, openly toying with his red-cheeked Cleopatra, ripening his apricot thigh upon the sunny deck. But ashore, all this effeminacy is dashed. The brigandish guise which the Canaller so proudly sports; his slouched and gaily-ribboned hat betoken his grand features. A terror to the smiling innocence of the villages through which he floats; his swart visage and bold swagger are not unshunned in cities. Once a vagabond on his own canal, I have received good turns from one of these Canallers; I thank him heartily; would fain be not ungrateful; but it is often one of the prime redeeming qualities of your man of violence, that at times he has as stiff an arm to back a poor stranger in a strait, as to plunder a wealthy one. In sum, gentlemen, what the wildness of this canal life is, is emphatically evinced by this; that our wild whale-fishery contains so many of its most finished graduates, and that scarce any race of mankind, except Sydney men, are so much distrusted by our whaling captains. Nor does it at all diminish the curiousness of this matter, that to many thousands of our rural boys and young men born along its line, the probationary life of the Grand Canal furnishes the sole transition between quietly reaping in a Christian cornfield, and recklessly ploughing the waters of the most barbaric seas.)</div><div class="dlg-aside">(“ ‘I see! I see!’ impetuously exclaimed Don Pedro, spilling his chicha upon his silvery ruffles. ‘No need to travel! The world’s one Lima. I had thought, now, that at your temperate North the generations were cold and holy as the hills.﻿—But the story.’)</div><div class="dlg-aside">(“I left off, gentlemen, where the Lakeman shook the backstay. Hardly had he done so, when he was surrounded by the three junior mates and the four harpooneers, who all crowded him to the deck. But sliding down the ropes like baleful comets, the two Canallers rushed into the uproar, and sought to drag their man out of it towards the forecastle. Others of the sailors joined with them in this attempt, and a twisted turmoil ensued; while standing out of harm’s way, the valiant captain danced up and down with a whale-pike, calling upon his officers to manhandle that atrocious scoundrel, and smoke him along to the quarterdeck. At intervals, he ran close up to the revolving border of the confusion, and prying into the heart of it with his pike, sought to prick out the object of his resentment. But Steelkilt and his desperadoes were too much for them all; they succeeded in gaining the forecastle deck, where, hastily slewing about three or four large casks in a line with the windlass, these sea-Parisians entrenched themselves behind the barricade.)</div><div class="dlg-aside">(“ ‘Come out of that, ye pirates!’ roared the captain, now menacing them with a pistol in each hand, just brought to him by the steward. ‘Come out of that, ye cutthroats!’)</div><div class="dlg-aside">(“Steelkilt leaped on the barricade, and striding up and down there, defied the worst the pistols could do; but gave the captain to understand distinctly, that his (Steelkilt’s) death would be the signal for a murderous mutiny on the part of all hands. Fearing in his heart lest this might prove but too true, the captain a little desisted, but still commanded the insurgents instantly to return to their duty.)</div><div class="dlg-aside">(“ ‘Will you promise not to touch us, if we do?’ demanded their ringleader.)</div><div class="dlg-aside">(“ ‘Turn to! turn to!﻿—I make no promise;﻿—to your duty! Do you want to sink the ship, by knocking off at a time like this? Turn to!’ and he once more raised a pistol.)</div><div class="dlg-aside">(“ ‘Sink the ship?’ cried Steelkilt. ‘Aye, let her sink. Not a man of us turns to, unless you swear not to raise a rope-yarn against us. What say ye, men?’ turning to his comrades. A fierce cheer was their response.)</div><div class="dlg-aside">(“The Lakeman now patrolled the barricade, all the while keeping his eye on the Captain, and jerking out such sentences as these:﻿—‘It’s not our fault; we didn’t want it; I told him to take his hammer away; it was boy’s business; he might have known me before this; I told him not to prick the buffalo; I believe I have broken a finger here against his cursed jaw; ain’t those mincing knives down in the forecastle there, men? look to those handspikes, my hearties. Captain, by God, look to yourself; say the word; don’t be a fool; forget it all; we are ready to turn to; treat us decently, and we’re your men; but we won’t be flogged.’)</div><div class="dlg-aside">(“ ‘Turn to! I make no promises, turn to, I say!’)</div><div class="dlg-aside">(“ ‘Look ye, now,’ cried the Lakeman, flinging out his arm towards him, ‘there are a few of us here (and I am one of them) who have shipped for the cruise, d’ye see; now as you well know, sir, we can claim our discharge as soon as the anchor is down; so we don’t want a row; it’s not our interest; we want to be peaceable; we are ready to work, but we won’t be flogged.’)</div><div class="dlg-aside">(“ ‘Turn to!’ roared the Captain.)</div><div class="dlg-aside">(“Steelkilt glanced round him a moment, and then said:﻿—‘I tell you what it is now, Captain, rather than kill ye, and be hung for such a shabby rascal, we won’t lift a hand against ye unless ye attack us; but till you say the word about not flogging us, we don’t do a hand’s turn.’)</div><div class="dlg-aside">(“ ‘Down into the forecastle then, down with ye, I’ll keep ye there till ye’re sick of it. Down ye go.’)</div><div class="dlg-aside">(“ ‘Shall we?’ cried the ringleader to his men. Most of them were against it; but at length, in obedience to Steelkilt, they preceded him down into their dark den, growlingly disappearing, like bears into a cave.)</div><div class="dlg-aside">(“As the Lakeman’s bare head was just level with the planks, the Captain and his posse leaped the barricade, and rapidly drawing over the slide of the scuttle, planted their group of hands upon it, and loudly called for the steward to bring the heavy brass padlock belonging to the companionway. Then opening the slide a little, the Captain whispered something down the crack, closed it, and turned the key upon them﻿—ten in number﻿—leaving on deck some twenty or more, who thus far had remained neutral.)</div><div class="dlg-aside">(“All night a wide-awake watch was kept by all the officers, forward and aft, especially about the forecastle scuttle and fore hatchway; at which last place it was feared the insurgents might emerge, after breaking through the bulkhead below. But the hours of darkness passed in peace; the men who still remained at their duty toiling hard at the pumps, whose clinking and clanking at intervals through the dreary night dismally resounded through the ship.)</div><div class="dlg-aside">(“At sunrise the Captain went forward, and knocking on the deck, summoned the prisoners to work; but with a yell they refused. Water was then lowered down to them, and a couple of handfuls of biscuit were tossed after it; when again turning the key upon them and pocketing it, the Captain returned to the quarterdeck. Twice every day for three days this was repeated; but on the fourth morning a confused wrangling, and then a scuffling was heard, as the customary summons was delivered; and suddenly four men burst up from the forecastle, saying they were ready to turn to. The fetid closeness of the air, and a famishing diet, united perhaps to some fears of ultimate retribution, had constrained them to surrender at discretion. Emboldened by this, the Captain reiterated his demand to the rest, but Steelkilt shouted up to him a terrific hint to stop his babbling and betake himself where he belonged. On the fifth morning three others of the mutineers bolted up into the air from the desperate arms below that sought to restrain them. Only three were left.)</div><div class="dlg-aside">(“ ‘Better turn to, now?’ said the Captain with a heartless jeer.)</div><div class="dlg-aside">(“ ‘Shut us up again, will ye!’ cried Steelkilt.)</div><div class="dlg-aside">(“ ‘Oh! certainly,’ said the Captain, and the key clicked.)</div><div class="dlg-aside">(“It was at this point, gentlemen, that enraged by the defection of seven of his former associates, and stung by the mocking voice that had last hailed him, and maddened by his long entombment in a place as black as the bowels of despair; it was then that Steelkilt proposed to the two Canallers, thus far apparently of one mind with him, to burst out of their hole at the next summoning of the garrison; and armed with their keen mincing knives (long, crescentic, heavy implements with a handle at each end) run amuck from the bowsprit to the taffrail; and if by any devilishness of desperation possible, seize the ship. For himself, he would do this, he said, whether they joined him or not. That was the last night he should spend in that den. But the scheme met with no opposition on the part of the other two; they swore they were ready for that, or for any other mad thing, for anything in short but a surrender. And what was more, they each insisted upon being the first man on deck, when the time to make the rush should come. But to this their leader as fiercely objected, reserving that priority for himself; particularly as his two comrades would not yield, the one to the other, in the matter; and both of them could not be first, for the ladder would but admit one man at a time. And here, gentlemen, the foul play of these miscreants must come out.)</div><div class="dlg-aside">(“Upon hearing the frantic project of their leader, each in his own separate soul had suddenly lighted, it would seem, upon the same piece of treachery, namely: to be foremost in breaking out, in order to be the first of the three, though the last of the ten, to surrender; and thereby secure whatever small chance of pardon such conduct might merit. But when Steelkilt made known his determination still to lead them to the last, they in some way, by some subtle chemistry of villainy, mixed their before secret treacheries together; and when their leader fell into a doze, verbally opened their souls to each other in three sentences; and bound the sleeper with cords, and gagged him with cords; and shrieked out for the Captain at midnight.)</div><div class="dlg-aside">(“Thinking murder at hand, and smelling in the dark for the blood, he and all his armed mates and harpooneers rushed for the forecastle. In a few minutes the scuttle was opened, and, bound hand and foot, the still struggling ringleader was shoved up into the air by his perfidious allies, who at once claimed the honor of securing a man who had been fully ripe for murder. But all these were collared, and dragged along the deck like dead cattle; and, side by side, were seized up into the mizzen rigging, like three quarters of meat, and there they hung till morning. ‘Damn ye,’ cried the Captain, pacing to and fro before them, ‘the vultures would not touch ye, ye villains!’)</div><div class="dlg-aside">(“At sunrise he summoned all hands; and separating those who had rebelled from those who had taken no part in the mutiny, he told the former that he had a good mind to flog them all round﻿—thought, upon the whole, he would do so﻿—he ought to﻿—justice demanded it; but for the present, considering their timely surrender, he would let them go with a reprimand, which he accordingly administered in the vernacular.)</div><div class="dlg-aside">(“ ‘But as for you, ye carrion rogues,’ turning to the three men in the rigging﻿—‘for you, I mean to mince ye up for the try-pots;’ and, seizing a rope, he applied it with all his might to the backs of the two traitors, till they yelled no more, but lifelessly hung their heads sideways, as the two crucified thieves are drawn.)</div><div class="dlg-aside">(“ ‘My wrist is sprained with ye!’ he cried, at last; ‘but there is still rope enough left for you, my fine bantam, that wouldn’t give up. Take that gag from his mouth, and let us hear what he can say for himself.’)</div><div class="dlg-aside">(“For a moment the exhausted mutineer made a tremulous motion of his cramped jaws, and then painfully twisting round his head, said in a sort of hiss, ‘What I say is this﻿—and mind it well﻿—if you flog me, I murder you!’)</div><div class="dlg-aside">(“ ‘Say ye so? then see how ye frighten me’﻿—and the Captain drew off with the rope to strike.)</div><div class="dlg-aside">(“ ‘Best not,’ hissed the Lakeman.)</div><div class="dlg-aside">(“ ‘But I must,’﻿—and the rope was once more drawn back for the stroke.)</div><div class="dlg-aside">(“Steelkilt here hissed out something, inaudible to all but the Captain; who, to the amazement of all hands, started back, paced the deck rapidly two or three times, and then suddenly throwing down his rope, said, ‘I won’t do it﻿—let him go﻿—cut him down: d’ye hear?’)</div><div class="dlg-aside">(“But as the junior mates were hurrying to execute the order, a pale man, with a bandaged head, arrested them﻿—Radney the chief mate. Ever since the blow, he had lain in his berth; but that morning, hearing the tumult on the deck, he had crept out, and thus far had watched the whole scene. Such was the state of his mouth, that he could hardly speak; but mumbling something about <em>his</em> being willing and able to do what the captain dared not attempt, he snatched the rope and advanced to his pinioned foe.)</div><div class="dlg-aside">(“ ‘You are a coward!’ hissed the Lakeman.)</div><div class="dlg-aside">(“ ‘So I am, but take that.’ The mate was in the very act of striking, when another hiss stayed his uplifted arm. He paused: and then pausing no more, made good his word, spite of Steelkilt’s threat, whatever that might have been. The three men were then cut down, all hands were turned to, and, sullenly worked by the moody seamen, the iron pumps clanged as before.)</div><div class="dlg-aside">(“Just after dark that day, when one watch had retired below, a clamor was heard in the forecastle; and the two trembling traitors running up, besieged the cabin door, saying they durst not consort with the crew. Entreaties, cuffs, and kicks could not drive them back, so at their own instance they were put down in the ship’s run for salvation. Still, no sign of mutiny reappeared among the rest. On the contrary, it seemed, that mainly at Steelkilt’s instigation, they had resolved to maintain the strictest peacefulness, obey all orders to the last, and, when the ship reached port, desert her in a body. But in order to insure the speediest end to the voyage, they all agreed to another thing﻿—namely, not to sing out for whales, in case any should be discovered. For, spite of her leak, and spite of all her other perils, the <em>Town-Ho</em> still maintained her mastheads, and her captain was just as willing to lower for a fish that moment, as on the day his craft first struck the cruising ground; and Radney the mate was quite as ready to change his berth for a boat, and with his bandaged mouth seek to gag in death the vital jaw of the whale.)</div><div class="dlg-aside">(“But though the Lakeman had induced the seamen to adopt this sort of passiveness in their conduct, he kept his own counsel (at least till all was over) concerning his own proper and private revenge upon the man who had stung him in the ventricles of his heart. He was in Radney the chief mate’s watch; and as if the infatuated man sought to run more than halfway to meet his doom, after the scene at the rigging, he insisted, against the express counsel of the captain, upon resuming the head of his watch at night. Upon this, and one or two other circumstances, Steelkilt systematically built the plan of his revenge.)</div><div class="dlg-aside">(“During the night, Radney had an unseamanlike way of sitting on the bulwarks of the quarterdeck, and leaning his arm upon the gunwale of the boat which was hoisted up there, a little above the ship’s side. In this attitude, it was well known, he sometimes dozed. There was a considerable vacancy between the boat and the ship, and down between this was the sea. Steelkilt calculated his time, and found that his next trick at the helm would come round at two o’clock, in the morning of the third day from that in which he had been betrayed. At his leisure, he employed the interval in braiding something very carefully in his watches below.)</div><div class="dlg-aside">(“ ‘What are you making there?’ said a shipmate.)</div><div class="dlg-aside">(“ ‘What do you think? what does it look like?’)</div><div class="dlg-aside">(“ ‘Like a lanyard for your bag; but it’s an odd one, seems to me.’)</div><div class="dlg-aside">(“ ‘Yes, rather oddish,’ said the Lakeman, holding it at arm’s length before him; ‘but I think it will answer. Shipmate, I haven’t enough twine﻿—have you any?’)</div><div class="dlg-aside">(“But there was none in the forecastle.)</div><div class="dlg-aside">(“ ‘Then I must get some from old Rad;’ and he rose to go aft.)</div><div class="dlg-aside">(“ ‘You don’t mean to go a begging to <em>him</em>!’ said a sailor.)</div><div class="dlg-aside">(“ ‘Why not? Do you think he won’t do me a turn, when it’s to help himself in the end, shipmate?’ and going to the mate, he looked at him quietly, and asked him for some twine to mend his hammock. It was given him﻿—neither twine nor lanyard were seen again; but the next night an iron ball, closely netted, partly rolled from the pocket of the Lakeman’s monkey jacket, as he was tucking the coat into his hammock for a pillow. Twenty-four hours after, his trick at the silent helm﻿—nigh to the man who was apt to doze over the grave always ready dug to the seaman’s hand﻿—that fatal hour was then to come; and in the foreordaining soul of Steelkilt, the mate was already stark and stretched as a corpse, with his forehead crushed in.)</div><div class="dlg-aside">(“But, gentlemen, a fool saved the would-be murderer from the bloody deed he had planned. Yet complete revenge he had, and without being the avenger. For by a mysterious fatality, Heaven itself seemed to step in to take out of his hands into its own the damning thing he would have done.)</div><div class="dlg-aside">(“It was just between daybreak and sunrise of the morning of the second day, when they were washing down the decks, that a stupid Teneriffe man, drawing water in the main-chains, all at once shouted out, ‘There she rolls! there she rolls!’ Jesu, what a whale! It was Moby Dick.)</div><div class="dlg-aside">(“ ‘Moby Dick!’ cried Don Sebastian; ‘St. Dominic! Sir sailor, but do whales have christenings? Whom call you Moby Dick?’)</div><div class="dlg-aside">(“ ‘A very white, and famous, and most deadly immortal monster, Don;﻿—but that would be too long a story.’)</div><div class="dlg-aside">(“ ‘How? how?’ cried all the young Spaniards, crowding.)</div><div class="dlg-aside">(“ ‘Nay, Dons, Dons﻿—nay, nay! I cannot rehearse that now. Let me get more into the air, Sirs.’)</div><div class="dlg-aside">(“ ‘The chicha! the chicha!’ cried Don Pedro; ‘our vigorous friend looks faint;﻿—fill up his empty glass!’)</div><div class="dlg-aside">(“No need, gentlemen; one moment, and I proceed.﻿—Now, gentlemen, so suddenly perceiving the snowy whale within fifty yards of the ship﻿—forgetful of the compact among the crew﻿—in the excitement of the moment, the Teneriffe man had instinctively and involuntarily lifted his voice for the monster, though for some little time past it had been plainly beheld from the three sullen mastheads. All was now a frenzy. ‘The White Whale﻿—the White Whale!’ was the cry from captain, mates, and harpooneers, who, undeterred by fearful rumours, were all anxious to capture so famous and precious a fish; while the dogged crew eyed askance, and with curses, the appalling beauty of the vast milky mass, that lit up by a horizontal spangling sun, shifted and glistened like a living opal in the blue morning sea. Gentlemen, a strange fatality pervades the whole career of these events, as if verily mapped out before the world itself was charted. The mutineer was the bowsman of the mate, and when fast to a fish, it was his duty to sit next him, while Radney stood up with his lance in the prow, and haul in or slacken the line, at the word of command. Moreover, when the four boats were lowered, the mate’s got the start; and none howled more fiercely with delight than did Steelkilt, as he strained at his oar. After a stiff pull, their harpooneer got fast, and, spear in hand, Radney sprang to the bow. He was always a furious man, it seems, in a boat. And now his bandaged cry was, to beach him on the whale’s topmost back. Nothing loath, his bowsman hauled him up and up, through a blinding foam that blent two whitenesses together; till of a sudden the boat struck as against a sunken ledge, and keeling over, spilled out the standing mate. That instant, as he fell on the whale’s slippery back, the boat righted, and was dashed aside by the swell, while Radney was tossed over into the sea, on the other flank of the whale. He struck out through the spray, and, for an instant, was dimly seen through that veil, wildly seeking to remove himself from the eye of Moby Dick. But the whale rushed round in a sudden maelstrom; seized the swimmer between his jaws; and rearing high up with him, plunged headlong again, and went down.)</div><div class="dlg-aside">(“Meantime, at the first tap of the boat’s bottom, the Lakeman had slackened the line, so as to drop astern from the whirlpool; calmly looking on, he thought his own thoughts. But a sudden, terrific, downward jerking of the boat, quickly brought his knife to the line. He cut it; and the whale was free. But, at some distance, Moby Dick rose again, with some tatters of Radney’s red woollen shirt, caught in the teeth that had destroyed him. All four boats gave chase again; but the whale eluded them, and finally wholly disappeared.)</div><div class="dlg-aside">(“In good time, the <em>Town-Ho</em> reached her port﻿—a savage, solitary place﻿—where no civilized creature resided. There, headed by the Lakeman, all but five or six of the foremastmen deliberately deserted among the palms; eventually, as it turned out, seizing a large double war-canoe of the savages, and setting sail for some other harbor.)</div><div class="dlg-aside">(“The ship’s company being reduced to but a handful, the captain called upon the Islanders to assist him in the laborious business of heaving down the ship to stop the leak. But to such unresting vigilance over their dangerous allies was this small band of whites necessitated, both by night and by day, and so extreme was the hard work they underwent, that upon the vessel being ready again for sea, they were in such a weakened condition that the captain durst not put off with them in so heavy a vessel. After taking counsel with his officers, he anchored the ship as far off shore as possible; loaded and ran out his two cannon from the bows; stacked his muskets on the poop; and warning the Islanders not to approach the ship at their peril, took one man with him, and setting the sail of his best whaleboat, steered straight before the wind for Tahiti, five hundred miles distant, to procure a reinforcement to his crew.)</div><div class="dlg-aside">(“On the fourth day of the sail, a large canoe was descried, which seemed to have touched at a low isle of corals. He steered away from it; but the savage craft bore down on him; and soon the voice of Steelkilt hailed him to heave to, or he would run him under water. The captain presented a pistol. With one foot on each prow of the yoked war-canoes, the Lakeman laughed him to scorn; assuring him that if the pistol so much as clicked in the lock, he would bury him in bubbles and foam.)</div><div class="dlg-aside">(“ ‘What do you want of me?’ cried the captain.)</div><div class="dlg-aside">(“ ‘Where are you bound? and for what are you bound?’ demanded Steelkilt; ‘no lies.’)</div><div class="dlg-aside">(“ ‘I am bound to Tahiti for more men.’)</div><div class="dlg-aside">(“ ‘Very good. Let me board you a moment﻿—I come in peace.’ With that he leaped from the canoe, swam to the boat; and climbing the gunwale, stood face to face with the captain.)</div><div class="dlg-aside">(“ ‘Cross your arms, sir; throw back your head. Now, repeat after me. As soon as Steelkilt leaves me, I swear to beach this boat on yonder island, and remain there six days. If I do not, may lightnings strike me!’)</div><div class="dlg-aside">(“ ‘A pretty scholar,’ laughed the Lakeman. ‘<em>Adios, Señor</em>!’ and leaping into the sea, he swam back to his comrades.)</div><div class="dlg-aside">(“Watching the boat till it was fairly beached, and drawn up to the roots of the coconut trees, Steelkilt made sail again, and in due time arrived at Tahiti, his own place of destination. There, luck befriended him; two ships were about to sail for France, and were providentially in want of precisely that number of men which the sailor headed. They embarked; and so forever got the start of their former captain, had he been at all minded to work them legal retribution.)</div><div class="dlg-aside">(“Some ten days after the French ships sailed, the whaleboat arrived, and the captain was forced to enlist some of the more civilized Tahitians, who had been somewhat used to the sea. Chartering a small native schooner, he returned with them to his vessel; and finding all right there, again resumed his cruisings.)</div><div class="dlg-aside">(“Where Steelkilt now is, gentlemen, none know; but upon the island of Nantucket, the widow of Radney still turns to the sea which refuses to give up its dead; still in dreams sees the awful white whale that destroyed him.﻿ ﻿…)</div><div class="dlg-aside">(“ ‘Are you through?’ said Don Sebastian, quietly.)</div><div class="dlg-aside">(“ ‘I am, Don.’)</div><div class="dlg-aside">(“ ‘Then I entreat you, tell me if to the best of your own convictions, this your story is in substance really true? It is so passing wonderful! Did you get it from an unquestionable source? Bear with me if I seem to press.’)</div><div class="dlg-aside">(“ ‘Also bear with all of us, sir sailor; for we all join in Don Sebastian’s suit,’ cried the company, with exceeding interest.)</div><div class="dlg-aside">(“ ‘Is there a copy of the Holy Evangelists in the Golden Inn, gentlemen?’)</div><div class="dlg-aside">(“ ‘Nay,’ said Don Sebastian; ‘but I know a worthy priest near by, who will quickly procure one for me. I go for it; but are you well advised? this may grow too serious.’)</div><div class="dlg-aside">(“ ‘Will you be so good as to bring the priest also, Don?’)</div><div class="dlg-aside">(“ ‘Though there are no Auto-da-Fés in Lima now,’ said one of the company to another; ‘I fear our sailor friend runs risk of the archiepiscopacy. Let us withdraw more out of the moonlight. I see no need of this.’)</div><div class="dlg-aside">(“ ‘Excuse me for running after you, Don Sebastian; but may I also beg that you will be particular in procuring the largest sized Evangelists you can.’)</div></div><div class="scene-break reveal" aria-hidden="true">◆</div><p class="reveal">“ ‘This is the priest, he brings you the Evangelists,’ said Don Sebastian, gravely, returning with a tall and solemn figure.</p>
+<p class="reveal">“ ‘Let me remove my hat. Now, venerable priest, further into the light, and hold the Holy Book before me that I may touch it.</p>
+<p class="reveal">“ ‘So help me Heaven, and on my honor the story I have told ye, gentlemen, is in substance and its great items, true. I know it to be true; it happened on this ball; I trod the ship; I knew the crew; I have seen and talked with Steelkilt since the death of Radney.’ ”</p>
+<div class="notes reveal"><div class="notes-title">Notes</div><div class="note"><div class="note-num">1</div><div><p>The ancient whale-cry upon first sighting a whale from the masthead, still used by whalemen in hunting the famous Galápagos terrapin.</p>
+</div></div></div>
+</div></main></div>
+<script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
+</body></html>
