@@ -101,6 +101,17 @@ img{display:block;max-width:100%}
 .brand{font-size:1.0625rem;font-weight:600;letter-spacing:.02em;color:var(--ink);text-decoration:none}
 .brand:hover{color:var(--accent-ink)}
 .brand-note{color:var(--ink-3);font-size:.8125rem;margin-inline-start:auto}
+.langsel{display:flex;gap:2px;margin-inline-start:auto;order:2}
+.lang-btn{
+  font:600 11px/1 var(--mono,ui-monospace,monospace);letter-spacing:.1em;
+  padding:6px 9px;border-radius:5px;cursor:pointer;
+  background:transparent;color:var(--mut,#8b8b8b);
+  border:1px solid transparent;transition:color .15s,border-color .15s,background .15s;
+}
+.lang-btn:hover{color:var(--ink,#111)}
+.lang-btn[aria-pressed="true"]{
+  color:var(--ink,#111);border-color:currentColor;opacity:.9;
+}
 .theme-btn{
   font:inherit;font-size:.75rem;color:var(--ink-3);background:none;
   border:1px solid var(--rule);border-radius:var(--r);
@@ -278,33 +289,37 @@ img{display:block;max-width:100%}
 </style>
 </head>
 <body>
-<a class="skip" href="#library">Skip to the books</a>
+<a class="skip" href="#library" data-i18n="skip">Skip to the books</a>
 
 <header class="masthead">
   <div class="wrap">
     <a class="brand" href="./">Fable</a>
-    <span class="brand-note">Interactive textbooks · fr · en · ar</span>
-    <button class="theme-btn" id="theme" type="button" aria-pressed="false">Dark</button>
+    <span class="brand-note" data-i18n="tagline">Interactive textbooks · fr · en · ar</span>
+    <div class="langsel" role="group" aria-label="Language">
+      <button type="button" class="lang-btn" data-lang="fr">FR</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <button class="theme-btn" id="theme" type="button" aria-pressed="false" data-i18n="dark">Dark</button>
   </div>
 </header>
 
 <main>
   <section class="hero wrap">
-    <p class="eyebrow">Figures are computed, never drawn</p>
-    <h1>Textbooks where you can <em>pull on the curves</em>.</h1>
-    <p>A light ray leaving a mirror obeys the law of reflection because the page solves it, not because someone drew it that way. Drag the mirror and the ray follows. A lens's focal length is measured off its own rays. There are 102 kinds of interactive figure in the engine, and every one of them is live.</p>
+    <p class="eyebrow" data-i18n="eyebrow">Figures are computed, never drawn</p>
+    <h1 data-i18n-html="h1">Textbooks where you can <em>pull on the curves</em>.</h1>
+    <p data-i18n="lede">A light ray leaving a mirror obeys the law of reflection because the page solves it, not because someone drew it that way. Drag the mirror and the ray follows. A lens's focal length is measured off its own rays. There are 102 kinds of interactive figure in the engine, and every one of them is live.</p>
   </section>
 
   <section class="section wrap" id="library">
     <div class="section-head">
-      <h2>The library</h2>
+      <h2 data-i18n="library">The library</h2>
       <span class="note" id="count"></span>
     </div>
 
     <div class="toolbar" id="toolbar" hidden>
       <div class="search">
-        <label class="sr" for="q">Search the library</label>
-        <input id="q" type="search" placeholder="Search titles and authors" autocomplete="off">
+        <label class="sr" for="q" data-i18n="searchLabel">Search the library</label>
+        <input id="q" type="search" placeholder="Search titles and authors" data-i18n-ph="searchPh" autocomplete="off">
       </div>
       <div class="chips" id="chips"></div>
     </div>
@@ -312,21 +327,21 @@ img{display:block;max-width:100%}
     <div class="grid" id="grid"></div>
 
     <div class="empty" id="empty" hidden>
-      <h3>No books yet.</h3>
-      <p>This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.</p>
+      <h3 data-i18n="emptyH">No books yet.</h3>
+      <p data-i18n-html="emptyP">This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.</p>
     </div>
   </section>
 
   <section class="section wrap" aria-labelledby="tools-h">
     <div class="section-head">
-      <h2 id="tools-h">And two things to read with</h2>
+      <h2 id="tools-h" data-i18n="toolsH">And two things to read with</h2>
     </div>
     <div class="tools">
       <a class="tool" href="cahier/">
         <div class="ruled" aria-hidden="true"></div>
         <span class="tool-title">Le Jaguar</span>
-        <p>A pupil's notebook on real Séyès ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on this device and no account is asked for.</p>
-        <span class="go">Open the notebook &rsaquo;</span>
+        <p data-i18n="nbDesc">A pupil's notebook on real Séyès ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on this device and no account is asked for.</p>
+        <span class="go" data-i18n="openNb">Open the notebook &rsaquo;</span>
       </a>
       <!-- `sfy/` et non `sfy/app/` : la construction aplatit les fichiers de
              l'application directement dans `sfy/` (voir make-web.mjs), parce que
@@ -335,8 +350,8 @@ img{display:block;max-width:100%}
         <a class="tool" href="sfy/" id="tool-sfy" hidden>
         <div class="plot" aria-hidden="true"></div>
         <span class="tool-title">See for yourself</span>
-        <p>The simulations on their own, outside any book — set the values, run it, watch what the equations actually do.</p>
-        <span class="go">Open the simulations &rsaquo;</span>
+        <p data-i18n="sfyDesc">The simulations on their own, outside any book — set the values, run it, watch what the equations actually do.</p>
+        <span class="go" data-i18n="openSfy">Open the simulations &rsaquo;</span>
       </a>
     </div>
   </section>
@@ -344,7 +359,7 @@ img{display:block;max-width:100%}
 
 <footer class="foot">
   <div class="wrap">
-    <span>Fable — interactive textbooks in French, English and Arabic.</span>
+    <span data-i18n="footer">Fable — interactive textbooks in French, English and Arabic.</span>
     <a href="cahier/">Le Jaguar</a>
     <a class="atelier" id="lien-atelier" href="#atelier">Atelier</a>
   </div>
@@ -1738,6 +1753,130 @@ img{display:block;max-width:100%}
 </script>
 
 <script>
+/* ── LA LANGUE ────────────────────────────────────────────────────────────
+   Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
+   et See for yourself sont servis depuis la même origine : ils lisent donc
+   tous cette clé, et choisir une fois vaut pour les trois.
+   Le marquage porte l'anglais en clair — c'est lui qu'on lit si le script ne
+   tourne pas — et la table porte les deux versions. */
+(function () {
+  var TEXTES = {
+    fr: {
+      skip: 'Aller aux livres',
+      tagline: 'Manuels interactifs \u00b7 fr \u00b7 en \u00b7 ar',
+      dark: 'Sombre', light: 'Clair',
+      eyebrow: 'Les figures sont calcul\u00e9es, jamais dessin\u00e9es',
+      h1: 'Des manuels dont on peut <em>tirer les courbes</em>.',
+      lede: 'Un rayon qui quitte un miroir ob\u00e9it \u00e0 la loi de la r\u00e9flexion parce que la page la r\u00e9sout, et non parce que quelqu\u2019un l\u2019a dessin\u00e9 ainsi. D\u00e9placez le miroir, le rayon suit. La distance focale d\u2019une lentille se mesure sur ses propres rayons. Le moteur compte 102 sortes de figures interactives, et toutes sont vivantes.',
+      library: 'La biblioth\u00e8que',
+      searchLabel: 'Chercher dans la biblioth\u00e8que',
+      searchPh: 'Chercher un titre, un auteur',
+      emptyH: 'Aucun livre pour l\u2019instant.',
+      emptyP: 'Ceci est une copie neuve de Fable \u2014 le moteur, le lecteur et le cahier sont l\u00e0, mais l\u2019\u00e9tag\u00e8re est vide. Posez un dossier de livre dans <code>library/</code> et reconstruisez : il appara\u00eetra ici avec sa couverture, sa langue et son nombre de chapitres.',
+      toolsH: 'Et deux choses pour lire avec',
+      nbDesc: 'Un cahier d\u2019\u00e9l\u00e8ve sur du vrai S\u00e9y\u00e8s. D\u00e9coupez un passage de n\u2019importe quel manuel, annotez-le, gardez-le. Tout reste sur cet appareil, et aucun compte n\u2019est demand\u00e9.',
+      openNb: 'Ouvrir le cahier \u203a',
+      sfyDesc: 'Les simulations seules, hors de tout livre \u2014 r\u00e9glez les valeurs, relancez, regardez ce que font vraiment les \u00e9quations.',
+      openSfy: 'Ouvrir les simulations \u203a',
+      footer: 'Fable \u2014 manuels interactifs en fran\u00e7ais, anglais et arabe.',
+      chapter: 'chapitre', chapters: 'chapitres',
+      book: 'livre', books: 'livres', of: 'sur',
+      noMatch: 'Rien ne correspond.',
+      noMatchP: 'Effacez la recherche ou un filtre pour revoir le reste de la bibliothèque.',
+      pageTitle: 'Fable — manuels interactifs',
+      pageDesc: 'Des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
+    },
+    en: {
+      skip: 'Skip to the books',
+      tagline: 'Interactive textbooks \u00b7 fr \u00b7 en \u00b7 ar',
+      dark: 'Dark', light: 'Light',
+      eyebrow: 'Figures are computed, never drawn',
+      h1: 'Textbooks where you can <em>pull on the curves</em>.',
+      lede: 'A light ray leaving a mirror obeys the law of reflection because the page solves it, not because someone drew it that way. Drag the mirror and the ray follows. A lens\u2019s focal length is measured off its own rays. There are 102 kinds of interactive figure in the engine, and every one of them is live.',
+      library: 'The library',
+      searchLabel: 'Search the library',
+      searchPh: 'Search titles and authors',
+      emptyH: 'No books yet.',
+      emptyP: 'This is a fresh copy of Fable \u2014 the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.',
+      toolsH: 'And two things to read with',
+      nbDesc: 'A pupil\u2019s notebook on real S\u00e9y\u00e8s ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on this device and no account is asked for.',
+      openNb: 'Open the notebook \u203a',
+      sfyDesc: 'The simulations on their own, outside any book \u2014 set the values, run it, watch what the equations actually do.',
+      openSfy: 'Open the simulations \u203a',
+      footer: 'Fable \u2014 interactive textbooks in French, English and Arabic.',
+      chapter: 'chapter', chapters: 'chapters',
+      book: 'book', books: 'books', of: 'of',
+      noMatch: 'Nothing matches that.',
+      noMatchP: 'Clear the search or a filter to see the rest of the library.',
+      pageTitle: 'Fable — interactive textbooks',
+      pageDesc: 'Interactive school textbooks in French, English and Arabic. Every figure is computed, not drawn.'
+    }
+  };
+
+  var CLE = 'fable:lang';
+  function choisie() {
+    var v;
+    try { v = localStorage.getItem(CLE); } catch (e) {}
+    if (v === 'fr' || v === 'en') return v;
+    /* Pas de choix enregistr\u00e9 : on suit la langue du navigateur. Un
+       visiteur francophone ne doit pas avoir \u00e0 cliquer pour \u00eatre chez lui. */
+    var n = (navigator.language || 'en').toLowerCase();
+    return n.indexOf('fr') === 0 ? 'fr' : 'en';
+  }
+
+  var LANG = choisie();
+  window.FABLE_LANG = LANG;
+  window.T = function (k) { return (TEXTES[LANG] && TEXTES[LANG][k]) || (TEXTES.en[k] || k); };
+
+  function appliquer() {
+    document.documentElement.lang = LANG;
+    /* L'onglet et la description suivent : c'est ce qu'on lit dans les
+       favoris, et ce que reprend un moteur de recherche. */
+    if (TEXTES[LANG].pageTitle) document.title = TEXTES[LANG].pageTitle;
+    var d = document.querySelector('meta[name="description"]');
+    if (d && TEXTES[LANG].pageDesc) d.setAttribute('content', TEXTES[LANG].pageDesc);
+    var n, i;
+    var txt = document.querySelectorAll('[data-i18n]');
+    for (i = 0; i < txt.length; i++) {
+      n = txt[i].getAttribute('data-i18n');
+      if (TEXTES[LANG][n] != null) txt[i].textContent = TEXTES[LANG][n];
+    }
+    /* `data-i18n-html` pour les rares cha\u00eenes qui portent une balise \u2014 le
+       titre a son <em>, le message vide son <code>. Ces valeurs sont \u00e9crites
+       ici, pas re\u00e7ues : rien d\u2019ext\u00e9rieur n\u2019entre par ce chemin. */
+    var htm = document.querySelectorAll('[data-i18n-html]');
+    for (i = 0; i < htm.length; i++) {
+      n = htm[i].getAttribute('data-i18n-html');
+      if (TEXTES[LANG][n] != null) htm[i].innerHTML = TEXTES[LANG][n];
+    }
+    var ph = document.querySelectorAll('[data-i18n-ph]');
+    for (i = 0; i < ph.length; i++) {
+      n = ph[i].getAttribute('data-i18n-ph');
+      if (TEXTES[LANG][n] != null) ph[i].setAttribute('placeholder', TEXTES[LANG][n]);
+    }
+    var b = document.querySelectorAll('.lang-btn');
+    for (i = 0; i < b.length; i++) {
+      b[i].setAttribute('aria-pressed', b[i].getAttribute('data-lang') === LANG ? 'true' : 'false');
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.lang-btn');
+    if (!b) return;
+    var v = b.getAttribute('data-lang');
+    if (v === LANG) return;
+    try { localStorage.setItem(CLE, v); } catch (e2) {}
+    /* On recharge plut\u00f4t que de tout retraduire \u00e0 chaud : la biblioth\u00e8que
+       se redessine avec les bons pluriels, et il n\u2019y a qu\u2019un chemin \u00e0
+       maintenir au lieu de deux. */
+    location.reload();
+  });
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', appliquer);
+  else appliquer();
+})();
+</script>
+<script>
 (function(){
   var LANGNAME={fr:"Français",en:"English",ar:"العربية"};
   var root=document.documentElement, grid=document.getElementById('grid'),
@@ -1751,7 +1890,7 @@ img{display:block;max-width:100%}
   function applyTheme(t){
     if(t) root.setAttribute('data-theme',t); else root.removeAttribute('data-theme');
     var dark = t==='dark' || (!t && matchMedia('(prefers-color-scheme:dark)').matches);
-    btn.textContent = dark ? 'Light' : 'Dark';
+    btn.textContent = dark ? T('light') : T('dark');
     btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
   }
   try{ applyTheme(localStorage.getItem('fable-theme')); }catch(e){ applyTheme(null); }
@@ -1795,7 +1934,7 @@ img{display:block;max-width:100%}
     if(b.author) body.appendChild(el('div','book-author',b.author));
     var meta=el('div','book-meta');
     meta.appendChild(el('span','badge',(b.lang||'').toUpperCase()));
-    if(b.chapters) meta.appendChild(el('span','ltr-nums',b.chapters+(b.chapters>1?' chapters':' chapter')));
+    if(b.chapters) meta.appendChild(el('span','ltr-nums',b.chapters+' '+(b.chapters>1?T('chapters'):T('chapter'))));
     body.appendChild(meta);
     a.appendChild(body);
     return a;
@@ -1851,12 +1990,12 @@ img{display:block;max-width:100%}
     empty.hidden = books.length>0;
     grid.hidden = books.length===0;
     countEl.textContent = books.length ? (list.length===books.length
-        ? books.length+(books.length>1?' books':' book')
-        : list.length+' of '+books.length) : '';
+        ? books.length+' '+(books.length>1?T('books'):T('book'))
+        : list.length+' '+T('of')+' '+books.length) : '';
     if(books.length && !list.length){
       grid.hidden=true; empty.hidden=false;
-      empty.querySelector('h3').textContent='Nothing matches that.';
-      empty.querySelector('p').textContent='Clear the search or a filter to see the rest of the library.';
+      empty.querySelector('h3').textContent=T('noMatch');
+      empty.querySelector('p').textContent=T('noMatchP');
     }
   }
 
