@@ -328,7 +328,11 @@ img{display:block;max-width:100%}
         <p>A pupil's notebook on real Séyès ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on this device and no account is asked for.</p>
         <span class="go">Open the notebook &rsaquo;</span>
       </a>
-      <a class="tool" href="sfy/app/" id="tool-sfy" hidden>
+      <!-- `sfy/` et non `sfy/app/` : la construction aplatit les fichiers de
+             l'application directement dans `sfy/` (voir make-web.mjs), parce que
+             leurs chemins relatifs l'exigent. Le lien pointait encore sur la
+             disposition des SOURCES, et donnait un 404 en ligne. -->
+        <a class="tool" href="sfy/" id="tool-sfy" hidden>
         <div class="plot" aria-hidden="true"></div>
         <span class="tool-title">See for yourself</span>
         <p>The simulations on their own, outside any book — set the values, run it, watch what the equations actually do.</p>
