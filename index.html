@@ -2820,10 +2820,23 @@ kbd{
 
   /* Un fondu croisé quand le contenu change d'un bloc — pas à chaque frappe :
      une transition par caractère tapé serait du retard, pas du soin. */
+  var enTransition=false;
   function avecTransition(fn){
-    if(document.startViewTransition && !matchMedia('(prefers-reduced-motion:reduce)').matches){
-      document.startViewTransition(fn);
-    } else fn();
+    if(!document.startViewTransition || document.visibilityState!=='visible'
+       || enTransition || matchMedia('(prefers-reduced-motion:reduce)').matches){
+      fn(); return;
+    }
+    enTransition=true;
+    var t;
+    try{ t=document.startViewTransition(fn); }
+    catch(e){ enTransition=false; fn(); return; }
+    /* Une transition interrompue — onglet caché, seconde transition par-dessus
+       la première — REJETTE ses promesses. Personne ne les attrapait, et un
+       fondu décoratif finissait en « InvalidStateError » dans la console. On
+       les attrape, et on garde le drapeau pour ne pas en lancer deux. */
+    var fini=function(){ enTransition=false; };
+    if(t && t.finished && t.finished.then) t.finished.then(fini,fini); else fini();
+    if(t && t.ready && t.ready.catch) t.ready.catch(function(){});
   }
   function poser(key,val){
     filters[key]=val;
@@ -3101,7 +3114,11 @@ kbd{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  fetch('library/library.json')
+  /* La version est posée par la construction (mu5tjgx9). Non remplacée —
+     la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
+     ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
+     graine prend le relais. */
+  fetch('library/library.json?v=mu5tjgx9')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -3112,6 +3129,6 @@ kbd{
 </script>
 
 
-<script src="atelier.js"></script>
+<script src="atelier.js?v=mu5tjgx9"></script>
 </body>
 </html>
