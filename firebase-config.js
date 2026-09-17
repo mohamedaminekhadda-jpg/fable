@@ -43,12 +43,12 @@
  * ne se déclenche jamais toute seule, et le cahier marche entier sans elle.
  */
 export const CONFIG_FIREBASE = {
-  // apiKey: 'AIza…',
-  // authDomain: 'votre-projet.firebaseapp.com',
-  // projectId: 'votre-projet',
-  // storageBucket: 'votre-projet.appspot.com',
-  // messagingSenderId: '000000000000',
-  // appId: '1:000000000000:web:0000000000000000000000',
+  apiKey: "AIzaSyBUstdrfj5ClEXdrDN-dGYWozns8qr8QRc",
+  authDomain: "fable-562d4.firebaseapp.com",
+  projectId: "fable-562d4",
+  storageBucket: "fable-562d4.firebasestorage.app",
+  messagingSenderId: "885484794658",
+  appId: "1:885484794658:web:fff132e07b2a3703e46b7b",
 };
 
 /* ── QUI EST CHEZ SOI ICI ─────────────────────────────────────────────────

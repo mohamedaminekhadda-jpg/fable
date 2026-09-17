@@ -4,9 +4,9 @@
 // just a walk of the sims/ folder. There is no state to get out of step with the
 // disk: reload the page and you are looking at what is actually there.
 
-import { vignette } from './vignettes.js?v=mu5yawv6';
-import { BRAND, marque, blocMarque } from './brand.js?v=mu5yawv6';
-import { LANG, T, champ, poserSelecteur } from './langue.js?v=mu5yawv6';
+import { vignette } from './vignettes.js?v=mu5yvpo0';
+import { BRAND, marque, blocMarque } from './brand.js?v=mu5yvpo0';
+import { LANG, T, champ, poserSelecteur } from './langue.js?v=mu5yvpo0';
 
 // L'enseigne est montée depuis brand.js, jamais recopiée dans index.html : une
 // marque écrite à deux endroits est une marque qui finit par différer.
@@ -50,7 +50,7 @@ const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0
 let DATA = { subjects: [], sims: [], counts: {}, problems: [], levels: [] };
 
 async function load() {
-  const r = await fetch('catalogue.json?v=mu5yawv6');
+  const r = await fetch('catalogue.json?v=mu5yvpo0');
   DATA = await r.json();
   cycleDuFoyer();
   render();
