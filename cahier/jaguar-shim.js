@@ -97,6 +97,7 @@
   const getCahier = (id) => tx(CAHIERS, 'readonly', (s) => s.get(id));
   const putCahier = (o) => tx(CAHIERS, 'readwrite', (s) => s.put(o));
   const tousCahiers = () => tx(CAHIERS, 'readonly', (s) => s.getAll());
+  const delCahier = (id) => tx(CAHIERS, 'readwrite', (s) => s.delete(id));
   const getMeta = (k) => tx(META, 'readonly', (s) => s.get(k));
   const setMeta = (k, v) => tx(META, 'readwrite', (s) => s.put(v, k));
 
@@ -121,7 +122,7 @@
   let _biblio = null;
   function biblio() {
     if (_biblio) return Promise.resolve(_biblio);
-    return vraiFetch('../library/library.json?v=mu5wau32')
+    return vraiFetch('../library/library.json?v=mu5x0ldz')
       .then((r) => (r.ok ? r.json() : { books: [] }))
       .catch(() => ({ books: [] }))
       .then((j) => { _biblio = j && j.books ? j : { books: [] }; return _biblio; });
@@ -257,7 +258,10 @@
     await setMeta('derniereSauvegarde', Date.now());
     return n;
   }
-  const nomDe = (nb) => (nb && nb.student && (nb.student.prenom || nb.student.nom)) || 'cahier';
+  /* Le nom du cahier d'abord, le prénom ensuite : un cahier créé avant
+     l'existence du champ `nom` garde donc l'affichage qu'il avait. */
+  const nomDe = (nb) => (nb && nb.nom)
+    || (nb && nb.student && (nb.student.prenom || nb.student.nom)) || 'Cahier';
 
   /* ── les images, réduites à l'entrée ───────────────────────────────────── */
   function reduireImage(dataUrl, mimeSource) {
@@ -345,7 +349,20 @@
       await putCahier({ id, notebook });
       ecrireBientot();
       peindreBarre();
+      /* Si quelqu'un est connecté, ce cahier remonte — dans quelques secondes,
+         pas à chaque frappe. Sans compte, cette ligne ne fait rien. */
+      try { if (window.FableCompte) window.FableCompte.pousserBientot(id); } catch (e) { /* le local a déjà réussi */ }
       return json({ ok: true, updated: notebook.updated });
+    }],
+
+    ['POST', '/api/nb/delete', async (_u, corps) => {
+      const id = corps && corps.id;
+      if (!id) return json({ error: 'id required' }, 400);
+      if (!await getCahier(id)) return json({ error: 'not found' }, 404);
+      await delCahier(id);
+      ecrireBientot();
+      peindreBarre();
+      return json({ ok: true });
     }],
 
     ['POST', '/api/nb/asset', async (_u, corps) => {
@@ -640,5 +657,7 @@
 
   // Pour la page de couverture, qui doit retrouver un cahier sans passer par
   // l'application : elle est chargée dans une iframe, hors de ce contexte.
-  window.JaguarStore = { getCahier, tousCahiers, exporterTout, importer };
+  /* `putCahier` sert au compte : c'est par là que redescend un cahier venu
+     d'un autre appareil. Les autres servaient déjà à la page de couverture. */
+  window.JaguarStore = { getCahier, putCahier, tousCahiers, delCahier, exporterTout, importer };
 })();

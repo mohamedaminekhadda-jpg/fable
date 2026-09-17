@@ -670,13 +670,95 @@ body.nb-op{cursor:grabbing;user-select:none}
 .linkpop .lp-go{color:var(--gold);text-decoration:none;white-space:nowrap;border-left:1px solid rgba(244,241,234,.16);padding-left:10px;letter-spacing:.06em}
 .linkpop .lp-go:hover{color:#fff}
 .paper a{cursor:pointer}
+/* ══════════ L'ÉTAGÈRE DES CAHIERS ══════════
+   On pouvait déjà en tenir plusieurs : le stockage les gardait tous. Mais on
+   les choisissait dans une liste déroulante et on les nommait dans un
+   `prompt()` — donc, en pratique, on n'en tenait qu'un. Une étagère se
+   regarde. */
+#shelf{position:fixed;inset:0;z-index:40;overflow:auto;background:var(--desk);
+  background-image:radial-gradient(60% 50% at 50% 0%,rgba(201,160,84,.10),transparent 70%)}
+.sh-wrap{max-width:1000px;margin:0 auto;padding:40px 28px 72px}
+.sh-tete{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.sh-tete h1{font-size:30px;margin:0;letter-spacing:-.02em}
+.sh-tete .compte{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--slate)}
+.sh-grille{display:grid;gap:26px 22px;grid-template-columns:repeat(auto-fill,minmax(178px,1fr))}
+.cah{position:relative;display:grid;gap:10px;align-content:start}
+
+/* Le volume. Trois palettes, une par couverture, et le dos prend la couleur
+   d'accent du cahier : deux cahiers de la même couverture restent
+   reconnaissables l'un de l'autre. */
+.cah-tome{position:relative;display:block;width:100%;aspect-ratio:3/4;border-radius:3px 7px 7px 3px;
+  background:var(--pap,#efe6d4);color:var(--enc,#2a2318);overflow:hidden;
+  box-shadow:0 14px 26px -16px rgba(0,0,0,.55),0 1px 3px rgba(0,0,0,.2);
+  transition:transform .22s cubic-bezier(.22,.8,.3,1),box-shadow .22s ease}
+.cah-tome::before{content:"";position:absolute;top:0;bottom:0;left:0;width:13px;
+  background:var(--acc,#c9a054);box-shadow:inset -6px 0 10px -6px rgba(0,0,0,.5)}
+.cah-tome::after{content:"";position:absolute;inset:11px 12px 12px 24px;border:1px solid currentColor;
+  opacity:.22;border-radius:2px;pointer-events:none}
+.cah-ouvrir{display:block;width:100%;padding:0;border-radius:3px 7px 7px 3px}
+.cah-ouvrir:hover .cah-tome,.cah-ouvrir:focus-visible .cah-tome{
+  transform:translateY(-4px) rotate(-.5deg);box-shadow:0 24px 40px -18px rgba(0,0,0,.6)}
+.cah-nom{position:absolute;left:32px;right:18px;bottom:46px;text-align:left;font-size:17px;
+  line-height:1.2;font-weight:600;letter-spacing:-.01em;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:4;line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.cah-sig{position:absolute;left:32px;bottom:22px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.24em;text-transform:uppercase;opacity:.55}
+.cah-titre{font-size:15px;margin:0;font-weight:600;line-height:1.25;word-break:break-word}
+.cah-meta{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--slate);margin:0}
+.cah-actions{display:flex;flex-wrap:wrap;gap:4px;opacity:0;transition:opacity .16s ease}
+.cah:hover .cah-actions,.cah:focus-within .cah-actions{opacity:1}
+@media (hover:none){.cah-actions{opacity:1}}
+.cah-actions button{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--slate);border:1px solid var(--rule);border-radius:100px;padding:3px 8px;background:#fffdf8}
+.cah-actions button:hover{color:var(--ink);border-color:var(--slate)}
+.cah-actions button.danger:hover{color:#a5332b;border-color:#a5332b}
+
+/* La carte « nouveau » : le même volume, en creux. */
+.cah-neuf{display:grid;place-items:center;width:100%;aspect-ratio:3/4;border-radius:3px 7px 7px 3px;
+  border:2px dashed var(--rule);color:var(--slate);background:rgba(255,253,248,.5);
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-align:center;
+  transition:border-color .16s,color .16s,background .16s}
+.cah-neuf:hover{border-color:var(--gold);color:var(--ink);background:#fffdf8}
+.cah-neuf span{display:block;font-size:26px;letter-spacing:0;margin-bottom:6px}
+.sh-pied{margin-top:34px;padding-top:18px;border-top:1px solid var(--rule);
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--slate)}
+.sh-pied button{text-decoration:underline;text-underline-offset:3px;color:var(--slate);font:inherit}
+.sh-pied button:hover{color:var(--ink)}
+.sh-vide{grid-column:1/-1;padding:30px 0;color:var(--slate);font-size:15px}
+/* Le compte, au pied de l'étagère. Il n'apparaît que si Firebase est
+   configuré : sans cela, la ligne dit simplement où vivent les cahiers. */
+.sh-compte{display:flex;gap:10px;align-items:center;margin-left:auto}
+.sh-compte img{width:22px;height:22px;border-radius:50%;object-fit:cover}
+.sh-compte .qui{color:var(--ink)}
+.sh-etat{font-size:10px;letter-spacing:.06em;color:var(--slate)}
+
 </style>
 
-<script src="model.js?v=mu5wau32"></script>
-<script src="sanitize.js?v=mu5wau32"></script>
-<script src="jaguar-shim.js?v=mu5wau32"></script>
+<script src="model.js?v=mu5x0ldz"></script>
+<script src="sanitize.js?v=mu5x0ldz"></script>
+<script src="jaguar-shim.js?v=mu5x0ldz"></script>
+<script src="compte.js?v=mu5x0ldz"></script>
 </head>
 <body>
+
+<!-- ══════════ ÉTAGÈRE ══════════ -->
+<div id="shelf" class="hidden">
+  <div class="sh-wrap">
+    <div class="sh-tete">
+      <h1>Mes cahiers</h1>
+      <span class="compte" id="shCompte"></span>
+    </div>
+    <div class="sh-grille" id="shGrille"></div>
+    <div class="sh-pied">
+      <span id="shOu">Sur cet appareil.</span>
+      <button id="shImporter" type="button">Importer un cahier…</button>
+      <span class="sh-compte" id="shCompte2"></span>
+      <input type="file" id="shFichier" accept="application/json,.json" hidden>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════ COVER ══════════ -->
 <div id="cover">
@@ -689,8 +771,7 @@ body.nb-op{cursor:grabbing;user-select:none}
   <div class="badges" id="badges"></div>
   <div class="cover-dock">
     <div class="dock-tools">
-      <select id="nbPick" title="Cahier"></select>
-      <button id="newNb">+ Cahier</button>
+      <button id="mShelf">‹ Mes cahiers</button>
     </div>
     <div class="dock-menu">
       <button id="mSettings">Réglages</button>
@@ -882,6 +963,7 @@ const api={
   list:()=>fetch('/api/nb/list').then(r=>r.json()),
   create:n=>fetch('/api/nb/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n})}).then(r=>r.json()),
   load:id=>fetch('/api/nb/load?id='+encodeURIComponent(id)).then(r=>r.json()),
+  del:id=>fetch('/api/nb/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})}).then(r=>r.json()),
   save:(id,nb)=>fetch('/api/nb/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,notebook:nb})}).then(r=>r.json()),
   asset:(id,name,data)=>fetch('/api/nb/asset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,name,data})}).then(r=>r.json()),
   books:()=>fetch('/api/nb/books').then(r=>r.json()),
@@ -1300,24 +1382,276 @@ async function boot(){
     const w=$('#work'); if(w)w.classList.add('review-mode');
     if(!$('#reviewBanner')){ const b=document.createElement('div'); b.id='reviewBanner'; b.className='review-banner'; b.textContent='✦ Mode enseignant — lecture seule · vous pouvez commenter les pages'; document.body.appendChild(b); }
   }
+  /* Un professeur qui ouvre le cahier d'un élève arrive par ?nb=… : il va
+     droit à ce cahier, et ne voit pas une étagère qui n'est pas la sienne. */
+  const vise=new URLSearchParams(location.search).get('nb');
+  if(vise) return ouvrirCahier(vise);
+  await ouvrirEtagere(true);
+}
+
+/* ═════ l'étagère ═════ */
+/* Trois papiers, un par couverture. Le dos prend l'accent du cahier : deux
+   cahiers de même couverture ne se confondent pas pour autant. */
+const PAPIERS={
+  jaguar:{pap:'#efe6d4',enc:'#2a2318',sig:'Le Jaguar'},
+  koutoubia:{pap:'#dde9e1',enc:'#1c2a23',sig:'Koutoubia'},
+  gazelle:{pap:'#f3e2e0',enc:'#33211f',sig:'La Gazelle'},
+};
+function depuis(t){
+  if(!t) return 'jamais ouvert';
+  const sec=Math.round((Date.now()-t)/1000);
+  if(sec<90) return 'a l\u2019instant';
+  const m=Math.round(sec/60); if(m<60) return 'il y a '+m+' min';
+  const h=Math.round(m/60); if(h<24) return 'il y a '+h+' h';
+  const j=Math.round(h/24); if(j<30) return 'il y a '+j+' j';
+  return new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+}
+
+let shListe=[];
+async function ouvrirEtagere(premier){
   const {notebooks}=await api.list();
-  const sel=$('#nbPick'); sel.innerHTML='';
-  if(!notebooks.length){ const {id,notebook}=await api.create('Élève'); state.id=id; state.nb=notebook; const o=document.createElement('option'); o.value=id;o.textContent='Élève'; sel.appendChild(o); }
-  else{ notebooks.forEach(n=>{const o=document.createElement('option');o.value=n.id;o.textContent=n.title||n.id;sel.appendChild(o);});
-    // ?nb=<id> (teacher opening a specific student's cahier) wins over the last-used one
-    const want=new URLSearchParams(location.search).get('nb');
-    const last=localStorage.getItem('nb_last');
-    const pick=notebooks.find(n=>n.id===want)?want:(notebooks.find(n=>n.id===last)?last:notebooks[0].id);
-    sel.value=pick; const {notebook}=await api.load(pick); state.id=pick; state.nb=notebook; }
-  localStorage.setItem('nb_last',state.id);
-  state.subjectId=state.nb.subjects[0]&&state.nb.subjects[0].id;
+  shListe=notebooks||[];
+  if(premier){
+    /* On rouvre là où l'on s'était arrêté. L'étagère est belle, mais la
+       traverser à chaque démarrage pour retrouver le même cahier serait une
+       porte de plus, pas un choix. Elle reste à un clic. */
+    if(!shListe.length) return nouveauCahier(true);
+    const dernier=localStorage.getItem('nb_last');
+    if(dernier&&shListe.some(c=>c.id===dernier)) return ouvrirCahier(dernier);
+    if(shListe.length===1) return ouvrirCahier(shListe[0].id);
+  }
+  peindreEtagere();
+  peindreCompte();
+  $('#shelf').classList.remove('hidden');
+  $('#cover').classList.add('hidden');
+  $('#work').classList.remove('on');
+}
+
+function peindreEtagere(){
+  const g=$('#shGrille'); g.innerHTML='';
+  $('#shCompte').textContent=shListe.length
+    ? shListe.length+(shListe.length>1?' cahiers':' cahier') : '';
+  if(!shListe.length){
+    const v=document.createElement('p'); v.className='sh-vide';
+    v.textContent='Aucun cahier pour l\u2019instant.'; g.appendChild(v);
+  }
+  shListe.forEach(function(cah){
+    const pal=PAPIERS[(cah.brand&&cah.brand.cover)||'jaguar']||PAPIERS.jaguar;
+    const acc=(cah.brand&&cah.brand.accent)||'#c9a054';
+    const art=document.createElement('article'); art.className='cah';
+    art.innerHTML=
+      '<button class="cah-ouvrir" type="button" data-ouvrir>'
+      +  '<span class="cah-tome" style="--pap:'+esc(pal.pap)+';--enc:'+esc(pal.enc)+';--acc:'+esc(acc)+'">'
+      +    '<span class="cah-nom">'+esc(cah.title||'Cahier')+'</span>'
+      +    '<span class="cah-sig">'+esc(pal.sig)+'</span>'
+      +  '</span></button>'
+      +'<h3 class="cah-titre">'+esc(cah.title||'Cahier')+'</h3>'
+      +'<p class="cah-meta">'+esc(depuis(cah.updated))+'</p>'
+      +'<div class="cah-actions">'
+      +  '<button type="button" data-renommer>Renommer</button>'
+      +  '<button type="button" data-copier>Dupliquer</button>'
+      +  '<button type="button" data-exporter>Exporter</button>'
+      +  '<button type="button" class="danger" data-supprimer>Supprimer</button>'
+      +'</div>';
+    art.querySelector('[data-ouvrir]').onclick=function(){ouvrirCahier(cah.id);};
+    art.querySelector('[data-renommer]').onclick=function(){renommerCahier(cah);};
+    art.querySelector('[data-copier]').onclick=function(){dupliquerCahier(cah);};
+    art.querySelector('[data-exporter]').onclick=function(){exporterCahier(cah);};
+    art.querySelector('[data-supprimer]').onclick=function(){supprimerCahier(cah);};
+    g.appendChild(art);
+  });
+  const neuf=document.createElement('button');
+  neuf.type='button'; neuf.className='cah-neuf';
+  neuf.innerHTML='<span>+</span>Nouveau cahier';
+  neuf.onclick=function(){nouveauCahier(false);};
+  g.appendChild(neuf);
+}
+
+async function ouvrirCahier(id){
+  const r=await api.load(id);
+  /* `nb_last` peut désigner un cahier supprimé — ou effacé sur un autre
+     appareil. On ne plante pas : on revient à l'étagère. */
+  if(!r||!r.notebook){ localStorage.removeItem('nb_last'); return ouvrirEtagere(false); }
+  state.id=id; state.nb=r.notebook;
+  localStorage.setItem('nb_last',id);
+  state.subjectId=r.notebook.subjects[0]&&r.notebook.subjects[0].id;
+  $('#shelf').classList.add('hidden');
+  $('#cover').classList.remove('hidden');
   renderCover();
+}
+
+/* Créer : un nom ET une couverture, vus avant de valider. C'est le moment où
+   l'on décide de quoi ce cahier aura l'air ; le faire dans un `prompt()` du
+   navigateur, c'était décider à l'aveugle. */
+function nouveauCahier(premier){
+  const cases=Object.keys(PAPIERS).map(function(k,i){
+    return '<button type="button" class="cov'+(i===0?' on':'')+'" data-pap="'+k+'" style="width:88px;padding:6px">'
+      +'<span style="display:block;height:64px;border-radius:3px;background:'+PAPIERS[k].pap
+      +';border-left:7px solid #c9a054"></span>'
+      +'<span class="kicker" style="display:block;margin-top:5px">'+esc(PAPIERS[k].sig)+'</span></button>';
+  }).join('');
+  popup('Nouveau cahier', premier?'le premier':'',
+    '<div class="fld"><label>Nom du cahier</label>'
+    +'<input id="nvNom" placeholder="Maths, Journal, Croquis\u2026" autocomplete="off"></div>'
+    +'<div class="fld"><label>Couverture</label><div class="cov-choix" id="nvPap">'+cases+'</div></div>'
+    +'<div class="fld"><label>Couleur du dos</label>'
+    +'<input type="color" id="nvAcc" value="#c9a054" style="width:60px;height:38px;padding:2px"></div>'
+    +'<div class="actions">'+(premier?'':'<button onclick="closePopup()">Annuler</button>')
+    +'<button class="primary" id="nvOk">Cr\u00e9er</button></div>');
+  let pap='jaguar';
+  $('#nvPap').onclick=function(e){
+    const b=e.target.closest('[data-pap]'); if(!b)return;
+    pap=b.getAttribute('data-pap');
+    $('#nvPap').querySelectorAll('.cov').forEach(function(x){x.classList.toggle('on',x===b);});
+  };
+  const valide=async function(){
+    const nom=$('#nvNom').value.trim()||'Cahier';
+    const r=await api.create(nom);
+    const nb=r.notebook;
+    nb.nom=nom;
+    nb.brand.cover=pap;
+    nb.brand.accent=$('#nvAcc').value;
+    await api.save(r.id,nb);
+    closePopup();
+    await ouvrirCahier(r.id);
+  };
+  $('#nvOk').onclick=valide;
+  $('#nvNom').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();valide();}};
+  setTimeout(function(){const f=$('#nvNom'); if(f)f.focus();},30);
+}
+
+function renommerCahier(cah){
+  popup('Renommer','',
+    '<div class="fld"><label>Nom du cahier</label>'
+    +'<input id="rnNom" value="'+esc(cah.title||'')+'" autocomplete="off"></div>'
+    +'<div class="actions"><button onclick="closePopup()">Annuler</button>'
+    +'<button class="primary" id="rnOk">Renommer</button></div>');
+  const valide=async function(){
+    const nom=$('#rnNom').value.trim(); if(!nom) return;
+    const r=await api.load(cah.id);
+    r.notebook.nom=nom;
+    await api.save(cah.id,r.notebook);
+    /* Si c'est le cahier ouvert, l'objet en mémoire doit suivre : sans ça le
+       prochain enregistrement réécrirait l'ancien nom par-dessus. */
+    if(state.id===cah.id&&state.nb) state.nb.nom=nom;
+    closePopup(); await ouvrirEtagere(false); toast('Renomm\u00e9');
+  };
+  $('#rnOk').onclick=valide;
+  $('#rnNom').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();valide();}};
+  setTimeout(function(){const f=$('#rnNom'); if(f){f.focus();f.select();}},30);
+}
+
+async function dupliquerCahier(cah){
+  const r=await api.load(cah.id);
+  const nom=(cah.title||'Cahier')+' (copie)';
+  const neuf=await api.create(nom);
+  const copie=JSON.parse(JSON.stringify(r.notebook));
+  copie.id=neuf.id; copie.nom=nom; copie.updated=Date.now();
+  /* Les médaillons sont décernés par un professeur À QUELQU'UN : une copie
+     n'en hérite pas, sinon on se remettrait ses propres mérites. */
+  delete copie.awardedBadges;
+  await api.save(neuf.id,copie);
+  await ouvrirEtagere(false); toast('Dupliqu\u00e9');
+}
+
+async function exporterCahier(cah){
+  const r=await api.load(cah.id);
+  const propre=String(cah.title||'cahier').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const b=new Blob([JSON.stringify({id:cah.id,notebook:r.notebook},null,1)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download=(propre||'cahier')+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  toast('Export\u00e9');
+}
+
+function supprimerCahier(cah){
+  /* On demande le NOM, pas un « oui ». Un cahier est le travail de quelqu'un,
+     et une boîte de confirmation se clique sans la lire. */
+  popup('Supprimer ce cahier','',
+    '<p>\u00ab <b>'+esc(cah.title||'Cahier')+'</b> \u00bb et tout ce qu\u2019il contient.</p>'
+    +'<p class="kicker" style="margin:10px 0">\u00c9crivez son nom pour confirmer.</p>'
+    +'<div class="fld"><input id="suNom" autocomplete="off" placeholder="'+esc(cah.title||'')+'"></div>'
+    +'<div class="actions"><button onclick="closePopup()">Annuler</button>'
+    +'<button class="primary" id="suOk" disabled>Supprimer</button></div>');
+  const ok=$('#suOk');
+  $('#suNom').oninput=function(e){ ok.disabled=e.target.value.trim()!==String(cah.title||'').trim(); };
+  ok.onclick=async function(){
+    await api.del(cah.id);
+    if(state.id===cah.id){ state.id=null; state.nb=null; localStorage.removeItem('nb_last'); }
+    closePopup(); await ouvrirEtagere(false); toast('Supprim\u00e9');
+  };
+  setTimeout(function(){const f=$('#suNom'); if(f)f.focus();},30);
+}
+
+/* ═════ le compte ═════ */
+/* Facultatif, et silencieux tant qu'il n'est pas configuré : sans Firebase
+   rempli, aucun bouton n'apparaît et le cahier se comporte comme avant. */
+async function peindreCompte(){
+  const hote=$('#shCompte2'); if(!hote||!window.FableCompte) return;
+  if(!await FableCompte.configure()) return;      /* pas configuré : rien du tout */
+  FableCompte.surChangement(function(e){
+    hote.innerHTML='';
+    if(e.utilisateur){
+      if(e.utilisateur.photo){ const im=new Image(); im.src=e.utilisateur.photo; im.alt=''; hote.appendChild(im); }
+      const q=document.createElement('span'); q.className='qui';
+      q.textContent=e.utilisateur.nom||e.utilisateur.email; hote.appendChild(q);
+      if(e.dernier){ const s2=document.createElement('span'); s2.className='sh-etat'; s2.textContent=e.dernier; hote.appendChild(s2); }
+      const d=document.createElement('button'); d.type='button'; d.textContent='Se déconnecter';
+      d.onclick=async function(){ await FableCompte.deconnecter(); ouvrirEtagere(false); };
+      hote.appendChild(d);
+      $('#shOu').textContent='Sur cet appareil, et dans votre compte.';
+    } else {
+      const b=document.createElement('button'); b.type='button'; b.textContent='Se connecter';
+      b.onclick=ouvrirConnexion; hote.appendChild(b);
+      $('#shOu').textContent='Sur cet appareil.';
+    }
+  });
+}
+
+function ouvrirConnexion(){
+  popup('Se connecter','pour retrouver vos cahiers partout',
+    '<p style="margin-bottom:12px">Vos cahiers restent sur cet appareil. Le compte en garde une copie, '
+    +'pour les retrouver sur un autre — et rien d’autre.</p>'
+    +'<div class="actions" style="justify-content:flex-start;margin-bottom:14px">'
+    +'<button class="primary" id="cnGoogle">Continuer avec Google</button></div>'
+    +'<div class="fld"><label>Ou par e-mail</label><input id="cnMail" type="email" autocomplete="username" placeholder="vous@exemple.fr"></div>'
+    +'<div class="fld"><label>Mot de passe</label><input id="cnMdp" type="password" autocomplete="current-password"></div>'
+    +'<p class="sh-etat" id="cnErr" style="min-height:14px;color:#a5332b"></p>'
+    +'<div class="actions"><button onclick="closePopup()">Annuler</button>'
+    +'<button id="cnCreer">Créer un compte</button>'
+    +'<button class="primary" id="cnOk">Se connecter</button></div>');
+  const err=function(e){ $('#cnErr').textContent=(e&&e.message)||String(e); };
+  $('#cnGoogle').onclick=async function(){ try{ await FableCompte.connecterGoogle(); closePopup(); ouvrirEtagere(false); }catch(e){ err(e); } };
+  const parMail=async function(creer){
+    try{
+      await FableCompte.connecterEmail($('#cnMail').value.trim(),$('#cnMdp').value,creer);
+      closePopup(); ouvrirEtagere(false);
+    }catch(e){ err(e); }
+  };
+  $('#cnOk').onclick=function(){ parMail(false); };
+  $('#cnCreer').onclick=function(){ parMail(true); };
+}
+
+async function importerFichier(fichier){
+  try{
+    const j=JSON.parse(await fichier.text());
+    const nb=j.notebook||j;
+    if(!nb||!Array.isArray(nb.subjects)) throw new Error('ce fichier n\u2019est pas un cahier');
+    const nom=nb.nom||(nb.student&&nb.student.prenom)||'Cahier import\u00e9';
+    const r=await api.create(nom);
+    nb.id=r.id; nb.nom=nom; nb.updated=Date.now();
+    delete nb.owner;          /* il change de main : il n'a plus de propriétaire */
+    await api.save(r.id,nb);
+    await ouvrirEtagere(false); toast('Cahier import\u00e9');
+  }catch(e){ toast('Import impossible : '+((e&&e.message)||e)); }
 }
 
 /* ═════ cover events ═════ */
 ['pNom','pPrenom','pClasse'].forEach(id=>$('#'+id).oninput=()=>{state.nb.student.nom=$('#pNom').value;state.nb.student.prenom=$('#pPrenom').value;state.nb.student.classe=$('#pClasse').value;$('#coverEyebrow').textContent=state.nb.student.classe||'Cahier de l’élève';markDirty();});
-$('#nbPick').onchange=async e=>{const {notebook}=await api.load(e.target.value);state.id=e.target.value;state.nb=notebook;localStorage.setItem('nb_last',state.id);state.subjectId=notebook.subjects[0]&&notebook.subjects[0].id;renderCover();};
-$('#newNb').onclick=async()=>{const name=prompt('Nom de l’élève / du cahier :');if(name===null)return;const {id,notebook}=await api.create(name||'Élève');const o=document.createElement('option');o.value=id;o.textContent=name||id;$('#nbPick').appendChild(o);$('#nbPick').value=id;state.id=id;state.nb=notebook;localStorage.setItem('nb_last',id);state.subjectId=notebook.subjects[0].id;renderCover();};
+$('#mShelf').onclick=()=>{persist();ouvrirEtagere(false);};
+$('#shImporter').onclick=()=>$('#shFichier').click();
+$('#shFichier').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)importerFichier(f);};
 $('#mStart').onclick=()=>{persist();ensurePage();$('#cover').classList.add('hidden');$('#work').classList.add('on');renderRails();loadPage();};
 $('#goCover').onclick=()=>{persist();$('#work').classList.remove('on');$('#cover').classList.remove('hidden');renderCover();};
 $('#mQuit').onclick=()=>{persist();toast('Enregistré — tu peux fermer l’onglet.');};

@@ -17,6 +17,12 @@ function defaultNotebook(name) {
   const page = (title, template, origin) => ({ id: 'p' + (now + Math.floor(Math.random() * 1e6)).toString(36), title, template: template || 'lined', origin: origin || 'student', html: '', created: now, updated: now, grade: null, comments: [] });
   return {
     id: slug(name || 'notebook'),
+    /* Le nom DU CAHIER, et non celui de l'élève. Les deux étaient confondus :
+       `nomDe()` renvoyait le prénom, si bien qu'une personne qui tient quatre
+       cahiers — Maths, Histoire, Journal, Croquis — ne pouvait pas les
+       distinguer. Les anciens cahiers n'ont pas ce champ et retombent sur le
+       prénom, exactement comme avant. */
+    nom: name || '',
     brand: { title: 'LE JAGUAR', subtitle: 'Cahier de l’élève', bg: 'aurora', accent: '#c9a054', cover: 'jaguar' },
     student: { nom: '', prenom: name || '', classe: '', avatar: null },
     badges: [
