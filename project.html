@@ -700,25 +700,18 @@ body::after{
 .atelier{display:grid;gap:var(--s4);margin-block-start:var(--s5)}
 @media (min-width:62rem){.atelier{grid-template-columns:minmax(0,1fr) 15rem;align-items:start}}
 
-/* LA HAUTEUR EST CELLE DE LA FIGURE, pas un format d’écran. Un 16/9 était juste
-   pour un film ; une figure a la hauteur qu’elle a, et la rogner ou la réduire
-   pour tenir dans un cadre choisi ici, c’est montrer autre chose que ce que
-   l’élève recevra. Le script la mesure et la pose ; 26rem n’est que ce qu’on
-   réserve avant de savoir. */
+/* LA HAUTEUR EST CELLE DE LA FIGURE, ENTIÈRE. Un 16/9 était juste pour un film.
+   Une figure a la hauteur qu’elle a, et un plafond — il y en a eu un, à 680
+   pixels — coupait le contrôle de lecture au milieu de sa troisième question,
+   deux blancs encore à remplir sous le bord. Le cadre ne défile pas : ce qui
+   était coupé était hors d’atteinte, sur une page qui invite à essayer. Mieux
+   vaut une page plus longue qu’une démonstration qu’on ne peut pas finir.
+   26rem n’est que ce qu’on réserve avant d’avoir mesuré. */
 .ecran{position:relative;block-size:26rem;border-radius:var(--r-lg);overflow:hidden;
-  border:1px solid var(--rule);background:var(--card);box-shadow:var(--lift);
+  border:1px solid var(--rule);background:var(--papier,var(--card));box-shadow:var(--lift);
   transition:block-size .45s cubic-bezier(.4,0,.2,1)}
 .ecran::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
   box-shadow:inset 0 0 0 1px rgba(33,29,25,.07)}
-/* QUAND LA FIGURE EST PLUS HAUTE QUE LE CADRE, on la coupe et on le DIT : un
-   fondu vers son propre papier, et le lien du pied qui l'ouvre entiere. Une
-   figure du manuel fait mille cinq cents pixels de haut ; la poser telle quelle
-   au milieu d'une page de presentation, c'est demander au lecteur de faire
-   defiler une demonstration. La couleur du fondu est LUE dans la page de la
-   figure : le papier appartient au theme du livre, pas au site. */
-.ecran.rogne::before{content:"";position:absolute;inset-inline:0;inset-block-end:0;
-  block-size:4rem;z-index:2;pointer-events:none;
-  background:linear-gradient(to top,var(--papier,var(--card)),transparent)}
 .ecran iframe{position:absolute;inset:0;inline-size:100%;block-size:100%;border:0;display:block}
 
 /* Le voile porte la couleur de la CARTE, pas du papier du livre : avant que la
@@ -1212,7 +1205,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7dohz9"></script>
+<script src="compte.js?v=mu7fl9i5"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1709,7 +1702,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7dohz9"></script>
+<script src="chrome-pages.js?v=mu7fl9i5"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
@@ -1791,20 +1784,45 @@ body::after{
     }
   }
 
-  /* LA HAUTEUR VIENT DE LA FIGURE, et on la redemande deux fois après coup :
-     une figure qui charge une image ou déplie un tableau grandit après son
-     premier calcul, et un cadre fixé trop tôt lui coupe les pieds. */
+  /* LA HAUTEUR VIENT DE LA FIGURE, ET ELLE LA SUIT. Sans plafond : le cadre ne
+     défile pas, donc tout ce qu’on couperait serait hors d’atteinte.
+
+     Et pas une seule mesure au chargement : un contrôle qui affiche sa
+     correction, une carte-mémoire qui se retourne sur une face plus longue,
+     une légende qui se déplie changent de hauteur APRÈS — c’est-à-dire juste
+     au moment où le curseur vient de faire quelque chose d’intéressant. On
+     observe donc la figure, plutôt que de la mesurer une fois et d’espérer.
+
+     Le seuil de quatre pixels n’est pas de la coquetterie : sans lui, poser la
+     hauteur fait bouger le cadre, ce qui refait partir l’observateur, qui
+     repose la hauteur — une boucle qui ne s’arrête jamais. */
+  var oeil = null;
   function poser() {
     var d = demo();
     if (!d || !d.hauteur) return;
     var h = Math.max(220, d.hauteur());
-    var plafond = Math.min(Math.round(innerHeight * 0.78), 680);
-    ecran.classList.toggle('rogne', h > plafond + 8);
-    ecran.style.blockSize = Math.min(h, plafond) + 'px';
+    /* `ecran.style.blockSize` est VIDE tant qu'on n'a rien pose - les 26rem
+       viennent de la feuille, pas de l'attribut - et `parseFloat('')` vaut NaN,
+       dont toute comparaison est fausse. Sans le test d'existence, la toute
+       premiere mesure ne passait jamais et le cadre restait a sa hauteur
+       d'attente, en coupant les figures encore plus court qu'avant. */
+    var actuel = parseFloat(ecran.style.blockSize);
+    if (!isFinite(actuel) || Math.abs(actuel - h) > 4) ecran.style.blockSize = h + 'px';
     try {
       var papier = cadre.contentWindow.getComputedStyle(cadre.contentDocument.body).backgroundColor;
       if (papier) ecran.style.setProperty('--papier', papier);
     } catch (e) { /* le cadre n’est pas encore là */ }
+  }
+
+  function surveiller() {
+    if (oeil) { oeil.disconnect(); oeil = null; }
+    if (!window.ResizeObserver) return;
+    try {
+      var corps = cadre.contentDocument.body;
+      if (!corps) return;
+      oeil = new ResizeObserver(function () { poser(); });
+      oeil.observe(corps);
+    } catch (e) { /* pas de cadre : les deux mesures différées suffiront */ }
   }
 
   function charger() {
@@ -1828,6 +1846,7 @@ body::after{
   function montre() {
     var d = demo();
     poser();
+    surveiller();
     setTimeout(poser, 700);
     setTimeout(poser, 2200);
     bloc.classList.add('pret');

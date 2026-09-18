@@ -189,8 +189,14 @@
     pause: arreter,
     reprendre: reprendre,
     rendu: function () { return rendu; },
+    /* ON MESURE LA FIGURE, PAS LE DOCUMENT. `scrollHeight` ne descend jamais
+       sous la hauteur de la fenetre, et la fenetre ici EST le cadre que le site
+       vient de regler sur la mesure precedente : chaque figure heritait donc de
+       la hauteur de la plus haute deja vue, et le cadre ne redescendait plus
+       jamais. Le rectangle du contenu, lui, ne doit rien au cadre. */
     hauteur: function () {
-      return Math.ceil(Math.max(document.body.scrollHeight, document.documentElement.scrollHeight));
+      var r = document.querySelector('.dm-page') || document.body;
+      return Math.ceil(r.getBoundingClientRect().height) + 2;
     },
   };
 

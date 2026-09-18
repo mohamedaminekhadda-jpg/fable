@@ -122,7 +122,7 @@
   let _biblio = null;
   function biblio() {
     if (_biblio) return Promise.resolve(_biblio);
-    return vraiFetch('../library/library.json?v=mu7dohz9')
+    return vraiFetch('../library/library.json?v=mu7fl9i5')
       .then((r) => (r.ok ? r.json() : { books: [] }))
       .catch(() => ({ books: [] }))
       .then((j) => { _biblio = j && j.books ? j : { books: [] }; return _biblio; });
