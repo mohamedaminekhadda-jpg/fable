@@ -746,17 +746,19 @@ body::after{
 .ecran-pied em{font-style:italic;font-family:var(--font-ital);font-size:.9375rem;color:var(--ink-2)}
 .ecran-pied a{color:var(--ink-2);text-decoration:none;margin-inline-start:auto}
 .ecran-pied a:hover{color:var(--accent-ink);text-decoration:underline}
-/* Une chose qui bouge toute seule plus de cinq secondes doit pouvoir être
-   arrêtée, et le bouton doit être là AVANT qu’on le cherche. */
-.ecran-pied button{font:500 .75rem/1 var(--font-mono);letter-spacing:.08em;
-  text-transform:uppercase;color:var(--ink-2);background:var(--card);cursor:pointer;
-  border:1px solid var(--rule);border-radius:100px;padding:.35rem .7rem;
-  transition:color .15s,border-color .15s}
-.ecran-pied button:hover{color:var(--ink);border-color:var(--ink-3)}
-/* Rendu la main, il n'y a plus rien a mettre en pause : le bouton reste, pale,
-   plutot que de disparaitre et de faire sauter la ligne. */
-.ecran-pied button:disabled{opacity:.4;cursor:default}
-.ecran-pied button:disabled:hover{color:var(--ink-2);border-color:var(--rule)}
+/* DEUX MODES, ET ON VOIT LEQUEL EST EN COURS. La première version n'avait
+   qu'un bouton « Pause », et le second mode — celui où le visiteur essaie la
+   figure lui-même — ne s'atteignait que par accident, en touchant l'écran.
+   C'est pourtant le mode qui compte : la démonstration n'existe que pour
+   amener quelqu'un à l'essayer. Une chose qui bouge toute seule plus de cinq
+   secondes doit d'ailleurs pouvoir être arrêtée, et « à vous » l'arrête. */
+.modes{display:inline-flex;gap:2px;padding:2px;background:var(--card);
+  border:1px solid var(--rule);border-radius:100px}
+.modes button{font:500 .75rem/1 var(--font-mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);background:transparent;cursor:pointer;
+  border:0;border-radius:100px;padding:.35rem .7rem;transition:color .15s,background .15s}
+.modes button:hover{color:var(--ink)}
+.modes button[aria-pressed="true"]{color:var(--accent-ink);background:var(--accent-wash)}
 
 .rail{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;padding-block:.15rem}
 .rail::-webkit-scrollbar{display:none}
@@ -1002,7 +1004,10 @@ body::after{
           <i class="avance" aria-hidden="true"></i>
         </div>
         <p class="ecran-pied">
-          <button type="button" id="film-pause" aria-pressed="false" data-pause="Pause" data-play="Play">Pause</button>
+          <span class="modes" role="group" aria-label="How to watch this figure">
+            <button type="button" id="mode-auto" aria-pressed="true" data-i18n="prShopAuto">Auto</button>
+            <button type="button" id="mode-main" aria-pressed="false" data-i18n="prShopYou">You drive</button>
+          </span>
           <b id="film-nom"></b>
           <em id="film-titre"></em>
           <a id="film-lien" href="demos/solar.html" target="_blank" rel="noopener" data-i18n="prShopFull">Open it on its own &nearr;</a>
@@ -1014,6 +1019,7 @@ body::after{
         <button type="button" class="bob" data-b="sim" aria-pressed="false"><b>Simulation</b><i>Mathématiques</i></button>
         <button type="button" class="bob" data-b="periodic" aria-pressed="false"><b>Periodic table</b><i>Physique — Chimie</i></button>
         <button type="button" class="bob" data-b="poppyramid" aria-pressed="false"><b>Population pyramid</b><i>Géographie</i></button>
+        <button type="button" class="bob" data-b="map" aria-pressed="false"><b>Map</b><i>Lire une carte</i></button>
         <button type="button" class="bob" data-b="flashcards" aria-pressed="false"><b>Flashcards</b><i>Sciences de la Vie et de la Terre</i></button>
         <button type="button" class="bob" data-b="quiz" aria-pressed="false"><b>Quiz / test</b><i>Français</i></button>
       </div>
@@ -1206,7 +1212,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7d97f6"></script>
+<script src="compte.js?v=mu7dohz9"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1703,18 +1709,24 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7d97f6"></script>
+<script src="chrome-pages.js?v=mu7dohz9"></script>
 <script>
-/* ── LES DÉMOS : SEPT FIGURES, UNE PAGE ──
-   Le rail est déjà dans la page — la construction l’a écrit. Ce script ne
-   fait que l’allumer, et il ne charge RIEN avant que la section soit à
-   l’écran : une figure, c’est le moteur du livre au complet, et la page du
-   projet se lit surtout par le haut.
+/* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
+   Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
+   que l’allumer, et il ne charge RIEN avant que la section soit à l’écran :
+   une figure, c’est le moteur du livre au complet, et la page du projet se lit
+   surtout par le haut.
+
+   AUTO : un curseur fait sur la figure les gestes qu’elle répond, et le rail
+   passe à la suivante au bout d’un tour.
+   À VOUS : le curseur se retire, le rail cesse de compter, la figure est au
+   visiteur. On y arrive par le bouton ou simplement en touchant la figure —
+   c’est le mode qui compte, une démonstration n’existe que pour amener
+   quelqu’un à essayer.
 
    Chaque démo est de la même origine que cette page, donc on peut lui parler :
-   `__demo` dit combien de temps dure son tour, se met en pause hors de vue, et
-   PRÉVIENT quand le visiteur a pris la main — auquel cas on cesse de compter.
-   Rien ne doit lui être repris pendant qu’il essaie quelque chose. */
+   `__demo` dit la durée d’un tour, se met en pause hors de vue, et PRÉVIENT
+   quand le visiteur a pris la main. */
 (function () {
   var bloc = document.getElementById('atelier-bloc');
   if (!bloc || !('IntersectionObserver' in window)) return;
@@ -1725,17 +1737,25 @@ body::after{
   var nom = document.getElementById('film-nom');
   var titre = document.getElementById('film-titre');
   var lien = document.getElementById('film-lien');
-  var bp = document.getElementById('film-pause');
+  var bAuto = document.getElementById('mode-auto');
+  var bMain = document.getElementById('mode-main');
   var boutons = [].slice.call(bloc.querySelectorAll('.bob'));
-  if (!cadre || !boutons.length) return;
+  if (!cadre || !boutons.length || !bAuto || !bMain) return;
 
+  /* La carte n’a qu’UN geste vérifié — son curseur d’étapes — et un tour de
+     quatre secondes ferait défiler le rail avant qu’on ait compris ce qu’on
+     regarde. Un plancher, donc : la carte fait deux allers-retours. */
+  var PLANCHER = 9000;
   var doux = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var i = 0, charge = false, dedans = false, marche = !doux, rendu = false;
-  var minuteur = 0, guet = 0, mesure = 0;
+  var i = 0, charge = false, dedans = false;
+  var auto = !doux;            // le mode demandé
+  var rendu = false;           // le visiteur a pris la main sur CETTE figure
+  var minuteur = 0, guet = 0;
 
   function demo() { try { return cadre.contentWindow.__demo; } catch (e) { return null; } }
   function slug(n) { return boutons[n].getAttribute('data-b'); }
   function texte(n, sel) { var e = boutons[n].querySelector(sel); return e ? e.textContent : ''; }
+  function tour() { var d = demo(); return Math.max((d && d.duree) || 11000, PLANCHER); }
 
   function marquer() {
     for (var n = 0; n < boutons.length; n++) {
@@ -1746,10 +1766,17 @@ body::after{
     lien.href = 'demos/' + slug(i) + '.html';
   }
 
+  function etat() {
+    var a = auto && !rendu;
+    bAuto.setAttribute('aria-pressed', a ? 'true' : 'false');
+    bMain.setAttribute('aria-pressed', a ? 'false' : 'true');
+  }
+
   /* Sans la lecture de `offsetWidth` entre les deux, le navigateur ne voit
      aucun changement et ne rejoue pas l’animation. */
   function barre(quoi) {
     if (quoi === 'repart') {
+      bloc.style.setProperty('--duree', tour() + 'ms');
       bloc.classList.remove('joue');
       avance.style.animation = 'none';
       void avance.offsetWidth;
@@ -1764,36 +1791,27 @@ body::after{
     }
   }
 
-  function etat() {
-    bp.disabled = rendu;
-    bp.setAttribute('aria-pressed', marche ? 'false' : 'true');
-    bp.textContent = marche ? bp.getAttribute('data-pause') : bp.getAttribute('data-play');
-  }
-
-  /* LA HAUTEUR VIENT DE LA FIGURE. On la redemande deux fois après coup : une
-     figure qui charge une image ou qui déplie un tableau grandit après son
+  /* LA HAUTEUR VIENT DE LA FIGURE, et on la redemande deux fois après coup :
+     une figure qui charge une image ou déplie un tableau grandit après son
      premier calcul, et un cadre fixé trop tôt lui coupe les pieds. */
   function poser() {
     var d = demo();
     if (!d || !d.hauteur) return;
     var h = Math.max(220, d.hauteur());
-    /* Le plafond : au-dela, on coupe et on le montre. Il suit la fenetre parce
-       qu'une figure qui remplit l'ecran d'un portable n'est plus une vitrine,
-       c'est un detournement. */
     var plafond = Math.min(Math.round(innerHeight * 0.78), 680);
     ecran.classList.toggle('rogne', h > plafond + 8);
     ecran.style.blockSize = Math.min(h, plafond) + 'px';
     try {
       var papier = cadre.contentWindow.getComputedStyle(cadre.contentDocument.body).backgroundColor;
       if (papier) ecran.style.setProperty('--papier', papier);
-    } catch (e) { /* le cadre n'est pas encore la */ }
+    } catch (e) { /* le cadre n’est pas encore là */ }
   }
 
   function charger() {
-    clearTimeout(minuteur); clearInterval(guet); clearTimeout(mesure);
+    clearTimeout(minuteur); clearInterval(guet);
     bloc.classList.remove('pret');
     barre('zero');
-    charge = true; rendu = false; etat();
+    charge = true;
     cadre.src = 'demos/' + slug(i) + '.html';
     var essais = 0;
     guet = setInterval(function () {
@@ -1802,7 +1820,7 @@ body::after{
       else if (++essais > 80) {
         /* Dix secondes. La figure ne viendra plus ; on lève quand même le
            voile, parce qu’un voile éternel ne dit rien à personne. */
-        clearInterval(guet); bloc.classList.add('pret');
+        clearInterval(guet); bloc.classList.add('pret'); poser();
       }
     }, 125);
   }
@@ -1810,39 +1828,28 @@ body::after{
   function montre() {
     var d = demo();
     poser();
-    mesure = setTimeout(poser, 700);
+    setTimeout(poser, 700);
     setTimeout(poser, 2200);
     bloc.classList.add('pret');
-    if (marche && dedans) {
+    if (auto && !rendu && dedans) {
       if (d) d.play();
-      var duree = (d && d.duree) || 11000;
-      avance.style.setProperty('--duree', duree + 'ms');
-      bloc.style.setProperty('--duree', duree + 'ms');
       barre('repart');
-      minuteur = setTimeout(suivant, duree);
+      clearTimeout(minuteur);
+      minuteur = setTimeout(suivant, tour());
     } else if (d) { d.pause(); barre('zero'); }
   }
 
   function suivant() {
-    if (rendu) return;                 // le visiteur a la main : on ne la reprend pas
-    i = (i + 1) % boutons.length; marquer(); charger();
+    if (!auto || rendu) return;      // la figure est au visiteur : on ne la reprend pas
+    aller((i + 1) % boutons.length);
   }
 
-  function jouer(on) {
-    marche = on; etat();
-    var d = demo();
-    if (!on) { if (d) d.pause(); barre('gele'); clearTimeout(minuteur); return; }
-    if (!charge) { charger(); return; }
-    if (d) d.play();
-    var duree = (d && d.duree) || 11000;
-    bloc.style.setProperty('--duree', duree + 'ms');
-    barre('repart');
-    clearTimeout(minuteur);
-    minuteur = setTimeout(suivant, duree);
+  function aller(n) {
+    i = n; rendu = false; marquer(); etat(); charger();
   }
 
-  /* La démo appelle ceci quand le visiteur la touche. À partir de là le rail
-     ne compte plus : il attend qu’on lui demande autre chose. */
+  /* La démo appelle ceci quand le visiteur la touche. Le mode bascule pour de
+     bon sur cette figure-là : le rail ne compte plus. */
   window.__demoMain = function () {
     rendu = true;
     clearTimeout(minuteur);
@@ -1850,31 +1857,57 @@ body::after{
     etat();
   };
 
+  bAuto.addEventListener('click', function () {
+    auto = true; rendu = false; etat();
+    if (!charge) { charger(); return; }
+    var d = demo();
+    if (d && d.reprendre) d.reprendre();
+    barre('repart');
+    clearTimeout(minuteur);
+    minuteur = setTimeout(suivant, tour());
+  });
+
+  bMain.addEventListener('click', function () {
+    auto = false; etat();
+    var d = demo();
+    if (d) d.pause();
+    clearTimeout(minuteur); barre('gele');
+    /* Choisir « à vous » avant que la figure soit là, c’est demander la figure :
+       on la charge, elle ne jouera simplement pas toute seule. */
+    if (!charge) charger();
+  });
+
   for (var n = 0; n < boutons.length; n++) {
     (function (k) {
-      boutons[k].addEventListener('click', function () {
-        i = k; marquer(); marche = true; charger();
-      });
+      boutons[k].addEventListener('click', function () { auto = true; aller(k); });
     })(n);
   }
-  bp.addEventListener('click', function () { jouer(!marche); });
 
   marquer(); etat();
   if (doux) mot.textContent = 'motion is off in your settings — pick one to load it';
 
   new IntersectionObserver(function (vues) {
     dedans = vues[0].isIntersecting;
-    if (dedans) { if (marche && !rendu) { if (!charge) charger(); else jouer(true); } }
-    else { var d = demo(); if (d) d.pause(); clearTimeout(minuteur); barre('gele'); }
+    if (dedans) {
+      if (!charge) { if (auto) charger(); return; }
+      if (auto && !rendu) {
+        var d = demo(); if (d) d.play();
+        barre('repart');
+        clearTimeout(minuteur);
+        minuteur = setTimeout(suivant, tour());
+      }
+    } else {
+      var d2 = demo(); if (d2) d2.pause();
+      clearTimeout(minuteur); barre('gele');
+    }
   }, { threshold: 0.25 }).observe(bloc);
 
   /* Un onglet caché ne calcule plus d’images, mais le minuteur, lui, continue :
      sans ça on revient à un rail qui a sauté trois figures pendant l’absence. */
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { clearTimeout(minuteur); barre('gele'); }
-    else if (marche && dedans && charge && !rendu) {
-      var d = demo(); var duree = (d && d.duree) || 11000;
-      barre('repart'); clearTimeout(minuteur); minuteur = setTimeout(suivant, duree);
+    else if (auto && !rendu && dedans && charge) {
+      barre('repart'); clearTimeout(minuteur); minuteur = setTimeout(suivant, tour());
     }
   });
 })();

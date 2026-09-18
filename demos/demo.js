@@ -25,8 +25,6 @@
   try { GESTES = JSON.parse(boite && boite.textContent) || []; } catch (e) { GESTES = []; }
 
   var cur = document.getElementById('dm-curseur');
-  var pastille = document.getElementById('dm-main');
-  var bRejouer = document.getElementById('dm-rejouer');
   if (!cur || !GESTES.length) return;
 
   var DOUX = matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -155,13 +153,21 @@
     rendu = true;
     arreter();
     document.body.classList.remove('dm-auto');
-    if (pastille) pastille.hidden = false;
-    /* Et on le DIT au site. Sans ça, le rail continuerait de compter et
-       arracherait la figure des mains du visiteur au bout de ses dix
-       secondes — le seul moment où il faut se taire. */
+    /* Et on le DIT au site, qui le montre dans son pied de page et cesse de
+       compter. Sans ça, le rail arracherait la figure des mains du visiteur au
+       bout de ses dix secondes — le seul moment où il faut se taire. */
     try {
       if (window.parent !== window && window.parent.__demoMain) window.parent.__demoMain();
     } catch (e) { /* une autre origine : il n'y en a pas, mais on ne parie pas dessus */ }
+  }
+
+  /* Le retour en mode automatique, demandé par le site. On repart du PREMIER
+     geste : reprendre au milieu d'une séquence sur une figure que le visiteur a
+     laissée dans un autre état donne un curseur qui presse des choses sans
+     rapport avec ce qu'on voit. */
+  function reprendre() {
+    rendu = false; i = 0;
+    demarrer();
   }
 
   /* `isTrusted` est la seule chose qui distingue le visiteur du curseur : les
@@ -171,18 +177,9 @@
   ['pointerdown', 'touchstart', 'keydown'].forEach(function (nom) {
     document.addEventListener(nom, function (e) {
       if (!e.isTrusted) return;
-      if (pastille && e.target && pastille.contains(e.target)) return;
       laMain();
     }, { capture: true, passive: true });
   });
-
-  if (bRejouer) {
-    bRejouer.addEventListener('click', function () {
-      rendu = false; i = 0;
-      if (pastille) pastille.hidden = true;
-      demarrer();
-    });
-  }
 
   window.__demo = {
     pret: true,
@@ -190,6 +187,7 @@
     gestes: GESTES.length,
     play: demarrer,
     pause: arreter,
+    reprendre: reprendre,
     rendu: function () { return rendu; },
     hauteur: function () {
       return Math.ceil(Math.max(document.body.scrollHeight, document.documentElement.scrollHeight));
