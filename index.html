@@ -214,10 +214,29 @@ kbd{
    inverts with the theme instead of disappearing into it. The wing keeps its
    own weight by opacity, not by a second colour - one hue that can never drift
    out of step with the other. */
-.cw{inline-size:1.55rem;block-size:1.55rem;flex:none;color:inherit}
+.cw{inline-size:2rem;block-size:2rem;flex:none;color:inherit}
 .cw-grand{inline-size:min(9rem,34vw);block-size:auto;margin-block-end:var(--s4);opacity:.9}
-.cw-tronc,.cw-queue,.cw-patte{fill:currentColor}
-.cw-aile{fill:currentColor;opacity:.78}
+/* THE WHOLE BIRD, ON THE FOOTER'S RULE.
+   Shown entire - perch, legs, tail - and stood on the hairline the footer
+   already draws, so its own little branch rests on the page's line and the two
+   read as one. The first try cropped the window at the bird's FEET so it could
+   stand on the rule directly; that cut the tail off, because a perched crow's
+   tail hangs well below its toes (y=882 against y=798). Hiding the author's
+   perch to gain nothing and lose the tail was the wrong trade.
+
+   `inset-block-end:100%` is what lands it on the line - not a nudge in pixels
+   that drifts the moment the type size changes. */
+.cw-pied{
+  position:absolute;inset-block-end:100%;inset-inline-start:var(--s5);
+  inline-size:auto;block-size:4.5rem;opacity:.92;pointer-events:none;
+}
+@media (max-width:34rem){.cw-pied{block-size:3.4rem}}
+.cw-tronc,.cw-queue,.cw-patte,.cw-flanc{fill:currentColor}
+/* Mixed with the paper rather than made transparent. The colour is the same
+   one it has always been over the page, but it is now OPAQUE - and it has to
+   be, because there is a solid flank behind it whose whole job is to be
+   hidden until the wing moves. */
+.cw-aile{fill:color-mix(in oklab,currentColor 78%,var(--paper))}
 .cw-bec{fill:var(--accent)}
 .cw-oeil{fill:var(--paper)}
 .cw-perche polygon{fill:var(--ink-3);opacity:.55}
@@ -397,6 +416,14 @@ body::after{
    l'étagère a l'air de continuer au-delà de la page — ce qui est vrai. */
 .mur-hote{
   display:grid;gap:var(--s3);justify-items:center;min-inline-size:0;
+  /* A MASK IS NOT A CLIP. The cards are absolutely positioned and reach well
+     past this box by design; the gradient fades them out so the shelf looks
+     like it carries on past the page - but a mask only decides what is
+     PAINTED. The cards still counted towards the width of the document, and
+     on a 375px phone that was 44px of sideways scroll on a page that has no
+     business scrolling sideways. The clip costs nothing here: it cuts exactly
+     where the mask has already faded to nothing. */
+  overflow:hidden;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
@@ -1028,7 +1055,7 @@ body::after{
 .pal-foot span{display:inline-flex;align-items:center;gap:.3rem}
 
 /* ─── footer ──────────────────────────────────────────────── */
-.foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7)}
+.foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7);position:relative}
 .foot .wrap{
   display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);align-items:baseline;
   padding-block:var(--s5) var(--s6);color:var(--ink-3);font-size:.8125rem;
@@ -1047,6 +1074,11 @@ body::after{
      seul sur sa rangée. Deux par deux, la grille reste lisible. */
   .stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
   .stat b{font-size:1.25rem}
+  /* `And two things to read with` is held on one line so the hairline can run
+     out beside it. At 375px that sentence is simply wider than the phone, and
+     it took the whole document with it. The rule goes, the title wraps. */
+  .section-head h2{white-space:normal}
+  .section-head .filet{display:none}
 }
 /* Sur un écran tactile il n'y a pas de survol : le résumé monté sur la
    couverture ne se montrerait jamais. On ne le « déplie » pas sur place — il
@@ -1096,11 +1128,16 @@ body::after{
          ONLY copy of the geometry on the page - everything else points at
          `#corbeau-oiseau` with <use>. -->
     <a class="brand" href="./">
-      <svg class="cw" id="cw-mast" viewBox="-12 -38 430 430" aria-hidden="true" focusable="false">
+      <svg class="cw" id="cw-mast" data-vivant viewBox="-12 -38 430 430" aria-hidden="true" focusable="false">
       <g id="corbeau-oiseau">
         <!-- The animal. Everything in here hops together; the perch below does
              not, which is the whole point of the split. -->
         <g class="cw-bete">
+          <!-- WHAT IS UNDER THE WING. The same diamond at 0.84 about the
+               shoulder the wing pivots on, so it is a strict subset: invisible
+               while the wing is down, and the moment the wing lifts it is the
+               far wing and the back, rather than a hole through the bird. -->
+          <polygon class="cw-flanc" points="723.55 642.36 270.85 642.36 204.19 575.70 204.19 352.50 278.17 278.53 359.72 278.53"/>
           <polygon class="cw-aile" points="815.65 703.76 276.73 703.76 197.37 624.41 197.37 358.69 285.44 270.63 382.52 270.63 815.65 703.76"/>
           <!-- The bill is drawn BEFORE the head and its root runs back to
                x=230, well inside it. Nothing right of x=285 moves, so the mark
@@ -1337,6 +1374,11 @@ body::after{
 </main>
 
 <footer class="foot">
+  <!-- The same `#corbeau-oiseau` as the masthead and the empty state - a third
+       window onto one drawing, never a third copy of it. -->
+  <svg class="cw cw-pied" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+    <use href="#corbeau-oiseau"/>
+  </svg>
   <div class="wrap">
     <span data-i18n="footer">Fable — interactive books and textbooks in French, English and Arabic.</span>
     <a href="cahier/">Le Jaguar</a>
@@ -3114,8 +3156,14 @@ body::after{
    exactly what that setting exists to stop - and the mark simply sits there,
    which is a perfectly good logo. */
 (function () {
-  var cw = document.getElementById('cw-mast');
-  if (!cw) return;
+  /* Every mark on the page, not one of them: the masthead carries the cropped
+     head, the footer the whole bird. They are driven together on purpose -
+     two birds blinking at the same instant read as one animal seen twice,
+     which is what they are. Separate timers would read as an aviary. */
+  var marques = [].slice.call(document.querySelectorAll('.cw[data-vivant]'));
+  if (!marques.length) return;
+  var cw = marques[0];
+  function chaque(f) { for (var i = 0; i < marques.length; i++) f(marques[i]); }
   var doux = !matchMedia('(prefers-reduced-motion:reduce)').matches;
   if (!doux) return;
 
@@ -3127,8 +3175,10 @@ body::after{
   (function encore() {
     setTimeout(function () {
       if (!document.hidden) {
-        cw.classList.add('cligne');
-        setTimeout(function () { cw.classList.remove('cligne'); }, 130);
+        chaque(function (m) { m.classList.add('cligne'); });
+        setTimeout(function () {
+          chaque(function (m) { m.classList.remove('cligne'); });
+        }, 130);
       }
       encore();
     }, 4200 + Math.random() * 5000);
@@ -3146,11 +3196,15 @@ body::after{
     /* Removed, forced through a layout read, then added again: without the
        read the browser coalesces the two changes and the second press of a
        double-press does nothing at all. */
-    cw.classList.remove('bat');
-    void cw.getBoundingClientRect().width;
-    cw.classList.add('bat');
+    chaque(function (m) {
+      m.classList.remove('bat');
+      void m.getBoundingClientRect().width;
+      m.classList.add('bat');
+    });
     clearTimeout(fin);
-    fin = setTimeout(function () { cw.classList.remove('bat'); }, 580);
+    fin = setTimeout(function () {
+      chaque(function (m) { m.classList.remove('bat'); });
+    }, 580);
   }, { passive: true });
 
   /* ── IL GUETTE ──
@@ -3162,7 +3216,7 @@ body::after{
     var veut = !!(e.target.closest && e.target.closest('.book,.mur-carte,.tool'));
     if (veut === guettait) return;
     guettait = veut;
-    cw.classList.toggle('guette', veut);
+    chaque(function (m) { m.classList.toggle('guette', veut); });
   }, { passive: true });
 
   /* ── IL VOUS SUIT DES YEUX ──
@@ -3174,27 +3228,47 @@ body::after{
      mouse move would force the browser to re-measure the page, several hundred
      times a minute, to learn something that had not moved. */
   if (!matchMedia('(hover:hover)').matches) return;
-  var regard = cw.querySelector('.cw-regard');
-  if (!regard) return;
-  var boite = null, dernier = 0;
-  function mesurer() { boite = cw.getBoundingClientRect(); }
-  mesurer();
-  addEventListener('resize', mesurer);
+  var yeux = [];
+  chaque(function (m) {
+    var r = m.querySelector('.cw-regard');
+    if (r) yeux.push({ m: m, r: r, boite: null });
+  });
+  if (!yeux.length) return;
+
+  /* THE MASTHEAD NEVER MOVES; THE FOOTER DOES.
+     One is sticky at the top of the screen, so its box on screen is the same
+     all visit and measuring it on every mouse move would ask the browser to
+     re-measure the page, hundreds of times a minute, to learn something that
+     had not changed. The other scrolls. So the boxes are cached and thrown
+     away on scroll or resize - a flag only, no measuring in the scroll
+     handler, which is the one place work must never go. */
+  var vieux = true, dernier = 0;
+  function perimer() { vieux = true; }
+  addEventListener('resize', perimer);
+  addEventListener('scroll', perimer, { passive: true });
+
   document.addEventListener('pointermove', function (e) {
     /* Sixteen times a second is more eye contact than anyone needs. */
     if (e.timeStamp - dernier < 60) return;
     dernier = e.timeStamp;
-    if (!boite || !boite.width) mesurer();
-    var dx = e.clientX - (boite.left + boite.width / 2);
-    var dy = e.clientY - (boite.top + boite.height / 2);
-    var d = Math.sqrt(dx * dx + dy * dy) || 1;
-    /* It looks FURTHER as you get further away, up to a stop: an eye that goes
-       hard to one side the moment the pointer leaves the logo looks broken,
-       and one that never reaches the edge looks asleep. The units are the
-       drawing's own - 30 of them is about a third of the eye's width. */
-    var k = Math.min(1, d / 400) * 30;
-    regard.style.transform = 'translate(' + (dx / d * k).toFixed(1) + 'px,'
-                                          + (dy / d * k).toFixed(1) + 'px)';
+    for (var i = 0; i < yeux.length; i++) {
+      var o = yeux[i];
+      if (vieux || !o.boite || !o.boite.width) o.boite = o.m.getBoundingClientRect();
+      /* Off screen: leave the eye where it is rather than spend a transform on
+         a bird nobody can see. */
+      if (o.boite.bottom < 0 || o.boite.top > innerHeight) continue;
+      var dx = e.clientX - (o.boite.left + o.boite.width / 2);
+      var dy = e.clientY - (o.boite.top + o.boite.height / 2);
+      var d = Math.sqrt(dx * dx + dy * dy) || 1;
+      /* It looks FURTHER as you get further away, up to a stop: an eye that
+         goes hard to one side the moment the pointer leaves the logo looks
+         broken, and one that never reaches the edge looks asleep. The units
+         are the drawing's own - 30 of them is about a third of the eye. */
+      var k = Math.min(1, d / 400) * 30;
+      o.r.style.transform = 'translate(' + (dx / d * k).toFixed(1) + 'px,'
+                                        + (dy / d * k).toFixed(1) + 'px)';
+    }
+    vieux = false;
   }, { passive: true });
 })();
 
@@ -4222,11 +4296,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6di5pz). Non remplacée —
+  /* La version est posée par la construction (mu6gxlg8). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6di5pz')
+  fetch('library/library.json?v=mu6gxlg8')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4237,7 +4311,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6di5pz"></script>
+<script src="compte.js?v=mu6gxlg8"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
