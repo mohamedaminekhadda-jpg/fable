@@ -4865,11 +4865,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu7frggz). Non remplacée —
+  /* La version est posée par la construction (mu7g947a). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu7frggz')
+  fetch('library/library.json?v=mu7g947a')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4880,7 +4880,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu7frggz"></script>
+<script src="compte.js?v=mu7g947a"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */

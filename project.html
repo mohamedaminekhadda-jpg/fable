@@ -1205,7 +1205,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7frggz"></script>
+<script src="compte.js?v=mu7g947a"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1702,7 +1702,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7frggz"></script>
+<script src="chrome-pages.js?v=mu7g947a"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
@@ -1748,7 +1748,13 @@ body::after{
   function demo() { try { return cadre.contentWindow.__demo; } catch (e) { return null; } }
   function slug(n) { return boutons[n].getAttribute('data-b'); }
   function texte(n, sel) { var e = boutons[n].querySelector(sel); return e ? e.textContent : ''; }
-  function tour() { var d = demo(); return Math.max((d && d.duree) || 11000, PLANCHER); }
+  function tour() {
+    var d = demo();
+    /* `duree` est une fonction : la figure ne peut la calculer qu'une fois ses
+       propres controles construits, ce qu'elle fait quand elle veut. */
+    var v = d && (typeof d.duree === 'function' ? d.duree() : d.duree);
+    return Math.max(v || 11000, PLANCHER);
+  }
 
   function marquer() {
     for (var n = 0; n < boutons.length; n++) {
@@ -1807,7 +1813,17 @@ body::after{
        premiere mesure ne passait jamais et le cadre restait a sa hauteur
        d'attente, en coupant les figures encore plus court qu'avant. */
     var actuel = parseFloat(ecran.style.blockSize);
-    if (!isFinite(actuel) || Math.abs(actuel - h) > 4) ecran.style.blockSize = h + 'px';
+    if (!isFinite(actuel) || Math.abs(actuel - h) > 4) {
+      /* ON GRANDIT D'UN COUP, ON RETRECIT DOUCEMENT. La carte change de hauteur
+         en changeant d'echelle, et animer la croissance laissait le bas de la
+         figure hors du cadre pendant la demi-seconde de la transition - juste
+         apres le geste, c'est-a-dire au seul moment ou on la regardait. Vers le
+         bas il n'y a rien a cacher, et un cadre qui se replie d'un coup claque. */
+      var croit = !isFinite(actuel) || h > actuel;
+      if (croit) ecran.style.transition = 'none';
+      ecran.style.blockSize = h + 'px';
+      if (croit) { void ecran.offsetHeight; ecran.style.transition = ''; }
+    }
     try {
       var papier = cadre.contentWindow.getComputedStyle(cadre.contentDocument.body).backgroundColor;
       if (papier) ecran.style.setProperty('--papier', papier);

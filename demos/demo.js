@@ -32,10 +32,38 @@
   var PRESSE = 280;    // le temps de la pression elle-même
   var POSE = 1500;     // et le temps de REGARDER ce qui a changé
   var TIRE = 950;      // un curseur de réglage qu'on traîne d'un bout à l'autre
+  var CRAN = 1100;     // ou, s'il a des crans, le temps de lire chacun
 
-  var duree = 900;
-  for (var d = 0; d < GESTES.length; d++) {
-    duree += VERS + PRESSE + POSE + (estTire(GESTES[d]) ? TIRE : 0);
+  /* UN CURSEUR À CRANS N'EST PAS UNE PLAGE. Les cinq échelles de la carte
+     vivent sur un `range` de 0 à 4 : le balayer envoyait vingt-huit événements
+     sur cinq entiers, la carte se redessinait sans arrêt et passait devant les
+     échelles intermédiaires sans jamais s'y poser. Au-dessous d'une douzaine
+     de crans, on avance donc d'un cran à la fois, le temps de lire chacun.
+     Au-dessus, c'est une vraie plage continue et le balayage est juste. */
+  function crans(el) {
+    if (!el || el.type !== 'range') return 0;
+    var min = parseFloat(el.min) || 0, max = parseFloat(el.max);
+    if (!isFinite(max) || max <= min) return 0;
+    var pas = parseFloat(el.step) || 1;
+    var n = Math.round((max - min) / pas) + 1;
+    return (n >= 2 && n <= 12) ? n : 0;
+  }
+
+  /* CALCULEE QUAND ON LA DEMANDE, pas au chargement. Une figure construit ses
+     controles quand elle veut : la carte n'avait pas encore son curseur
+     d'echelles au moment ou ce script s'est execute, donc ses cinq crans
+     comptaient pour zero et le tour etait annonce a 4,35 s au lieu de 8,9. Le
+     site n'aurait laisse voir que la moitie du parcours. */
+  function calculerDuree() {
+    var t = 900;
+    for (var d = 0; d < GESTES.length; d++) {
+      t += VERS + PRESSE + POSE;
+      if (estTire(GESTES[d])) {
+        var n = crans(cible(GESTES[d]));
+        t += n ? n * CRAN : TIRE;
+      }
+    }
+    return t;
   }
 
   var i = 0, joue = false, rendu = false, minuteurs = [];
@@ -82,12 +110,35 @@
      là où la figure est posée, en fraction de SON échelle : c'est elle qui sait
      ce que ses bornes veulent dire, pas nous. Une valeur en dur donnerait une
      démo juste pour une figure et absurde pour la suivante. */
+  /* Cran par cran : on amène la pointe sur le cran suivant, PUIS on y pose la
+     valeur. La poignée semble suivre la main, et non l'inverse. */
+  function parCrans(el, min, max, pas, n, fini) {
+    var r = el.getBoundingClientRect();
+    var k = 0;
+    (function un() {
+      if (!joue) return;
+      var v = parseFloat(el.value); if (!isFinite(v)) v = min;
+      var suite = (v + pas > max + 1e-9) ? min : v + pas;
+      viser(r.left + r.width * ((suite - min) / (max - min)), r.top + r.height / 2);
+      plus(function () {
+        if (!joue) return;
+        el.value = String(suite);
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        if (++k >= n) { fini(); return; }
+        plus(un, Math.max(200, CRAN - 380));
+      }, 380);
+    })();
+  }
+
   function tirer(el, fini) {
     if (el.type !== 'range') { presser(el); fini(); return; }
     var min = parseFloat(el.min) || 0;
     var max = parseFloat(el.max);
     if (!isFinite(max) || max <= min) { presser(el); fini(); return; }
     var pas = parseFloat(el.step) || (max - min) / 100;
+    var n = crans(el);
+    if (n) { parCrans(el, min, max, parseFloat(el.step) || 1, n, fini); return; }
     var de = parseFloat(el.value); if (!isFinite(de)) de = (min + max) / 2;
     var vers = (de - min) > (max - de) ? min + (max - min) * 0.18 : min + (max - min) * 0.82;
 
@@ -188,7 +239,7 @@
     /* Ce que le site compare pour savoir s'il regarde bien la figure qu'il
        vient de demander, et pas celle d'avant. */
     nom: (page && page.getAttribute('data-demo')) || '',
-    duree: duree,
+    duree: calculerDuree,
     gestes: GESTES.length,
     play: demarrer,
     pause: arreter,
@@ -201,7 +252,9 @@
        jamais. Le rectangle du contenu, lui, ne doit rien au cadre. */
     hauteur: function () {
       var r = document.querySelector('.dm-page') || document.body;
-      return Math.ceil(r.getBoundingClientRect().height) + 2;
+      /* Le BAS du contenu, pas sa hauteur : ce qui le precede - une marge, un
+         filet - compte aussi, et le cadre rendait deux pixels de trop court. */
+      return Math.ceil(r.getBoundingClientRect().bottom) + 2;
     },
   };
 

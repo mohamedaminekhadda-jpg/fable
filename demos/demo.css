@@ -5,8 +5,9 @@
  * typographie, ses mesures. Repeindre ça aux couleurs du site donnerait une
  * belle vitrine d'un produit qui n'existe pas. Le site fait le cadre — l'écran,
  * le rail, la légende, en Bricolage sur son papier à lui ; ici on ne pose que
- * ce que le livre n'a pas : de quoi tenir la page dans un cadre, un curseur, et
- * la pastille qui dit au visiteur qu'il a la main.
+ * ce que le livre n'a pas : de quoi tenir la page dans un cadre, et un curseur.
+ * Ce que le visiteur fait à la figure se dit dans le pied de page du site, pas
+ * ici : une pastille posée en bas de CE cadre tombait en travers de la figure.
  *
  * Les deux seules couleurs qui viennent du site sont celles de l'accent
  * (#e4402a et son encre #c2331c, avec son lavis #fce8e2) — le curseur doit se
@@ -37,52 +38,42 @@ body.dm-auto { -webkit-user-select: none; user-select: none; }
    Il est POSÉ DANS la page de la figure, pas au-dessus d'elle depuis le site :
    il vise des boutons que seule cette page peut mesurer, et une mesure prise à
    travers un cadre se trompe dès qu'il y a eu un défilement. */
+/* UNE VRAIE FLÈCHE, pas une pastille. L'anneau rouge se lisait comme un
+   repère posé sur la figure — quelque chose que la page signale — alors que
+   tout le propos de ce curseur est « vous pourriez être en train de faire
+   ça ». Il doit donc ressembler à ce que le lecteur a sous la main : blanc,
+   cerné de noir, légèrement ombré, lisible sur un ciel étoilé comme sur une
+   feuille crème. La POINTE est l'origine du dessin, d'où la marge de deux
+   pixels : c'est elle qui doit tomber sur le bouton, pas le centre. */
 .dm-curseur {
   position: fixed; left: 0; top: 0; z-index: 40;
-  inline-size: 26px; block-size: 26px; margin: -13px 0 0 -13px;
+  inline-size: 14px; block-size: 21px; margin: -2px 0 0 -2px;
   pointer-events: none; opacity: 0; transform: translate(-120px, -120px);
   transition: transform .72s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
 }
 .dm-curseur.on { opacity: 1; }
 .dm-curseur.vite { transition-duration: .07s, .3s; }   /* il suit la poignée */
-.dm-curseur i {
-  position: absolute; inset: 0; display: block; border-radius: 50%;
-  border: 1.5px solid #e4402a; background: rgba(228, 64, 42, .14);
-  box-shadow: 0 2px 10px -4px rgba(228, 64, 42, .8);
-  transition: transform .18s ease, background .18s ease;
+.dm-curseur svg {
+  display: block; overflow: visible;
+  filter: drop-shadow(0 1.5px 2px rgba(0, 0, 0, .4));
+  transition: transform .18s ease;
 }
-.dm-curseur.press i { transform: scale(.6); background: rgba(228, 64, 42, .32); }
+.dm-curseur .dm-fleche {
+  fill: #fff; stroke: #17140f; stroke-width: 1.5;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.dm-curseur.press svg { transform: scale(.86); }
+/* L'onde part de la POINTE, pas du milieu du dessin. */
 .dm-curseur::after {
-  content: ""; position: absolute; inset: -7px; border-radius: 50%;
-  border: 1.5px solid #e4402a; opacity: 0; transform: scale(.55);
+  content: ""; position: absolute; left: 0; top: 0;
+  inline-size: 26px; block-size: 26px; margin: -13px 0 0 -13px;
+  border-radius: 50%; border: 1.5px solid #e4402a; opacity: 0; transform: scale(.55);
 }
 .dm-curseur.press::after { animation: dm-onde .52s ease-out; }
 @keyframes dm-onde {
   from { opacity: .65; transform: scale(.55); }
   to   { opacity: 0;   transform: scale(1.55); }
 }
-
-/* ── la pastille ──────────────────────────────────────────────────────────
-   Elle n'apparaît QU'APRÈS le premier geste du visiteur : avant, elle
-   expliquerait une chose qui ne s'est pas encore produite. */
-.dm-main {
-  position: fixed; inset-block-end: 10px; inset-inline: 0; z-index: 41;
-  margin: 0 auto; inline-size: max-content; max-inline-size: calc(100% - 20px);
-  display: flex; align-items: center; gap: .55rem;
-  font: 600 11px/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  letter-spacing: .07em; text-transform: uppercase;
-  color: #c2331c; background: #fce8e2;
-  border: 1px solid rgba(228, 64, 42, .38); border-radius: 100px;
-  padding: .45rem .5rem .45rem .8rem;
-}
-.dm-main[hidden] { display: none; }
-.dm-main button {
-  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit;
-  background: transparent; cursor: pointer;
-  border: 0; border-inline-start: 1px solid rgba(228, 64, 42, .38);
-  padding: .1rem .35rem .1rem .55rem;
-}
-.dm-main button:hover { text-decoration: underline; }
 
 @media (prefers-reduced-motion: reduce) {
   .dm-curseur { display: none; }

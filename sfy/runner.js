@@ -4,7 +4,7 @@
    ses deux versions, et c'est ici qu'on choisit.
    Le CONTENU de la simulation, lui, reste dans la langue ou il est ecrit :
    chaque sim.js porte ses propres libelles. */
-import { LANG, T, poserSelecteur } from './langue.js?v=mu7frggz';
+import { LANG, T, poserSelecteur } from './langue.js?v=mu7g947a';
 
 poserSelecteur(document.getElementById('langsel'));
 document.documentElement.lang = LANG;
@@ -40,7 +40,7 @@ document.documentElement.lang = LANG;
 // the error handling. A simulation that fails to import, exports no mount(), or
 // throws on its first frame must say so in plain words on screen: an author
 // staring at a blank rectangle learns nothing, and neither does a teacher.
-import { createLab } from './harness.js?v=mu7frggz';
+import { createLab } from './harness.js?v=mu7g947a';
 
 const SIM = window.__SIM__ || {};
 
