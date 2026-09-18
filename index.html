@@ -23,6 +23,11 @@
      cost more and said less. -->
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* SOCLE-CSS-DEBUT
+   Everything from here to SOCLE-CSS-FIN is lifted by scripts/make-web.mjs into
+   every other page of the site: the tokens, the base, the masthead, the crow,
+   the bubble, the grain, and the hero with its buttons. One copy in the repo,
+   one per page in the build. */
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
   --paper:#f4f1e9;      /* page ground */
@@ -530,6 +535,21 @@ kbd{
 }
 .theme-btn:hover{color:var(--ink);border-color:var(--ink-3)}
 .theme-btn:active{background:var(--accent-wash)}
+/* ── la rangée des pages ── */
+.pages{border-block-start:1px solid var(--rule-soft)}
+.pages .wrap{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none;
+  padding-block:.3rem .35rem}
+.pages .wrap::-webkit-scrollbar{display:none}
+.pages a{
+  font-family:var(--font-display);font-size:.75rem;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;
+  color:var(--ink-3);text-decoration:none;padding:.3rem .65rem;border-radius:100px;
+  transition:color .15s,background .15s;
+}
+.pages a:hover{color:var(--ink);background:var(--rule-soft)}
+/* The page you are on is stated, not merely unlinked: `aria-current` is what a
+   screen reader announces, and the colour is what everyone else reads. */
+.pages a[aria-current="page"]{color:var(--accent-ink);background:var(--accent-wash)}
 /* Under 30rem every control shrinks together rather than one of them being
    dropped: on a phone the language switch and the theme are exactly what you
    came to the top of the page for. */
@@ -611,6 +631,8 @@ body::after{
 .btn-1:hover{color:var(--paper);transform:translateY(-2px);box-shadow:0 18px 32px -14px var(--accent)}
 .btn-2{border-color:var(--rule);color:var(--ink)}
 .btn-2:hover{border-color:var(--ink-3);background:var(--card);color:var(--ink);transform:translateY(-2px)}
+
+/* SOCLE-CSS-FIN */
 
 /* ─── le mur de couvertures ───────────────────────────────── */
 /* Les livres du fond dépassent du cadre : plutôt que de les trancher net, on
@@ -1328,6 +1350,7 @@ body::after{
   border-block-start:1px solid var(--rule-soft);font-size:.75rem;color:var(--ink-3)}
 .pal-foot span{display:inline-flex;align-items:center;gap:.3rem}
 
+/* PIED-CSS-DEBUT  lifted into every other page with the footer markup. */
 /* ─── footer ──────────────────────────────────────────────── */
 .foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7);position:relative}
 .foot .wrap{
@@ -1372,6 +1395,8 @@ body::after{
   .tome-inner{transform:none!important}
 }
 
+/* PIED-CSS-FIN */
+
 /* ─── la transition de vue au changement de filtre ────────── */
 /* Par défaut, une transition de vue fait un fondu croisé de la PAGE ENTIÈRE.
    L'étagère change de hauteur quand on filtre, donc tout ce qui la suit se
@@ -1393,6 +1418,7 @@ body::after{
 <a class="skip" href="#library" data-i18n="skip">Skip to the books</a>
 
 <div id="sentinelle" aria-hidden="true"></div>
+<!-- ENTETE-DEBUT  the bar, lifted into every other page -->
 <header class="masthead" id="masthead">
   <div class="wrap">
     <!-- LE CORBEAU. The drawing is SVG/logo.svg, unchanged in shape; only its
@@ -1446,8 +1472,23 @@ body::after{
     </div>
     <button class="theme-btn" id="theme" type="button" aria-pressed="false" data-i18n="dark">Dark</button>
   </div>
+  <!-- THE PAGES, IN A ROW OF THEIR OWN.
+       Not beside the brand: that row already runs 359px of a 375px phone, and
+       four more links there would push the theme switch off the screen. This
+       one scrolls sideways when it has to, which is the honest answer to a
+       narrow screen - a menu that hides behind a button is one more thing to
+       press before you know the site has more than one page. -->
+  <nav class="pages" aria-label="Pages">
+    <div class="wrap">
+      <a href="./" data-p="accueil" data-i18n="navHome">The library</a>
+      <a href="simulations.html" data-p="simulations" data-i18n="navSims">See for yourself</a>
+      <a href="notebook.html" data-p="notebook" data-i18n="navNb">Le Jaguar</a>
+      <a href="project.html" data-p="project" data-i18n="navProj">The project</a>
+    </div>
+  </nav>
   <i class="progres" aria-hidden="true"></i>
 </header>
+<!-- ENTETE-FIN -->
 
 <main>
   <section class="hero wrap">
@@ -1688,6 +1729,7 @@ body::after{
   </section>
 </main>
 
+<!-- PIED-DEBUT  the footer, lifted into every other page -->
 <footer class="foot">
   <!-- The bird and what it has to say, perched together on the footer's rule.
        The same `#corbeau-oiseau` as the masthead and the empty state - a third
@@ -1741,6 +1783,7 @@ body::after{
     <a href="cahier/">Le Jaguar</a>
   </div>
 </footer>
+<!-- PIED-FIN -->
 
 <dialog class="palette" id="palette" aria-label="Search">
   <div class="pal-top">
@@ -3329,6 +3372,9 @@ body::after{
 ]
 </script>
 
+<!-- LANGUE-JS-DEBUT  lifted into every other page: one string table for the
+     whole site, so a word is translated once and appears translated four
+     times. -->
 <script>
 /* ── LA LANGUE ────────────────────────────────────────────────────────────
    Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
@@ -3353,6 +3399,8 @@ body::after{
                'Tirez sur la courbe. Elle ne mord pas.',
                'Je ne dessine pas les figures. Je les regarde se résoudre.',
                'Je sais compter jusqu’à trois. Le reste, c’est votre travail.'],
+      navHome: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
+      navNb: 'Le Jaguar', navProj: 'Le projet',
       rubanEyebrow: 'Ce qu\u2019il y a vraiment dedans',
       rubanH: 'Cent deux sortes de figure, <em>toutes vivantes</em>',
       lede: 'La figure n’illustre pas la leçon : elle la résout, sous vos yeux, avec les mêmes quelques lignes de mathématiques dont la leçon parle.',
@@ -3414,6 +3462,8 @@ body::after{
                'Pull the curve. It does not bite.',
                'I do not draw the figures. I just watch them work it out.',
                'I can count to three. The rest is your job.'],
+      navHome: 'The library', navSims: 'See for yourself',
+      navNb: 'Le Jaguar', navProj: 'The project',
       rubanEyebrow: 'What is actually in them',
       rubanH: 'A hundred and two kinds of figure, <em>every one of them alive</em>',
       lede: 'The figure does not illustrate the lesson. It works it out, while you watch, from the same few lines of mathematics the lesson is about.',
@@ -3523,6 +3573,9 @@ body::after{
 })();
 </script>
 
+<!-- LANGUE-JS-FIN -->
+
+<!-- CORBEAU-JS-DEBUT  the bird's behaviour, lifted with it -->
 <script>
 /* ── LE CORBEAU, VIVANT ───────────────────────────────────────────────────
    The logo is the mascot, so it has to behave like one - but it sits in a
@@ -3754,7 +3807,14 @@ body::after{
    five minutes of swaps to replay when you come back. */
 (function () {
   function demarrer() {
-    var em = document.querySelector('.hero h1 em');
+    /* ONLY THE PAGE WHOSE HEADLINE THIS IS.
+       This script is lifted into every page of the site with the crow, and the
+       other three have their own titles with their own `<em>`. Matching on
+       `.hero h1 em` alone rewrote all of them to say "pull the curves out of",
+       which is a fine sentence about a library and nonsense about a notebook.
+       The h1 that owns these phrases is the one keyed to them. */
+    var titre = document.querySelector('.hero h1[data-i18n-html="h1"]');
+    var em = titre && titre.querySelector('em');
     var mots = window.T ? window.T('h1Mots') : null;
     if (!em || !mots || !mots.length || !mots.join) return;
 
@@ -3810,6 +3870,8 @@ body::after{
   else poser();
 })();
 </script>
+
+<!-- CORBEAU-JS-FIN -->
 
 <script>
 /* ── LA FIGURE DU HÉROS ───────────────────────────────────────────────────
@@ -4803,11 +4865,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu78k1hy). Non remplacée —
+  /* La version est posée par la construction (mu7bhvdd). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu78k1hy')
+  fetch('library/library.json?v=mu7bhvdd')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4818,7 +4880,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu78k1hy"></script>
+<script src="compte.js?v=mu7bhvdd"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
