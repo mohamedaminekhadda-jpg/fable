@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nothing on this branch — Fable</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-46 -52 502 502'><rect x='-46' y='-52' width='502' height='502' rx='104' fill='%2317140f'/><polygon fill='%23f4f1e9' opacity='.62' points='815.65 703.76 276.73 703.76 197.37 624.41 197.37 358.69 285.44 270.63 382.52 270.63 815.65 703.76'/><polygon fill='%23f4f1e9' points='197.37 358.69 197.37 624.41 276.73 703.76 188.78 703.76 14.26 529.24 14.26 44.02 58.19 .1 241.41 0 285.44 44.02 285.44 173.54 382.52 270.63 285.44 270.63 197.37 358.69'/><polygon fill='%23e4402a' points='285.44 44.02 496.35 44.02 285.44 173.54 285.44 44.02'/><rect fill='%2317140f' x='177.34' y='57.2' width='36.52' height='36.52'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<style>
+/* LA PAGE QUI N'EXISTE PAS.
+   GitHub Pages serves this for any address under the site that is not there -
+   a mistyped book slug, a chapter link from a build that has since changed,
+   anything. Until now it served its own grey default, which says "404" and
+   offers no way back to a site the visitor was clearly trying to reach.
+
+   It is deliberately standalone: no library, no account, no search. A page
+   whose whole job is to appear when something is already wrong should not have
+   anything left that can go wrong. The ONE thing it borrows is the crow
+   itself, injected at build time from `web/index.html`, so there is still only
+   one copy of that drawing in the project. */
+:root{
+  --paper:#f4f1e9; --card:#fffdf8; --ink:#17140f; --ink-2:#544d44; --ink-3:#8a8277;
+  --rule:#ddd5c7; --accent:#e4402a; --accent-ink:#c2331c; --focus:#3340dd;
+  --font:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#121016; --card:#1b1822; --ink:#f1ece2; --ink-2:#b3aca1; --ink-3:#8a8278;
+    --rule:#332e3c; --accent:#ff6f52; --accent-ink:#ff9078; --focus:#9aa4ff;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;min-block-size:100vh;background:var(--paper);color:var(--ink);
+  font:400 1rem/1.62 var(--font);font-variation-settings:"opsz" 14;
+  display:grid;place-items:center;padding:2rem 1.5rem;
+  -webkit-font-smoothing:antialiased;
+}
+/* Le grain, comme sur l'accueil : c'est du papier, pas un aplat. */
+body::after{
+  content:"";position:fixed;inset:0;z-index:5;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.035;mix-blend-mode:multiply;
+}
+@media (prefers-color-scheme:dark){body::after{opacity:.06;mix-blend-mode:screen}}
+
+.boite{max-inline-size:34rem;text-align:start}
+.scene{display:flex;align-items:center;gap:1.6rem;margin-block-end:2rem;flex-wrap:wrap}
+
+/* ─── le corbeau ─── */
+.cw{inline-size:auto;block-size:7rem;flex:none;color:var(--ink)}
+.cw-tronc,.cw-queue,.cw-patte,.cw-flanc{fill:currentColor}
+.cw-aile{fill:color-mix(in oklab,currentColor 78%,var(--paper))}
+.cw-bec{fill:var(--accent)}
+.cw-oeil{fill:var(--paper)}
+.cw-perche polygon{fill:var(--ink-3);opacity:.55}
+.cw-bete,.cw-aile,.cw-bec,.cw-paupiere{transform-box:view-box}
+.cw-bete{transform-origin:280px 800px}
+.cw-aile{transform-origin:240px 320px}
+.cw-bec{transform-origin:268px 142px}
+.cw-paupiere{transform-origin:195.6px 75.5px;transition:transform .09s ease}
+.cw.cligne .cw-paupiere{transform:scaleY(.08)}
+
+/* ─── la bulle, en pixels ─── */
+.bulle{--px:3px;position:relative;z-index:0;font:inherit;background:none;border:0;
+  padding:0;cursor:pointer;text-align:start;max-inline-size:24ch;
+  transition:transform .18s cubic-bezier(.22,.8,.3,1)}
+.bulle-boite{
+  display:block;font:500 .75rem/1.55 var(--mono);color:var(--ink);background:var(--card);
+  border:var(--px) solid var(--ink);padding:.45rem .6rem;
+  clip-path:polygon(
+    var(--px) 0,calc(100% - var(--px)) 0,
+    calc(100% - var(--px)) var(--px),100% var(--px),
+    100% calc(100% - var(--px)),calc(100% - var(--px)) calc(100% - var(--px)),
+    calc(100% - var(--px)) 100%,var(--px) 100%,
+    var(--px) calc(100% - var(--px)),0 calc(100% - var(--px)),
+    0 var(--px),var(--px) var(--px));
+}
+.bulle-queue{
+  position:absolute;z-index:1;
+  inline-size:calc(var(--px)*8);block-size:calc(var(--px)*6);
+  inset-inline-start:calc(var(--px)*-7);inset-block-start:calc(var(--px)*.8);
+  shape-rendering:crispEdges;
+}
+.bq-ink{fill:var(--ink)}
+.bq-card{fill:var(--card)}
+.bulle:hover{transform:translateY(-2px)}
+.bulle:hover .bq-ink{fill:var(--accent)}
+.bulle:hover .bulle-boite{border-color:var(--accent)}
+.bulle:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+
+h1{font-size:clamp(2rem,6vw,3rem);font-weight:800;line-height:1;letter-spacing:-.035em;
+  font-variation-settings:"opsz" 60,"wdth" 100;margin:0 0 .75rem}
+.eyebrow{font-size:.6875rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 .6rem}
+p.lede{color:var(--ink-2);margin:0 0 1.6rem;max-inline-size:38ch}
+.liens{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-flex;align-items:center;font:inherit;font-size:.9375rem;font-weight:600;
+  font-variation-settings:"opsz" 16;padding:.7rem 1.35rem;border-radius:100px;
+  text-decoration:none;border:1px solid transparent;
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s,color .16s}
+.btn-1{background:var(--accent);color:var(--paper);box-shadow:0 10px 24px -14px var(--accent)}
+.btn-1:hover{transform:translateY(-2px);box-shadow:0 18px 32px -14px var(--accent)}
+.btn-2{border-color:var(--rule);color:var(--ink)}
+.btn-2:hover{border-color:var(--ink-3);background:var(--card);transform:translateY(-2px)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:2px}
+@media (max-width:34rem){
+  .cw{block-size:5rem}
+  .bulle{--px:2px;max-inline-size:19ch}
+  .bulle-boite{font-size:.6875rem;padding:.35rem .45rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="boite">
+  <div class="scene">
+    <!-- Le corbeau est injecté par scripts/make-web.mjs depuis web/index.html.
+         Il n'est PAS recopié ici : deux copies d'un dessin sont deux dessins
+         qui finiront par différer.
+         Le jeton est DEHORS de ce commentaire, et il doit y rester : le
+         dessin injecté porte ses propres commentaires, et la première
+         fermeture de commentaire qu'il contient refermait celui-ci, renversant
+         le reste du texte sur la page. (Cette phrase ne peut donc pas citer la
+         séquence en question, pour exactement la même raison.) -->
+    <svg class="cw" id="cw-404" viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+<g id="corbeau-oiseau">
+        <!-- The animal. Everything in here hops together; the perch below does
+             not, which is the whole point of the split. -->
+        <g class="cw-bete">
+          <!-- WHAT IS UNDER THE WING. The same diamond at 0.84 about the
+               shoulder the wing pivots on, so it is a strict subset: invisible
+               while the wing is down, and the moment the wing lifts it is the
+               far wing and the back, rather than a hole through the bird. -->
+          <polygon class="cw-flanc" points="723.55 642.36 270.85 642.36 204.19 575.70 204.19 352.50 278.17 278.53 359.72 278.53"/>
+          <polygon class="cw-aile" points="815.65 703.76 276.73 703.76 197.37 624.41 197.37 358.69 285.44 270.63 382.52 270.63 815.65 703.76"/>
+          <!-- The bill is drawn BEFORE the head and its root runs back to
+               x=230, well inside it. Nothing right of x=285 moves, so the mark
+               is the author's exactly - but the joint is now hidden under the
+               skull, and the bill can be hinged without tearing a red wedge
+               out of the face every time it opens. -->
+          <polygon class="cw-bec" points="230 44.02 496.35 44.02 285.44 173.54 230 173.54"/>
+          <polygon class="cw-tronc" points="197.37 358.69 197.37 624.41 276.73 703.76 188.78 703.76 14.26 529.24 14.26 44.02 58.19 .1 241.41 0 285.44 44.02 285.44 173.54 382.52 270.63 285.44 270.63 197.37 358.69"/>
+          <polygon class="cw-queue" points="914.26 882.59 593.78 882.59 414.96 703.76 735.44 703.76 914.26 882.59"/>
+          <rect class="cw-patte" x="188.79" y="703.76" width="49.3" height="94.7"/>
+          <rect class="cw-patte" x="322.85" y="703.76" width="49.3" height="94.7"/>
+          <!-- Two nested groups, because looking and blinking are different
+               things: the outer one aims the eye, the inner one shuts it. One
+               element doing both would have them fight over `transform`. -->
+          <g class="cw-regard"><g class="cw-paupiere">
+            <rect class="cw-oeil" x="177.34" y="57.2" width="36.52" height="36.52"/>
+          </g></g>
+        </g>
+        <g class="cw-perche">
+          <polygon points="341.05 966.02 0 966.02 37.13 928.89 303.92 928.89 341.05 966.02"/>
+          <polygon points="230.78 798.46 100.35 928.89 66.44 928.89 196.87 798.46 230.78 798.46"/>
+          <polygon points="366.44 798.46 236.01 928.89 202.1 928.89 332.53 798.46 366.44 798.46"/>
+        </g>
+      </g>
+    </svg>
+    <button class="bulle" id="bulle" type="button">
+      <span class="bulle-boite">I have looked. There is nothing on this branch.</span>
+      <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
+        <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
+        <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
+      </svg>
+    </button>
+  </div>
+
+  <p class="eyebrow" id="eyebrow">Error 404</p>
+  <h1 id="titre">Nothing on this branch.</h1>
+  <p class="lede" id="lede">That address is not part of Fable — or it was, and the shelf has been rebuilt since. The library below is the whole of it.</p>
+  <div class="liens">
+    <a class="btn btn-1" id="lien-biblio" href="/">The library</a>
+    <a class="btn btn-2" id="lien-cahier" href="/cahier/">The notebook</a>
+  </div>
+</main>
+
+<script>
+/* ── LA LANGUE ──
+   The same key the rest of Fable shares. This page is served for addresses
+   that were never ours to route, so it cannot be told anything - it reads the
+   choice the visitor already made, and falls back to the browser. */
+(function () {
+  var LANGUE = 'en';
+  try { var v = localStorage.getItem('fable:lang'); if (v === 'fr' || v === 'en') LANGUE = v; }
+  catch (e) { LANGUE = (navigator.language || '').slice(0, 2) === 'fr' ? 'fr' : 'en'; }
+
+  var FR = {
+    titre: 'Rien sur cette branche.',
+    eyebrow: 'Erreur 404',
+    lede: 'Cette adresse ne fait pas partie de Fable — ou elle en faisait partie, et l’étagère a été reconstruite depuis. La bibliothèque ci-dessous, c’est tout.',
+    biblio: 'La bibliothèque',
+    cahier: 'Le cahier',
+    titrePage: 'Rien sur cette branche — Fable',
+    bulles: ['J’ai regardé. Il n’y a rien sur cette branche.',
+             'Ce qu’il y avait ici, ce n’est pas moi qui l’ai pris.',
+             'Mauvaise branche. La bibliothèque est par là.',
+             'Même moi je ne trouve pas, et je me souviens de tout.']
+  };
+  var EN = {
+    bulles: ['I have looked. There is nothing on this branch.',
+             'Whatever was here, it was not me who took it.',
+             'Wrong branch. The library is that way.',
+             'Even I cannot find this one, and I remember everything.']
+  };
+
+  if (LANGUE === 'fr') {
+    document.documentElement.lang = 'fr';
+    document.title = FR.titrePage;
+    document.getElementById('titre').textContent = FR.titre;
+    document.getElementById('eyebrow').textContent = FR.eyebrow;
+    document.getElementById('lede').textContent = FR.lede;
+    document.getElementById('lien-biblio').textContent = FR.biblio;
+    document.getElementById('lien-cahier').textContent = FR.cahier;
+  }
+
+  /* ── OÙ EST LA RACINE DU SITE ──
+     This page is served for a path nobody planned, at any depth, so a relative
+     link out of it points somewhere arbitrary. The root is `/` on a custom
+     domain and `/<repo>/` on github.io, and those are the only two places this
+     site is ever served from - so that is exactly the rule, written out rather
+     than guessed from the depth of an address we did not choose. */
+  var racine = '/';
+  if (/\.github\.io$/i.test(location.hostname)) {
+    var premier = location.pathname.split('/')[1];
+    if (premier) racine = '/' + premier + '/';
+  }
+  document.getElementById('lien-biblio').href = racine;
+  document.getElementById('lien-cahier').href = racine + 'cahier/';
+
+  /* ── CE QU'IL DIT ──
+     One at random, another on every press, never the same twice running. */
+  var mots = (LANGUE === 'fr' ? FR : EN).bulles;
+  var b = document.getElementById('bulle');
+  var boite = b.querySelector('.bulle-boite');
+  var n = Math.floor(Math.random() * mots.length);
+  boite.textContent = mots[n];
+  b.addEventListener('click', function () {
+    n = (n + 1 + Math.floor(Math.random() * (mots.length - 1))) % mots.length;
+    boite.textContent = mots[n];
+  });
+
+  /* ── IL CLIGNE ──
+     A timer that swaps a class; the stylesheet does the moving. Nothing runs
+     between blinks, and nothing at all in a hidden tab. */
+  if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
+    var cw = document.getElementById('cw-404');
+    (function encore() {
+      setTimeout(function () {
+        if (!document.hidden) {
+          cw.classList.add('cligne');
+          setTimeout(function () { cw.classList.remove('cligne'); }, 130);
+        }
+        encore();
+      }, 4200 + Math.random() * 5000);
+    })();
+  }
+})();
+</script>
+</body>
+</html>

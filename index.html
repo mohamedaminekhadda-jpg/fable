@@ -215,7 +215,15 @@ kbd{
    own weight by opacity, not by a second colour - one hue that can never drift
    out of step with the other. */
 .cw{inline-size:2rem;block-size:2rem;flex:none;color:inherit}
-.cw-grand{inline-size:min(9rem,34vw);block-size:auto;margin-block-end:var(--s4);opacity:.9}
+.cw-grand{inline-size:min(9rem,34vw);block-size:auto;opacity:.9;flex:none}
+/* The bird and what it says about this shelf, side by side - and wrapping on a
+   narrow screen rather than squeezing the bubble to three words a line. */
+.parle{display:flex;align-items:center;gap:calc(var(--s5) + .4rem);
+  flex-wrap:wrap;margin-block-end:var(--s5)}
+.bulle-muette{cursor:default}
+.bulle-muette:hover{transform:none}
+.bulle-muette:hover .bulle-boite{border-color:var(--ink)}
+.bulle-muette:hover .bq-ink{fill:var(--ink)}
 /* ── la bulle ──
    A PIXEL BUBBLE, WHICH MEANS NO CURVE AND NO MITRE.
    The corners are notched by one square step and the tail is two squares
@@ -1404,10 +1412,23 @@ body::after{
 
     <div class="empty" id="empty" hidden>
       <!-- The same group, seen whole: perch, legs and all. A mascot earns its
-           keep on the page where there is nothing else to look at. -->
-      <svg class="cw cw-grand" viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
-        <use href="#corbeau-oiseau"/>
-      </svg>
+           keep on the page where there is nothing else to look at - and this
+           is the one screen with nothing else to look at.
+           The bubble here is a <p>, not a button: on the footer pressing it
+           gets you another quip, but this one is REPORTING something, and text
+           that explains an empty shelf should not change when you poke it. -->
+      <div class="parle">
+        <svg class="cw cw-grand" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+          <use href="#corbeau-oiseau"/>
+        </svg>
+        <p class="bulle bulle-muette" id="bulle-vide">
+          <span class="bulle-boite" data-i18n="bulleVide">An empty shelf. I have checked it twice.</span>
+          <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
+            <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
+            <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
+          </svg>
+        </p>
+      </div>
       <h3 data-i18n="emptyH">No books yet.</h3>
       <p data-i18n-html="emptyP">This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.</p>
     </div>
@@ -3102,6 +3123,8 @@ body::after{
       fSubject: 'Matière', fLevel: 'Niveau', fLang: 'Langue', fTag: 'Étiquette', fGenre: 'Type',
       filtres: 'Filtres', fermerFiltres: 'Masquer les filtres', retirer: 'Retirer ce filtre',
       clearAll: 'Tout effacer', more: 'et %n de plus', less: 'moins',
+      bulleVide: 'Une étagère vide. J’ai vérifié deux fois.',
+      bulleRien: 'Rien sous celui-là. Essayez moins de filtres.',
       emptyH: 'Aucun livre pour l’instant.',
       emptyP: 'Ceci est une copie neuve de Fable — le moteur, le lecteur et le cahier sont là, mais l’étagère est vide. Posez un dossier de livre dans <code>library/</code> et reconstruisez : il apparaîtra ici avec sa couverture, sa langue et son nombre de chapitres.',
       toolsH: 'Et deux choses pour lire avec',
@@ -3161,6 +3184,8 @@ body::after{
       fSubject: 'Subject', fLevel: 'Level', fLang: 'Language', fTag: 'Tag', fGenre: 'Type',
       filtres: 'Filters', fermerFiltres: 'Hide filters', retirer: 'Remove this filter',
       clearAll: 'Clear all', more: '%n more', less: 'fewer',
+      bulleVide: 'An empty shelf. I have checked it twice.',
+      bulleRien: 'Nothing under that one. Try fewer filters.',
       emptyH: 'No books yet.',
       emptyP: 'This is a fresh copy of Fable — the engine, the reader and the notebook are all here, but the shelf is empty. Put a book folder in <code>library/</code> and rebuild; it will appear here with its cover, its language and its chapter count.',
       toolsH: 'And two things to read with',
@@ -3998,7 +4023,12 @@ body::after{
     if(books.length && !list.length){
       grid.hidden=true; empty.hidden=false;
       empty.querySelector('h3').textContent=T('noMatch');
-      empty.querySelector('p').textContent=T('noMatchP');
+      /* `p` would also match the bubble, which is a <p> - and the bird would
+         end up reciting the explanation. The paragraph wanted here is the one
+         that is NOT inside the bubble. */
+      empty.querySelector('p:not(.bulle)').textContent=T('noMatchP');
+      var bv=document.getElementById('bulle-vide');
+      if(bv) bv.querySelector('.bulle-boite').textContent=T('bulleRien');
     }
   }
 
@@ -4416,11 +4446,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6hjv08). Non remplacée —
+  /* La version est posée par la construction (mu6idrdg). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6hjv08')
+  fetch('library/library.json?v=mu6idrdg')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4431,7 +4461,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6hjv08"></script>
+<script src="compte.js?v=mu6idrdg"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
