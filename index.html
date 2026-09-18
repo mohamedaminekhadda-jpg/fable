@@ -209,6 +209,11 @@ kbd{
 }
 .brand:hover{color:var(--accent-ink)}
 
+/* CORBEAU-CSS-DEBUT
+   Everything between this and CORBEAU-CSS-FIN is lifted by
+   scripts/make-web.mjs into the 404 page, which needs the same bird and the
+   same bubble but cannot share a stylesheet with a page it must not depend on.
+   One copy of these rules, two pages. Anything added in here reaches both. */
 /* ─── le corbeau ──────────────────────────────────────────── */
 /* THE PAINT. The bird takes the page's ink rather than a fixed black, so it
    inverts with the theme instead of disappearing into it. The wing keeps its
@@ -304,7 +309,7 @@ kbd{
    that drifts the moment the type size changes. */
 .cw-pied{
   position:static;flex:none;
-  inline-size:auto;block-size:4.5rem;opacity:.92;pointer-events:none;
+  inline-size:auto;block-size:4.5rem;opacity:.92;
 }
 @media (max-width:34rem){.cw-pied{block-size:3.4rem}}
 .cw-tronc,.cw-queue,.cw-patte,.cw-flanc{fill:currentColor}
@@ -361,6 +366,75 @@ kbd{
 @keyframes cw-sauter{0%{transform:none}28%{transform:translateY(-30px)}64%{transform:translateY(8px)}100%{transform:none}}
 @keyframes cw-crier{0%{transform:none}24%{transform:rotate(-16deg)}66%{transform:rotate(-5deg)}100%{transform:none}}
 @keyframes cw-queuer{0%{transform:none}30%{transform:rotate(13deg)}70%{transform:rotate(-3deg)}100%{transform:none}}
+
+/* ── LE NUMÉRO ──
+   Press the whole bird - the one on the footer rule, the one on an empty
+   shelf, the one on the 404 - and it performs: crouch, jump aside with the
+   bill open, land, flutter, turn to look the other way, hold it, turn back,
+   hop home. Two and a half seconds, once, and nothing runs afterwards.
+
+   It is deliberately NOT on the little head in the masthead. That one is a
+   logo on every screen of the site, and a logo that dances when you touch it
+   stops being a logo.
+
+   `translate` then `scaleX` then `scaleY`, in that order, in EVERY keyframe:
+   a transform list that changes shape between keyframes is interpolated as a
+   matrix instead, and the bird swings through the poses on a curve nobody
+   asked for.
+
+   The tx values during the turn are not eyeballed. The origin is the bird's
+   feet, so a mirror about it would fling the bird across the page; with origin
+   O a point p lands at 2·O + tx − p, and keeping the centre where it hopped to
+   (C = 347) needs tx = 2C − 2O = 244. At the halfway squash, scaleX .15, the
+   same requirement gives 40.5. */
+@media (prefers-reduced-motion:no-preference){
+  .cw.saute .cw-bete{animation:cw-bondir 2.6s ease-in-out both}
+  .cw.saute .cw-aile{animation:cw-froufrou 2.6s ease-in-out both}
+  .cw.saute .cw-bec{animation:cw-becquee 2.6s ease-in-out both}
+  .cw.saute .cw-queue{animation:cw-queuette 2.6s ease-in-out both}
+}
+@keyframes cw-bondir{
+  0%  {transform:translate(0px,0px) scaleX(1) scaleY(1)}
+  5%  {transform:translate(0px,0px) scaleX(1) scaleY(.93);
+       animation-timing-function:cubic-bezier(.2,.75,.35,1)}   /* the push off */
+  13% {transform:translate(-58px,-72px) scaleX(1) scaleY(1.05);
+       animation-timing-function:cubic-bezier(.55,0,.85,.5)}   /* and the fall */
+  21% {transform:translate(-110px,0px) scaleX(1) scaleY(.95)}
+  26% {transform:translate(-110px,0px) scaleX(1) scaleY(1)}
+  48% {transform:translate(-110px,0px) scaleX(1) scaleY(1)}
+  53% {transform:translate(40.5px,0px) scaleX(.15) scaleY(1)}  /* edge-on */
+  59% {transform:translate(244px,0px) scaleX(-1) scaleY(1)}    /* facing left */
+  68% {transform:translate(244px,0px) scaleX(-1) scaleY(1)}    /* a beat, looking */
+  74% {transform:translate(40.5px,0px) scaleX(.15) scaleY(1)}
+  80% {transform:translate(-110px,0px) scaleX(1) scaleY(1);
+       animation-timing-function:cubic-bezier(.2,.75,.35,1)}
+  88% {transform:translate(-56px,-58px) scaleX(1) scaleY(1.04);
+       animation-timing-function:cubic-bezier(.55,0,.85,.5)}   /* hops home */
+  96% {transform:translate(0px,0px) scaleX(1) scaleY(.96)}
+  100%{transform:translate(0px,0px) scaleX(1) scaleY(1)}
+}
+/* Soft, and three of them: one big beat reads as a flap, three small ones read
+   as settling. */
+@keyframes cw-froufrou{
+  0%{transform:rotate(0deg)} 13%{transform:rotate(-22deg)} 21%{transform:rotate(-5deg)}
+  27%{transform:rotate(-2deg)} 32%{transform:rotate(-13deg)} 37%{transform:rotate(-3deg)}
+  42%{transform:rotate(-11deg)} 47%{transform:rotate(-2deg)} 52%{transform:rotate(0deg)}
+  80%{transform:rotate(0deg)} 88%{transform:rotate(-20deg)} 96%{transform:rotate(-4deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes cw-becquee{
+  0%{transform:rotate(0deg)} 10%{transform:rotate(-20deg)} 21%{transform:rotate(-12deg)}
+  30%{transform:rotate(-2deg)} 60%{transform:rotate(-14deg)} 70%{transform:rotate(-3deg)}
+  88%{transform:rotate(-10deg)} 100%{transform:rotate(0deg)}
+}
+@keyframes cw-queuette{
+  0%{transform:rotate(0deg)} 13%{transform:rotate(11deg)} 21%{transform:rotate(-5deg)}
+  28%{transform:rotate(0deg)} 59%{transform:rotate(-6deg)} 80%{transform:rotate(0deg)}
+  88%{transform:rotate(10deg)} 96%{transform:rotate(-3deg)} 100%{transform:rotate(0deg)}
+}
+/* The whole bird invites the press; the cropped head in the masthead does not. */
+.cw-pied,.cw-grand{cursor:pointer}
+/* CORBEAU-CSS-FIN */
 .brand-note{color:var(--ink-3);font-size:.8125rem}
 .mast-spacer{margin-inline-start:auto}
 /* Le bouton qui ouvre la palette : il ressemble à un champ, parce que c'en est
@@ -1418,8 +1492,40 @@ body::after{
            gets you another quip, but this one is REPORTING something, and text
            that explains an empty shelf should not change when you poke it. -->
       <div class="parle">
-        <svg class="cw cw-grand" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
-          <use href="#corbeau-oiseau"/>
+        <svg class="cw cw-grand" data-vivant data-entier viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+          <g>
+        <!-- The animal. Everything in here hops together; the perch below does
+             not, which is the whole point of the split. -->
+        <g class="cw-bete">
+          <!-- WHAT IS UNDER THE WING. The same diamond at 0.84 about the
+               shoulder the wing pivots on, so it is a strict subset: invisible
+               while the wing is down, and the moment the wing lifts it is the
+               far wing and the back, rather than a hole through the bird. -->
+          <polygon class="cw-flanc" points="723.55 642.36 270.85 642.36 204.19 575.70 204.19 352.50 278.17 278.53 359.72 278.53"/>
+          <polygon class="cw-aile" points="815.65 703.76 276.73 703.76 197.37 624.41 197.37 358.69 285.44 270.63 382.52 270.63 815.65 703.76"/>
+          <!-- The bill is drawn BEFORE the head and its root runs back to
+               x=230, well inside it. Nothing right of x=285 moves, so the mark
+               is the author's exactly - but the joint is now hidden under the
+               skull, and the bill can be hinged without tearing a red wedge
+               out of the face every time it opens. -->
+          <polygon class="cw-bec" points="230 44.02 496.35 44.02 285.44 173.54 230 173.54"/>
+          <polygon class="cw-tronc" points="197.37 358.69 197.37 624.41 276.73 703.76 188.78 703.76 14.26 529.24 14.26 44.02 58.19 .1 241.41 0 285.44 44.02 285.44 173.54 382.52 270.63 285.44 270.63 197.37 358.69"/>
+          <polygon class="cw-queue" points="914.26 882.59 593.78 882.59 414.96 703.76 735.44 703.76 914.26 882.59"/>
+          <rect class="cw-patte" x="188.79" y="703.76" width="49.3" height="94.7"/>
+          <rect class="cw-patte" x="322.85" y="703.76" width="49.3" height="94.7"/>
+          <!-- Two nested groups, because looking and blinking are different
+               things: the outer one aims the eye, the inner one shuts it. One
+               element doing both would have them fight over `transform`. -->
+          <g class="cw-regard"><g class="cw-paupiere">
+            <rect class="cw-oeil" x="177.34" y="57.2" width="36.52" height="36.52"/>
+          </g></g>
+        </g>
+        <g class="cw-perche">
+          <polygon points="341.05 966.02 0 966.02 37.13 928.89 303.92 928.89 341.05 966.02"/>
+          <polygon points="230.78 798.46 100.35 928.89 66.44 928.89 196.87 798.46 230.78 798.46"/>
+          <polygon points="366.44 798.46 236.01 928.89 202.1 928.89 332.53 798.46 366.44 798.46"/>
+        </g>
+      </g>
         </svg>
         <p class="bulle bulle-muette" id="bulle-vide">
           <span class="bulle-boite" data-i18n="bulleVide">An empty shelf. I have checked it twice.</span>
@@ -1467,8 +1573,40 @@ body::after{
        The same `#corbeau-oiseau` as the masthead and the empty state - a third
        window onto one drawing, never a third copy of it. -->
   <div class="perchoir">
-    <svg class="cw cw-pied" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
-      <use href="#corbeau-oiseau"/>
+    <svg class="cw cw-pied" data-vivant data-entier viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+      <g>
+        <!-- The animal. Everything in here hops together; the perch below does
+             not, which is the whole point of the split. -->
+        <g class="cw-bete">
+          <!-- WHAT IS UNDER THE WING. The same diamond at 0.84 about the
+               shoulder the wing pivots on, so it is a strict subset: invisible
+               while the wing is down, and the moment the wing lifts it is the
+               far wing and the back, rather than a hole through the bird. -->
+          <polygon class="cw-flanc" points="723.55 642.36 270.85 642.36 204.19 575.70 204.19 352.50 278.17 278.53 359.72 278.53"/>
+          <polygon class="cw-aile" points="815.65 703.76 276.73 703.76 197.37 624.41 197.37 358.69 285.44 270.63 382.52 270.63 815.65 703.76"/>
+          <!-- The bill is drawn BEFORE the head and its root runs back to
+               x=230, well inside it. Nothing right of x=285 moves, so the mark
+               is the author's exactly - but the joint is now hidden under the
+               skull, and the bill can be hinged without tearing a red wedge
+               out of the face every time it opens. -->
+          <polygon class="cw-bec" points="230 44.02 496.35 44.02 285.44 173.54 230 173.54"/>
+          <polygon class="cw-tronc" points="197.37 358.69 197.37 624.41 276.73 703.76 188.78 703.76 14.26 529.24 14.26 44.02 58.19 .1 241.41 0 285.44 44.02 285.44 173.54 382.52 270.63 285.44 270.63 197.37 358.69"/>
+          <polygon class="cw-queue" points="914.26 882.59 593.78 882.59 414.96 703.76 735.44 703.76 914.26 882.59"/>
+          <rect class="cw-patte" x="188.79" y="703.76" width="49.3" height="94.7"/>
+          <rect class="cw-patte" x="322.85" y="703.76" width="49.3" height="94.7"/>
+          <!-- Two nested groups, because looking and blinking are different
+               things: the outer one aims the eye, the inner one shuts it. One
+               element doing both would have them fight over `transform`. -->
+          <g class="cw-regard"><g class="cw-paupiere">
+            <rect class="cw-oeil" x="177.34" y="57.2" width="36.52" height="36.52"/>
+          </g></g>
+        </g>
+        <g class="cw-perche">
+          <polygon points="341.05 966.02 0 966.02 37.13 928.89 303.92 928.89 341.05 966.02"/>
+          <polygon points="230.78 798.46 100.35 928.89 66.44 928.89 196.87 798.46 230.78 798.46"/>
+          <polygon points="366.44 798.46 236.01 928.89 202.1 928.89 332.53 798.46 366.44 798.46"/>
+        </g>
+      </g>
     </svg>
     <!-- A button, because it does something: press it and the bird says
          something else. It carries real text rather than a picture of text,
@@ -3342,6 +3480,9 @@ body::after{
        read the browser coalesces the two changes and the second press of a
        double-press does nothing at all. */
     chaque(function (m) {
+      /* A bird already in the middle of its own number is not interrupted to
+         acknowledge a button press somewhere else. */
+      if (m.classList.contains('saute')) return;
       m.classList.remove('bat');
       void m.getBoundingClientRect().width;
       m.classList.add('bat');
@@ -3351,6 +3492,18 @@ body::after{
       chaque(function (m) { m.classList.remove('bat'); });
     }, 580);
   }, { passive: true });
+
+  /* ── LE NUMÉRO ──
+     Only the whole bird, and only on a press. It runs for two and a half
+     seconds and a second press during it is ignored rather than queued -
+     restarting mid-jump looks like a stutter, not like eagerness. */
+  [].forEach.call(document.querySelectorAll('.cw[data-entier]'), function (m) {
+    m.addEventListener('click', function () {
+      if (m.classList.contains('saute')) return;
+      m.classList.add('saute');
+      setTimeout(function () { m.classList.remove('saute'); }, 2650);
+    });
+  });
 
   /* ── IL GUETTE ──
      It leans towards whatever you are about to choose. `pointerover` fires
@@ -4446,11 +4599,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6idrdg). Non remplacée —
+  /* La version est posée par la construction (mu6is07i). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6idrdg')
+  fetch('library/library.json?v=mu6is07i')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4461,7 +4614,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6idrdg"></script>
+<script src="compte.js?v=mu6is07i"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */

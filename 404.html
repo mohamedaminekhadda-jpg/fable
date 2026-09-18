@@ -51,27 +51,55 @@ body::after{
 .boite{max-inline-size:34rem;text-align:start}
 .scene{display:flex;align-items:center;gap:1.6rem;margin-block-end:2rem;flex-wrap:wrap}
 
-/* ─── le corbeau ─── */
-.cw{inline-size:auto;block-size:7rem;flex:none;color:var(--ink)}
-.cw-tronc,.cw-queue,.cw-patte,.cw-flanc{fill:currentColor}
-.cw-aile{fill:color-mix(in oklab,currentColor 78%,var(--paper))}
-.cw-bec{fill:var(--accent)}
-.cw-oeil{fill:var(--paper)}
-.cw-perche polygon{fill:var(--ink-3);opacity:.55}
-.cw-bete,.cw-aile,.cw-bec,.cw-paupiere{transform-box:view-box}
-.cw-bete{transform-origin:280px 800px}
-.cw-aile{transform-origin:240px 320px}
-.cw-bec{transform-origin:268px 142px}
-.cw-paupiere{transform-origin:195.6px 75.5px;transition:transform .09s ease}
-.cw.cligne .cw-paupiere{transform:scaleY(.08)}
+/* Le corbeau et sa bulle, injectés par scripts/make-web.mjs depuis la feuille
+   de l'accueil. Cette page en avait une copie à la main, ce qui faisait deux
+   endroits à corriger le jour où la palette bouge - et donc un jour où l'un
+   des deux ne bougerait pas. */
+/* ─── le corbeau ──────────────────────────────────────────── */
+/* THE PAINT. The bird takes the page's ink rather than a fixed black, so it
+   inverts with the theme instead of disappearing into it. The wing keeps its
+   own weight by opacity, not by a second colour - one hue that can never drift
+   out of step with the other. */
+.cw{inline-size:2rem;block-size:2rem;flex:none;color:inherit}
+.cw-grand{inline-size:min(9rem,34vw);block-size:auto;opacity:.9;flex:none}
+/* The bird and what it says about this shelf, side by side - and wrapping on a
+   narrow screen rather than squeezing the bubble to three words a line. */
+.parle{display:flex;align-items:center;gap:calc(var(--s5) + .4rem);
+  flex-wrap:wrap;margin-block-end:var(--s5)}
+.bulle-muette{cursor:default}
+.bulle-muette:hover{transform:none}
+.bulle-muette:hover .bulle-boite{border-color:var(--ink)}
+.bulle-muette:hover .bq-ink{fill:var(--ink)}
+/* ── la bulle ──
+   A PIXEL BUBBLE, WHICH MEANS NO CURVE AND NO MITRE.
+   The corners are notched by one square step and the tail is two squares
+   walking towards the bird. A triangular tail and a rounded corner are the two
+   things that give away a "pixel" style that is really a normal box - so
+   neither is here. `--px` is the pixel: change it and every step in the shape
+   changes with it, because nothing is measured independently.
 
-/* ─── la bulle, en pixels ─── */
-.bulle{--px:3px;position:relative;z-index:0;font:inherit;background:none;border:0;
-  padding:0;cursor:pointer;text-align:start;max-inline-size:24ch;
-  transition:transform .18s cubic-bezier(.22,.8,.3,1)}
+   Two elements rather than one: `clip-path` clips pseudo-elements as well, so
+   a bubble that notched its own corners would also cut off its own tail. The
+   clip goes on the inner box, the tail hangs off the outer one. */
+.perchoir{
+  position:absolute;inset-block-end:100%;inset-inline-start:var(--s5);
+  display:flex;align-items:center;gap:calc(var(--s5) + .4rem);
+  inline-size:min(40rem,calc(100% - var(--s5)*2));
+}
+.bulle{
+  --px:3px;
+  position:relative;z-index:0;
+  font:inherit;background:none;border:0;padding:0;cursor:pointer;
+  text-align:start;max-inline-size:27ch;
+  transition:transform .18s cubic-bezier(.22,.8,.3,1);
+}
 .bulle-boite{
-  display:block;font:500 .75rem/1.55 var(--mono);color:var(--ink);background:var(--card);
-  border:var(--px) solid var(--ink);padding:.45rem .6rem;
+  display:block;
+  font:500 .75rem/1.55 var(--font-mono);letter-spacing:-.005em;
+  color:var(--ink);background:var(--card);
+  border:var(--px) solid var(--ink);
+  padding:.45rem .6rem;
+  /* the notch: a pixel box has no mitre */
   clip-path:polygon(
     var(--px) 0,calc(100% - var(--px)) 0,
     calc(100% - var(--px)) var(--px),100% var(--px),
@@ -80,18 +108,177 @@ body::after{
     var(--px) calc(100% - var(--px)),0 calc(100% - var(--px)),
     0 var(--px),var(--px) var(--px));
 }
+/* THE TAIL. One stepped shape, not two loose squares - the first attempt drew
+   a pair of outlined boxes floating off the corner, which reads as debris
+   rather than as speech. And it climbs UP towards the beak: the crow's head is
+   level with the TOP of the bubble, so a tail hanging off the bottom pointed
+   at its tail feathers.
+
+   It is an SVG rather than pseudo-elements because it has to be two shapes -
+   the ink silhouette and the paper inside it - and it has to OVERLAP the
+   bubble by one pixel so the paper eats through the border and the bubble
+   opens into the tail. A box-shadow ring cannot do that; it would draw a line
+   across the join instead. */
 .bulle-queue{
   position:absolute;z-index:1;
   inline-size:calc(var(--px)*8);block-size:calc(var(--px)*6);
-  inset-inline-start:calc(var(--px)*-7);inset-block-start:calc(var(--px)*.8);
+  inset-inline-start:calc(var(--px)*-7);   /* one pixel of it lies over the border */
+  inset-block-start:calc(var(--px)*.8);
   shape-rendering:crispEdges;
 }
+[dir="rtl"] .bulle-queue{transform:scaleX(-1)}
 .bq-ink{fill:var(--ink)}
 .bq-card{fill:var(--card)}
-.bulle:hover{transform:translateY(-2px)}
 .bulle:hover .bq-ink{fill:var(--accent)}
+.bulle:hover{transform:translateY(-2px)}
 .bulle:hover .bulle-boite{border-color:var(--accent)}
 .bulle:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+@media (max-width:34rem){
+  .bulle{--px:2px;max-inline-size:20ch}
+  .bulle-boite{font-size:.6875rem;padding:.35rem .45rem}
+}
+
+/* THE WHOLE BIRD, ON THE FOOTER'S RULE.
+   Shown entire - perch, legs, tail - and stood on the hairline the footer
+   already draws, so its own little branch rests on the page's line and the two
+   read as one. The first try cropped the window at the bird's FEET so it could
+   stand on the rule directly; that cut the tail off, because a perched crow's
+   tail hangs well below its toes (y=882 against y=798). Hiding the author's
+   perch to gain nothing and lose the tail was the wrong trade.
+
+   `inset-block-end:100%` is what lands it on the line - not a nudge in pixels
+   that drifts the moment the type size changes. */
+.cw-pied{
+  position:static;flex:none;
+  inline-size:auto;block-size:4.5rem;opacity:.92;
+}
+@media (max-width:34rem){.cw-pied{block-size:3.4rem}}
+.cw-tronc,.cw-queue,.cw-patte,.cw-flanc{fill:currentColor}
+/* Mixed with the paper rather than made transparent. The colour is the same
+   one it has always been over the page, but it is now OPAQUE - and it has to
+   be, because there is a solid flank behind it whose whole job is to be
+   hidden until the wing moves. */
+.cw-aile{fill:color-mix(in oklab,currentColor 78%,var(--paper))}
+.cw-bec{fill:var(--accent)}
+.cw-oeil{fill:var(--paper)}
+.cw-perche polygon{fill:var(--ink-3);opacity:.55}
+
+/* THE JOINTS. `transform-box:view-box` is what lets an origin be written as a
+   POINT IN THE DRAWING - the shoulder, the hinge of the bill - instead of a
+   percentage of a bounding box that changes the moment the shape does. */
+.cw-bete,.cw-aile,.cw-bec,.cw-queue,.cw-regard,.cw-paupiere{transform-box:view-box}
+.cw-bete{transform-origin:280px 800px}      /* the feet: it leans and hops from there */
+.cw-aile{transform-origin:240px 320px}      /* the shoulder */
+.cw-bec{transform-origin:268px 142px}      /* the gape, hidden under the skull */
+.cw-queue{transform-origin:490px 782px}     /* where the tail meets the body */
+.cw-regard,.cw-paupiere{transform-origin:195.6px 75.5px}
+@media (prefers-reduced-motion:no-preference){
+  .cw-bete,.cw-aile,.cw-bec,.cw-queue{transition:transform .34s cubic-bezier(.22,.8,.3,1)}
+  .cw-paupiere{transition:transform .09s ease}
+  .cw-regard{transition:transform .5s cubic-bezier(.22,.8,.3,1)}
+}
+
+/* IT LEANS IN WHEN YOU COME NEAR. Wing up, bill parted, tail counterweighting
+   the lean - a bird tips its tail to stay on the branch, and leaving it still
+   is what makes a moving logo look like moving parts. */
+.brand:hover .cw-bete,.brand:focus-visible .cw-bete{transform:rotate(-5deg) translateY(-14px)}
+.brand:hover .cw-aile,.brand:focus-visible .cw-aile{transform:rotate(-9deg)}
+.brand:hover .cw-bec,.brand:focus-visible .cw-bec{transform:rotate(-11deg)}
+.brand:hover .cw-queue,.brand:focus-visible .cw-queue{transform:rotate(7deg)}
+
+/* IT WATCHES WHAT YOU ARE ABOUT TO PICK. Set while the pointer is over a book,
+   a cover in the carousel, or one of the two tools. */
+.cw.guette .cw-bete{transform:rotate(4deg) translate(6px,-9px)}
+.cw.guette .cw-aile{transform:rotate(-4deg)}
+.cw.guette .cw-bec{transform:rotate(-7deg)}
+.cw.guette .cw-queue{transform:rotate(-5deg)}
+
+/* THE BLINK. A scale, not a second drawing: the lid is the eye itself, shut. */
+.cw.cligne .cw-paupiere{transform:scaleY(.08)}
+
+/* THE FLAP, when something on the page is pressed. */
+@media (prefers-reduced-motion:no-preference){
+  .cw.bat .cw-aile{animation:cw-battre .56s cubic-bezier(.3,.9,.4,1)}
+  .cw.bat .cw-bete{animation:cw-sauter .56s cubic-bezier(.3,.9,.4,1)}
+  .cw.bat .cw-bec{animation:cw-crier .56s ease}
+  .cw.bat .cw-queue{animation:cw-queuer .56s ease}
+}
+@keyframes cw-battre{0%{transform:none}28%{transform:rotate(-30deg)}62%{transform:rotate(7deg)}100%{transform:none}}
+@keyframes cw-sauter{0%{transform:none}28%{transform:translateY(-30px)}64%{transform:translateY(8px)}100%{transform:none}}
+@keyframes cw-crier{0%{transform:none}24%{transform:rotate(-16deg)}66%{transform:rotate(-5deg)}100%{transform:none}}
+@keyframes cw-queuer{0%{transform:none}30%{transform:rotate(13deg)}70%{transform:rotate(-3deg)}100%{transform:none}}
+
+/* ── LE NUMÉRO ──
+   Press the whole bird - the one on the footer rule, the one on an empty
+   shelf, the one on the 404 - and it performs: crouch, jump aside with the
+   bill open, land, flutter, turn to look the other way, hold it, turn back,
+   hop home. Two and a half seconds, once, and nothing runs afterwards.
+
+   It is deliberately NOT on the little head in the masthead. That one is a
+   logo on every screen of the site, and a logo that dances when you touch it
+   stops being a logo.
+
+   `translate` then `scaleX` then `scaleY`, in that order, in EVERY keyframe:
+   a transform list that changes shape between keyframes is interpolated as a
+   matrix instead, and the bird swings through the poses on a curve nobody
+   asked for.
+
+   The tx values during the turn are not eyeballed. The origin is the bird's
+   feet, so a mirror about it would fling the bird across the page; with origin
+   O a point p lands at 2·O + tx − p, and keeping the centre where it hopped to
+   (C = 347) needs tx = 2C − 2O = 244. At the halfway squash, scaleX .15, the
+   same requirement gives 40.5. */
+@media (prefers-reduced-motion:no-preference){
+  .cw.saute .cw-bete{animation:cw-bondir 2.6s ease-in-out both}
+  .cw.saute .cw-aile{animation:cw-froufrou 2.6s ease-in-out both}
+  .cw.saute .cw-bec{animation:cw-becquee 2.6s ease-in-out both}
+  .cw.saute .cw-queue{animation:cw-queuette 2.6s ease-in-out both}
+}
+@keyframes cw-bondir{
+  0%  {transform:translate(0px,0px) scaleX(1) scaleY(1)}
+  5%  {transform:translate(0px,0px) scaleX(1) scaleY(.93);
+       animation-timing-function:cubic-bezier(.2,.75,.35,1)}   /* the push off */
+  13% {transform:translate(-58px,-72px) scaleX(1) scaleY(1.05);
+       animation-timing-function:cubic-bezier(.55,0,.85,.5)}   /* and the fall */
+  21% {transform:translate(-110px,0px) scaleX(1) scaleY(.95)}
+  26% {transform:translate(-110px,0px) scaleX(1) scaleY(1)}
+  48% {transform:translate(-110px,0px) scaleX(1) scaleY(1)}
+  53% {transform:translate(40.5px,0px) scaleX(.15) scaleY(1)}  /* edge-on */
+  59% {transform:translate(244px,0px) scaleX(-1) scaleY(1)}    /* facing left */
+  68% {transform:translate(244px,0px) scaleX(-1) scaleY(1)}    /* a beat, looking */
+  74% {transform:translate(40.5px,0px) scaleX(.15) scaleY(1)}
+  80% {transform:translate(-110px,0px) scaleX(1) scaleY(1);
+       animation-timing-function:cubic-bezier(.2,.75,.35,1)}
+  88% {transform:translate(-56px,-58px) scaleX(1) scaleY(1.04);
+       animation-timing-function:cubic-bezier(.55,0,.85,.5)}   /* hops home */
+  96% {transform:translate(0px,0px) scaleX(1) scaleY(.96)}
+  100%{transform:translate(0px,0px) scaleX(1) scaleY(1)}
+}
+/* Soft, and three of them: one big beat reads as a flap, three small ones read
+   as settling. */
+@keyframes cw-froufrou{
+  0%{transform:rotate(0deg)} 13%{transform:rotate(-22deg)} 21%{transform:rotate(-5deg)}
+  27%{transform:rotate(-2deg)} 32%{transform:rotate(-13deg)} 37%{transform:rotate(-3deg)}
+  42%{transform:rotate(-11deg)} 47%{transform:rotate(-2deg)} 52%{transform:rotate(0deg)}
+  80%{transform:rotate(0deg)} 88%{transform:rotate(-20deg)} 96%{transform:rotate(-4deg)}
+  100%{transform:rotate(0deg)}
+}
+@keyframes cw-becquee{
+  0%{transform:rotate(0deg)} 10%{transform:rotate(-20deg)} 21%{transform:rotate(-12deg)}
+  30%{transform:rotate(-2deg)} 60%{transform:rotate(-14deg)} 70%{transform:rotate(-3deg)}
+  88%{transform:rotate(-10deg)} 100%{transform:rotate(0deg)}
+}
+@keyframes cw-queuette{
+  0%{transform:rotate(0deg)} 13%{transform:rotate(11deg)} 21%{transform:rotate(-5deg)}
+  28%{transform:rotate(0deg)} 59%{transform:rotate(-6deg)} 80%{transform:rotate(0deg)}
+  88%{transform:rotate(10deg)} 96%{transform:rotate(-3deg)} 100%{transform:rotate(0deg)}
+}
+/* The whole bird invites the press; the cropped head in the masthead does not. */
+.cw-pied,.cw-grand{cursor:pointer}
+
+/* Ce qui appartient à CETTE page, et à elle seule : l'oiseau y est grand et
+   seul. Placé après le bloc injecté, donc il l'emporte. */
+.cw{inline-size:auto;block-size:7rem;flex:none;color:var(--ink);cursor:pointer}
 
 h1{font-size:clamp(2rem,6vw,3rem);font-weight:800;line-height:1;letter-spacing:-.035em;
   font-variation-settings:"opsz" 60,"wdth" 100;margin:0 0 .75rem}
@@ -245,11 +432,21 @@ p.lede{color:var(--ink-2);margin:0 0 1.6rem;max-inline-size:38ch}
     boite.textContent = mots[n];
   });
 
+  /* ── LE NUMÉRO ──
+     The same performance as on the landing page, driven by the same class from
+     the same stylesheet - this page only has to say WHEN. */
+  var oiseau = document.getElementById('cw-404');
+  oiseau.addEventListener('click', function () {
+    if (oiseau.classList.contains('saute')) return;
+    oiseau.classList.add('saute');
+    setTimeout(function () { oiseau.classList.remove('saute'); }, 2650);
+  });
+
   /* ── IL CLIGNE ──
      A timer that swaps a class; the stylesheet does the moving. Nothing runs
      between blinks, and nothing at all in a hidden tab. */
   if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
-    var cw = document.getElementById('cw-404');
+    var cw = oiseau;
     (function encore() {
       setTimeout(function () {
         if (!document.hidden) {
