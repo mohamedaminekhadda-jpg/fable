@@ -1205,7 +1205,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7fl9i5"></script>
+<script src="compte.js?v=mu7frggz"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1702,7 +1702,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7fl9i5"></script>
+<script src="chrome-pages.js?v=mu7frggz"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
@@ -1834,7 +1834,12 @@ body::after{
     var essais = 0;
     guet = setInterval(function () {
       var d = demo();
-      if (d && d.pret) { clearInterval(guet); montre(); }
+      /* Et c'est bien LA figure demandee : le document precedent repond
+         encore `pret` tant que la navigation n'est pas validee, et mesurer
+         celui-la laissait le cadre a la hauteur de la figure d'avant. En
+         local la navigation est trop rapide pour qu'on le voie ; en ligne,
+         le cadre gardait la hauteur de la premiere figure pour toujours. */
+      if (d && d.pret && d.nom === slug(i)) { clearInterval(guet); montre(); }
       else if (++essais > 80) {
         /* Dix secondes. La figure ne viendra plus ; on lève quand même le
            voile, parce qu’un voile éternel ne dit rien à personne. */

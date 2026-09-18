@@ -181,8 +181,13 @@
     }, { capture: true, passive: true });
   });
 
+  var page = document.querySelector('.dm-page');
+
   window.__demo = {
     pret: true,
+    /* Ce que le site compare pour savoir s'il regarde bien la figure qu'il
+       vient de demander, et pas celle d'avant. */
+    nom: (page && page.getAttribute('data-demo')) || '',
     duree: duree,
     gestes: GESTES.length,
     play: demarrer,
