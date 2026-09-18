@@ -289,12 +289,35 @@ body::after{
   74%{transform:scaleX(-1)} 80%{transform:scaleX(.1)}
   86%{transform:scaleX(1)} 100%{transform:scaleX(1)}
 }
-/* And the eye goes with it. */
+/* AND THE EYE GOES ROUND THE HEAD, NOT ACROSS THE FACE.
+   Sliding it from one side of the skull to the other is what a sticker does.
+   A head that turns carries its near eye TOWARDS the side it is turning to,
+   out of sight around the edge, and the far eye appears from the other edge:
+   two eyes, one seen at a time, never one crossing the bridge of the nose.
+
+   So it leaves with the bill to the right, fades out at the skull's right edge
+   - centre 295.48, which +88 from its resting 205.63 puts it exactly on - and
+   fades back in past the left edge to settle in the mirrored spot. The jump
+   between the two happens while opacity is already 0, which is the entire
+   trick: the fade has to FINISH before the translate does, or you see it
+   streak across the face after all. */
 @keyframes cw-oeilcroise{
-  0%{transform:translateX(0px)} 48%{transform:translateX(0px)}
-  56%{transform:translateX(-46px)} 62%{transform:translateX(-91.5px)}
-  74%{transform:translateX(-91.5px)} 80%{transform:translateX(-46px)}
-  86%{transform:translateX(0px)} 100%{transform:translateX(0px)}
+  0%  {transform:translateX(0px);opacity:1}
+  48% {transform:translateX(0px);opacity:1}
+  54% {transform:translateX(58px);opacity:1}
+  58% {transform:translateX(88px);opacity:0}   /* gone, around the right */
+  59% {transform:translateX(-165px);opacity:0} /* the unseen jump */
+  63% {transform:translateX(-128px);opacity:0}
+  65% {transform:translateX(-118px);opacity:1} /* the other eye, at the left */
+  71% {transform:translateX(-91.5px);opacity:1}
+  78% {transform:translateX(-91.5px);opacity:1}
+  82% {transform:translateX(-120px);opacity:1} /* back out the way it came */
+  85% {transform:translateX(-150px);opacity:0}
+  86% {transform:translateX(95px);opacity:0}
+  89% {transform:translateX(70px);opacity:0}
+  90% {transform:translateX(58px);opacity:1}   /* and in from the right */
+  96% {transform:translateX(0px);opacity:1}
+  100%{transform:translateX(0px);opacity:1}
 }
 @keyframes cw-becquee{
   0%{transform:rotate(0deg)} 8%{transform:rotate(-18deg)} 20%{transform:rotate(-4deg)}

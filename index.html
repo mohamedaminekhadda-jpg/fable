@@ -448,12 +448,35 @@ kbd{
   74%{transform:scaleX(-1)} 80%{transform:scaleX(.1)}
   86%{transform:scaleX(1)} 100%{transform:scaleX(1)}
 }
-/* And the eye goes with it. */
+/* AND THE EYE GOES ROUND THE HEAD, NOT ACROSS THE FACE.
+   Sliding it from one side of the skull to the other is what a sticker does.
+   A head that turns carries its near eye TOWARDS the side it is turning to,
+   out of sight around the edge, and the far eye appears from the other edge:
+   two eyes, one seen at a time, never one crossing the bridge of the nose.
+
+   So it leaves with the bill to the right, fades out at the skull's right edge
+   - centre 295.48, which +88 from its resting 205.63 puts it exactly on - and
+   fades back in past the left edge to settle in the mirrored spot. The jump
+   between the two happens while opacity is already 0, which is the entire
+   trick: the fade has to FINISH before the translate does, or you see it
+   streak across the face after all. */
 @keyframes cw-oeilcroise{
-  0%{transform:translateX(0px)} 48%{transform:translateX(0px)}
-  56%{transform:translateX(-46px)} 62%{transform:translateX(-91.5px)}
-  74%{transform:translateX(-91.5px)} 80%{transform:translateX(-46px)}
-  86%{transform:translateX(0px)} 100%{transform:translateX(0px)}
+  0%  {transform:translateX(0px);opacity:1}
+  48% {transform:translateX(0px);opacity:1}
+  54% {transform:translateX(58px);opacity:1}
+  58% {transform:translateX(88px);opacity:0}   /* gone, around the right */
+  59% {transform:translateX(-165px);opacity:0} /* the unseen jump */
+  63% {transform:translateX(-128px);opacity:0}
+  65% {transform:translateX(-118px);opacity:1} /* the other eye, at the left */
+  71% {transform:translateX(-91.5px);opacity:1}
+  78% {transform:translateX(-91.5px);opacity:1}
+  82% {transform:translateX(-120px);opacity:1} /* back out the way it came */
+  85% {transform:translateX(-150px);opacity:0}
+  86% {transform:translateX(95px);opacity:0}
+  89% {transform:translateX(70px);opacity:0}
+  90% {transform:translateX(58px);opacity:1}   /* and in from the right */
+  96% {transform:translateX(0px);opacity:1}
+  100%{transform:translateX(0px);opacity:1}
 }
 @keyframes cw-becquee{
   0%{transform:rotate(0deg)} 8%{transform:rotate(-18deg)} 20%{transform:rotate(-4deg)}
@@ -466,7 +489,6 @@ kbd{
    never turns, and its crop is the whole point of it. */
 .cw-pied,.cw-grand{cursor:pointer;overflow:visible}
 /* CORBEAU-CSS-FIN */
-.brand-note{color:var(--ink-3);font-size:.8125rem}
 .mast-spacer{margin-inline-start:auto}
 /* Le bouton qui ouvre la palette : il ressemble à un champ, parce que c'en est
    un une fois ouvert — et il annonce son raccourci plutôt que de l'attendre. */
@@ -514,7 +536,6 @@ kbd{
 @media (max-width:30rem){
   .masthead .wrap{gap:.3rem;padding-block:var(--s2)}
   .brand{font-size:1rem}
-  .brand-note{display:none}
   .compte-hote button{padding:.28rem .55rem;max-inline-size:6.5rem}
   .lang-btn{padding:5px 6px;letter-spacing:.06em}
   .theme-btn{padding:.2rem .45rem;font-size:.6875rem}
@@ -1322,7 +1343,6 @@ body::after{
   .section{padding-block:var(--s6)}
   .grid{grid-template-columns:repeat(auto-fill,minmax(9rem,1fr));gap:var(--s5) var(--s4)}
   .tool{padding:var(--s4)}
-  .brand-note{display:none}
   /* Quatre chiffres en ligne ne tiennent pas dans 375 px : le dernier tombait
      seul sur sa rangée. Deux par deux, la grille reste lisible. */
   .stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
@@ -1411,7 +1431,6 @@ body::after{
       </svg>
       Fable
     </a>
-    <span class="brand-note" data-i18n="tagline">Books and textbooks · fr · en · ar</span>
     <span class="mast-spacer"></span>
     <button class="mast-search" id="open-palette" type="button">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -3321,7 +3340,6 @@ body::after{
   var TEXTES = {
     fr: {
       skip: 'Aller aux livres',
-      tagline: 'Livres et manuels · fr · en · ar',
       dark: 'Sombre', light: 'Clair',
       searchBtn: 'Chercher',
       eyebrow: 'Les figures sont calculées, jamais dessinées',
@@ -3380,7 +3398,6 @@ body::after{
     },
     en: {
       skip: 'Skip to the books',
-      tagline: 'Books and textbooks · fr · en · ar',
       dark: 'Dark', light: 'Light',
       searchBtn: 'Search',
       eyebrow: 'Figures are computed, never drawn',
@@ -4786,11 +4803,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6kqjg7). Non remplacée —
+  /* La version est posée par la construction (mu78k1hy). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6kqjg7')
+  fetch('library/library.json?v=mu78k1hy')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4801,7 +4818,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6kqjg7"></script>
+<script src="compte.js?v=mu78k1hy"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
