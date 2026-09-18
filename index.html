@@ -216,6 +216,74 @@ kbd{
    out of step with the other. */
 .cw{inline-size:2rem;block-size:2rem;flex:none;color:inherit}
 .cw-grand{inline-size:min(9rem,34vw);block-size:auto;margin-block-end:var(--s4);opacity:.9}
+/* ── la bulle ──
+   A PIXEL BUBBLE, WHICH MEANS NO CURVE AND NO MITRE.
+   The corners are notched by one square step and the tail is two squares
+   walking towards the bird. A triangular tail and a rounded corner are the two
+   things that give away a "pixel" style that is really a normal box - so
+   neither is here. `--px` is the pixel: change it and every step in the shape
+   changes with it, because nothing is measured independently.
+
+   Two elements rather than one: `clip-path` clips pseudo-elements as well, so
+   a bubble that notched its own corners would also cut off its own tail. The
+   clip goes on the inner box, the tail hangs off the outer one. */
+.perchoir{
+  position:absolute;inset-block-end:100%;inset-inline-start:var(--s5);
+  display:flex;align-items:center;gap:calc(var(--s5) + .4rem);
+  inline-size:min(40rem,calc(100% - var(--s5)*2));
+}
+.bulle{
+  --px:3px;
+  position:relative;z-index:0;
+  font:inherit;background:none;border:0;padding:0;cursor:pointer;
+  text-align:start;max-inline-size:27ch;
+  transition:transform .18s cubic-bezier(.22,.8,.3,1);
+}
+.bulle-boite{
+  display:block;
+  font:500 .75rem/1.55 var(--font-mono);letter-spacing:-.005em;
+  color:var(--ink);background:var(--card);
+  border:var(--px) solid var(--ink);
+  padding:.45rem .6rem;
+  /* the notch: a pixel box has no mitre */
+  clip-path:polygon(
+    var(--px) 0,calc(100% - var(--px)) 0,
+    calc(100% - var(--px)) var(--px),100% var(--px),
+    100% calc(100% - var(--px)),calc(100% - var(--px)) calc(100% - var(--px)),
+    calc(100% - var(--px)) 100%,var(--px) 100%,
+    var(--px) calc(100% - var(--px)),0 calc(100% - var(--px)),
+    0 var(--px),var(--px) var(--px));
+}
+/* THE TAIL. One stepped shape, not two loose squares - the first attempt drew
+   a pair of outlined boxes floating off the corner, which reads as debris
+   rather than as speech. And it climbs UP towards the beak: the crow's head is
+   level with the TOP of the bubble, so a tail hanging off the bottom pointed
+   at its tail feathers.
+
+   It is an SVG rather than pseudo-elements because it has to be two shapes -
+   the ink silhouette and the paper inside it - and it has to OVERLAP the
+   bubble by one pixel so the paper eats through the border and the bubble
+   opens into the tail. A box-shadow ring cannot do that; it would draw a line
+   across the join instead. */
+.bulle-queue{
+  position:absolute;z-index:1;
+  inline-size:calc(var(--px)*8);block-size:calc(var(--px)*6);
+  inset-inline-start:calc(var(--px)*-7);   /* one pixel of it lies over the border */
+  inset-block-start:calc(var(--px)*.8);
+  shape-rendering:crispEdges;
+}
+[dir="rtl"] .bulle-queue{transform:scaleX(-1)}
+.bq-ink{fill:var(--ink)}
+.bq-card{fill:var(--card)}
+.bulle:hover .bq-ink{fill:var(--accent)}
+.bulle:hover{transform:translateY(-2px)}
+.bulle:hover .bulle-boite{border-color:var(--accent)}
+.bulle:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+@media (max-width:34rem){
+  .bulle{--px:2px;max-inline-size:20ch}
+  .bulle-boite{font-size:.6875rem;padding:.35rem .45rem}
+}
+
 /* THE WHOLE BIRD, ON THE FOOTER'S RULE.
    Shown entire - perch, legs, tail - and stood on the hairline the footer
    already draws, so its own little branch rests on the page's line and the two
@@ -227,7 +295,7 @@ kbd{
    `inset-block-end:100%` is what lands it on the line - not a nudge in pixels
    that drifts the moment the type size changes. */
 .cw-pied{
-  position:absolute;inset-block-end:100%;inset-inline-start:var(--s5);
+  position:static;flex:none;
   inline-size:auto;block-size:4.5rem;opacity:.92;pointer-events:none;
 }
 @media (max-width:34rem){.cw-pied{block-size:3.4rem}}
@@ -1374,11 +1442,28 @@ body::after{
 </main>
 
 <footer class="foot">
-  <!-- The same `#corbeau-oiseau` as the masthead and the empty state - a third
+  <!-- The bird and what it has to say, perched together on the footer's rule.
+       The same `#corbeau-oiseau` as the masthead and the empty state - a third
        window onto one drawing, never a third copy of it. -->
-  <svg class="cw cw-pied" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
-    <use href="#corbeau-oiseau"/>
-  </svg>
+  <div class="perchoir">
+    <svg class="cw cw-pied" data-vivant viewBox="0 0 914.26 966.02" aria-hidden="true" focusable="false">
+      <use href="#corbeau-oiseau"/>
+    </svg>
+    <!-- A button, because it does something: press it and the bird says
+         something else. It carries real text rather than a picture of text,
+         so it can be read aloud, translated and selected like anything else
+         on the page. -->
+    <button class="bulle" id="bulle" type="button">
+      <span class="bulle-boite">I have read every cover here. The insides are better.</span>
+      <!-- Two steps, climbing towards the beak. The right edge of both shapes
+           sits inside the bubble's border, which is what opens the one into
+           the other instead of butting them together. -->
+      <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
+        <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
+        <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
+      </svg>
+    </button>
+  </div>
   <div class="wrap">
     <span data-i18n="footer">Fable — interactive books and textbooks in French, English and Arabic.</span>
     <a href="cahier/">Le Jaguar</a>
@@ -2990,6 +3075,13 @@ body::after{
       h1: 'Des livres dont on peut <em>tirer les courbes</em>',
       h1Mots: ['tirer les courbes', 'démonter les circuits', 'faire tourner le miroir',
                'pousser les planètes', 'ouvrir les phrases'],
+      bulles: ['J’ai lu toutes les couvertures. C’est mieux dedans.',
+               'On lâche des cailloux, l’eau monte. De la physique, et un déjeuner.',
+               'Un corbeau retient un visage pendant des années. Essayez avec une formule.',
+               'Rien ici ne brille. Je suis resté quand même.',
+               'Tirez sur la courbe. Elle ne mord pas.',
+               'Je ne dessine pas les figures. Je les regarde se résoudre.',
+               'Je sais compter jusqu’à trois. Le reste, c’est votre travail.'],
       rubanEyebrow: 'Ce qu\u2019il y a vraiment dedans',
       rubanH: 'Cent deux sortes de figure, <em>toutes vivantes</em>',
       lede: 'La figure n’illustre pas la leçon : elle la résout, sous vos yeux, avec les mêmes quelques lignes de mathématiques dont la leçon parle.',
@@ -3039,6 +3131,16 @@ body::after{
       h1: 'Books you can <em>pull the curves out of</em>',
       h1Mots: ['pull the curves out of', 'take the circuits apart', 'turn the mirror inside',
                'push the planets around', 'break the sentences open'],
+      /* Every one of these is true of crows, which is the joke: they really do
+         count, really do remember a face for years, and really do drop stones
+         in to bring the water up. */
+      bulles: ['I have read every cover here. The insides are better.',
+               'Drop pebbles in, the water comes up. That is physics, and lunch.',
+               'A crow remembers a face for years. Try that with a formula.',
+               'Nothing in here is shiny. I stayed anyway.',
+               'Pull the curve. It does not bite.',
+               'I do not draw the figures. I just watch them work it out.',
+               'I can count to three. The rest is your job.'],
       rubanEyebrow: 'What is actually in them',
       rubanH: 'A hundred and two kinds of figure, <em>every one of them alive</em>',
       lede: 'The figure does not illustrate the lesson. It works it out, while you watch, from the same few lines of mathematics the lesson is about.',
@@ -3184,13 +3286,31 @@ body::after{
     }, 4200 + Math.random() * 5000);
   })();
 
+  /* ── IL DIT QUELQUE CHOSE ──
+     One line at random on arrival, another whenever the bubble is pressed -
+     never the same one twice running, or pressing it would sometimes look
+     broken. No timer: a bubble at the very bottom of the page would spend the
+     whole visit talking to nobody. */
+  (function () {
+    var b = document.getElementById('bulle');
+    var boite = b && b.querySelector('.bulle-boite');
+    var mots = window.T ? window.T('bulles') : null;
+    if (!b || !boite || !mots || !mots.length || !mots.join) return;
+    var n = Math.floor(Math.random() * mots.length);
+    boite.textContent = mots[n];
+    b.addEventListener('click', function () {
+      n = (n + 1 + Math.floor(Math.random() * (mots.length - 1))) % mots.length;
+      boite.textContent = mots[n];
+    });
+  })();
+
   /* ── IL BAT DES AILES ──
      When you press something that does something. Not on every click on the
      page: pressing a paragraph is not an event, and a mascot that reacts to
      everything is reacting to nothing. */
   var fin = null;
   var CIBLES = '.btn,.chip,.tag,.filtres-btn,.sortsel,.segmented button,.book a,'
-             + '.mur-carte,.tool,.theme-btn,.lang-btn,.mast-search,.pal-results a,.brand';
+             + '.mur-carte,.tool,.theme-btn,.lang-btn,.mast-search,.pal-results a,.brand,.bulle';
   document.addEventListener('pointerdown', function (e) {
     if (!e.target.closest || !e.target.closest(CIBLES)) return;
     /* Removed, forced through a layout read, then added again: without the
@@ -4296,11 +4416,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6gxlg8). Non remplacée —
+  /* La version est posée par la construction (mu6hjv08). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6gxlg8')
+  fetch('library/library.json?v=mu6hjv08')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4311,7 +4431,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6gxlg8"></script>
+<script src="compte.js?v=mu6hjv08"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
