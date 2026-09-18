@@ -965,13 +965,13 @@ body::after{
         <h3>Le Jaguar</h3>
         <p class="quoi" data-i18n="prE3">the pupil's notebook</p>
         <p data-i18n="prE3P">Séyès paper in a browser. Clippings arrive from any book with their source attached. Everything stays on the device; an account is optional and only adds a copy that travels.</p>
-        <a href="notebook.html" data-i18n="prE3L">See the notebook &rsaquo;</a>
+        <a href="notebook.html" data-i18n-html="prE3L">See the notebook &rsaquo;</a>
       </div>
       <div class="piece" style="--h:var(--lilac-ink)">
         <h3>See for yourself</h3>
         <p class="quoi" data-i18n="prE4">the experiments, alone</p>
         <p data-i18n="prE4P">The simulations lifted out of the books and given their own page, for the lesson where the experiment is the point and the chapter around it is not.</p>
-        <a href="simulations.html" data-i18n="prE4L">See the simulations &rsaquo;</a>
+        <a href="simulations.html" data-i18n-html="prE4L">See the simulations &rsaquo;</a>
       </div>
       <div class="piece" style="--h:var(--marigold-ink)">
         <h3>Le Classeur</h3>
@@ -993,7 +993,7 @@ body::after{
       <span style="margin-inline-start:auto;font-size:.875rem;color:var(--ink-3)" data-i18n="prShopN">live figures, not screenshots</span>
     </div>
     <div style="display:grid;gap:var(--s5);grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))">
-      <p class="mesure" data-i18n="prShop1">Every figure below is the real one, lifted straight out of the demonstration textbook and run by the same engine that serves it to a pupil. Nothing here is a picture of the product. It <em>is</em> the product, with the page around it removed.</p>
+      <p class="mesure" data-i18n-html="prShop1">Every figure below is the real one, lifted straight out of the demonstration textbook and run by the same engine that serves it to a pupil. Nothing here is a picture of the product. It <em>is</em> the product, with the page around it removed.</p>
       <p class="mesure" data-i18n="prShop2">A cursor works each one for you — pressing a tab, choosing from a list, dragging a slider — and every one of those gestures is a real event on a real control, which is why the figure answers. Touch it and the cursor stands down: from then on you are the one driving.</p>
     </div>
 
@@ -1011,7 +1011,7 @@ body::after{
           </span>
           <b id="film-nom"></b>
           <em id="film-titre"></em>
-          <a id="film-lien" href="demos/solar.html" target="_blank" rel="noopener" data-i18n="prShopFull">Open it on its own &nearr;</a>
+          <a id="film-lien" href="demos/solar.html" target="_blank" rel="noopener" data-i18n-html="prShopFull">Open it on its own &nearr;</a>
         </p>
       </div>
       <div class="rail" id="rail" role="group" aria-label="Which figure to try">
@@ -1213,7 +1213,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7ix6p8"></script>
+<script src="compte.js?v=mu7j3qbq"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1228,6 +1228,162 @@ body::after{
 (function () {
   var TEXTES = {
     fr: {
+      /* ── LES TROIS AUTRES PAGES ──
+         Voir par soi-même, Le Jaguar et Le projet. Leurs textes vivent ici,
+         dans la même table que l'accueil, parce que le sélecteur de langue est
+         celui de la barre : une page qui garderait sa propre table serait une
+         page qui, un jour, ne suivrait pas.
+
+         L'ANGLAIS Y EST AUSSI, et ce n'est pas du remplissage : sans lui,
+         basculer en FR puis revenir en EN laissait la page en français. Le
+         script ne remplace un texte que s'il trouve la clé, et il n'y a rien
+         à quoi revenir quand la clé anglaise n'existe pas. Il est repris MOT
+         POUR MOT du balisage, jamais retapé : deux copies d'une même phrase
+         finissent toujours par différer d'une virgule que personne ne voit. */
+      simEyebrow: "Trente-six, et pas une seule vidéo",
+      simH1: "Des nombres qu’on peut <em>bousculer</em>",
+      simLede: "Posez les valeurs, lancez, et regardez ce que font vraiment les équations. Rien ici n’est animé ni enregistré d’avance : chaque courbe est résolue pendant que vous déplacez le curseur, et c’est pour cela qu’on peut y mettre une valeur que personne n’avait prévue et obtenir quand même la bonne réponse.",
+      simOpen: "Ouvrir les simulations",
+      simLib: "Retour à la bibliothèque",
+      simAngle: "Angle",
+      simSpeed: "Vitesse",
+      simRead: "Relevé sur la trajectoire tracée, pas sur la formule qui l’a tracée.",
+      simRange: "portée",
+      simApex: "flèche",
+      simSubjectsH: "Quatre matières",
+      simSubjectsN: "36 simulations",
+      simPhys: "Physique",
+      simPhysD: "Lumière et lentilles, forces, ondes, électricité, énergie. Le banc d’optique à lui seul trace chacun des rayons qu’il dessine.",
+      simChem: "Chimie",
+      simChemD: "Courbes de titrage, avancement de réaction, concentration et couleur. Le point d’équivalence est trouvé, jamais marqué d’avance.",
+      simBio: "Sciences de la vie et de la Terre",
+      simBioD: "Croisements et hérédité, populations, la cellule, le mouvement des plaques. Le hasard est tiré, donc les proportions sortent comme sortent des proportions.",
+      simMath: "Mathématiques",
+      simMathD: "Fonctions, arbres de probabilité, suites, géométrie. Changez un coefficient et la courbe est retracée à partir de lui.",
+      simCounts: "Ces quatre nombres sont les dossiers présents sur le disque à la dernière construction, pas un objectif. Si l’un d’eux grandit, cette page a tort jusqu’à ce qu’on la reconstruise.",
+      simWhyE: "Pourquoi ce n’est pas une vidéo",
+      simWhyH: "On ne pose pas de question à un enregistrement.",
+      simWhyP: "Une animation vous montre une exécution d’une expérience, choisie par celui qui l’a faite. Demandez-lui ce qui se passe à quarante et un degrés plutôt qu’à quarante : elle n’a rien à répondre. Ici tout est résolu à chaque mouvement, à partir des mêmes quelques lignes de mathématiques dont la leçon parle — si bien que la valeur qui tombe mal, celle qu’un élève demande vraiment, reçoit exactement la même réponse que la valeur bien ronde.",
+      simP1H: "Cela tourne dans le navigateur",
+      simP1P: "Rien à installer, aucun greffon, aucun compte. Ouvrez la page et c’est là, sur les tablettes de l’établissement aussi bien que sur les vôtres.",
+      simP2H: "Cela tourne hors ligne",
+      simP2P: "Une fois la page chargée, le réseau ne sert plus. Un cours ne s’arrête pas parce que la connexion de l’école, elle, s’est arrêtée.",
+      simP3H: "C’est le même moteur",
+      simP3P: "Ce sont les figures de l’intérieur des manuels, sorties et posées sur leur propre page. Rien n’a été refait pour les mettre ici.",
+      simTryH: "Essayez-en une",
+      simTryP: "Le curseur ci-dessus est un petit, écrit pour cette page. Les vrais vont considérablement plus loin : un traceur de rayons devant lequel on pose une lentille, un titrage qui trouve son propre point d’équivalence, un échiquier de Punnett qui tire les dés au lieu d’énumérer les issues.",
+      simBulle: "On lâche un caillou, l’eau monte. Personne n’a eu besoin de me dire de combien.",
+      simOpen2: "Ouvrir les simulations",
+      simNb: "Et le cahier où elles se collent",
+      nbEyebrow: "Le cahier",
+      nbH1: "Du papier qui <em>garde ce qu’on y pose</em>",
+      nbLede: "Le Jaguar est un cahier d’élève sur une vraie réglure Séyès — le papier sur lequel il écrit déjà, dessiné et non photographié. On découpe un passage de n’importe quel manuel, on l’annote, on le garde. Tout reste sur l’appareil, et aucun compte n’est demandé.",
+      nbOpen: "Ouvrir le cahier",
+      nbLib: "Retour à la bibliothèque",
+      nbSheetName: "Optique — 12 mars",
+      nbSheetHint: "Écrivez dessus",
+      nbSheetFoot: "Séyès, dessiné : une ligne forte tous les 20 px, trois fines entre, des verticales au même pas, et la marge rouge.",
+      nbSheetLocal: "sur cet appareil seulement",
+      nbTripH: "Comment un passage arrive là",
+      nbT1H: "On le sélectionne dans le livre",
+      nbT1P: "N’importe quel passage de n’importe quel manuel de la bibliothèque. Une figure aussi — les vivantes arrivent en état de marche, et non en capture d’écran d’elles-mêmes.",
+      nbT2H: "Il arrive avec son adresse",
+      nbT2P: "La coupure retient de quel livre et de quel chapitre elle vient, si bien que des mois plus tard elle dit encore où retourner. Une citation qui a perdu sa source est une rumeur.",
+      nbT3H: "On écrit autour",
+      nbT3P: "Vos propres mots au-dessus et au-dessous, sur la réglure. La coupure garde son filet sur le côté : elle reste visiblement de quelqu’un d’autre.",
+      nbT4H: "Cela reste",
+      nbT4P: "Dans le stockage du navigateur, sur cet appareil-là. Fermer l’onglet, perdre le réseau ou ne jamais se connecter n’y change rien.",
+      nbManyH: "Autant qu’ils veulent, nommés comme ils veulent",
+      nbManyP: "Un cahier par matière, par trimestre, par professeur, par lubie. On les crée, on les renomme, on les duplique et on les jette depuis une étagère qui se comporte comme une étagère — parce qu’un élève à qui on donne exactement un cahier cesse de s’en servir la semaine où il devient brouillon.",
+      nbManyNote: "Ces quatre-là illustrent l’étagère ; ce n’est pas une lecture de la vôtre.",
+      nbWhereE: "Où vit l’écriture",
+      nbWhereH: "L’appareil est l’original.",
+      nbWhereP: "Le Jaguar fonctionne entièrement sans compte et sans connexion, parce qu’un élève dont le réseau tombe en plein cours doit continuer d’écrire, et qu’un cahier ne doit pas disparaître parce qu’un service a changé d’avis. Se connecter est facultatif et n’ajoute qu’une chose : une copie qui suit la personne sur un autre appareil. L’original, lui, reste là où il a été écrit.",
+      nbNoAcc: "Aucun compte requis",
+      nbIci1H: "Rien n’est envoyé nulle part",
+      nbIci1P: "Tant que personne ne choisit de se connecter, aucun cahier n’a quitté l’appareil sur lequel il a été écrit. Il n’y a aucun serveur à nous au milieu pour l’y laisser.",
+      nbIci2H: "Si deux appareils ont écrit",
+      nbIci2P: "Le plus récent l’emporte, cahier par cahier. Ce n’est pas une fusion ligne à ligne et cela ne prétend pas l’être : le dire est plus honnête que de laisser croire à une magie qui n’existe pas.",
+      nbOpenH: "Ouvrez-le",
+      nbOpenP: "Il s’ouvre vide, sur une feuille neuve, sans inscription et sans rien à écarter d’abord.",
+      nbBulle: "J’entasse des choses moi aussi. Les miennes brillent davantage et servent moins.",
+      nbOpen2: "Ouvrir le cahier",
+      nbSims: "Et les simulations d’où elles sortent",
+      prEyebrow: "Le projet",
+      prH1: "Un manuel qui fait les <em>mathématiques</em> pendant qu’on le lit",
+      prLede: "Fable est un système d’édition scolaire complet : un moteur qui construit des manuels interactifs, un studio pour les écrire, un cahier d’élève, et les expériences sorties pour tenir debout toutes seules. C’est construit, cela tourne, et tout ce qui est sur ce site a été fait avec.",
+      prProbH: "Une figure de manuel est la photographie d’une pensée",
+      prProb1: "Quelqu’un l’a dessinée une fois, pour un jeu de valeurs, et l’a imprimée. On ne peut rien lui demander. L’élève qui se demande ce qui se passe à un autre angle, à une autre concentration, avec un autre coefficient n’a nulle part où poser la question — et cette question-là, c’est le moment où la leçon fonctionnait.",
+      prProb2: "Les éditions numériques reproduisent surtout le problème en plus cher : un PDF de la même image, ou la vidéo d’une exécution choisie par quelqu’un d’autre. Ce sont deux enregistrements. Aucun ne peut être interrogé, et un enregistrement ne peut pas se tromper de façon intéressante.",
+      prProb3: "Les figures de Fable sont résolues, sur la page, à partir des mêmes quelques lignes de mathématiques dont la leçon parle. C’est toute l’idée, et tout le reste en découle.",
+      prBuiltH: "Ce qui existe aujourd’hui",
+      prBuiltN: "compté à la construction, pas estimé",
+      prN1: "sortes de figure vivante",
+      prN1D: "Chacune est un composant qu’un auteur pose et remplit ; chacune se résout chez le lecteur.",
+      prN2: "livres publiés",
+      prN2D: "242 chapitres, construits et en ligne, dont un manuel de démonstration complet.",
+      prN3: "simulations",
+      prN3D: "Dans quatre matières, chacune utilisable dans un livre ou toute seule.",
+      prN4: "langues",
+      prN4D: "Français, anglais et arabe, droite à gauche comprise, depuis une seule table de chaînes.",
+      prBuiltP: "Ces quatre nombres sont imprimés par la construction elle-même : ils ne peuvent donc pas s’écarter de ce qui est réellement sur le disque. Tout ce qui est sur ce site — la bibliothèque, la liseuse, le cahier, les simulations — est une sortie du système, pas une maquette de celui-ci.",
+      prPartsH: "Les pièces",
+      prE1: "construit un livre",
+      prE1P: "Prend des chapitres écrits dans un format texte lisible et produit un fichier HTML autonome par livre — figures, styles et scripts dedans. Rien à installer pour en lire un, rien à laisser tourner pour le servir.",
+      prE2: "là où s’écrit un livre",
+      prE2P: "Un atelier d’écriture pour professeurs : chapitres, les 102 types de figure avec un formulaire pour chacun, thèmes, et un bouton de construction. Il écrit des fichiers et lance des constructions, donc il reste sur la machine de l’auteur.",
+      prE3: "le cahier de l’élève",
+      prE3P: "Du papier Séyès dans un navigateur. Les coupures arrivent de n’importe quel livre avec leur source attachée. Tout reste sur l’appareil ; un compte est facultatif et n’ajoute qu’une copie qui voyage.",
+      prE3L: "Voir le cahier &rsaquo;",
+      prE4: "les expériences, seules",
+      prE4P: "Les simulations sorties des livres et posées sur leur propre page, pour la leçon où l’expérience est le sujet et où le chapitre autour ne l’est pas.",
+      prE4L: "Voir les simulations &rsaquo;",
+      prE5: "le côté établissement",
+      prE5P: "Classes, bulletins, plans de révision, calendrier scolaire et badges de mérite — l’administration qu’un professeur porte réellement. Cela tourne sur la machine de l’établissement, pas sur la nôtre.",
+      prE6: "ce qui part en ligne",
+      prE6P: "Un bouton construit et publie le site public, avec un garde-fou sur les droits qu’il ne peut délibérément pas lever : un livre scanné ne peut pas être publié par mégarde, parce qu’un livre publié par mégarde ne se dé-publie pas.",
+      prShopH: "Mettez-y la main",
+      prShopN: "des figures vivantes, pas des captures",
+      prShop1: "Chaque figure ci-dessous est la vraie, sortie telle quelle du manuel de démonstration et animée par le moteur même qui la sert à un élève. Rien ici n’est une image du produit. C’<em>est</em> le produit, la page autour en moins.",
+      prShop2: "Un curseur travaille chacune pour vous — il presse un onglet, choisit dans une liste, traîne une réglette — et chacun de ces gestes est un vrai événement sur une vraie commande, ce qui est la raison pour laquelle la figure répond. Touchez-la et le curseur se retire : à partir de là, c’est vous qui conduisez.",
+      prShopWait: "chargement de la figure",
+      prShopAuto: "Auto",
+      prShopYou: "À vous",
+      prShopFull: "L’ouvrir seule &nearr;",
+      prRunE: "Ce qu’il lui faut",
+      prRunH: "Un navigateur, et rien d’autre.",
+      prRunP: "Chaque livre est un seul fichier HTML. Il s’ouvre sur les tablettes de l’établissement, sur un portable de dix ans, depuis une clé USB, et il continue de fonctionner quand la connexion tombe en plein cours — ce qui, dans la plupart des écoles auxquelles ceci s’adresse, arrivera. Il n’y a pas d’application à faire approuver, pas de compte à créer pour un enfant de treize ans, et aucun serveur dont la facture puisse mettre fin au cours.",
+      prR1: "Après le premier chargement, le réseau ne sert plus.",
+      prR2: "Lire et écrire ne demandent aucune inscription.",
+      prR3: "Un livre s’envoie par courriel, se copie ou se passe sur une clé.",
+      prR4: "Y compris de droite à gauche, ce que les figures respectent aussi.",
+      prWhoH: "À qui cela s’adresse",
+      prW1H: "Établissements",
+      prW1P: "Un département adopte le livre d’une matière pour un niveau. Le professeur peut le modifier — c’est tout l’objet de Studio — donc le livre suit la façon dont il enseigne déjà, et non l’inverse.",
+      prW1a: "Tourne sur ce que l’établissement possède déjà.",
+      prW1b: "Ce qu’écrivent les élèves reste sur les appareils des élèves.",
+      prW1c: "Le Classeur couvre l’appel, les bulletins et les plans de révision.",
+      prW2H: "Programmes de formation",
+      prW2P: "Partout où une notion se déplace plus facilement qu’elle ne se décrit : apprentissage, titres professionnels, formation interne. Les types de figure ne sont pas propres à l’école.",
+      prW2a: "Un support de cours qui se remet en un seul fichier.",
+      prW2b: "Écrit par le formateur, pas commandé à une agence.",
+      prW3H: "Éditeurs",
+      prW3P: "Un catalogue existant devient interactif sans être réécrit : la chaîne d’import prend un PDF ou un EPUB et produit des chapitres, et les figures se posent ensuite là où il y avait une image.",
+      prW3a: "Le garde-fou refuse de publier ce qui ne nous appartient pas.",
+      prW3b: "La sortie est un fichier qui vous appartient, pas une licence qui se loue.",
+      prNextH: "La suite",
+      prNextNote: "Tout ce qui précède peut être vérifié dans la construction. Rien de cette section ne le peut — c’est à vous de la remplir, et elle a été laissée visiblement blanche plutôt que meublée de plausible.",
+      prNx1H: "Utilisé aujourd’hui",
+      prNx1P: "— nommez les établissements, les classes ou les programmes où cela a tourné, et ce qui s’y est passé.",
+      prNx2H: "Ce qu’un soutien permettrait",
+      prNx2P: "— la version honnête : plus de livres, plus de matières, une expérimentation, quelqu’un d’autre que vous pour les écrire.",
+      prNx3H: "Qui est derrière",
+      prNx3P: "— on soutient des gens, et celui-ci a été construit par une seule personne.",
+      prTalkH: "Écrivez-moi",
+      prTalkP: "Si vous dirigez un établissement, un programme ou une collection, le plus rapide pour en juger est d’ouvrir un livre et d’essayer de casser une figure. Le manuel de démonstration est dans la bibliothèque et utilise chacun des 102 types.",
+      prBulle: "Rien sur cette page n’est une maquette. J’ai vérifié. Deux fois.",
+      prDemo: "Ouvrir le manuel de démonstration",
+      prLib: "Voir toute la bibliothèque",
       skip: 'Aller aux livres',
       dark: 'Sombre', light: 'Clair',
       searchBtn: 'Chercher',
@@ -1288,6 +1444,162 @@ body::after{
       pageDesc: 'Des livres et des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
     },
     en: {
+      /* ── LES TROIS AUTRES PAGES ──
+         Voir par soi-même, Le Jaguar et Le projet. Leurs textes vivent ici,
+         dans la même table que l'accueil, parce que le sélecteur de langue est
+         celui de la barre : une page qui garderait sa propre table serait une
+         page qui, un jour, ne suivrait pas.
+
+         L'ANGLAIS Y EST AUSSI, et ce n'est pas du remplissage : sans lui,
+         basculer en FR puis revenir en EN laissait la page en français. Le
+         script ne remplace un texte que s'il trouve la clé, et il n'y a rien
+         à quoi revenir quand la clé anglaise n'existe pas. Il est repris MOT
+         POUR MOT du balisage, jamais retapé : deux copies d'une même phrase
+         finissent toujours par différer d'une virgule que personne ne voit. */
+      simEyebrow: "Thirty-six of them, and none is a video",
+      simH1: "Numbers you can <em>push around</em>",
+      simLede: "Set the values, run it, and watch what the equations actually do. Nothing here is animated or pre-recorded: every curve is solved while you move the slider, which is why you can put in a figure nobody planned for and still get the right answer.",
+      simOpen: "Open the simulations",
+      simLib: "Back to the library",
+      simAngle: "Angle",
+      simSpeed: "Speed",
+      simRead: "Read back off the drawn path, not off the formula that drew it.",
+      simRange: "range",
+      simApex: "apex",
+      simSubjectsH: "Four subjects",
+      simSubjectsN: "36 simulations",
+      simPhys: "Physics",
+      simPhysD: "Light and lenses, forces, waves, electricity, energy. The optics bench alone traces every ray it draws.",
+      simChem: "Chemistry",
+      simChemD: "Titration curves, reaction progress, concentration and colour. The equivalence point is found, never marked in advance.",
+      simBio: "Life and earth sciences",
+      simBioD: "Crosses and inheritance, populations, the cell, plate movement. Chance is rolled, so the ratios come out as ratios do.",
+      simMath: "Mathematics",
+      simMathD: "Functions, probability trees, sequences, geometry. Change a coefficient and the curve is redrawn from it.",
+      simCounts: "Those four numbers are the folders on disk at the last build, not a target. If one of them grows, this page is wrong until it is rebuilt.",
+      simWhyE: "Why it is not a video",
+      simWhyH: "A recording cannot be asked a question.",
+      simWhyP: "An animation shows you one run of one experiment, chosen by whoever made it. Ask it what happens at forty-one degrees instead of forty and it has nothing to say. These are solved on every movement from the same few lines of mathematics the lesson is about — so the awkward value, the one a pupil actually asks about, is answered exactly like the tidy one.",
+      simP1H: "It runs in the browser",
+      simP1P: "No install, no plug-in, no account. Open the page and it is there, on the school's tablets as readily as on yours.",
+      simP2H: "It runs offline",
+      simP2P: "Once the page has loaded, the network is not needed again. A lesson does not stop because the school's connection did.",
+      simP3H: "It is the same engine",
+      simP3P: "These are the figures from inside the textbooks, lifted out and given their own page. Nothing was rebuilt to put them here.",
+      simTryH: "Try one now",
+      simTryP: "The slider above is a small one, written for this page. The real ones go considerably further: a ray tracer you can put a lens in front of, a titration that finds its own equivalence point, a punnett square that rolls the dice rather than listing the outcomes.",
+      simBulle: "Drop a pebble, the water rises. I did not need to be told the number.",
+      simOpen2: "Open the simulations",
+      simNb: "And the notebook they clip into",
+      nbEyebrow: "The notebook",
+      nbH1: "Paper that <em>keeps what you put on it</em>",
+      nbLede: "Le Jaguar is a pupil's notebook on real Séyès ruling — the same paper they already write on, drawn rather than photographed. Clip a passage out of any textbook, annotate it, keep it. Everything stays on the device, and no account is asked for.",
+      nbOpen: "Open the notebook",
+      nbLib: "Back to the library",
+      nbSheetName: "Optics — 12 March",
+      nbSheetHint: "Write on it",
+      nbSheetFoot: "Séyès, drawn: one strong line every 20px, three fine ones between, verticals at the same pitch, and the red margin.",
+      nbSheetLocal: "on this device only",
+      nbTripH: "How a passage gets there",
+      nbT1H: "Select it in the book",
+      nbT1P: "Any passage of any textbook in the library. A figure too — the live ones come across still working, not as a screenshot of themselves.",
+      nbT2H: "It arrives with its address",
+      nbT2P: "The clipping remembers which book and which chapter it came from, so months later it still says where to go back to. A quotation that has lost its source is a rumour.",
+      nbT3H: "Write around it",
+      nbT3P: "Your own words above and below, on the ruling. The clipping keeps its rule down the side so it stays visibly someone else's.",
+      nbT4H: "It stays",
+      nbT4P: "In the browser's own storage, on that device. Closing the tab, losing the network, or never signing in changes nothing.",
+      nbManyH: "As many as they like, named as they like",
+      nbManyP: "One notebook per subject, per term, per teacher, per whim. They are made, renamed, duplicated and thrown away from a shelf that behaves like a shelf — because a pupil who is given exactly one notebook stops using it the week it gets messy.",
+      nbManyNote: "Those four are an illustration of the shelf, not a reading of yours.",
+      nbWhereE: "Where the writing lives",
+      nbWhereH: "The device is the original.",
+      nbWhereP: "Le Jaguar works whole with no account and no connection, because a pupil whose network drops mid-lesson must keep writing, and a notebook must not vanish because a service changed its mind. Signing in is optional and adds one thing only: a copy that follows the person to another device. The original stays where it was written.",
+      nbNoAcc: "No account required",
+      nbIci1H: "Nothing is sent anywhere",
+      nbIci1P: "Until someone chooses to sign in, no notebook has left the device it was written on. There is no server of ours in the middle to leave it on.",
+      nbIci2H: "If two devices both wrote",
+      nbIci2P: "The most recent wins, notebook by notebook. That is not a line-by-line merge and does not pretend to be: saying so is more honest than implying a magic that does not exist.",
+      nbOpenH: "Open it",
+      nbOpenP: "It opens empty, on a fresh sheet, with no sign-up and nothing to dismiss first.",
+      nbBulle: "I hoard things too. Mine are shinier and less useful.",
+      nbOpen2: "Open the notebook",
+      nbSims: "And the simulations it clips from",
+      prEyebrow: "The project",
+      prH1: "A textbook that does the <em>mathematics</em> while you read it",
+      prLede: "Fable is a complete school publishing system: an engine that builds interactive textbooks, a studio to write them in, a pupil's notebook, and the experiments lifted out to stand on their own. It is built, it runs, and everything on this site was made with it.",
+      prProbH: "A figure in a textbook is a photograph of a thought",
+      prProb1: "Someone drew it once, at one set of values, and printed it. It cannot be asked anything. A pupil who wonders what happens at a different angle, a different concentration, a different coefficient has nowhere to put the question — and that question is the moment the lesson was working.",
+      prProb2: "The digital editions mostly reproduce the problem at greater expense: a PDF of the same picture, or a video of one run chosen by someone else. Both are recordings. Neither can be interrogated, and a recording cannot be wrong in an interesting way.",
+      prProb3: "Fable's figures are solved, on the page, from the same few lines of mathematics the lesson is about. That is the whole idea, and everything else here follows from it.",
+      prBuiltH: "What exists today",
+      prBuiltN: "counted from the build, not estimated",
+      prN1: "kinds of live figure",
+      prN1D: "Each is a component an author places and fills in; each solves itself in the reader.",
+      prN2: "books published",
+      prN2D: "242 chapters, built and online, including a full demonstration textbook.",
+      prN3: "simulations",
+      prN3D: "Across four subjects, each usable inside a book or on its own.",
+      prN4: "languages",
+      prN4D: "French, English and Arabic, right-to-left included, from one string table.",
+      prBuiltP: "Those four numbers are printed by the build itself, so they cannot drift from what is actually on disk. Everything on this website — the library, the reader, the notebook, the simulations — is output of the system, not a mock-up of it.",
+      prPartsH: "The parts",
+      prE1: "builds a book",
+      prE1P: "Takes chapters written in a readable text format and produces one self-contained HTML file per book — figures, styles and scripts inside it. Nothing to install to read one, and nothing to keep running to serve it.",
+      prE2: "where a book is written",
+      prE2P: "An authoring environment for teachers: chapters, the 102 figure types with a form for each, themes, and a build button. It writes files and runs builds, so it stays on the author's own machine.",
+      prE3: "the pupil's notebook",
+      prE3P: "Séyès paper in a browser. Clippings arrive from any book with their source attached. Everything stays on the device; an account is optional and only adds a copy that travels.",
+      prE3L: "See the notebook &rsaquo;",
+      prE4: "the experiments, alone",
+      prE4P: "The simulations lifted out of the books and given their own page, for the lesson where the experiment is the point and the chapter around it is not.",
+      prE4L: "See the simulations &rsaquo;",
+      prE5: "the school side",
+      prE5P: "Classes, reports, exam plans, a school calendar and merit badges — the administration a teacher actually carries. It runs on the school's own machine rather than ours.",
+      prE6: "what goes online",
+      prE6P: "One button builds and publishes the public site, with a rights guard it deliberately cannot override: a scanned book cannot be published by accident, because a book published by accident cannot be unpublished.",
+      prShopH: "Reach into one",
+      prShopN: "live figures, not screenshots",
+      prShop1: "Every figure below is the real one, lifted straight out of the demonstration textbook and run by the same engine that serves it to a pupil. Nothing here is a picture of the product. It <em>is</em> the product, with the page around it removed.",
+      prShop2: "A cursor works each one for you — pressing a tab, choosing from a list, dragging a slider — and every one of those gestures is a real event on a real control, which is why the figure answers. Touch it and the cursor stands down: from then on you are the one driving.",
+      prShopWait: "loading the figure",
+      prShopAuto: "Auto",
+      prShopYou: "You drive",
+      prShopFull: "Open it on its own &nearr;",
+      prRunE: "What it runs on",
+      prRunH: "A browser, and nothing else.",
+      prRunP: "Every book is a single HTML file. It opens on the school's tablets, on a ten-year-old laptop, from a memory stick, and it keeps working when the connection drops mid-lesson — which, in most of the schools this is meant for, it will. There is no app to approve, no account to create for a thirteen-year-old, and no server whose invoice can end the lesson.",
+      prR1: "After the first load, the network is not needed again.",
+      prR2: "Reading and writing need no sign-up of any kind.",
+      prR3: "A book can be emailed, copied or handed over on a stick.",
+      prR4: "Including right-to-left, which the figures respect too.",
+      prWhoH: "Who it is for",
+      prW1H: "Schools",
+      prW1P: "A department adopts one subject's book for one year group. The teacher can edit it — that is the point of Studio — so the book follows the way they already teach instead of the other way round.",
+      prW1a: "Runs on what the school already owns.",
+      prW1b: "Pupils' writing stays on pupils' devices.",
+      prW1c: "Le Classeur covers the register, reports and exam plans.",
+      prW2H: "Training programmes",
+      prW2P: "Anywhere a concept is easier moved than described: apprenticeships, technical certificates, in-house training. The figure types are not school-specific — a titration curve and a load calculation are the same kind of object.",
+      prW2a: "Course material that can be handed over as one file.",
+      prW2b: "Written by the trainer, not commissioned from an agency.",
+      prW3H: "Publishers",
+      prW3P: "An existing catalogue becomes interactive without being rewritten: the import pipeline takes a PDF or an EPUB and produces chapters, and the figures are then placed by hand where they earn their place.",
+      prW3a: "The rights guard refuses to publish what is not ours to publish.",
+      prW3b: "Output is a file you own, not a licence you rent.",
+      prNextH: "What is next",
+      prNextNote: "Everything above can be checked against the build. Everything in this section cannot — it is yours to fill in, and it has been left visibly blank rather than filled with a plausible number. A pitch page that invents its own traction is the one mistake that cannot be repaired later.",
+      prNx1H: "In use today",
+      prNx1P: "— name the schools, classes or programmes it has run in, and what happened.",
+      prNx2H: "What support would buy",
+      prNx2P: "— the honest version: more books, more subjects, a pilot, someone other than you writing them.",
+      prNx3H: "Who is behind it",
+      prNx3P: "— people back people, and this was built by one.",
+      prTalkH: "Talk to me",
+      prTalkP: "If you run a school, a programme or a list, the fastest way to judge this is to open a book and try to break a figure. The demonstration textbook is in the library and uses every one of the 102 types.",
+      prBulle: "Nothing on this page is a mock-up. I checked. Twice.",
+      prDemo: "Open the demonstration textbook",
+      prLib: "See the whole library",
       skip: 'Skip to the books',
       dark: 'Dark', light: 'Light',
       searchBtn: 'Search',
@@ -1710,7 +2022,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7ix6p8"></script>
+<script src="chrome-pages.js?v=mu7j3qbq"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
