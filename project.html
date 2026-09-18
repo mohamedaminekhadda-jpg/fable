@@ -691,6 +691,94 @@ body::after{
 .dit{display:flex;align-items:center;gap:calc(var(--s5) + .4rem);flex-wrap:wrap;margin-block-start:var(--s6)}
 .dit .cw{inline-size:auto;block-size:4.5rem;cursor:pointer;overflow:visible}
 
+/* ─── les démos : une figure, sur sa page ───────────── */
+/* UNE SEULE À LA FOIS, PAS SEPT. Chaque démo charge le moteur du livre — un
+   méga-octet — pour faire tourner sa figure ; sept ensemble, c’est un
+   téléphone tiède et une page qui saccade, pour sept figures que personne ne
+   regarde en même temps. Le rail choisit, la page joue, et rien ne se charge
+   avant que la section soit à l’écran. */
+.atelier{display:grid;gap:var(--s4);margin-block-start:var(--s5)}
+@media (min-width:62rem){.atelier{grid-template-columns:minmax(0,1fr) 15rem;align-items:start}}
+
+/* LA HAUTEUR EST CELLE DE LA FIGURE, pas un format d’écran. Un 16/9 était juste
+   pour un film ; une figure a la hauteur qu’elle a, et la rogner ou la réduire
+   pour tenir dans un cadre choisi ici, c’est montrer autre chose que ce que
+   l’élève recevra. Le script la mesure et la pose ; 26rem n’est que ce qu’on
+   réserve avant de savoir. */
+.ecran{position:relative;block-size:26rem;border-radius:var(--r-lg);overflow:hidden;
+  border:1px solid var(--rule);background:var(--card);box-shadow:var(--lift);
+  transition:block-size .45s cubic-bezier(.4,0,.2,1)}
+.ecran::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(33,29,25,.07)}
+/* QUAND LA FIGURE EST PLUS HAUTE QUE LE CADRE, on la coupe et on le DIT : un
+   fondu vers son propre papier, et le lien du pied qui l'ouvre entiere. Une
+   figure du manuel fait mille cinq cents pixels de haut ; la poser telle quelle
+   au milieu d'une page de presentation, c'est demander au lecteur de faire
+   defiler une demonstration. La couleur du fondu est LUE dans la page de la
+   figure : le papier appartient au theme du livre, pas au site. */
+.ecran.rogne::before{content:"";position:absolute;inset-inline:0;inset-block-end:0;
+  block-size:4rem;z-index:2;pointer-events:none;
+  background:linear-gradient(to top,var(--papier,var(--card)),transparent)}
+.ecran iframe{position:absolute;inset:0;inline-size:100%;block-size:100%;border:0;display:block}
+
+/* Le voile porte la couleur de la CARTE, pas du papier du livre : avant que la
+   figure arrive, on ne sait pas encore de quel papier il s’agit, et un blanc
+   franc qui bascule ensuite vers un crème se voit. */
+.voile{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:var(--s4);
+  text-align:center;background:var(--card);color:var(--ink-3);
+  font:500 .6875rem/1.6 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;
+  transition:opacity .5s ease}
+.atelier.pret .voile{opacity:0;pointer-events:none}
+
+/* Ce que la barre mesure, c’est LE TEMPS QUI RESTE AVANT LA FIGURE SUIVANTE.
+   Elle repart avec chaque figure, donc elle ne dérive jamais de plus d’une ;
+   et elle s’arrête net dès que le visiteur prend la main, parce qu’à ce
+   moment-là plus rien ne doit lui être repris. */
+.avance{position:absolute;inset-inline:0;inset-block-end:0;block-size:2px;z-index:4;
+  background:var(--accent);transform:scaleX(0);transform-origin:0 50%}
+.atelier.joue .avance{animation:demo-avance var(--duree,11s) linear}
+@keyframes demo-avance{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.ecran-pied{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+  margin-block-start:var(--s3);font-size:.8125rem;color:var(--ink-3)}
+.ecran-pied b{font-family:var(--font-display);font-weight:700;font-size:.9375rem;
+  font-variation-settings:"opsz" 18;letter-spacing:-.015em;color:var(--ink)}
+.ecran-pied em{font-style:italic;font-family:var(--font-ital);font-size:.9375rem;color:var(--ink-2)}
+.ecran-pied a{color:var(--ink-2);text-decoration:none;margin-inline-start:auto}
+.ecran-pied a:hover{color:var(--accent-ink);text-decoration:underline}
+/* Une chose qui bouge toute seule plus de cinq secondes doit pouvoir être
+   arrêtée, et le bouton doit être là AVANT qu’on le cherche. */
+.ecran-pied button{font:500 .75rem/1 var(--font-mono);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-2);background:var(--card);cursor:pointer;
+  border:1px solid var(--rule);border-radius:100px;padding:.35rem .7rem;
+  transition:color .15s,border-color .15s}
+.ecran-pied button:hover{color:var(--ink);border-color:var(--ink-3)}
+/* Rendu la main, il n'y a plus rien a mettre en pause : le bouton reste, pale,
+   plutot que de disparaitre et de faire sauter la ligne. */
+.ecran-pied button:disabled{opacity:.4;cursor:default}
+.ecran-pied button:disabled:hover{color:var(--ink-2);border-color:var(--rule)}
+
+.rail{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;padding-block:.15rem}
+.rail::-webkit-scrollbar{display:none}
+@media (min-width:62rem){.rail{flex-direction:column;overflow:visible}}
+.bob{display:grid;gap:.1rem;text-align:start;flex:0 0 auto;font:inherit;cursor:pointer;
+  border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--card);
+  padding:.5rem .75rem;transition:border-color .15s,background .15s}
+.bob b{font-family:var(--font-display);font-size:.9375rem;font-weight:700;
+  font-variation-settings:"opsz" 18;letter-spacing:-.015em;color:var(--ink);white-space:nowrap}
+/* La matière vient du titre de chapitre du manuel, et « Sciences de la Vie et
+   de la Terre » ne tient pas sur une ligne de quinze rem. Elle a le droit de
+   passer à la ligne ; le nom de la figure, non. */
+.bob i{font-style:normal;font-size:.6875rem;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);line-height:1.35}
+.bob:hover{border-color:var(--ink-3)}
+.bob[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-wash)}
+.bob[aria-pressed="true"] b{color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){
+  .atelier.joue .avance{animation:none}
+  .ecran{transition:none}
+}
+
 /* ─── footer ──────────────────────────────────────────────── */
 .foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7);position:relative}
 .foot .wrap{
@@ -818,6 +906,7 @@ body::after{
         <a href="#probleme">The problem</a>
         <a href="#fait">What exists</a>
         <a href="#pieces">The parts</a>
+        <a href="#atelier">The workshop</a>
         <a href="#qui">Who it is for</a>
         <a href="#tourne">What it runs on</a>
         <a href="#suite">What is next</a>
@@ -890,6 +979,43 @@ body::after{
         <h3>The console</h3>
         <p class="quoi" data-i18n="prE6">what goes online</p>
         <p data-i18n="prE6P">One button builds and publishes the public site, with a rights guard it deliberately cannot override: a scanned book cannot be published by accident, because a book published by accident cannot be unpublished.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="atelier">
+    <div class="sec-head">
+      <h2 data-i18n="prShopH">Reach into one</h2>
+      <span class="filet" aria-hidden="true"></span>
+      <span style="margin-inline-start:auto;font-size:.875rem;color:var(--ink-3)" data-i18n="prShopN">live figures, not screenshots</span>
+    </div>
+    <div style="display:grid;gap:var(--s5);grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))">
+      <p class="mesure" data-i18n="prShop1">Every figure below is the real one, lifted straight out of the demonstration textbook and run by the same engine that serves it to a pupil. Nothing here is a picture of the product. It <em>is</em> the product, with the page around it removed.</p>
+      <p class="mesure" data-i18n="prShop2">A cursor works each one for you — pressing a tab, choosing from a list, dragging a slider — and every one of those gestures is a real event on a real control, which is why the figure answers. Touch it and the cursor stands down: from then on you are the one driving.</p>
+    </div>
+
+    <div class="atelier" id="atelier-bloc">
+      <div>
+        <div class="ecran" id="ecran">
+          <iframe id="film" title="A figure from the demonstration textbook" loading="lazy" scrolling="no"></iframe>
+          <div class="voile"><span id="voile-mot" data-i18n="prShopWait">loading the figure</span></div>
+          <i class="avance" aria-hidden="true"></i>
+        </div>
+        <p class="ecran-pied">
+          <button type="button" id="film-pause" aria-pressed="false" data-pause="Pause" data-play="Play">Pause</button>
+          <b id="film-nom"></b>
+          <em id="film-titre"></em>
+          <a id="film-lien" href="demos/solar.html" target="_blank" rel="noopener" data-i18n="prShopFull">Open it on its own &nearr;</a>
+        </p>
+      </div>
+      <div class="rail" id="rail" role="group" aria-label="Which figure to try">
+        <button type="button" class="bob" data-b="solar" aria-pressed="true"><b>Solar system</b><i>Nouveaux éléments</i></button>
+        <button type="button" class="bob" data-b="wave" aria-pressed="false"><b>Wave</b><i>Physique — Chimie</i></button>
+        <button type="button" class="bob" data-b="sim" aria-pressed="false"><b>Simulation</b><i>Mathématiques</i></button>
+        <button type="button" class="bob" data-b="periodic" aria-pressed="false"><b>Periodic table</b><i>Physique — Chimie</i></button>
+        <button type="button" class="bob" data-b="poppyramid" aria-pressed="false"><b>Population pyramid</b><i>Géographie</i></button>
+        <button type="button" class="bob" data-b="flashcards" aria-pressed="false"><b>Flashcards</b><i>Sciences de la Vie et de la Terre</i></button>
+        <button type="button" class="bob" data-b="quiz" aria-pressed="false"><b>Quiz / test</b><i>Français</i></button>
       </div>
     </div>
   </section>
@@ -1080,7 +1206,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu7bhvdd"></script>
+<script src="compte.js?v=mu7d97f6"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1577,7 +1703,183 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7bhvdd"></script>
+<script src="chrome-pages.js?v=mu7d97f6"></script>
+<script>
+/* ── LES DÉMOS : SEPT FIGURES, UNE PAGE ──
+   Le rail est déjà dans la page — la construction l’a écrit. Ce script ne
+   fait que l’allumer, et il ne charge RIEN avant que la section soit à
+   l’écran : une figure, c’est le moteur du livre au complet, et la page du
+   projet se lit surtout par le haut.
+
+   Chaque démo est de la même origine que cette page, donc on peut lui parler :
+   `__demo` dit combien de temps dure son tour, se met en pause hors de vue, et
+   PRÉVIENT quand le visiteur a pris la main — auquel cas on cesse de compter.
+   Rien ne doit lui être repris pendant qu’il essaie quelque chose. */
+(function () {
+  var bloc = document.getElementById('atelier-bloc');
+  if (!bloc || !('IntersectionObserver' in window)) return;
+  var cadre = document.getElementById('film');
+  var ecran = document.getElementById('ecran');
+  var avance = bloc.querySelector('.avance');
+  var mot = document.getElementById('voile-mot');
+  var nom = document.getElementById('film-nom');
+  var titre = document.getElementById('film-titre');
+  var lien = document.getElementById('film-lien');
+  var bp = document.getElementById('film-pause');
+  var boutons = [].slice.call(bloc.querySelectorAll('.bob'));
+  if (!cadre || !boutons.length) return;
+
+  var doux = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var i = 0, charge = false, dedans = false, marche = !doux, rendu = false;
+  var minuteur = 0, guet = 0, mesure = 0;
+
+  function demo() { try { return cadre.contentWindow.__demo; } catch (e) { return null; } }
+  function slug(n) { return boutons[n].getAttribute('data-b'); }
+  function texte(n, sel) { var e = boutons[n].querySelector(sel); return e ? e.textContent : ''; }
+
+  function marquer() {
+    for (var n = 0; n < boutons.length; n++) {
+      boutons[n].setAttribute('aria-pressed', n === i ? 'true' : 'false');
+    }
+    nom.textContent = texte(i, 'b');
+    titre.textContent = texte(i, 'i');
+    lien.href = 'demos/' + slug(i) + '.html';
+  }
+
+  /* Sans la lecture de `offsetWidth` entre les deux, le navigateur ne voit
+     aucun changement et ne rejoue pas l’animation. */
+  function barre(quoi) {
+    if (quoi === 'repart') {
+      bloc.classList.remove('joue');
+      avance.style.animation = 'none';
+      void avance.offsetWidth;
+      avance.style.animation = '';
+      bloc.classList.add('joue');
+      avance.style.animationPlayState = 'running';
+    } else if (quoi === 'gele') {
+      avance.style.animationPlayState = 'paused';
+    } else {
+      bloc.classList.remove('joue');
+      avance.style.animation = 'none';
+    }
+  }
+
+  function etat() {
+    bp.disabled = rendu;
+    bp.setAttribute('aria-pressed', marche ? 'false' : 'true');
+    bp.textContent = marche ? bp.getAttribute('data-pause') : bp.getAttribute('data-play');
+  }
+
+  /* LA HAUTEUR VIENT DE LA FIGURE. On la redemande deux fois après coup : une
+     figure qui charge une image ou qui déplie un tableau grandit après son
+     premier calcul, et un cadre fixé trop tôt lui coupe les pieds. */
+  function poser() {
+    var d = demo();
+    if (!d || !d.hauteur) return;
+    var h = Math.max(220, d.hauteur());
+    /* Le plafond : au-dela, on coupe et on le montre. Il suit la fenetre parce
+       qu'une figure qui remplit l'ecran d'un portable n'est plus une vitrine,
+       c'est un detournement. */
+    var plafond = Math.min(Math.round(innerHeight * 0.78), 680);
+    ecran.classList.toggle('rogne', h > plafond + 8);
+    ecran.style.blockSize = Math.min(h, plafond) + 'px';
+    try {
+      var papier = cadre.contentWindow.getComputedStyle(cadre.contentDocument.body).backgroundColor;
+      if (papier) ecran.style.setProperty('--papier', papier);
+    } catch (e) { /* le cadre n'est pas encore la */ }
+  }
+
+  function charger() {
+    clearTimeout(minuteur); clearInterval(guet); clearTimeout(mesure);
+    bloc.classList.remove('pret');
+    barre('zero');
+    charge = true; rendu = false; etat();
+    cadre.src = 'demos/' + slug(i) + '.html';
+    var essais = 0;
+    guet = setInterval(function () {
+      var d = demo();
+      if (d && d.pret) { clearInterval(guet); montre(); }
+      else if (++essais > 80) {
+        /* Dix secondes. La figure ne viendra plus ; on lève quand même le
+           voile, parce qu’un voile éternel ne dit rien à personne. */
+        clearInterval(guet); bloc.classList.add('pret');
+      }
+    }, 125);
+  }
+
+  function montre() {
+    var d = demo();
+    poser();
+    mesure = setTimeout(poser, 700);
+    setTimeout(poser, 2200);
+    bloc.classList.add('pret');
+    if (marche && dedans) {
+      if (d) d.play();
+      var duree = (d && d.duree) || 11000;
+      avance.style.setProperty('--duree', duree + 'ms');
+      bloc.style.setProperty('--duree', duree + 'ms');
+      barre('repart');
+      minuteur = setTimeout(suivant, duree);
+    } else if (d) { d.pause(); barre('zero'); }
+  }
+
+  function suivant() {
+    if (rendu) return;                 // le visiteur a la main : on ne la reprend pas
+    i = (i + 1) % boutons.length; marquer(); charger();
+  }
+
+  function jouer(on) {
+    marche = on; etat();
+    var d = demo();
+    if (!on) { if (d) d.pause(); barre('gele'); clearTimeout(minuteur); return; }
+    if (!charge) { charger(); return; }
+    if (d) d.play();
+    var duree = (d && d.duree) || 11000;
+    bloc.style.setProperty('--duree', duree + 'ms');
+    barre('repart');
+    clearTimeout(minuteur);
+    minuteur = setTimeout(suivant, duree);
+  }
+
+  /* La démo appelle ceci quand le visiteur la touche. À partir de là le rail
+     ne compte plus : il attend qu’on lui demande autre chose. */
+  window.__demoMain = function () {
+    rendu = true;
+    clearTimeout(minuteur);
+    barre('gele');
+    etat();
+  };
+
+  for (var n = 0; n < boutons.length; n++) {
+    (function (k) {
+      boutons[k].addEventListener('click', function () {
+        i = k; marquer(); marche = true; charger();
+      });
+    })(n);
+  }
+  bp.addEventListener('click', function () { jouer(!marche); });
+
+  marquer(); etat();
+  if (doux) mot.textContent = 'motion is off in your settings — pick one to load it';
+
+  new IntersectionObserver(function (vues) {
+    dedans = vues[0].isIntersecting;
+    if (dedans) { if (marche && !rendu) { if (!charge) charger(); else jouer(true); } }
+    else { var d = demo(); if (d) d.pause(); clearTimeout(minuteur); barre('gele'); }
+  }, { threshold: 0.25 }).observe(bloc);
+
+  /* Un onglet caché ne calcule plus d’images, mais le minuteur, lui, continue :
+     sans ça on revient à un rail qui a sauté trois figures pendant l’absence. */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { clearTimeout(minuteur); barre('gele'); }
+    else if (marche && dedans && charge && !rendu) {
+      var d = demo(); var duree = (d && d.duree) || 11000;
+      barre('repart'); clearTimeout(minuteur); minuteur = setTimeout(suivant, duree);
+    }
+  });
+})();
+</script>
+
 <script>
 /* ── LE SOMMAIRE SUIT LA LECTURE ──
    On a page this long a list of links is only a list until it says where you

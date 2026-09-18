@@ -1,0 +1,89 @@
+/* LE CADRE D'UNE DÉMO.
+ *
+ * Presque rien, et c'est voulu. Ce que la page montre, c'est la FIGURE, rendue
+ * par le moteur du livre avec la feuille du livre : sa couleur de papier, sa
+ * typographie, ses mesures. Repeindre ça aux couleurs du site donnerait une
+ * belle vitrine d'un produit qui n'existe pas. Le site fait le cadre — l'écran,
+ * le rail, la légende, en Bricolage sur son papier à lui ; ici on ne pose que
+ * ce que le livre n'a pas : de quoi tenir la page dans un cadre, un curseur, et
+ * la pastille qui dit au visiteur qu'il a la main.
+ *
+ * Les deux seules couleurs qui viennent du site sont celles de l'accent
+ * (#e4402a et son encre #c2331c, avec son lavis #fce8e2) — le curseur doit se
+ * lire sur n'importe quelle figure, et il doit appartenir au site qui le
+ * montre, pas au livre qu'il touche. Elles sont écrites ici en clair : cette
+ * page est servie hors du site et n'hérite d'aucun de ses jetons. Si la
+ * palette bouge dans web/index.html, elle bouge ici aussi — voir
+ * DESIGN-CHART.html, § Colour.
+ */
+
+html, body { margin: 0; background: var(--paper); }
+
+/* `--content-width` est la mesure d'une colonne de lecture dans un chapitre.
+   Une figure seule dans un cadre n'a pas de chapitre autour d'elle : elle prend
+   la largeur qu'on lui donne. */
+:root { --content-width: 100%; }
+.dm-page .book-chapter { padding: 20px 24px 26px; }
+.dm-page .book-chapter > *:first-child { margin-top: 0; }
+.dm-page .book-chapter > *:last-child { margin-bottom: 0; }
+
+/* Pendant que le curseur joue, une bande de sélection bleue en travers d'un
+   tableau est la seule chose qui fasse ressembler tout ça à l'enregistrement
+   d'écran de quelqu'un qui s'emmêle. Dès que le visiteur a la main, on lui rend
+   aussi le droit de sélectionner. */
+body.dm-auto { -webkit-user-select: none; user-select: none; }
+
+/* ── le curseur ───────────────────────────────────────────────────────────
+   Il est POSÉ DANS la page de la figure, pas au-dessus d'elle depuis le site :
+   il vise des boutons que seule cette page peut mesurer, et une mesure prise à
+   travers un cadre se trompe dès qu'il y a eu un défilement. */
+.dm-curseur {
+  position: fixed; left: 0; top: 0; z-index: 40;
+  inline-size: 26px; block-size: 26px; margin: -13px 0 0 -13px;
+  pointer-events: none; opacity: 0; transform: translate(-120px, -120px);
+  transition: transform .72s cubic-bezier(.4, 0, .2, 1), opacity .3s ease;
+}
+.dm-curseur.on { opacity: 1; }
+.dm-curseur.vite { transition-duration: .07s, .3s; }   /* il suit la poignée */
+.dm-curseur i {
+  position: absolute; inset: 0; display: block; border-radius: 50%;
+  border: 1.5px solid #e4402a; background: rgba(228, 64, 42, .14);
+  box-shadow: 0 2px 10px -4px rgba(228, 64, 42, .8);
+  transition: transform .18s ease, background .18s ease;
+}
+.dm-curseur.press i { transform: scale(.6); background: rgba(228, 64, 42, .32); }
+.dm-curseur::after {
+  content: ""; position: absolute; inset: -7px; border-radius: 50%;
+  border: 1.5px solid #e4402a; opacity: 0; transform: scale(.55);
+}
+.dm-curseur.press::after { animation: dm-onde .52s ease-out; }
+@keyframes dm-onde {
+  from { opacity: .65; transform: scale(.55); }
+  to   { opacity: 0;   transform: scale(1.55); }
+}
+
+/* ── la pastille ──────────────────────────────────────────────────────────
+   Elle n'apparaît QU'APRÈS le premier geste du visiteur : avant, elle
+   expliquerait une chose qui ne s'est pas encore produite. */
+.dm-main {
+  position: fixed; inset-block-end: 10px; inset-inline: 0; z-index: 41;
+  margin: 0 auto; inline-size: max-content; max-inline-size: calc(100% - 20px);
+  display: flex; align-items: center; gap: .55rem;
+  font: 600 11px/1 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: #c2331c; background: #fce8e2;
+  border: 1px solid rgba(228, 64, 42, .38); border-radius: 100px;
+  padding: .45rem .5rem .45rem .8rem;
+}
+.dm-main[hidden] { display: none; }
+.dm-main button {
+  font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit;
+  background: transparent; cursor: pointer;
+  border: 0; border-inline-start: 1px solid rgba(228, 64, 42, .38);
+  padding: .1rem .35rem .1rem .55rem;
+}
+.dm-main button:hover { text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-curseur { display: none; }
+}
