@@ -32,6 +32,77 @@
 (function () {
   'use strict';
 
+  /* ── LA LANGUE ─────────────────────────────────────────────────────────
+     English is the source: the sentences below are written in the code in the
+     language they are read in, and French is a lookup keyed by the English.
+     A sentence nobody has translated therefore falls back to English rather
+     than to a key name or to a blank - which is the house rule, made
+     structural instead of remembered.
+
+     Which language is not this file's business to decide. The landing page,
+     the notebook and the simulations already share one choice under
+     `fable:lang`, and a page that has made it puts it on `FABLE_LANG` before
+     this script loads. Failing both, the browser's own. */
+  var FR = {
+    'The browser blocked Google\'s window. Allow pop-ups for this site, or use e-mail instead.': 'Le navigateur a bloqué la fenêtre de Google. Autorisez les fenêtres pour ce site, ou passez par l’e-mail.',
+    'Google\'s window was closed before it finished.': 'La fenêtre de Google a été fermée avant la fin.',
+    'Another sign-in window was already open.': 'Une autre fenêtre de connexion était déjà ouverte.',
+    'This domain is not allowed in Firebase (Authentication → Settings → Authorized domains).': 'Ce domaine n’est pas autorisé dans Firebase (Authentication → Settings → Authorized domains).',
+    'This method is not switched on in Firebase (Authentication → Sign-in method).': 'Cette méthode n’est pas activée dans Firebase (Authentication → Sign-in method).',
+    'That e-mail address is not valid.': 'Cette adresse e-mail n’est pas valide.',
+    'Wrong e-mail or password.': 'E-mail ou mot de passe incorrect.',
+    'Wrong password.': 'Mot de passe incorrect.',
+    'No account with that address. Use “Create an account”.': 'Aucun compte avec cette adresse. Utilisez « Créer un compte ».',
+    'An account already exists with that address. Use “Sign in”.': 'Un compte existe déjà avec cette adresse. Utilisez « Se connecter ».',
+    'Password too short — six characters at the least.': 'Mot de passe trop court — six caractères au minimum.',
+    'No network. Your notebooks stay on this device, as they always do.': 'Pas de réseau. Vos cahiers restent sur cet appareil, comme toujours.',
+    'The Firebase key is not valid. Paste the configuration again from the console (“Accounts” panel).': 'La clef Firebase n’est pas valide. Recollez la configuration dans la console (panneau « Comptes »).',
+    'The project answers, but authentication is not switched on in it (Firebase → Authentication → Get started).': 'Le projet répond, mais l’authentification n’y est pas activée (Firebase → Authentication → Get started).',
+    'That Firebase project cannot be found — check `projectId` and `appId`.': 'Ce projet Firebase est introuvable — vérifiez `projectId` et `appId`.',
+    'Firebase is not configured (web/firebase-config.js).': 'Firebase n’est pas configuré (web/firebase-config.js).',
+    'Your account': 'Votre compte',
+    'Your Fable account': 'Votre compte Fable',
+    'Your notebooks follow this account.': 'Vos cahiers suivent ce compte.',
+    'Close': 'Fermer',
+    'Sign out': 'Se déconnecter',
+    'Sign in': 'Se connecter',
+    'Create an account': 'Créer un compte',
+    'Continue with Google': 'Continuer avec Google',
+    'or by e-mail': 'ou par e-mail',
+    'Address': 'Adresse',
+    'Password': 'Mot de passe',
+    'One account for the books, the notebook and the simulations. Your notebooks stay on this device — the account keeps a copy, so you can find them again elsewhere.': 'Un seul compte pour les livres, le cahier et les simulations. Vos cahiers restent sur cet appareil — le compte en garde une copie, pour les retrouver ailleurs.',
+    'your workshop': 'votre atelier',
+    'what is online, build, deploy': 'ce qui est en ligne, construire, déployer',
+    'write and build the textbooks': 'écrire et construire les manuels',
+    'the platform: classes, reports, exams': 'la plateforme : classes, bulletins, examens',
+    'They run on this machine. Anywhere else these links open an empty port — which is exactly the protection: they listen on 127.0.0.1 only. ': 'Ils tournent sur cette machine. Ailleurs, ces liens ouvrent un port vide — ce qui est exactement la protection : ils n’écoutent que 127.0.0.1. ',
+    'Change an address…': 'Changer une adresse…',
+    'Which tool? (': 'Quel outil ? (',
+    'Address of ': 'Adresse de ',
+    ' — a port (4310), or a full URL (https://studio.my-tailnet.ts.net):': ' — un port (4310), ou une URL complète (https://studio.mon-tailnet.ts.net) :',
+    'Expected: a port, or a full http(s) address.': 'Attendu : un port, ou une adresse http(s) complète.',
+    'Synchronising…': 'Synchronisation…',
+    'Up to date.': 'À jour.',
+    'Up to date — ': 'À jour — ',
+    'Could not synchronise: ': 'Synchronisation impossible : ',
+    'Could not send: ': 'Envoi impossible : ',
+    'sent': 'envoyé',
+    'received': 'reçu',
+    'An e-mail address is needed.': 'Une adresse e-mail est demandée.'
+  };
+  function t(en) {
+    return LANGUE === 'fr' && FR[en] ? FR[en] : en;
+  }
+  var LANGUE = (function () {
+    if (window.FABLE_LANG) return window.FABLE_LANG === 'fr' ? 'fr' : 'en';
+    try {
+      var v = localStorage.getItem('fable:lang');
+      if (v) return v === 'fr' ? 'fr' : 'en';
+    } catch (e) { /* storage refused: fall through to the browser */ }
+    return (navigator.language || '').slice(0, 2) === 'fr' ? 'fr' : 'en';
+  })();
+
   var etat = {
     pret: false,        // la configuration est-elle remplie ?
     utilisateur: null,
@@ -70,9 +141,9 @@
      d'arriver à la machine. Chacun règle la sienne dans son navigateur ; rien
      n'est publié. */
   var OUTILS = [
-    { id: 'console', nom: 'Console', quoi: 'ce qui est en ligne, construire, déployer', port: 4310 },
-    { id: 'studio', nom: 'Studio', quoi: 'écrire et construire les manuels', port: 4000 },
-    { id: 'classeur', nom: 'Le Classeur', quoi: 'la plateforme : classes, bulletins, examens', port: 4300 },
+    { id: 'console', nom: 'Console', quoi: t('what is online, build, deploy'), port: 4310 },
+    { id: 'studio', nom: 'Studio', quoi: t('write and build the textbooks'), port: 4000 },
+    { id: 'classeur', nom: 'Le Classeur', quoi: t('the platform: classes, reports, exams'), port: 4300 },
   ];
   var CLE_ADR = 'fable-outils-adresses';
   function adresses() {
@@ -121,7 +192,7 @@
     if (fb) return fb;
     var cfg = await import(BASE + 'firebase-config.js' + VERSION_Q);
     var C = cfg.CONFIG_FIREBASE || {};
-    if (!C.apiKey || !C.projectId) throw new Error('Firebase n’est pas configuré (web/firebase-config.js).');
+    if (!C.apiKey || !C.projectId) throw new Error(t('Firebase is not configured (web/firebase-config.js).'));
     var base = 'https://www.gstatic.com/firebasejs/' + (cfg.VERSION_SDK || '10.12.0') + '/';
     var app = await import(base + 'firebase-app.js');
     var auth = await import(base + 'firebase-auth.js');
@@ -233,7 +304,7 @@
   async function synchroniser() {
     var st = magasin();
     if (!st || !etat.utilisateur || etat.occupe) return;
-    etat.occupe = true; dire('Synchronisation…');
+    etat.occupe = true; dire(t('Synchronising\u2026'));
     try {
       var locaux = await st.tousCahiers();
       var parId = {};
@@ -254,12 +325,15 @@
 
       if (montes || descendus) {
         var bouts = [];
-        if (montes) bouts.push(montes + ' envoyé' + (montes > 1 ? 's' : ''));
-        if (descendus) bouts.push(descendus + ' reçu' + (descendus > 1 ? 's' : ''));
-        dire('À jour — ' + bouts.join(', ') + '.');
-      } else dire('À jour.');
+        /* The plural is French-only: "2 sent" needs no -s, "2 envoyés" does.
+           Adding it in English would have produced "2 sents". */
+        var pl = LANGUE === 'fr' ? 's' : '';
+        if (montes) bouts.push(montes + ' ' + t('sent') + (montes > 1 ? pl : ''));
+        if (descendus) bouts.push(descendus + ' ' + t('received') + (descendus > 1 ? pl : ''));
+        dire(t('Up to date \u2014 ') + bouts.join(', ') + '.');
+      } else dire(t('Up to date.'));
     } catch (e) {
-      dire('Synchronisation impossible : ' + ((e && e.message) || e));
+      dire(t('Could not synchronise: ') + ((e && e.message) || e));
     } finally {
       etat.occupe = false; prevenir();
     }
@@ -279,27 +353,27 @@
         try {
           var c = await st.getCahier(ids[i]);
           if (c) await pousserCahier(c.id, c.notebook);
-        } catch (e) { dire('Envoi impossible : ' + ((e && e.message) || e)); }
+        } catch (e) { dire(t('Could not send: ') + ((e && e.message) || e)); }
       }
     }, 4000);
   }
 
-  /* Firebase renvoie des codes ; un élève lit une phrase. Chacune dit ce qui
-     s'est passé ET ce qu'on peut faire — un message qui ne mène à rien n'aide
-     que celui qui l'a écrit. */
+  /* Firebase hands back codes; a pupil reads a sentence. Each one says what
+     happened AND what can be done about it - a message that leads nowhere only
+     helps the person who wrote it. */
   var RAISONS = {
-    'auth/popup-blocked': 'Le navigateur a bloqué la fenêtre de Google. Autorisez les fenêtres pour ce site, ou passez par l’e-mail.',
-    'auth/popup-closed-by-user': 'La fenêtre de Google a été fermée avant la fin.',
-    'auth/cancelled-popup-request': 'Une autre fenêtre de connexion était déjà ouverte.',
-    'auth/unauthorized-domain': 'Ce domaine n’est pas autorisé dans Firebase (Authentication → Settings → Authorized domains).',
-    'auth/operation-not-allowed': 'Cette méthode n’est pas activée dans Firebase (Authentication → Sign-in method).',
-    'auth/invalid-email': 'Cette adresse e-mail n’est pas valide.',
-    'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
-    'auth/wrong-password': 'Mot de passe incorrect.',
-    'auth/user-not-found': 'Aucun compte avec cette adresse. Utilisez « Créer un compte ».',
-    'auth/email-already-in-use': 'Un compte existe déjà avec cette adresse. Utilisez « Se connecter ».',
-    'auth/weak-password': 'Mot de passe trop court — six caractères au minimum.',
-    'auth/network-request-failed': 'Pas de réseau. Vos cahiers restent sur cet appareil, comme toujours.',
+    'auth/popup-blocked': t("The browser blocked Google's window. Allow pop-ups for this site, or use e-mail instead."),
+    'auth/popup-closed-by-user': t("Google's window was closed before it finished."),
+    'auth/cancelled-popup-request': t('Another sign-in window was already open.'),
+    'auth/unauthorized-domain': t('This domain is not allowed in Firebase (Authentication \u2192 Settings \u2192 Authorized domains).'),
+    'auth/operation-not-allowed': t('This method is not switched on in Firebase (Authentication \u2192 Sign-in method).'),
+    'auth/invalid-email': t('That e-mail address is not valid.'),
+    'auth/invalid-credential': t('Wrong e-mail or password.'),
+    'auth/wrong-password': t('Wrong password.'),
+    'auth/user-not-found': t('No account with that address. Use \u201cCreate an account\u201d.'),
+    'auth/email-already-in-use': t('An account already exists with that address. Use \u201cSign in\u201d.'),
+    'auth/weak-password': t('Password too short \u2014 six characters at the least.'),
+    'auth/network-request-failed': t('No network. Your notebooks stay on this device, as they always do.'),
   };
   function raison(e) {
     var c = (e && e.code) || '';
@@ -308,9 +382,9 @@
        projet et pas en s'en servant. Elles arrivent sous des codes verbeux —
        « auth/api-key-not-valid.-please-pass-a-valid-api-key. » — d'où le test
        sur un fragment plutôt que sur le code entier. */
-    if (/api-key/.test(c)) return 'La clef Firebase n’est pas valide. Recollez la configuration dans la console (panneau « Comptes »).';
-    if (/configuration-not-found/.test(c)) return 'Le projet répond, mais l’authentification n’y est pas activée (Firebase → Authentication → Get started).';
-    if (/project-not-found|invalid-app-id/.test(c)) return 'Ce projet Firebase est introuvable — vérifiez `projectId` et `appId`.';
+    if (/api-key/.test(c)) return t('The Firebase key is not valid. Paste the configuration again from the console (\u201cAccounts\u201d panel).');
+    if (/configuration-not-found/.test(c)) return t('The project answers, but authentication is not switched on in it (Firebase \u2192 Authentication \u2192 Get started).');
+    if (/project-not-found|invalid-app-id/.test(c)) return t('That Firebase project cannot be found \u2014 check `projectId` and `appId`.');
     var m = (e && e.message) || String(e);
     /* « Firebase: Error (auth/quelque-chose). » : l'emballage n'apprend rien,
        le code oui. On ne garde que lui plutôt que d'afficher la phrase entière. */
@@ -366,31 +440,31 @@
 
     if (etat.utilisateur) {
       var u = etat.utilisateur;
-      c.innerHTML = '<h2>Votre compte</h2>'
+      c.innerHTML = '<h2>' + echappe(t('Your account')) + '</h2>'
         + '<div class="fc-qui">' + (u.photo ? '<img alt="" src="' + echappe(u.photo) + '">' : '')
         + '<span><b>' + echappe(u.nom || u.email) + '</b>'
-        + '<span>' + echappe(etat.dernier || 'Vos cahiers suivent ce compte.') + '</span></span></div>'
+        + '<span>' + echappe(etat.dernier || t('Your notebooks follow this account.')) + '</span></span></div>'
         + (chezSoi() ? atelierHtml() : '')
-        + '<div class="fc-rang"><button data-fermer>Fermer</button>'
-        + '<button data-sortir>Se déconnecter</button></div>';
+        + '<div class="fc-rang"><button data-fermer>' + echappe(t('Close')) + '</button>'
+        + '<button data-sortir>' + echappe(t('Sign out')) + '</button></div>';
       if (chezSoi()) brancherAtelier(c);
       c.querySelector('[data-sortir]').onclick = function () {
         window.FableCompte.deconnecter().then(function () { d.close(); });
       };
     } else {
-      c.innerHTML = '<h2>Votre compte Fable</h2>'
-        + '<p>Un seul compte pour les livres, le cahier et les simulations. '
-        + 'Vos cahiers restent sur cet appareil — le compte en garde une copie, '
-        + 'pour les retrouver ailleurs.</p>'
-        + '<button class="fc-fort" data-google>Continuer avec Google</button>'
-        + '<div class="fc-ou">ou par e-mail</div>'
-        + '<label for="fc-mail">Adresse</label>'
-        + '<input id="fc-mail" type="email" autocomplete="username" placeholder="vous@exemple.fr">'
-        + '<label for="fc-mdp">Mot de passe</label>'
+      c.innerHTML = '<h2>' + echappe(t('Your Fable account')) + '</h2>'
+        + '<p>' + echappe(t('One account for the books, the notebook and the simulations. '
+          + 'Your notebooks stay on this device \u2014 the account keeps a copy, so you can '
+          + 'find them again elsewhere.')) + '</p>'
+        + '<button class="fc-fort" data-google>' + echappe(t('Continue with Google')) + '</button>'
+        + '<div class="fc-ou">' + echappe(t('or by e-mail')) + '</div>'
+        + '<label for="fc-mail">' + echappe(t('Address')) + '</label>'
+        + '<input id="fc-mail" type="email" autocomplete="username" placeholder="you@example.com">'
+        + '<label for="fc-mdp">' + echappe(t('Password')) + '</label>'
         + '<input id="fc-mdp" type="password" autocomplete="current-password">'
         + '<p class="fc-err" data-err></p>'
-        + '<div class="fc-rang"><button data-creer>Créer un compte</button>'
-        + '<button class="fc-fort" data-entrer>Se connecter</button></div>';
+        + '<div class="fc-rang"><button data-creer>' + echappe(t('Create an account')) + '</button>'
+        + '<button class="fc-fort" data-entrer>' + echappe(t('Sign in')) + '</button></div>';
       var err = c.querySelector('[data-err]');
       var dire2 = function (e) { err.textContent = (e && e.message) || String(e); };
       c.querySelector('[data-google]').onclick = function () {
@@ -413,36 +487,38 @@
   }
 
   function atelierHtml() {
-    var t = adresses();
-    return '<div class="fc-ou">votre atelier</div>'
+    var adr = adresses();
+    return '<div class="fc-ou">' + echappe(t('your workshop')) + '</div>'
       + '<ul class="fc-outils">'
       + OUTILS.map(function (o) {
-        var u = adresseDe(o, t);
+        var u = adresseDe(o, adr);
         return '<li><a href="' + echappe(u) + '" target="_blank" rel="noopener">'
           + '<b>' + echappe(o.nom) + '</b><span>' + echappe(o.quoi) + '</span></a></li>';
       }).join('')
       + '</ul>'
-      + '<p class="fc-note">Ils tournent sur cette machine. Ailleurs, ces liens ouvrent '
-      + 'un port vide — ce qui est exactement la protection : ils n’écoutent que 127.0.0.1. '
-      + '<button data-adresses>Changer une adresse…</button></p>';
+      + '<p class="fc-note">' + echappe(t('They run on this machine. Anywhere else these '
+        + 'links open an empty port \u2014 which is exactly the protection: they listen on '
+        + '127.0.0.1 only. '))
+      + '<button data-adresses>' + echappe(t('Change an address\u2026')) + '</button></p>';
   }
 
   function brancherAtelier(c) {
     var b = c.querySelector('[data-adresses]');
     if (!b) return;
     b.onclick = function () {
-      var t = adresses();
+      var adr = adresses();
       var noms = OUTILS.map(function (o, i) { return (i + 1) + ' = ' + o.nom; }).join(', ');
-      var q = prompt('Quel outil ? (' + noms + ')', '1');
+      var q = prompt(t('Which tool? (') + noms + ')', '1');
       if (q === null) return;
       var o = OUTILS[Number(q) - 1];
       if (!o) return;
-      var v = (prompt('Adresse de ' + o.nom + ' — un port (4310), ou une URL complète '
-        + '(https://studio.mon-tailnet.ts.net) :', String(t[o.id] || o.port)) || '').trim();
+      var v = (prompt(t('Address of ') + o.nom
+        + t(' \u2014 a port (4310), or a full URL (https://studio.my-tailnet.ts.net):'),
+        String(adr[o.id] || o.port)) || '').trim();
       if (!v) return;
-      if (!adresseValide(v)) { alert('Attendu : un port, ou une adresse http(s) complète.'); return; }
-      t[o.id] = /^\d+$/.test(v) ? Number(v) : v;
-      try { localStorage.setItem(CLE_ADR, JSON.stringify(t)); } catch (e) { /* refusé */ }
+      if (!adresseValide(v)) { alert(t('Expected: a port, or a full http(s) address.')); return; }
+      adr[o.id] = /^\d+$/.test(v) ? Number(v) : v;
+      try { localStorage.setItem(CLE_ADR, JSON.stringify(adr)); } catch (e) { /* refused */ }
       ouvrirDialogue();
     };
   }
@@ -476,7 +552,7 @@
         b.appendChild(document.createTextNode(court));
         b.title = e.utilisateur.email + (e.dernier ? ' — ' + e.dernier : '');
       } else {
-        b.textContent = 'Se connecter';
+        b.textContent = t('Sign in');
       }
       b.onclick = ouvrirDialogue;
       hote.appendChild(b);
@@ -516,8 +592,8 @@
       }
     },
     connecterEmail: async function (email, mdp, creer) {
-      if (!email) throw new Error('Une adresse e-mail est demandée.');
-      if (!mdp || mdp.length < 6) throw new Error('Mot de passe trop court — six caractères au minimum.');
+      if (!email) throw new Error(t('An e-mail address is needed.'));
+      if (!mdp || mdp.length < 6) throw new Error(t('Password too short \u2014 six characters at the least.'));
       var x = await charger();
       try {
         if (creer) await x.a.createUserWithEmailAndPassword(x.auth, email, mdp);
