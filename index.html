@@ -219,7 +219,13 @@ kbd{
    inverts with the theme instead of disappearing into it. The wing keeps its
    own weight by opacity, not by a second colour - one hue that can never drift
    out of step with the other. */
-.cw{inline-size:2rem;block-size:2rem;flex:none;color:inherit}
+/* THE WINDOW IS OPEN AT THE TOP.
+   `overflow:hidden` cut the bird on all four sides, so the head could never
+   leave the frame. A clip-path with a negative top inset cuts left, right and
+   bottom exactly where it did and leaves the top open - which is what lets the
+   bird put its head out of its own crop now and then. */
+.cw{inline-size:2.4rem;block-size:2.4rem;flex:none;color:inherit}
+#cw-mast{overflow:visible;clip-path:inset(-120% 0 0 0)}
 .cw-grand{inline-size:min(9rem,34vw);block-size:auto;opacity:.9;flex:none}
 /* The bird and what it says about this shelf, side by side - and wrapping on a
    narrow screen rather than squeezing the bubble to three words a line. */
@@ -366,6 +372,31 @@ kbd{
 @keyframes cw-battre{0%{transform:none}28%{transform:rotate(-30deg)}62%{transform:rotate(7deg)}100%{transform:none}}
 @keyframes cw-sauter{0%{transform:none}28%{transform:translateY(-30px)}64%{transform:translateY(8px)}100%{transform:none}}
 @keyframes cw-crier{0%{transform:none}24%{transform:rotate(-16deg)}66%{transform:rotate(-5deg)}100%{transform:none}}
+
+/* ── IL SORT LA TÊTE ──
+   Every half-minute or so, and only in the masthead: up, a caw, and back. The
+   rise is small on purpose - 90 units is 7.7px here, against 12px of header
+   above it. Any further and the head would meet the top of a bar that is
+   pinned to the top of the screen, and be cut off by the window instead of by
+   its own crop, which is the opposite of the trick. */
+@media (prefers-reduced-motion:no-preference){
+  .cw.sort .cw-bete{animation:cw-tete 1.5s cubic-bezier(.22,.8,.3,1) both}
+  .cw.sort .cw-bec{animation:cw-cri 1.5s ease-in-out both}
+  .cw.sort .cw-aile{animation:cw-epaule 1.5s ease-in-out both}
+}
+@keyframes cw-tete{
+  0%{transform:translateY(0)} 18%{transform:translateY(-90px)}
+  62%{transform:translateY(-84px)} 100%{transform:translateY(0)}
+}
+/* Two calls, the second smaller - a crow rarely says anything once. */
+@keyframes cw-cri{
+  0%{transform:rotate(0deg)} 20%{transform:rotate(-19deg)} 34%{transform:rotate(-4deg)}
+  46%{transform:rotate(-14deg)} 58%{transform:rotate(-3deg)} 100%{transform:rotate(0deg)}
+}
+@keyframes cw-epaule{
+  0%{transform:rotate(0deg)} 20%{transform:rotate(-7deg)}
+  62%{transform:rotate(-5deg)} 100%{transform:rotate(0deg)}
+}
 
 /* ── LE NUMÉRO ──
    Press the whole bird and it looks round at you: a bounce, a soft flutter,
@@ -3459,9 +3490,10 @@ body::after{
        read the browser coalesces the two changes and the second press of a
        double-press does nothing at all. */
     chaque(function (m) {
-      /* A bird already in the middle of its own number is not interrupted to
-         acknowledge a button press somewhere else. */
-      if (m.classList.contains('saute')) return;
+      /* A bird already in the middle of its own number, or with its head out
+         of the frame, is not interrupted to acknowledge a button press
+         somewhere else. */
+      if (m.classList.contains('saute') || m.classList.contains('sort')) return;
       m.classList.remove('bat');
       void m.getBoundingClientRect().width;
       m.classList.add('bat');
@@ -3472,6 +3504,65 @@ body::after{
     }, 580);
   }, { passive: true });
 
+  /* ── SA VOIX ──
+     A crow, not a canary: a rasping note that FALLS. Synthesised rather than
+     played from a file, because a file is one more thing to publish, version
+     and cache-bust for a sixth of a second of sound.
+
+     The context is built on the first press and kept - browsers refuse to
+     start one without a gesture, and building a new one per click leaks them.
+     Everything is wrapped: a browser with no Web Audio, or one that refuses,
+     must cost the click nothing. */
+  var son = null;
+  function crier() {
+    try {
+      var A = window.AudioContext || window.webkitAudioContext;
+      if (!A) return;
+      if (!son) son = new A();
+      if (son.state === 'suspended') son.resume();
+      var t = son.currentTime;
+
+      var sortie = son.createGain();
+      sortie.gain.setValueAtTime(0.0001, t);
+      sortie.gain.linearRampToValueAtTime(0.055, t + 0.012);   /* quiet on purpose */
+      sortie.gain.exponentialRampToValueAtTime(0.0001, t + 0.17);
+
+      /* The buzz is the whole character of a corvid: a narrow band lets a
+         little of the harmonics through and none of the body, so it rasps
+         instead of singing. */
+      var bande = son.createBiquadFilter();
+      bande.type = 'bandpass';
+      bande.frequency.setValueAtTime(1150, t);
+      bande.Q.value = 3.2;
+
+      var a = son.createOscillator(), b = son.createOscillator();
+      a.type = 'sawtooth'; b.type = 'square'; b.detune.value = 9;
+      [a, b].forEach(function (o) {
+        o.frequency.setValueAtTime(520, t);
+        o.frequency.exponentialRampToValueAtTime(330, t + 0.16);  /* it falls */
+      });
+      var doux = son.createGain(); doux.gain.value = 0.35;
+      a.connect(bande); b.connect(doux); doux.connect(bande);
+      bande.connect(sortie); sortie.connect(son.destination);
+      a.start(t); b.start(t);
+      a.stop(t + 0.19); b.stop(t + 0.19);
+    } catch (e) { /* no sound is fine; a broken click is not */ }
+  }
+
+  /* ── IL SORT LA TÊTE ──
+     Every twenty-five to fifty seconds, in the masthead only, and never while
+     it is already busy with a flap. SILENTLY: the call belongs to a press. A
+     page that makes a noise nobody asked for is a page people close. */
+  (function encore() {
+    setTimeout(function () {
+      if (!document.hidden && !cw.classList.contains('bat') && !cw.classList.contains('sort')) {
+        cw.classList.add('sort');
+        setTimeout(function () { cw.classList.remove('sort'); }, 1550);
+      }
+      encore();
+    }, 25000 + Math.random() * 25000);
+  })();
+
   /* ── LE NUMÉRO ──
      Only the whole bird, and only on a press. It runs for two and a half
      seconds and a second press during it is ignored rather than queued -
@@ -3479,6 +3570,7 @@ body::after{
   [].forEach.call(document.querySelectorAll('.cw[data-entier]'), function (m) {
     m.addEventListener('click', function () {
       if (m.classList.contains('saute')) return;
+      crier();
       m.classList.add('saute');
       setTimeout(function () { m.classList.remove('saute'); }, 2650);
     });
@@ -4578,11 +4670,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6jgis0). Non remplacée —
+  /* La version est posée par la construction (mu6jpsqr). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6jgis0')
+  fetch('library/library.json?v=mu6jpsqr')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4593,7 +4685,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6jgis0"></script>
+<script src="compte.js?v=mu6jpsqr"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
