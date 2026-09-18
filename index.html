@@ -768,8 +768,15 @@ body::after{
   font-size:.8125rem;color:var(--ink-3);
 }
 .demo-cap b{color:var(--ink-2);font-weight:600}
-.demo-cap .val{font-family:var(--font-mono);font-size:.75rem;color:var(--accent-ink);
-  margin-inline-start:auto;font-variant-numeric:lining-nums}
+.demo-cap .val{margin-inline-start:auto;display:flex;gap:var(--s4);flex-wrap:wrap}
+.demo-cap .mesure{display:flex;align-items:baseline;gap:.35rem}
+.demo-cap .mesure b{font-family:var(--font-mono);font-size:.8125rem;font-weight:500;
+  color:var(--accent-ink);font-variant-numeric:lining-nums tabular-nums}
+.demo-cap .mesure i{font-style:normal;font-size:.625rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3)}
+/* The gap is the one that matters, so it is the one that is not red: it should
+   read as a settled fact, not as a live value. */
+.demo-cap .ecart b{color:var(--ink-2)}
 .ray-in{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round}
 .ray-out{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round;opacity:.92}
 /* Le point qui parcourt le trajet dit dans quel SENS la lumière va — deux
@@ -789,6 +796,18 @@ body::after{
 .normal-line{stroke:var(--seyes);stroke-width:1.2;stroke-dasharray:4 4;fill:none}
 .arc{stroke:var(--seyes);stroke-width:1.2;fill:none}
 .fig-lbl{font:600 11px/1 var(--font-mono);fill:var(--ink-3);letter-spacing:.06em}
+.fig-pouls{fill:none;stroke:var(--accent);stroke-width:2;opacity:0;pointer-events:none;
+  transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:no-preference){
+  .demo-fig.invite .fig-pouls{animation:fig-onde 1.9s ease-out 3}
+}
+/* Scaled, not re-radiused: `r` as a CSS property is newer than the browsers
+   this has to open on, and a transform is composited besides. */
+@keyframes fig-onde{
+  0%{transform:scale(1);opacity:.6}
+  70%{opacity:0}
+  100%{transform:scale(2.9);opacity:0}
+}
 .handle{fill:var(--card);stroke:var(--accent);stroke-width:2;cursor:grab}
 .handle:hover,.handle:focus-visible{fill:var(--accent-wash)}
 .fig-ruling{stroke:var(--rule-soft);stroke-width:1}
@@ -1445,11 +1464,23 @@ body::after{
             <circle id="handle" class="handle" r="9" cx="0" cy="0" tabindex="0"
                     role="slider" aria-label="Mirror angle" aria-valuemin="-55" aria-valuemax="40" aria-valuenow="-14"/>
             <circle id="hitdot" r="3.2" cx="0" cy="0" fill="currentColor" style="color:var(--accent)"/>
+            <!-- A figure nobody touches proves nothing. Three rings out of the
+                 handle the first time the band is reached, and never again
+                 once anyone has taken hold of it. -->
+            <circle id="pouls" class="fig-pouls" r="9" cx="0" cy="0"/>
           </g>
         </svg>
         <figcaption class="demo-cap">
           <span data-i18n="figNote">Angle in, angle out — measured off the rays themselves.</span>
-          <span class="val" id="fig-val">θ = 0°</span>
+          <!-- Two measurements and the gap between them, not one number
+               printed twice. The gap is the proof: it is 0.0 because the
+               geometry makes it so, and it is where a wrong solver would
+               show itself. -->
+          <span class="val" id="fig-val">
+            <span class="mesure"><b id="fig-in">0.0°</b><i data-i18n="figIn">in</i></span>
+            <span class="mesure"><b id="fig-out">0.0°</b><i data-i18n="figOut">out</i></span>
+            <span class="mesure ecart"><b id="fig-gap">0.0°</b><i data-i18n="figGap">apart</i></span>
+          </span>
         </figcaption>
       </figure>
     </div>
@@ -3260,6 +3291,7 @@ body::after{
       figDrag: 'Déplacez le miroir.',
       bandP: 'Le rayon réfléchi n’est pas dessiné. Il est résolu à chaque mouvement par r = i − 2(i·n)n — les mêmes quelques lignes qui tournent dans les livres. L’angle d’entrée vaut l’angle de sortie parce que la géométrie l’impose, et non parce que quelqu’un l’a dessiné pour que ça tombe juste.',
       figNote: 'Angle d’entrée, angle de sortie — mesurés sur les rayons eux-mêmes.',
+      figIn: 'entrée', figOut: 'sortie', figGap: 'd’écart',
       statBooks: 'livres', statChapters: 'chapitres', statFigures: 'figures vivantes', statLangs: 'langues',
       library: 'La bibliothèque',
       searchLabel: 'Chercher dans la bibliothèque',
@@ -3321,6 +3353,7 @@ body::after{
       figDrag: 'Drag the mirror.',
       bandP: 'The reflected ray is not drawn. It is solved on every movement by r = i − 2(i·n)n — the same few lines that run inside the books. The angle in equals the angle out because the geometry says so, not because someone drew it to come out right.',
       figNote: 'Angle in, angle out — measured off the rays themselves.',
+      figIn: 'in', figOut: 'out', figGap: 'apart',
       statBooks: 'books', statChapters: 'chapters', statFigures: 'live figures', statLangs: 'languages',
       library: 'The library',
       searchLabel: 'Search the library',
@@ -3727,7 +3760,8 @@ body::after{
   var mir = Q('mirror'), mirBack = Q('mirror-back'), handle = Q('handle'), hit = Q('hitdot'),
       rIn = Q('ray-in'), rOut = Q('ray-out'), spark = Q('spark'), nrm = Q('normal'),
       aIn = Q('arc-in'), aOut = Q('arc-out'), lIn = Q('lbl-in'), lOut = Q('lbl-out'),
-      val = Q('fig-val'), rule = Q('fig-rule');
+      val = Q('fig-val'), rule = Q('fig-rule'),
+      vIn = Q('fig-in'), vOut = Q('fig-out'), vGap = Q('fig-gap'), pouls = Q('pouls');
 
   /* un quadrillage très pâle : la figure doit se lire comme du papier */
   (function () {
@@ -3763,6 +3797,7 @@ body::after{
     var h = { x: P.x + (DEMI + 14) * d.x, y: P.y + (DEMI + 14) * d.y };
     handle.setAttribute('cx', h.x); handle.setAttribute('cy', h.y);
     handle.setAttribute('aria-valuenow', Math.round(alpha));
+    pouls.setAttribute('cx', h.x); pouls.setAttribute('cy', h.y);
     hit.setAttribute('cx', P.x); hit.setAttribute('cy', P.y);
 
     rIn.setAttribute('d', 'M' + S.x + ' ' + S.y + 'L' + P.x + ' ' + P.y);
@@ -3792,8 +3827,20 @@ body::after{
     arc(aIn, lIn, { x: -i.x, y: -i.y }, n);
     arc(aOut, lOut, n, r);
 
-    var theta = Math.round(Math.acos(Math.min(1, Math.abs(dot))) * 180 / Math.PI);
-    val.textContent = 'θ = ' + theta + '°';
+    /* MEASURED, NOT ASSERTED. The band's own caption promises these come off
+       the rays, so they do: the first from the incoming ray against the
+       normal, the second from the REFLECTED vector against the same normal.
+       Two separate lines, measured separately. Printing one number twice
+       would have proved nothing except that we can print. */
+    function degres(u, v) {
+      var c = u.x * v.x + u.y * v.y;
+      return Math.acos(Math.max(-1, Math.min(1, Math.abs(c)))) * 180 / Math.PI;
+    }
+    var aI = degres(i, n), aR = degres(r, n);
+    vIn.textContent = aI.toFixed(1) + '°';
+    vOut.textContent = aR.toFixed(1) + '°';
+    /* `abs` so it never prints a signed nothing like «-0.0°». */
+    vGap.textContent = Math.abs(aI - aR).toFixed(1) + '°';
   }
 
   function versPointeur(ev) {
@@ -3807,7 +3854,22 @@ body::after{
   }
 
   var tient = false;
+  /* The ring runs once, when the band is first reached, and is retired for
+     good the moment anyone touches the figure - an invitation that keeps
+     arriving after it has been accepted is a nag. */
+  var cadre = svg.closest('.demo-fig');
+  function assez() { if (cadre) cadre.classList.remove('invite'); }
+  if (cadre && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (vues) {
+      if (!vues[0].isIntersecting) return;
+      io.disconnect();
+      cadre.classList.add('invite');
+    }, { threshold: .55 });
+    io.observe(cadre);
+  }
+
   svg.addEventListener('pointerdown', function (ev) {
+    assez();
     tient = true; svg.setPointerCapture(ev.pointerId); versPointeur(ev); ev.preventDefault();
   });
   svg.addEventListener('pointermove', function (ev) { if (tient) versPointeur(ev); });
@@ -3817,6 +3879,7 @@ body::after{
   /* Au clavier aussi : la poignée est un `slider`, elle doit répondre aux
      flèches comme tout curseur. */
   handle.addEventListener('keydown', function (ev) {
+    assez();
     var k = ev.key, pas = ev.shiftKey ? 5 : 1;
     if (k === 'ArrowLeft' || k === 'ArrowDown') alpha = Math.max(MIN, alpha - pas);
     else if (k === 'ArrowRight' || k === 'ArrowUp') alpha = Math.min(MAX, alpha + pas);
@@ -4670,11 +4733,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu6jpsqr). Non remplacée —
+  /* La version est posée par la construction (mu6jyy8u). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu6jpsqr')
+  fetch('library/library.json?v=mu6jyy8u')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -4685,7 +4748,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu6jpsqr"></script>
+<script src="compte.js?v=mu6jyy8u"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
