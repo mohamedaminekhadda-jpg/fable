@@ -29,7 +29,11 @@
   inset-block-end: clamp(14px, 3vh, 26px);
   inset-inline-end: clamp(14px, 3vw, 34px);
   z-index: 40;
-  display: flex; align-items: flex-end; gap: 10px;
+  /* L'ECART TIENT COMPTE DE LA POINTE. Elle deborde de la bulle de sept
+     pixels-charte - vingt et un a l'ecran - donc un ecart de dix la faisait
+     entrer dans le corps de l'oiseau. Trente laisse la pointe le designer sans
+     le toucher. */
+  display: flex; align-items: flex-end; gap: 30px;
   /* Le conteneur laisse passer les clics ; ses enfants les reprennent. */
   pointer-events: none;
   opacity: 0; transform: translateY(10px);
@@ -93,9 +97,16 @@
 /* Sur un téléphone, une bulle de trente caractères à côté d'un oiseau de
    quatre rem prend la moitié de la largeur. On réduit les deux, et la bulle
    passe AU-DESSUS : côte à côte, il ne resterait rien pour le texte. */
+/* SUR UN TELEPHONE AUSSI, COTE A COTE. La premiere version empilait la bulle
+   au-dessus de l'oiseau pour gagner de la largeur ; la pointe se retrouvait
+   alors a designer le vide a cote d'elle, et elle debordait de l'ecran par la
+   droite. Reduits, les deux tiennent en rangee : a 375 px il reste plus de
+   deux cents pixels pour le texte, soit largement les vingt-six caracteres
+   qu'on lui accorde. */
 @media (max-width: 34rem) {
-  .compagnon { flex-direction: column; align-items: flex-end; gap: 4px; }
-  .compagnon .bulle { max-inline-size: min(26ch, 74vw); font-size: .8125rem; }
+  .compagnon { gap: 22px; }
+  .compagnon .bulle { max-inline-size: min(24ch, 52vw); }
+  .compagnon .bulle-boite { font-size: .6875rem; padding: .5rem .65rem; }
   .compagnon .cw { block-size: 3rem; }
 }
 
