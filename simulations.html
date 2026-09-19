@@ -589,6 +589,14 @@ body::after{
   display:grid;overflow:hidden;
   /* the clip would otherwise cut the italic's descenders */
   padding-block:.08em;margin-block:-.08em;
+  /* ET LA MEME CHOSE SUR LES COTES, POUR L'ARABE. Le decoupage mordait la
+     PREMIERE LETTRE : en arabe le mot commence au bord droit de la boite, et
+     les formes initiales debordent leur chasse - les deux points du ta se
+     faisaient couper net, et le mot se lisait comme un autre. En latin rien
+     ne depassait, alors le defaut ne s'etait jamais vu. La marge negative
+     annule la marge interieure : la mise en page ne bouge pas d'un pixel,
+     seule la zone de decoupe s'elargit. */
+  padding-inline:.18em;margin-inline:-.18em;
 }
 .hero h1 em>span{
   grid-area:1/1;opacity:0;transform:translateY(.6em);
@@ -1027,7 +1035,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 </footer>
 
 
-<script src="compte.js?v=mu7ujvqv"></script>
+<script src="compte.js?v=mu7zipbs"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -2119,7 +2127,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu7ujvqv"></script>
+<script src="chrome-pages.js?v=mu7zipbs"></script>
 <script>
 /* ── LE TIR ──
    Two sliders, one parabola, and a readout that does not trust the formula.

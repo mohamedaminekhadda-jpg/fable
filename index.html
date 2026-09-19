@@ -605,6 +605,14 @@ body::after{
   display:grid;overflow:hidden;
   /* the clip would otherwise cut the italic's descenders */
   padding-block:.08em;margin-block:-.08em;
+  /* ET LA MEME CHOSE SUR LES COTES, POUR L'ARABE. Le decoupage mordait la
+     PREMIERE LETTRE : en arabe le mot commence au bord droit de la boite, et
+     les formes initiales debordent leur chasse - les deux points du ta se
+     faisaient couper net, et le mot se lisait comme un autre. En latin rien
+     ne depassait, alors le defaut ne s'etait jamais vu. La marge negative
+     annule la marge interieure : la mise en page ne bouge pas d'un pixel,
+     seule la zone de decoupe s'elargit. */
+  padding-inline:.18em;margin-inline:-.18em;
 }
 .hero h1 em>span{
   grid-area:1/1;opacity:0;transform:translateY(.6em);
@@ -665,7 +673,14 @@ body::after{
   transition:transform .6s cubic-bezier(.22,.8,.3,1);
 }
 .mur-carte{
-  position:absolute;inset-block-start:50%;inset-inline-start:50%;
+  /* `left`, PAS `inset-inline-start`. C'est une ancre GEOMETRIQUE : le script
+     place ensuite chaque carte avec des transformations physiques
+     (translateX, rotateY), qui ne se retournent pas, elles, en ecriture de
+     droite a gauche. La propriete logique retournait donc l'ancre toute seule
+     et le manege s'effondrait en tas en arabe - les couvertures empilees les
+     unes sur les autres au lieu d'etre en eventail. Un anneau en trois
+     dimensions n'est pas du texte : il n'a pas de sens de lecture. */
+  position:absolute;inset-block-start:50%;left:50%;
   inline-size:42%;aspect-ratio:3/4;margin:0;
   border-radius:2px 4px 4px 2px;overflow:hidden;background:var(--card);
   /* Le filet clair fait la tranche : sans lui, sept rectangles sombres qui
@@ -5472,11 +5487,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mu7ujvqv). Non remplacée —
+  /* La version est posée par la construction (mu7zipbs). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mu7ujvqv')
+  fetch('library/library.json?v=mu7zipbs')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -5487,7 +5502,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mu7ujvqv"></script>
+<script src="compte.js?v=mu7zipbs"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
