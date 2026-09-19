@@ -1,0 +1,33 @@
+{
+ "name": "Fable — interactive books and textbooks",
+ "short_name": "Fable",
+ "description": "Books and textbooks whose figures are computed on the page.",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "lang": "en",
+ "dir": "ltr",
+ "background_color": "#f4f1e9",
+ "theme_color": "#f4f1e9",
+ "icons": [
+  {
+   "src": "icons/icone-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icons/icone-512-masque.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  },
+  {
+   "src": "icons/icone-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  }
+ ]
+}

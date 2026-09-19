@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /cahier/
+Disallow: /demos/
+Sitemap: https://mohamedaminekhadda-jpg.github.io/fable/sitemap.xml

@@ -540,5 +540,26 @@ p.lede{color:var(--ink-2);margin:0 0 1.6rem;max-inline-size:38ch}
   }
 })();
 </script>
+<script>
+/* HORS LIGNE, CE N'EST PAS UNE 404.
+   L'agent de service sert cette page quand une adresse n'est pas dans le cache
+   et que le reseau ne repond pas. Dire alors « rien sur cette branche » est
+   faux et decourageant : la page existe, c'est le reseau qui manque, et la
+   difference decide si le visiteur reessaie plus tard ou s'en va. */
+(function () {
+  if (navigator.onLine !== false) return;
+  var fr = (document.documentElement.lang || '').indexOf('fr') === 0;
+  var t = document.getElementById('titre');
+  var l = document.getElementById('lede');
+  var e = document.getElementById('eyebrow');
+  if (e) e.textContent = fr ? 'Hors ligne' : 'Offline';
+  if (t) t.textContent = fr ? 'Cette page-la n’a pas ete gardee.' : 'That one was not kept.';
+  if (l) {
+    l.textContent = fr
+      ? 'Vous etes hors reseau. Ce que vous avez deja ouvert reste lisible — le reste attendra le retour de la connexion.'
+      : 'You are offline. Whatever you have already opened is still readable; the rest will wait for the connection.';
+  }
+})();
+</script>
 </body>
 </html>
