@@ -43,6 +43,59 @@
      the notebook and the simulations already share one choice under
      `fable:lang`, and a page that has made it puts it on `FABLE_LANG` before
      this script loads. Failing both, the browser's own. */
+  /* L'ARABE, meme table indexee par l'anglais. Le site offre trois boutons de
+     langue ; la fenetre du compte en offrait deux, et « Sign in » restait en
+     anglais sur une page entierement arabe - sur CHAQUE page, puisque le
+     bouton est dans la barre. */
+  var AR = {
+    'The browser blocked Google\'s window. Allow pop-ups for this site, or use e-mail instead.': 'حجب المتصفّح نافذة Google. اسمح بالنوافذ المنبثقة لهذا الموقع، أو استعمل البريد الإلكتروني بدلًا منها.',
+    'Google\'s window was closed before it finished.': 'أُغلقت نافذة Google قبل أن تنتهي.',
+    'Another sign-in window was already open.': 'كانت هناك نافذة دخول أخرى مفتوحة سلفًا.',
+    'This domain is not allowed in Firebase (Authentication → Settings → Authorized domains).': 'هذا النطاق غير مسموح به في Firebase (Authentication → Settings → Authorized domains).',
+    'This method is not switched on in Firebase (Authentication → Sign-in method).': 'هذه الطريقة غير مفعَّلة في Firebase (Authentication → Sign-in method).',
+    'That e-mail address is not valid.': 'هذا العنوان الإلكتروني غير صالح.',
+    'Wrong e-mail or password.': 'البريد الإلكتروني أو كلمة السرّ خاطئة.',
+    'Wrong password.': 'كلمة السرّ خاطئة.',
+    'No account with that address. Use “Create an account”.': 'لا حساب بهذا العنوان. استعمل «إنشاء حساب».',
+    'An account already exists with that address. Use “Sign in”.': 'يوجد حساب بهذا العنوان بالفعل. استعمل «تسجيل الدخول».',
+    'Password too short — six characters at the least.': 'كلمة السرّ قصيرة جدًّا — ستة محارف على الأقل.',
+    'No network. Your notebooks stay on this device, as they always do.': 'لا شبكة. دفاترك تبقى على هذا الجهاز، كما هو الحال دائمًا.',
+    'The Firebase key is not valid. Paste the configuration again from the console (“Accounts” panel).': 'مفتاح Firebase غير صالح. الصق الإعدادات من جديد من لوحة التحكم (لوحة «الحسابات»).',
+    'The project answers, but authentication is not switched on in it (Firebase → Authentication → Get started).': 'المشروع يستجيب، لكن التوثيق غير مفعَّل فيه (Firebase → Authentication → Get started).',
+    'That Firebase project cannot be found — check `projectId` and `appId`.': 'تعذّر العثور على مشروع Firebase هذا — تحقّق من `projectId` و`appId`.',
+    'Firebase is not configured (web/firebase-config.js).': 'Firebase غير مضبوط (web/firebase-config.js).',
+    'Your account': 'حسابك',
+    'Your Fable account': 'حسابك في Fable',
+    'Your notebooks follow this account.': 'دفاترك تتبع هذا الحساب.',
+    'Close': 'إغلاق',
+    'Sign out': 'تسجيل الخروج',
+    'Sign in': 'تسجيل الدخول',
+    'Create an account': 'إنشاء حساب',
+    'Continue with Google': 'المتابعة بحساب Google',
+    'or by e-mail': 'أو بالبريد الإلكتروني',
+    'Address': 'العنوان',
+    'Password': 'كلمة السرّ',
+    'One account for the books, the notebook and the simulations. Your notebooks stay on this device — the account keeps a copy, so you can find them again elsewhere.': 'حساب واحد للكتب والدفتر والمحاكاة. دفاترك تبقى على هذا الجهاز — والحساب يحتفظ بنسخة، حتى تجدها من جديد في مكان آخر.',
+    'your workshop': 'ورشتك',
+    'what is online, build, deploy': 'ما هو على الشبكة، البناء، النشر',
+    'write and build the textbooks': 'اكتب المقرّرات وابنِها',
+    'the platform: classes, reports, exams': 'المنصّة: الأقسام، النقط، الامتحانات',
+    'They run on this machine. Anywhere else these links open an empty port — which is exactly the protection: they listen on 127.0.0.1 only. ': 'تشتغل على هذا الجهاز. في أي مكان آخر تفتح هذه الروابط منفذًا فارغًا — وهذه هي الحماية بالضبط: إنها تُنصت على 127.0.0.1 وحده. ',
+    'Change an address…': 'تغيير عنوان…',
+    'Which tool? (': 'أيّ أداة؟ (',
+    'Address of ': 'عنوان ',
+    ' — a port (4310), or a full URL (https://studio.my-tailnet.ts.net):': ' — منفذ (4310)، أو عنوان كامل (https://studio.my-tailnet.ts.net):',
+    'Expected: a port, or a full http(s) address.': 'المتوقَّع: منفذ، أو عنوان http(s) كامل.',
+    'Synchronising…': 'جارٍ المزامنة…',
+    'Up to date.': 'محدَّث.',
+    'Up to date — ': 'محدَّث — ',
+    'Could not synchronise: ': 'تعذّرت المزامنة: ',
+    'Could not send: ': 'تعذّر الإرسال: ',
+    'sent': 'مُرسَل',
+    'received': 'مستقبَل',
+    'An e-mail address is needed.': 'لا بدّ من عنوان بريد إلكتروني.',
+  };
+
   var FR = {
     'The browser blocked Google\'s window. Allow pop-ups for this site, or use e-mail instead.': 'Le navigateur a bloqué la fenêtre de Google. Autorisez les fenêtres pour ce site, ou passez par l’e-mail.',
     'Google\'s window was closed before it finished.': 'La fenêtre de Google a été fermée avant la fin.',
@@ -92,15 +145,18 @@
     'An e-mail address is needed.': 'Une adresse e-mail est demandée.'
   };
   function t(en) {
-    return LANGUE === 'fr' && FR[en] ? FR[en] : en;
+    var table = LANGUE === 'fr' ? FR : (LANGUE === 'ar' ? AR : null);
+    return (table && table[en]) || en;
   }
   var LANGUE = (function () {
-    if (window.FABLE_LANG) return window.FABLE_LANG === 'fr' ? 'fr' : 'en';
+    var connues = { fr: 1, en: 1, ar: 1 };
+    if (window.FABLE_LANG && connues[window.FABLE_LANG]) return window.FABLE_LANG;
     try {
       var v = localStorage.getItem('fable:lang');
-      if (v) return v === 'fr' ? 'fr' : 'en';
+      if (v && connues[v]) return v;
     } catch (e) { /* storage refused: fall through to the browser */ }
-    return (navigator.language || '').slice(0, 2) === 'fr' ? 'fr' : 'en';
+    var n = (navigator.language || '').slice(0, 2);
+    return connues[n] ? n : 'en';
   })();
 
   var etat = {
