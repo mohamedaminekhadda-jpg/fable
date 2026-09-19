@@ -1,0 +1,86 @@
+/* LE CORBEAU QUI SUIT LA LECTURE.
+ *
+ * Sur les trois pages autres que la bibliothèque, il y en avait DEUX : un au
+ * milieu d'une section et un dans le pied, à quelques centimètres l'un de
+ * l'autre. Deux fois le même oiseau sur un écran, ce n'est plus une mascotte,
+ * c'est un motif de papier peint.
+ *
+ * Il n'en reste qu'un, et il accompagne : posé en bas à droite, il commente la
+ * section qu'on est en train de lire. Le corbeau devient alors ce qu'il aurait
+ * dû être dès le début — quelqu'un qui lit la page avec vous — au lieu d'une
+ * décoration posée deux fois.
+ *
+ * Quatre choses que cette feuille prend au sérieux :
+ *
+ *   1. IL NE BLOQUE RIEN. Le conteneur ne reçoit pas les clics ; seuls
+ *      l'oiseau et sa bulle les reçoivent. Un compagnon qui avale le clic d'un
+ *      bouton qu'il recouvre est une nuisance, pas une présence.
+ *   2. IL S'EFFACE DEVANT LE PIED DE PAGE. Sinon il se retrouve par-dessus le
+ *      corbeau du pied — le problème qu'on vient de corriger, revenu par la
+ *      fenêtre.
+ *   3. IL SE RANGE DU BON CÔTÉ EN ARABE. `inset-inline-end` et non `right` :
+ *      en lecture de droite à gauche, la marge libre est à gauche.
+ *   4. IL SE TAIT SI ON LUI DEMANDE DU CALME. `prefers-reduced-motion` coupe
+ *      les fondus ; le texte, lui, change quand même.
+ */
+
+.compagnon {
+  position: fixed;
+  inset-block-end: clamp(14px, 3vh, 26px);
+  inset-inline-end: clamp(14px, 3vw, 34px);
+  z-index: 40;
+  display: flex; align-items: flex-end; gap: 10px;
+  /* Le conteneur laisse passer les clics ; ses enfants les reprennent. */
+  pointer-events: none;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.22, .8, .3, 1);
+}
+.compagnon.la { opacity: 1; transform: none; }
+
+/* La bulle est DEVANT l'oiseau, du côté d'où vient la lecture : à sa gauche en
+   français, à sa droite en arabe. Posée de l'autre côté elle sortirait de
+   l'écran. */
+.compagnon .bulle {
+  pointer-events: auto;
+  max-inline-size: min(30ch, 52vw);
+  margin-block-end: 6px;
+  transition: opacity .28s ease;
+}
+.compagnon.change .bulle { opacity: 0; }
+
+.compagnon .cw {
+  pointer-events: auto;
+  inline-size: auto; block-size: 4.1rem;
+  cursor: pointer; overflow: visible;
+  /* Une ombre très basse : elle pose l'oiseau sur la page au lieu de le
+     laisser flotter devant elle. */
+  filter: drop-shadow(0 10px 14px rgba(33, 29, 25, .22));
+}
+:root[data-theme="dark"] .compagnon .cw,
+:root:not([data-theme="light"]) .compagnon .cw {
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .5));
+}
+
+/* LE CORBEAU DU PIED S'EN VA, sur ces pages-là seulement. C'est le même
+   oiseau : le garder en bas ET en flottant, c'est reproduire exactement le
+   doublon qu'on enlève. */
+.a-compagnon .foot .perchoir { display: none; }
+
+/* Sur un téléphone, une bulle de trente caractères à côté d'un oiseau de
+   quatre rem prend la moitié de la largeur. On réduit les deux, et la bulle
+   passe AU-DESSUS : côte à côte, il ne resterait rien pour le texte. */
+@media (max-width: 34rem) {
+  .compagnon { flex-direction: column; align-items: flex-end; gap: 4px; }
+  .compagnon .bulle { max-inline-size: min(26ch, 74vw); font-size: .8125rem; }
+  .compagnon .cw { block-size: 3rem; }
+}
+
+/* Écran très bas — un téléphone couché — : l'oiseau mangerait le tiers de ce
+   qu'on essaie de lire. */
+@media (max-height: 26rem) {
+  .compagnon { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compagnon, .compagnon .bulle { transition: none; }
+}

@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="compagnon.css?v=mu84121j">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -750,7 +751,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 <script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
 <meta name="twitter:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/simulations.jpg?v=41955f0981">
 </head>
-<body>
+<body class="a-compagnon">
 <div id="sentinelle" aria-hidden="true"></div>
 <header class="masthead" id="masthead">
   <div class="wrap">
@@ -824,7 +825,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 </header>
 
 <main>
-  <section class="hero wrap">
+  <section class="hero wrap" data-mot="cmpSimHero">
     <div class="hero-grid">
       <div class="hero-txt">
         <p class="eyebrow" data-i18n="simEyebrow">Thirty-six of them, and none is a video</p>
@@ -877,7 +878,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
     </div>
   </section>
 
-  <section class="sec wrap">
+  <section class="sec wrap" data-mot="cmpSimMat">
     <div class="sec-head">
       <h2 data-i18n="simSubjectsH">Four subjects</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -904,7 +905,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
     <p class="mesure" style="margin-block-start:var(--s5);font-size:.9375rem" data-i18n="simCounts">Those four numbers are the folders on disk at the last build, not a target. If one of them grows, this page is wrong until it is rebuilt.</p>
   </section>
 
-  <section class="band">
+  <section class="band" data-mot="cmpSimPourquoi">
     <div class="wrap band-grid">
       <div>
         <p class="eyebrow" data-i18n="simWhyE">Why it is not a video</p>
@@ -928,16 +929,37 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
     </div>
   </section>
 
-  <section class="sec wrap">
+  <section class="sec wrap" data-mot="cmpSimEssai">
     <div class="sec-head">
       <h2 data-i18n="simTryH">Try one now</h2>
       <span class="filet" aria-hidden="true"></span>
     </div>
     <p class="mesure" data-i18n="simTryP">The slider above is a small one, written for this page. The real ones go considerably further: a ray tracer you can put a lens in front of, a titration that finds its own equivalence point, a punnett square that rolls the dice rather than listing the outcomes.</p>
 
-    <div class="dit">
-      <svg class="cw" data-vivant data-entier viewBox="0 0 924.3 953.19" aria-hidden="true" focusable="false">
-        <g>
+    <!-- Le corbeau qui se tenait ici est parti en bas a droite : il y en
+         avait deux sur la meme page, a quelques centimetres l un de l autre. -->
+
+    <div class="fin">
+      <a class="btn btn-1" href="sfy/" data-i18n="simOpen2">Open the simulations</a>
+      <a class="btn btn-2" href="notebook.html" data-i18n="simNb">And the notebook they clip into</a>
+    </div>
+  </section>
+</main>
+
+<!-- LE CORBEAU QUI SUIT LA LECTURE.
+     Un seul oiseau par page : celui du pied s'efface (voir compagnon.css) et
+     celui-ci commente la section qu'on est en train de lire. Le `<use>` devient
+     une vraie copie du dessin a la construction - un clone ne s'anime pas. -->
+<aside class="compagnon" id="compagnon" aria-live="polite">
+  <p class="bulle bulle-muette">
+    <span class="bulle-boite">Go on, then. I will keep up.</span>
+    <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
+      <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
+      <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
+    </svg>
+  </p>
+  <svg class="cw" data-vivant data-entier viewBox="0 0 924.3 953.19" aria-hidden="true" focusable="false">
+    <g>
         <!-- The perch and the legs stay put. They are outside the moving group
              on purpose: a bird whose feet slide off its own branch is exactly
              what looked broken before. -->
@@ -963,22 +985,8 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
           </g></g></g>
         </g>
       </g>
-      </svg>
-      <p class="bulle bulle-muette" style="max-inline-size:34ch">
-        <span class="bulle-boite" data-i18n="simBulle">Drop a pebble, the water rises. I did not need to be told the number.</span>
-        <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
-          <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
-          <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
-        </svg>
-      </p>
-    </div>
-
-    <div class="fin">
-      <a class="btn btn-1" href="sfy/" data-i18n="simOpen2">Open the simulations</a>
-      <a class="btn btn-2" href="notebook.html" data-i18n="simNb">And the notebook they clip into</a>
-    </div>
-  </section>
-</main>
+  </svg>
+</aside>
 
 <footer class="foot">
   <!-- The bird and what it has to say, perched together on the footer's rule.
@@ -1035,7 +1043,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 </footer>
 
 
-<script src="compte.js?v=mu80nodt"></script>
+<script src="compte.js?v=mu84121j"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1050,6 +1058,29 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 (function () {
   var TEXTES = {
     ar: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "تفضّل. أنا معك.",
+      cmpSimHero: "حرّك الزاوية. الرقم تحتها لا يبحث عن شيء.",
+      cmpSimMat: "ستّ وثلاثون. عددتُها واحدةً واحدة.",
+      cmpSimPourquoi: "فيلم التجربة يبقى فيلمًا. اسأله سؤالًا وانظر.",
+      cmpSimEssai: "تفضّل. لا شيء هنا ينكسر إذا سحبته.",
+      cmpNbHero: "تسطير حقيقي، مرسوم سطرًا سطرًا. رأيته يُرسم.",
+      cmpNbVoyage: "تصل ومعها عنوانها. وبغيره تصير إشاعة.",
+      cmpNbEtagere: "دفتر لكل مزاج. أوافق، فأنا أكدّس أيضًا.",
+      cmpNbOu: "كل شيء يبقى على الجهاز. ولا يصلني منه شيء.",
+      cmpNbOuvrir: "فارغة، وتنتظر. خير أنواع الورق.",
+      cmpPrHero: "باختصار: الأشكال هي التي تشتغل، لا الصور.",
+      cmpPrProbleme: "الشكل المرسوم لا يُسأل. هذه هي الشكوى كلّها.",
+      cmpPrFait: "أربعة أرقام يطبعها البناء. لا تجامل.",
+      cmpPrPieces: "ستّ قطع. اثنتان لا تغادران جهاز المؤلف.",
+      cmpPrAtelier: "هذه هي الحقيقية. المس واحدة تصر لك.",
+      cmpPrTourne: "ملف واحد. يشتغل حين لا يشتغل الواي-فاي.",
+      cmpPrQui: "مدارس ومكوّنون وناشرون. قاعات مختلفة وحجّة واحدة.",
+      cmpPrSuite: "لا مكان بعد، وهو مكتوب. تحققتُ من ذلك أيضًا.",
+      cmpPrParler: "هذا العنوان يعمل. لا أضع عنوانًا ميتًا في صفحة.",
     /* ── L'ARABE ──
        PENSÉ EN ARABE, PAS TRADUIT DE L'ANGLAIS. Le premier jet gardait la
        FORME anglaise et devenait illisible. Le titre en est l'exemple net :
@@ -1300,6 +1331,29 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
       pageDesc: "كتب ومقرّرات مدرسية تفاعلية بالعربية والفرنسية والإنجليزية. كل شكل فيها محسوب، لا مرسوم.",
     },
     fr: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "Allez-y. Je suis.",
+      cmpSimHero: "Bougez l’angle. Le nombre en dessous ne consulte rien.",
+      cmpSimMat: "Trente-six. Je les ai comptées une par une.",
+      cmpSimPourquoi: "Un film d’expérience reste un film. Posez-lui une question, pour voir.",
+      cmpSimEssai: "Allez-y. Rien ne casse ici quand on tire dessus.",
+      cmpNbHero: "De la vraie réglure, tracée ligne à ligne. J’ai regardé faire.",
+      cmpNbVoyage: "Elle arrive avec son adresse. Sans elle, c’est un ragot.",
+      cmpNbEtagere: "Un cahier par lubie. J’approuve : j’entasse aussi.",
+      cmpNbOu: "Tout reste sur l’appareil. Rien ne me parvient.",
+      cmpNbOuvrir: "Vide, et qui attend. La meilleure sorte de page.",
+      cmpPrHero: "En bref : ce sont les figures qui travaillent, pas les images.",
+      cmpPrProbleme: "On ne demande rien à une figure dessinée. C’est tout le grief.",
+      cmpPrFait: "Quatre nombres, imprimés par la construction. Ils ne flattent pas.",
+      cmpPrPieces: "Six pièces. Deux ne quittent jamais la machine de l’auteur.",
+      cmpPrAtelier: "Ce sont les vraies. Touchez-en une, elle est à vous.",
+      cmpPrTourne: "Un seul fichier. Il marche quand le wifi ne marche plus.",
+      cmpPrQui: "Écoles, formateurs, éditeurs. Trois salles, un seul argument.",
+      cmpPrSuite: "Nulle part encore, et c’est écrit. J’ai vérifié ça aussi.",
+      cmpPrParler: "Cette adresse fonctionne. Je n’en mettrais pas une morte.",
       prPlan1: "Le problème",
       prPlan2: "Ce qui existe",
       prPlan3: "Les pièces",
@@ -1529,6 +1583,29 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
       pageDesc: 'Des livres et des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
     },
     en: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "Go on, then. I will keep up.",
+      cmpSimHero: "Move the angle. The number underneath is not looking anything up.",
+      cmpSimMat: "Thirty-six. I counted them the slow way.",
+      cmpSimPourquoi: "A film of an experiment is a film. Ask it something and see.",
+      cmpSimEssai: "Go on. Nothing here breaks when you pull it.",
+      cmpNbHero: "Real ruling, drawn line by line. I watched it happen.",
+      cmpNbVoyage: "It arrives with its address. Without one it is gossip.",
+      cmpNbEtagere: "One notebook per whim. I approve — I hoard too.",
+      cmpNbOu: "It stays on the device. None of it reaches me.",
+      cmpNbOuvrir: "Empty, and waiting. The best kind of page.",
+      cmpPrHero: "The short version: the figures do the work, not the pictures.",
+      cmpPrProbleme: "You cannot ask a drawn figure anything. That is the whole complaint.",
+      cmpPrFait: "Four numbers, printed by the build. They cannot flatter.",
+      cmpPrPieces: "Six pieces. Two of them never leave the author’s machine.",
+      cmpPrAtelier: "These are the real ones. Touch one and it is yours.",
+      cmpPrTourne: "One file. It works when the wifi does not.",
+      cmpPrQui: "Schools, trainers, publishers. Different rooms, one argument.",
+      cmpPrSuite: "Nowhere yet, and it says so. I checked that too.",
+      cmpPrParler: "That address works. I would not put a dead one on a page.",
       prPlan1: "The problem",
       prPlan2: "What exists",
       prPlan3: "The parts",
@@ -2127,7 +2204,7 @@ input[type=range]{inline-size:100%;accent-color:var(--accent);block-size:1.6rem}
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu80nodt"></script>
+<script src="chrome-pages.js?v=mu84121j"></script>
 <script>
 /* ── LE TIR ──
    Two sliders, one parabola, and a readout that does not trust the formula.

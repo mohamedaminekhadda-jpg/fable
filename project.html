@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="compagnon.css?v=mu84121j">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -849,7 +850,7 @@ body::after{
 <script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
 <meta name="twitter:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/project.jpg?v=222a6ada74">
 </head>
-<body>
+<body class="a-compagnon">
 <div id="sentinelle" aria-hidden="true"></div>
 <header class="masthead" id="masthead">
   <div class="wrap">
@@ -923,7 +924,7 @@ body::after{
 </header>
 
 <main>
-  <section class="hero wrap" style="padding-block:var(--s8) var(--s6)">
+  <section class="hero wrap" style="padding-block:var(--s8) var(--s6)" data-mot="cmpPrHero">
     <div style="max-width:52rem">
       <p class="eyebrow" data-i18n="prEyebrow">The project</p>
       <h1 style="max-width:18ch" data-i18n-html="prH1">A textbook that does the <em>mathematics</em> while you read it</h1>
@@ -941,7 +942,7 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="probleme">
+  <section class="sec wrap" id="probleme" data-mot="cmpPrProbleme">
     <div class="sec-head">
       <h2 data-i18n="prProbH">A figure in a textbook is a photograph of a thought</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -953,7 +954,7 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="fait">
+  <section class="sec wrap" id="fait" data-mot="cmpPrFait">
     <div class="sec-head">
       <h2 data-i18n="prBuiltH">What exists today</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -968,7 +969,7 @@ body::after{
     <p class="mesure" style="margin-block-start:var(--s5)" data-i18n="prBuiltP">Those four numbers are printed by the build itself, so they cannot drift from what is actually on disk. Everything on this website — the library, the reader, the notebook, the simulations — is output of the system, not a mock-up of it.</p>
   </section>
 
-  <section class="sec wrap" id="pieces">
+  <section class="sec wrap" id="pieces" data-mot="cmpPrPieces">
     <div class="sec-head">
       <h2 data-i18n="prPartsH">The parts</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -1009,7 +1010,7 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="atelier">
+  <section class="sec wrap" id="atelier" data-mot="cmpPrAtelier">
     <div class="sec-head">
       <h2 data-i18n="prShopH">Reach into one</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -1050,7 +1051,7 @@ body::after{
     </div>
   </section>
 
-  <section class="band">
+  <section class="band" data-mot="cmpPrTourne">
     <div class="wrap band-grid">
       <div>
         <p class="eyebrow" data-i18n="prRunE">What it runs on</p>
@@ -1066,7 +1067,7 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="qui">
+  <section class="sec wrap" id="qui" data-mot="cmpPrQui">
     <div class="sec-head">
       <h2 data-i18n="prWhoH">Who it is for</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -1106,7 +1107,7 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="suite">
+  <section class="sec wrap" id="suite" data-mot="cmpPrSuite">
     <div class="sec-head">
       <h2 data-i18n="prNextH">What is next</h2>
       <span class="filet" aria-hidden="true"></span>
@@ -1128,16 +1129,39 @@ body::after{
     </div>
   </section>
 
-  <section class="sec wrap" id="parler">
+  <section class="sec wrap" id="parler" data-mot="cmpPrParler">
     <div class="sec-head">
       <h2 data-i18n="prTalkH">Talk to me</h2>
       <span class="filet" aria-hidden="true"></span>
     </div>
     <p class="mesure" data-i18n="prTalkP">If you run a school, a programme or a list, the fastest way to judge this is to open a book and try to break a figure. The demonstration textbook is in the library and uses every one of the 102 types.</p>
 
-    <div class="dit">
-      <svg class="cw" data-vivant data-entier viewBox="0 0 924.3 953.19" aria-hidden="true" focusable="false">
-        <g>
+    <!-- Le corbeau qui se tenait ici est parti en bas a droite : il y en
+         avait deux sur la meme page, a quelques centimetres l un de l autre. -->
+
+    <p class="courriel"><a href="mailto:mohamedaminekhadda@gmail.com">mohamedaminekhadda@gmail.com</a></p>
+
+    <div class="fin">
+      <a class="btn btn-1" href="library/manuel-bac-demo/" data-i18n="prDemo">Open the demonstration textbook</a>
+      <a class="btn btn-2" href="./" data-i18n="prLib">See the whole library</a>
+    </div>
+  </section>
+</main>
+
+<!-- LE CORBEAU QUI SUIT LA LECTURE.
+     Un seul oiseau par page : celui du pied s'efface (voir compagnon.css) et
+     celui-ci commente la section qu'on est en train de lire. Le `<use>` devient
+     une vraie copie du dessin a la construction - un clone ne s'anime pas. -->
+<aside class="compagnon" id="compagnon" aria-live="polite">
+  <p class="bulle bulle-muette">
+    <span class="bulle-boite">Go on, then. I will keep up.</span>
+    <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
+      <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
+      <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
+    </svg>
+  </p>
+  <svg class="cw" data-vivant data-entier viewBox="0 0 924.3 953.19" aria-hidden="true" focusable="false">
+    <g>
         <!-- The perch and the legs stay put. They are outside the moving group
              on purpose: a bird whose feet slide off its own branch is exactly
              what looked broken before. -->
@@ -1163,24 +1187,8 @@ body::after{
           </g></g></g>
         </g>
       </g>
-      </svg>
-      <p class="bulle bulle-muette" style="max-inline-size:36ch">
-        <span class="bulle-boite" data-i18n="prBulle">Nothing on this page is a mock-up. I checked. Twice.</span>
-        <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
-          <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
-          <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
-        </svg>
-      </p>
-    </div>
-
-    <p class="courriel"><a href="mailto:mohamedaminekhadda@gmail.com">mohamedaminekhadda@gmail.com</a></p>
-
-    <div class="fin">
-      <a class="btn btn-1" href="library/manuel-bac-demo/" data-i18n="prDemo">Open the demonstration textbook</a>
-      <a class="btn btn-2" href="./" data-i18n="prLib">See the whole library</a>
-    </div>
-  </section>
-</main>
+  </svg>
+</aside>
 
 <footer class="foot">
   <!-- The bird and what it has to say, perched together on the footer's rule.
@@ -1236,7 +1244,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu80nodt"></script>
+<script src="compte.js?v=mu84121j"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1251,6 +1259,29 @@ body::after{
 (function () {
   var TEXTES = {
     ar: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "تفضّل. أنا معك.",
+      cmpSimHero: "حرّك الزاوية. الرقم تحتها لا يبحث عن شيء.",
+      cmpSimMat: "ستّ وثلاثون. عددتُها واحدةً واحدة.",
+      cmpSimPourquoi: "فيلم التجربة يبقى فيلمًا. اسأله سؤالًا وانظر.",
+      cmpSimEssai: "تفضّل. لا شيء هنا ينكسر إذا سحبته.",
+      cmpNbHero: "تسطير حقيقي، مرسوم سطرًا سطرًا. رأيته يُرسم.",
+      cmpNbVoyage: "تصل ومعها عنوانها. وبغيره تصير إشاعة.",
+      cmpNbEtagere: "دفتر لكل مزاج. أوافق، فأنا أكدّس أيضًا.",
+      cmpNbOu: "كل شيء يبقى على الجهاز. ولا يصلني منه شيء.",
+      cmpNbOuvrir: "فارغة، وتنتظر. خير أنواع الورق.",
+      cmpPrHero: "باختصار: الأشكال هي التي تشتغل، لا الصور.",
+      cmpPrProbleme: "الشكل المرسوم لا يُسأل. هذه هي الشكوى كلّها.",
+      cmpPrFait: "أربعة أرقام يطبعها البناء. لا تجامل.",
+      cmpPrPieces: "ستّ قطع. اثنتان لا تغادران جهاز المؤلف.",
+      cmpPrAtelier: "هذه هي الحقيقية. المس واحدة تصر لك.",
+      cmpPrTourne: "ملف واحد. يشتغل حين لا يشتغل الواي-فاي.",
+      cmpPrQui: "مدارس ومكوّنون وناشرون. قاعات مختلفة وحجّة واحدة.",
+      cmpPrSuite: "لا مكان بعد، وهو مكتوب. تحققتُ من ذلك أيضًا.",
+      cmpPrParler: "هذا العنوان يعمل. لا أضع عنوانًا ميتًا في صفحة.",
     /* ── L'ARABE ──
        PENSÉ EN ARABE, PAS TRADUIT DE L'ANGLAIS. Le premier jet gardait la
        FORME anglaise et devenait illisible. Le titre en est l'exemple net :
@@ -1501,6 +1532,29 @@ body::after{
       pageDesc: "كتب ومقرّرات مدرسية تفاعلية بالعربية والفرنسية والإنجليزية. كل شكل فيها محسوب، لا مرسوم.",
     },
     fr: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "Allez-y. Je suis.",
+      cmpSimHero: "Bougez l’angle. Le nombre en dessous ne consulte rien.",
+      cmpSimMat: "Trente-six. Je les ai comptées une par une.",
+      cmpSimPourquoi: "Un film d’expérience reste un film. Posez-lui une question, pour voir.",
+      cmpSimEssai: "Allez-y. Rien ne casse ici quand on tire dessus.",
+      cmpNbHero: "De la vraie réglure, tracée ligne à ligne. J’ai regardé faire.",
+      cmpNbVoyage: "Elle arrive avec son adresse. Sans elle, c’est un ragot.",
+      cmpNbEtagere: "Un cahier par lubie. J’approuve : j’entasse aussi.",
+      cmpNbOu: "Tout reste sur l’appareil. Rien ne me parvient.",
+      cmpNbOuvrir: "Vide, et qui attend. La meilleure sorte de page.",
+      cmpPrHero: "En bref : ce sont les figures qui travaillent, pas les images.",
+      cmpPrProbleme: "On ne demande rien à une figure dessinée. C’est tout le grief.",
+      cmpPrFait: "Quatre nombres, imprimés par la construction. Ils ne flattent pas.",
+      cmpPrPieces: "Six pièces. Deux ne quittent jamais la machine de l’auteur.",
+      cmpPrAtelier: "Ce sont les vraies. Touchez-en une, elle est à vous.",
+      cmpPrTourne: "Un seul fichier. Il marche quand le wifi ne marche plus.",
+      cmpPrQui: "Écoles, formateurs, éditeurs. Trois salles, un seul argument.",
+      cmpPrSuite: "Nulle part encore, et c’est écrit. J’ai vérifié ça aussi.",
+      cmpPrParler: "Cette adresse fonctionne. Je n’en mettrais pas une morte.",
       prPlan1: "Le problème",
       prPlan2: "Ce qui existe",
       prPlan3: "Les pièces",
@@ -1730,6 +1784,29 @@ body::after{
       pageDesc: 'Des livres et des manuels scolaires interactifs en français, anglais et arabe. Chaque figure est calculée, jamais dessinée.'
     },
     en: {
+      /* ── CE QUE L'OISEAU DIT DE CHAQUE SECTION ──
+         Sur les trois autres pages il accompagne la lecture et commente ce
+         qu'on a sous les yeux. Court, sec, jamais commercial : il ne vend pas
+         la section, il en dit la chose qu'on risquerait de manquer. */
+      cmpDefaut: "Go on, then. I will keep up.",
+      cmpSimHero: "Move the angle. The number underneath is not looking anything up.",
+      cmpSimMat: "Thirty-six. I counted them the slow way.",
+      cmpSimPourquoi: "A film of an experiment is a film. Ask it something and see.",
+      cmpSimEssai: "Go on. Nothing here breaks when you pull it.",
+      cmpNbHero: "Real ruling, drawn line by line. I watched it happen.",
+      cmpNbVoyage: "It arrives with its address. Without one it is gossip.",
+      cmpNbEtagere: "One notebook per whim. I approve — I hoard too.",
+      cmpNbOu: "It stays on the device. None of it reaches me.",
+      cmpNbOuvrir: "Empty, and waiting. The best kind of page.",
+      cmpPrHero: "The short version: the figures do the work, not the pictures.",
+      cmpPrProbleme: "You cannot ask a drawn figure anything. That is the whole complaint.",
+      cmpPrFait: "Four numbers, printed by the build. They cannot flatter.",
+      cmpPrPieces: "Six pieces. Two of them never leave the author’s machine.",
+      cmpPrAtelier: "These are the real ones. Touch one and it is yours.",
+      cmpPrTourne: "One file. It works when the wifi does not.",
+      cmpPrQui: "Schools, trainers, publishers. Different rooms, one argument.",
+      cmpPrSuite: "Nowhere yet, and it says so. I checked that too.",
+      cmpPrParler: "That address works. I would not put a dead one on a page.",
       prPlan1: "The problem",
       prPlan2: "What exists",
       prPlan3: "The parts",
@@ -2328,7 +2405,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu80nodt"></script>
+<script src="chrome-pages.js?v=mu84121j"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
