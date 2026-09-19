@@ -48,6 +48,30 @@
 }
 .compagnon.change .bulle { opacity: 0; }
 
+/* LA POINTE DOIT VISER L'OISEAU. Dans le pied de page l'oiseau est du cote du
+   debut et la bulle apres lui : la pointe par defaut, accrochee au bord de
+   debut, le vise juste. Ici l'ordre est inverse - la bulle d'abord, l'oiseau
+   ensuite - donc elle restait accrochee du mauvais cote, a designer le vide a
+   gauche pendant que l'oiseau attendait a droite.
+
+   Elle passe au bord de fin et se retourne. En arabe elle se retourne une
+   seconde fois : la regle generale mirroite deja toutes les pointes, or
+   celle-ci est desormais du bon cote. Deux retournements valent une position
+   juste. */
+.compagnon .bulle-queue {
+  inset-inline-start: auto;
+  inset-inline-end: calc(var(--px) * -7);
+  transform: scaleX(-1);
+}
+[dir="rtl"] .compagnon .bulle-queue { transform: none; }
+
+/* Deux lignes de monospace serrees se lisent mal a la volee, et cette bulle se
+   lit toujours a la volee : on regarde ailleurs pendant qu'elle parle. */
+.compagnon .bulle-boite {
+  padding: .62rem .82rem;
+  line-height: 1.75;
+}
+
 .compagnon .cw {
   pointer-events: auto;
   inline-size: auto; block-size: 4.1rem;
@@ -83,4 +107,62 @@
 
 @media (prefers-reduced-motion: reduce) {
   .compagnon, .compagnon .bulle { transition: none; }
+}
+
+/* ── D'UNE PARTIE A L'AUTRE ────────────────────────────────────
+   Le defilement se pose sur le debut d'une section au lieu de s'arreter
+   n'importe ou. Trois decisions, et la premiere est la seule qui compte :
+
+   `proximity`, PAS `mandatory`. Avec `mandatory` le navigateur DOIT finir sur
+   un point d'accroche : sur une section de quinze cents pixels - celle des
+   demonstrations en fait mille cent - on ne peut plus s'arreter au milieu pour
+   lire, la page vous tire au prochain titre a chaque geste. `proximity` ne se
+   manifeste que si on s'est deja arrete pres d'un debut de section : elle range
+   le defilement au lieu de le conduire.
+
+   Le decalage haut est celui de la barre collante. Sans lui, la section sur
+   laquelle on se pose commence SOUS la barre et son titre est cache - le seul
+   mot qu'on voulait voir.
+
+   Rien de tout cela sur la bibliotheque : elle n'a pas de sections, elle a une
+   etagere, et s'accrocher au milieu d'une grille de couvertures n'aurait aucun
+   sens. C'est pour cela que cette feuille n'est chargee que par les trois
+   autres pages. */
+@media (min-height: 34rem) {
+  html {
+    scroll-snap-type: y proximity;
+    scroll-padding-block-start: 5.6rem;
+  }
+  main > section { scroll-snap-align: start; }
+}
+/* Le glissement, lui, EST du mouvement : un saut d'ancre qui traverse trois
+   ecrans en glissant est exactement ce qu'un reglage de confort demande de ne
+   pas faire. L'accroche reste - elle ne bouge rien, elle range. */
+@media (min-height: 34rem) and (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* L'ARRIVEE D'UNE SECTION. Elle monte de quelques pixels et se revele, une fois,
+   pendant qu'elle entre dans la fenetre.
+
+   `animation-timeline: view()` attache l'animation au DEFILEMENT lui-meme et
+   non a une horloge : la section se revele a la vitesse ou on la decouvre, elle
+   se re-voile si on remonte, et il n'y a pas une ligne de JavaScript ni une
+   seule image calculee quand la page est immobile. Derriere @supports parce
+   qu'un navigateur qui ne connait pas la regle doit montrer la page, pas une
+   page a moitie transparente. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-height: 34rem) {
+    main > section {
+      animation: arrivee-section linear both;
+      animation-timeline: view();
+      /* Fini bien avant le milieu de l'ecran : on lit une section qui est
+         arrivee, pas une section qui finit d'arriver. */
+      animation-range: entry 0% entry 38%;
+    }
+    @keyframes arrivee-section {
+      from { opacity: .35; transform: translateY(22px); }
+      to   { opacity: 1;   transform: none; }
+    }
+  }
 }
