@@ -25,7 +25,7 @@
  * tout s'éteigne d'un coup.
  */
 import { CONFIG_FIREBASE, VERSION_SDK, PROPRIETAIRES } from './firebase-config.js';
-import { rendreRapport, csv } from './pilote-rapport.js';
+import { monter, csv } from './pilote-rapport.js';
 
 const $ = (s) => document.querySelector(s);
 const B = 'https://www.gstatic.com/firebasejs/' + (VERSION_SDK || '10.12.0') + '/';
@@ -267,7 +267,7 @@ async function chargerMesures() {
       etat('');
       return;
     }
-    $('#ess-rapport').innerHTML = rendreRapport(out);
+    monter(out, $('#ess-rapport'), $('#ess-tiroir'));
     $('#ess-csv').hidden = false;
     etat('');
   } catch (e) {
@@ -334,7 +334,7 @@ if (DEMO) {
     $('#ess-console').hidden = false;
     $('#ess-qui').textContent = 'made-up data — this is only the shape';
     peindreGroupes();
-    $('#ess-rapport').innerHTML = rendreRapport(donnees);
+    monter(donnees, $('#ess-rapport'), $('#ess-tiroir'));
     $('#ess-csv').hidden = false;
   });
 }

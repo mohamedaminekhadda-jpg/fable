@@ -16,6 +16,19 @@
  */
 const FIGURES = ['map', 'solar', 'quiz', 'periodic', 'sim', 'flashcards', 'wave'];
 
+/* Les titres tels qu'un auteur les ecrit : c'est ce qui fait la difference
+   entre « map #3 », qu'on ne retrouve pas, et « map — Le Maroc physique »,
+   qu'on ouvre dans le livre en trois secondes. */
+const TITRES = {
+  map: 'Le Maroc physique',
+  solar: 'Le systeme solaire a l’echelle',
+  quiz: 'Controle : les forces',
+  periodic: 'Le tableau periodique',
+  sim: 'Tir parabolique',
+  flashcards: 'Vocabulaire : la cellule',
+  wave: 'Interference de deux ondes',
+};
+
 const PROFILS = {
   map: { n: 0, av: -1, mo: 0, rg: 0, gl: 0, db: 1, ct: {} },
   solar: { n: 0, av: -1, mo: 0, rg: 0, gl: 0, db: 0, ct: {} },
@@ -43,12 +56,16 @@ export function essaiInvente() {
     const seances = d < 2 ? 3 : d < 4 ? 2 : 1;
     const ev = [];
     for (let s = 0; s < seances; s++) {
-      ev.push({ k: 'ouvre', p: 'livre', b: 'manuel-bac-demo', q: q(s), t: Date.now() - d * 9e7 - s * 864e5 });
+      ev.push({ k: 'ouvre', p: 'livre', b: 'manuel-bac-demo', q: q(s), t: Date.now() - (d % 3) * 864e5 - s * 2 * 864e5 });
       ['chapter-01', 'chapter-02', 'chapter-04'].slice(0, 3 - s).forEach((c, i) => {
         ev.push({
           k: 'chapitre', b: 'manuel-bac-demo', c,
           n: ['Mathématiques', 'SVT', 'Physique-chimie'][i],
           s: 120 + d * 40 + i * 60, q: q(s), t: Date.now(),
+          /* Ils descendent de moins en moins loin a mesure qu'on avance :
+             c'est la forme qu'a presque tout abandon de lecture. */
+          pr: [92, 61, 28][i] - d * 3,
+          d0: 12 + i * 220 + d * 8,
         });
       });
       FIGURES.forEach((f, i) => {
@@ -57,6 +74,7 @@ export function essaiInvente() {
           k: 'element', b: 'manuel-bac-demo', c: 'chapter-0' + (1 + i % 4), e: f, i,
           n: P.n, vu: 12 + i * 4, av: P.av, ct: P.ct, mo: P.mo, rg: P.rg, kb: 0,
           rv: f === 'sim' ? 4 : 0, gl: P.gl, fi: 0, db: d < 2 ? P.db : 0, re: (i + d) % 3,
+          ti: TITRES[f] || '', d0: 30 + i * 70 + d * 11,
           q: q(s), t: Date.now() + i,
         });
       });
@@ -67,12 +85,13 @@ export function essaiInvente() {
       ev.push({ k: 'fin', s: 400 + d * 100, nf: 157, nc: 8, q: q(s), t: Date.now() });
     }
     if (d === 1 || d === 3) {
-      ev.push({ k: 'panne', b: 'manuel-bac-demo', f: 'index.html', l: 8821, q: q(0), t: Date.now(),
+      ev.push({ k: 'panne', b: 'manuel-bac-demo', f: 'index.html', l: 8821, q: q(0),
+        t: Date.now() - 40000,
         m: "Cannot read properties of null (reading 'getContext')" });
     }
     if (d === 3) {
       ev.push({ k: 'panne', b: 'manuel-bac-demo', m: 'WebGL context lost', f: 'index.html',
-        l: 9110, q: q(0), t: Date.now() });
+        l: 9110, q: q(0), t: Date.now() - 12000 });
     }
     inv.push({
       uid,

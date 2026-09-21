@@ -725,6 +725,71 @@ body::after{
 .ess-check code{font-family:var(--font-mono);font-size:.82em;background:var(--paper);
   border:1px solid var(--rule);border-radius:4px;padding:.05rem .3rem}
 
+/* ─── les dessins ──────────────────────────────────────────── */
+.ess-svg{inline-size:100%;block-size:auto;max-inline-size:36rem;display:block;margin-block:.4rem 1rem}
+.ess-blab{font-size:10px;fill:var(--ink-2);dominant-baseline:middle}
+.ess-bval{font-size:10px;fill:var(--ink-3);font-variant-numeric:tabular-nums}
+.ess-jlab{font-size:9px;fill:var(--ink-3);text-anchor:middle}
+.ess-rlab{font-size:9px;fill:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+.ess-mid{text-anchor:middle}
+.ess-start{text-anchor:start}.ess-end{text-anchor:end}
+.ess-bfill{fill:var(--accent);opacity:.75}
+.ess-pt{fill:var(--ink);stroke:var(--paper);stroke-width:1.5}
+.ess-bhit{fill:transparent;cursor:pointer}
+.ess-brow:hover .ess-bfill,.ess-crow:hover .ess-bfill{opacity:1}
+.ess-brow:hover .ess-blab,.ess-crow:hover .ess-jlab{fill:var(--ink)}
+.ess-brow:focus-visible .ess-bhit,.ess-crow:focus-visible .ess-bhit{outline:2px solid var(--accent)}
+.ess-rline{stroke:var(--rule);stroke-width:1}
+.ess-mark{cursor:pointer;stroke:var(--paper);stroke-width:1.5}
+.ess-mark:hover{r:7}
+.ess-m-ch{fill:var(--ultra)}
+.ess-m-el{fill:var(--jade)}
+.ess-m-vu{fill:var(--rule);stroke:var(--ink-3)}
+.ess-m-ex{fill:var(--marigold)}
+.ess-m-pa{fill:var(--accent)}
+.ess-frise{max-inline-size:36rem}
+
+/* ─── la jauge de profondeur ───────────────────────────────── */
+.ess-jauge{display:inline-block;inline-size:3.4rem;block-size:6px;border-radius:3px;
+  background:var(--rule);vertical-align:middle;overflow:hidden;margin-inline-end:.35rem}
+.ess-jauge i{display:block;block-size:100%;background:var(--accent)}
+
+/* ─── ce qui se clique ─────────────────────────────────────── */
+.ess-t tr.ess-cliq{cursor:pointer}
+.ess-t tr.ess-cliq:hover{background:var(--accent-wash)}
+.ess-t tr.ess-cliq:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ess-chips{margin-block:.6rem}
+.ess-chip{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-mono);
+  font-size:.75rem;padding:.2rem .3rem .2rem .6rem;border-radius:100px;
+  background:var(--accent-wash);color:var(--accent-ink);border:1px solid var(--accent)}
+.ess-chip button{font:inherit;font-size:.9rem;line-height:1;border:none;background:none;
+  color:inherit;cursor:pointer;padding:0 .25rem}
+.ess-filtre{inline-size:100%;max-inline-size:28rem;font:inherit;font-size:.85rem;
+  color:var(--ink);background:var(--card);border:1px solid var(--rule);
+  border-radius:var(--r);padding:.45rem .7rem;margin-block-end:.6rem}
+.ess-filtre:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* ─── LE TIROIR ────────────────────────────────────────────────
+   Un panneau lateral plutot qu'une page de plus : le rapport reste derriere,
+   donc on ne perd pas la question qu'on etait en train de se poser. Sur un
+   ecran etroit il prend toute la place, parce qu'a cette largeur deux
+   colonnes ne sont pas deux colonnes. */
+.ess-tiroir{position:fixed;inset-block:0;inset-inline-end:0;inline-size:min(40rem,94vw);
+  background:var(--paper);border-inline-start:1px solid var(--rule);box-shadow:var(--shadow);
+  z-index:60;overflow-y:auto;transform:translateX(101%);visibility:hidden;
+  transition:transform .28s cubic-bezier(.22,.8,.3,1),visibility .28s}
+[dir="rtl"] .ess-tiroir{transform:translateX(-101%)}
+.ess-tiroir.on{transform:none;visibility:visible}
+.ess-tiroir-in{padding:var(--s6) var(--s5) var(--s8)}
+.ess-tiroir h4{font-family:var(--font-display);font-size:1.2rem;letter-spacing:-.02em;
+  margin-block:0 .3rem}
+.ess-tiroir .ess-t th,.ess-tiroir .ess-t td{white-space:nowrap}
+.ess-fermer{position:sticky;inset-block-start:0;float:inline-end;font:inherit;font-size:1.1rem;
+  line-height:1;padding:.3rem .55rem;border-radius:100px;border:1px solid var(--rule);
+  background:var(--card);color:var(--ink-2);cursor:pointer}
+.ess-fermer:hover{color:var(--ink);border-color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){.ess-tiroir{transition:none}}
+
 /* ─── footer ──────────────────────────────────────────────── */
 .foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7);position:relative}
 .foot .wrap{
@@ -929,6 +994,12 @@ body::after{
         <div id="ess-rapport"></div>
       </div>
 
+      <!-- LE TIROIR. Il s'ouvre sur le cote a chaque clic — une figure, un
+           chapitre, un appareil, une seance, une ligne brute — et il garde le
+           rapport en place derriere lui. Une page qui remplace tout a chaque
+           question fait perdre le fil de la question precedente. -->
+      <aside class="ess-tiroir" id="ess-tiroir" aria-live="polite"></aside>
+
       <div class="ess-check">
         <p class="eyebrow">If nothing arrives</p>
         <ol>
@@ -999,7 +1070,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=muatkgg7"></script>
+<script src="compte.js?v=muavndct"></script>
 <script>
 /* ── LA LANGUE ────────────────────────────────────────────────────────────
    Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
@@ -2168,7 +2239,7 @@ body::after{
   else poser();
 })();
 </script>
-<script src="chrome-pages.js?v=muatkgg7"></script>
-<script type="module" src="trial.js?v=muatkgg7"></script>
+<script src="chrome-pages.js?v=muavndct"></script>
+<script type="module" src="trial.js?v=muavndct"></script>
 </body>
 </html>

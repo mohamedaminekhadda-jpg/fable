@@ -491,6 +491,35 @@
     var compteur = {};
     var courant = null, depuis = 0;
 
+    /* JUSQU'OU ILS SONT DESCENDUS. Le temps passe dans un chapitre dit s'il
+       a retenu ; il ne dit pas OU on s'est arrete. Or « ils abandonnent aux
+       deux tiers du chapitre 4 » est une phrase sur laquelle on peut agir, et
+       « ils ont passe quatre minutes dans le chapitre 4 » n'en est pas une.
+
+       On garde donc, par chapitre, le point le plus bas atteint, en centiemes
+       de sa hauteur. Releve au defilement plutot qu'a la sortie : quelqu'un
+       qui descend puis remonte pour relire a bel et bien atteint le bas. */
+    var fond = {};
+    var chapitresVus = [];
+    function jauger() {
+      for (var i = 0; i < chapitresVus.length; i++) {
+        var c = chapitresVus[i];
+        var r = c.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) continue;
+        var h = r.height || 1;
+        /* Le bas de la fenetre, rapporte au chapitre : a zero on vient
+           d'entrer, a cent on en voit la derniere ligne. */
+        var p = Math.round(100 * Math.min(1, Math.max(0, (innerHeight - r.top) / h)));
+        if (p > (fond[c.id] || 0)) fond[c.id] = p;
+      }
+    }
+    var jaugeEnCours = false;
+    addEventListener('scroll', function () {
+      if (jaugeEnCours) return;
+      jaugeEnCours = true;
+      requestAnimationFrame(function () { jaugeEnCours = false; jauger(); });
+    }, { passive: true });
+
     function quitter() {
       if (!courant) return;
       var s = Math.round((Date.now() - depuis) / 1000);
@@ -500,10 +529,17 @@
       }
       courant = null;
     }
+    /* L'INSTANT DE LA PREMIERE ENTREE, par chapitre. Sans lui, une frise
+       chronologique est un mensonge : tous les evenements d'une seance
+       portent l'horodatage du REPLI, c'est-a-dire du depart, et se
+       tasseraient donc a la fin dans une seule colonne. On garde l'ecart,
+       en secondes, depuis l'ouverture de la page. */
+    var arrive = {};
     function entrer(el) {
       if (courant === el) return;
       quitter();
       courant = el; depuis = Date.now();
+      if (arrive[el.id] === undefined) arrive[el.id] = Math.round((depuis - t0) / 1000);
     }
 
     var vus = [];
@@ -581,8 +617,19 @@
       if (parBoite && parBoite.has(box)) return parBoite.get(box);
       var ch = box.closest ? box.closest('.book-chapter[id]') : null;
       var chId = (ch && ch.id) || '';
+      /* SON TITRE, POUR QU'ELLE AIT UN NOM. « map #3 » ne se retient pas et
+         ne se cherche pas ; « map — Le Maroc physique » se retrouve dans le
+         livre en trois secondes. C'est le titre ECRIT PAR L'AUTEUR, deja
+         public dans le manuel : ce n'est pas du texte d'eleve, et la regle
+         « rien de ce qui est saisi » reste entiere. */
+      var ti = '';
+      try {
+        var h = box.querySelector('.iw-title');
+        ti = h ? (h.textContent || '').trim().slice(0, 70) : '';
+      } catch (e) { ti = ''; }
+
       var f = {
-        box: box, e: box.getAttribute('data-iw') || '?', c: chId, i: 0,
+        box: box, e: box.getAttribute('data-iw') || '?', c: chId, i: 0, ti: ti,
         n: 0, vu: 0, av: -1, ct: {}, mo: 0, rg: 0, kb: 0, rv: 0, gl: 0, fi: 0, db: 0, re: 0,
         emis: 0,
         depuis: 0, neLe: 0, prise: 0, change: 0,
@@ -776,7 +823,7 @@
     function scanner() {
       if (obsCh) {
         [].slice.call(document.querySelectorAll('.book-chapter[id]'))
-          .forEach(function (c) { if (neuf(c)) obsCh.observe(c); });
+          .forEach(function (c) { if (neuf(c)) { obsCh.observe(c); chapitresVus.push(c); } });
       }
       if (obsEl) {
         [].slice.call(document.querySelectorAll('.iw[data-iw]'))
@@ -845,6 +892,10 @@
           k: 'chapitre', b: OU.b, c: id,
           n: (el && el.getAttribute('data-ctitle')) || '',
           s: compteur[id],
+          /* Jusqu'ou ils sont descendus dedans, en centiemes. */
+          pr: fond[id] || 0,
+          /* Et a quelle seconde de la seance ils y sont arrives. */
+          d0: arrive[id] === undefined ? -1 : arrive[id],
         });
         delete compteur[id];
       });
@@ -889,7 +940,10 @@
         for (var j = 0; j < noms.length && j < 6; j++) ct[noms[j]] = f.ct[noms[j]];
 
         pousser({
-          k: 'element', b: OU.b, c: f.c, e: f.e, i: f.i,
+          k: 'element', b: OU.b, c: f.c, e: f.e, i: f.i, ti: f.ti,
+          /* La seconde de la seance ou la figure est apparue. Avec `av`, le
+             premier geste se replace tout seul : d0 + av. */
+          d0: f.neLe ? Math.round((f.neLe - t0) / 1000) : -1,
           n: f.n, vu: Math.round(f.vu) || 0, av: f.av,
           ct: ct, mo: f.mo, rg: f.rg, kb: f.kb, rv: f.rv, gl: f.gl,
           fi: fini, db: deborde, re: f.re,
