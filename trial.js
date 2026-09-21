@@ -53,6 +53,9 @@ async function firebase() {
   F = await import(B + 'firebase-firestore.js');
   const application = app.getApps().length ? app.getApp() : app.initializeApp(CONFIG_FIREBASE);
   auth = A.getAuth(application);
+  /* Voir compte.js : le defaut ne suffit pas partout. */
+  try { await A.setPersistence(auth, A.browserLocalPersistence); }
+  catch (e) { /* stockage cloisonne */ }
   db = F.getFirestore(application);
 }
 
@@ -99,8 +102,16 @@ function expliquerRefus(ou) {
 
 /* ── LA PORTE ──────────────────────────────────────────────────────────── */
 async function demarrer() {
+  /* ON N'AFFICHE PAS LA PORTE AVANT DE SAVOIR. Firebase restaure la session
+     depuis IndexedDB, ce qui prend un aller-retour : afficher tout de suite
+     donnait « connectez-vous » une demi-seconde a quelqu'un qui l'etait
+     deja, et cette demi-seconde suffit a faire croire qu'on a ete
+     deconnecte. On dit qu'on regarde, puis on tranche. */
+  $('#ess-porte').hidden = true;
+  $('#ess-attente').hidden = false;
   await firebase();
   A.onAuthStateChanged(auth, async (u) => {
+    $('#ess-attente').hidden = true;
     if (!proprietaire(u)) {
       $('#ess-porte').hidden = false;
       $('#ess-console').hidden = true;
@@ -316,6 +327,8 @@ addEventListener('DOMContentLoaded', () => {
     demarrer().catch(function (e) {
       /* Le message va dans la porte, qui est la seule chose a l'ecran a ce
          moment-la ; `etat()` ecrit plus bas, dans un bloc encore cache. */
+      $('#ess-attente').hidden = true;
+      $('#ess-porte').hidden = false;
       $('#ess-qui').textContent = 'Firebase did not load: ' + e.message;
       $('#ess-qui').className = 'ess-mal';
     });

@@ -160,4 +160,23 @@
     }
     juger();
   })();
+
+  /* ── LE BOUTON DU COMPTE, SUR CES PAGES AUSSI ────────────────────────────
+     Il n'y etait pas. `poserBouton` n'etait appele qu'a UN endroit, dans le
+     grand script de l'accueil ; les quatre autres pages portaient bien le
+     `<span class="compte-hote">` venu de la barre partagee, et personne ne le
+     remplissait. Consequences, toutes invisibles tant qu'on restait sur
+     l'accueil : pas de bouton « Se connecter », pas de nom affiche, et
+     surtout pas d'onglets de proprietaire — puisque c'est l'ecouteur pose par
+     `poserBouton` qui les revele. On arrivait donc sur « L'essai » deconnecte,
+     sans rien pour se connecter, et sans les onglets par lesquels on venait
+     d'arriver.
+
+     Ici et pas dans la barre : ce fichier est charge par les pages qui ne
+     sont PAS l'accueil, et l'accueil garde son propre appel. Deux appels sur
+     la meme page poseraient deux boutons. */
+  if (window.FableCompte && window.FableCompte.poserBouton) {
+    var hoteCompte = document.getElementById('compte-hote');
+    if (hoteCompte) window.FableCompte.poserBouton(hoteCompte);
+  }
 })();

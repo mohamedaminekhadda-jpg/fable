@@ -3633,7 +3633,86 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
 
 </style>
 <script>(function(){try{var k="alice-in-wonderland_theme";var m=localStorage.getItem(k);if(!m){m="auto";if(m==='auto')m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(m==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=muavndct";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=muawlasy";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<style>.fable-vise{outline:3px solid #e4402a;outline-offset:6px;border-radius:4px;animation:fable-vise-arrive .5s ease-out}@keyframes fable-vise-arrive{from{outline-color:transparent;outline-offset:22px}}@media (prefers-reduced-motion:reduce){.fable-vise{animation:none}}</style><script>/* ALLER VOIR — ouvrir le livre exactement là où le rapport pointe.
+ *
+ * Ce fichier n'est jamais servi tel quel : la construction le RECOPIE dans le
+ * `<head>` de chaque livre publié. Un livre est un fichier autonome, et lui
+ * faire chercher un script à côté serait lui retirer ce qui fait sa valeur.
+ *
+ * ── POURQUOI ─────────────────────────────────────────────────────────────
+ *
+ * La console dit « map — Le Maroc physique, chapitre 4, vue par cinq, touchée
+ * par personne ». C'est un bon diagnostic et un mauvais point d'arrivée :
+ * pour corriger la figure il faut LA VOIR, telle que l'élève l'a vue, dans le
+ * chapitre où elle est. Retrouver ça à la main, c'est ouvrir le livre,
+ * chercher le chapitre, faire défiler, compter les figures. Un lien le fait.
+ *
+ * ── CE QU'IL LIT ─────────────────────────────────────────────────────────
+ *
+ *   ?voir=chapter-04        le chapitre, posé en haut de l'écran
+ *   ?voir=chapter-04.7      la huitième figure de ce chapitre, au milieu
+ *
+ * Le rang est celui que le pilote a mesuré — le rang parmi les `.iw` du
+ * chapitre — donc les deux bouts comptent la même chose de la même façon.
+ *
+ * ── IL NE CHANGE RIEN POUR UN LECTEUR ────────────────────────────────────
+ *
+ * Sans `?voir=` dans l'adresse il sort à la première ligne. Un élève ne le
+ * rencontre jamais ; il n'est là que pour l'auteur qui arrive du rapport.
+ */
+(function () {
+  'use strict';
+  var m = /[?&]voir=([^&#]+)/.exec(location.search);
+  if (!m) return;
+
+  var cible;
+  try { cible = decodeURIComponent(m[1]).split('.'); } catch (e) { return; }
+  if (!cible[0]) return;
+
+  function viser() {
+    var ch = document.getElementById(cible[0]);
+    if (!ch) return;
+    var el = ch, centre = false;
+    if (cible.length > 1) {
+      var figs = ch.querySelectorAll('.iw[data-iw]');
+      var i = parseInt(cible[1], 10);
+      if (figs[i]) { el = figs[i]; centre = true; }
+    }
+
+    /* LE GLISSEMENT EST COUPÉ LE TEMPS DU SAUT. Le livre défile en douceur,
+       ce qui est juste pour un lecteur et faux ici : trente mille pixels de
+       glissement mettent plusieurs secondes, pendant lesquelles on croit que
+       le lien n'a rien fait. On saute, puis on rend la douceur. */
+    var avant = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    el.scrollIntoView({ block: centre ? 'center' : 'start' });
+    document.documentElement.style.scrollBehavior = avant;
+
+    el.classList.add('fable-vise');
+    /* La marque s'efface au bout de quelques secondes, ou au premier geste :
+       elle sert à trouver, pas à rester. */
+    var oter = function () {
+      el.classList.remove('fable-vise');
+      removeEventListener('pointerdown', oter, true);
+      removeEventListener('keydown', oter, true);
+    };
+    setTimeout(oter, 6000);
+    addEventListener('pointerdown', oter, true);
+    addEventListener('keydown', oter, true);
+  }
+
+  /* ON ATTEND LE LIVRE ENTIER. Même piège que le collecteur : `<body>` arrive
+     à l'octet 277 000 d'un fichier qui en fait 1 800 000, donc à
+     DOMContentLoaded la figure visée peut ne pas exister encore. Le `load`
+     attend aussi les images, ce qui compte ici : une figure dont les images
+     ne sont pas posées n'a pas encore sa hauteur définitive, et on viserait
+     à côté. */
+  function lancer() { setTimeout(viser, 80); }
+  if (document.readyState === 'complete') lancer();
+  else addEventListener('load', lancer);
+})();
+</script>
 </head>
 <body dir="">
 

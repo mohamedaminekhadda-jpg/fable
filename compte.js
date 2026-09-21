@@ -258,9 +258,18 @@
     var app = await import(base + 'firebase-app.js');
     var auth = await import(base + 'firebase-auth.js');
     var fs = await import(base + 'firebase-firestore.js');
-    var application = app.initializeApp(C);
+    var application = app.getApps().length ? app.getApp() : app.initializeApp(C);
+    /* LA SESSION DOIT SURVIVRE A UN RAFRAICHISSEMENT. C'est deja le defaut de
+       Firebase, et le defaut ne suffit pas : selon le navigateur et le
+       cloisonnement du stockage, une session ouverte par fenetre surgissante
+       retombe en memoire seule et disparait au premier F5. On le demande donc
+       explicitement, et on continue si le navigateur refuse — mieux vaut une
+       session qui ne dure pas qu'une page qui ne s'ouvre pas. */
+    var moteur = auth.getAuth(application);
+    try { await auth.setPersistence(moteur, auth.browserLocalPersistence); }
+    catch (e) { /* stockage cloisonne : on reste en memoire */ }
     fb = {
-      auth: auth.getAuth(application),
+      auth: moteur,
       db: fs.getFirestore(application),
       a: auth, f: fs,
     };

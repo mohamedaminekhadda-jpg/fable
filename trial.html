@@ -711,11 +711,17 @@ body::after{
 .ess-tag{display:inline-block;font-family:var(--font-mono);font-size:.68rem;padding:.08rem .4rem;
   border-radius:100px;border:1px solid var(--rule);color:var(--ink-3)}
 .ess-rien{color:var(--ink-3);font-size:.85rem}
+.ess-voir{font-size:.72rem;font-weight:600;letter-spacing:.02em;white-space:nowrap;
+  color:var(--accent-ink);text-decoration:none;border-bottom:1px solid var(--accent);
+  padding-block-end:1px}
+.ess-voir:hover{color:var(--ink)}
+.ess-tiroir h4 .ess-voir{font-size:.75rem;margin-inline-start:.5rem;vertical-align:middle}
 .ess-mal{color:var(--accent-ink);font-weight:600}
 .ess-bof{color:var(--ink-2)}
 .ess-etat{color:var(--ink-3);font-size:.85rem;min-block-size:1.3em;margin-block:var(--s3)}
 .ess-rangee{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-block-start:var(--s4)}
 .ess-qui{color:var(--ink-3);font-size:.82rem}
+.ess-attente{color:var(--ink-3);font-size:.9rem;padding-block:var(--s6);text-align:center}
 
 /* la liste à cocher */
 .ess-check{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);
@@ -935,6 +941,8 @@ body::after{
          themselves.</p>
     </div>
 
+    <p class="ess-attente" id="ess-attente" hidden>Checking who you are…</p>
+
     <!-- LA PORTE. Elle cache, elle ne protège pas : les mesures sont gardées par
          firestore.rules, côté serveur. -->
     <!-- VISIBLE PAR DEFAUT, et cachee seulement quand un proprietaire est
@@ -949,6 +957,25 @@ body::after{
       <button class="btn btn-1" id="ess-entrer">Sign in with Google</button>
       <p class="ess-qui" id="ess-qui" style="margin-block-start:var(--s4)"></p>
     </section>
+
+    <!-- TOUT DE SUITE, ET PAS AU CHARGEMENT DU MODULE. Le module est differe :
+         entre l'analyse de la page et son execution, la porte restait a
+         l'ecran une demi-seconde et disait « connectez-vous » a quelqu'un qui
+         l'etait deja. Cette demi-seconde suffit a faire croire qu'on vient
+         d'etre deconnecte. Ces quatre lignes s'executent pendant l'analyse,
+         donc rien ne clignote.
+
+         La porte reste VISIBLE dans le balisage, et c'est volontaire : si le
+         JavaScript ne s'execute pas du tout, on veut une porte, pas un « on
+         regarde » eternel. Le filet ci-dessous dit la meme chose autrement. -->
+    <script>
+    (function () {
+      var p = document.getElementById('ess-porte'), a = document.getElementById('ess-attente');
+      if (!p || !a) return;
+      p.hidden = true; a.hidden = false;
+      setTimeout(function () { if (!a.hidden) { a.hidden = true; p.hidden = false; } }, 8000);
+    })();
+    </script>
 
     <section id="ess-console" hidden>
 
@@ -1070,7 +1097,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=muavndct"></script>
+<script src="compte.js?v=muawlasy"></script>
 <script>
 /* ── LA LANGUE ────────────────────────────────────────────────────────────
    Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
@@ -2239,7 +2266,7 @@ body::after{
   else poser();
 })();
 </script>
-<script src="chrome-pages.js?v=muavndct"></script>
-<script type="module" src="trial.js?v=muavndct"></script>
+<script src="chrome-pages.js?v=muawlasy"></script>
+<script type="module" src="trial.js?v=muawlasy"></script>
 </body>
 </html>

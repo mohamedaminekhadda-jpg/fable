@@ -67,6 +67,24 @@ const jour = (t) => new Date(t).toISOString().slice(0, 10);
 const heure = (t) => new Date(t).toISOString().slice(11, 16);
 const court = (u) => String(u).slice(0, 6);
 
+/* ── ALLER VOIR DANS LE LIVRE ────────────────────────────────────────────
+   Un diagnostic qu'on ne peut pas aller verifier de ses yeux reste une
+   opinion. Chaque chapitre et chaque emplacement de figure porte donc un
+   lien vers le livre publie, a l'endroit exact, ou le petit script `voir.js`
+   pose un anneau autour de la chose.
+
+   La racine se deduit de la page plutot que de s'ecrire : la console publiee
+   sous `/fable/` doit pointer vers `/fable/library/...`, et une adresse
+   recopiee a la main se trompe un jour. */
+const RACINE_SITE = location.href.replace(/[?#].*$/, '').replace(/\/[^/]*$/, '/');
+function lienLivre(b, ch, i) {
+  if (!b || !ch) return '';
+  const q = ch + (i === undefined || i === null ? '' : '.' + i);
+  const u = `${RACINE_SITE}library/${encodeURIComponent(b)}/?voir=${encodeURIComponent(q)}`;
+  return `<a class="ess-voir" href="${esc(u)}" target="_blank" rel="noopener"
+    title="Open the book here">see it ↗</a>`;
+}
+
 /* Le nom lisible d'une figure : son titre d'auteur s'il y en a un, son type
    sinon. C'est ce qui fait la différence entre « map #3 » et « map — Le Maroc
    physique », c'est-à-dire entre un identifiant et une chose qu'on retrouve
@@ -249,13 +267,15 @@ function tiroir(quoi, ev, tout) {
         `<span class="ess-tag">${esc(t)}</span>`).join(' ')}</p>`);
     }
     h.push('<p class="ess-why">Every placement of it, then every device that met one.</p>');
-    h.push(table([['where'], ['title'], ['devices', 1], ['gestures', 1], ['dead', 1], ['wait', 1]],
+    h.push(table([['where'], ['title'], ['devices', 1], ['gestures', 1], ['dead', 1], ['wait', 1], ['']],
       Object.keys(fig.lieux).map((l) => {
         const L = fig.lieux[l];
+        const [ch, rang] = l.split(' #');
+        const livre = (mien[0] || {}).b;
         return { clic: 'lieu:' + clef + '|' + l,
           cells: [`<code>${esc(l)}</code>`, esc(L.ti || '—'), L.vu.size,
             L.n || '<span class="ess-mal">0</span>', L.mo || '',
-            med(L.av) === null ? '' : med(L.av) + 's'] };
+            med(L.av) === null ? '' : med(L.av) + 's', lienLivre(livre, ch, rang)] };
       })));
     h.push(table([['device'], ['where'], ['gestures', 1], ['wait', 1], ['dead', 1], ['fight', 1], ['range', 1]],
       mien.map((e) => ({ clic: 'appareil:' + e.uid,
@@ -265,7 +285,8 @@ function tiroir(quoi, ev, tout) {
   } else if (genre === 'chapitre') {
     const mien = ev.filter((e) => e.k === 'chapitre' && e.c === clef);
     const nom = (mien[0] && mien[0].n) || clef;
-    h.push(`<h4>${esc(nom)} <span class="ess-hn">${esc(clef)}</span></h4>`);
+    h.push(`<h4>${esc(nom)} <span class="ess-hn">${esc(clef)}</span>
+      ${lienLivre((mien[0] || {}).b, clef)}</h4>`);
     h.push('<p class="ess-why">How far down each device got, and how long it stayed. '
       + 'A low depth with a long stay is someone stuck near the top.</p>');
     h.push(table([['device'], ['reached at', 1], ['stayed', 1], ['got to', 1]],
@@ -321,7 +342,9 @@ function tiroir(quoi, ev, tout) {
   } else if (genre === 'lieu') {
     const [type, ou] = clef.split('|');
     const mien = ev.filter((e) => e.k === 'element' && e.e === type && `${e.c} #${e.i || 0}` === ou);
-    h.push(`<h4>${esc(type)} <span class="ess-hn">${esc(ou)}</span></h4>`);
+    const [chLieu, rangLieu] = ou.split(' #');
+    h.push(`<h4>${esc(type)} <span class="ess-hn">${esc(ou)}</span>
+      ${lienLivre((mien[0] || {}).b, chLieu, rangLieu)}</h4>`);
     if (mien[0] && mien[0].ti) h.push(`<p class="ess-why">${esc(mien[0].ti)}</p>`);
     h.push(table([['device'], ['seen for', 1], ['wait', 1], ['gestures', 1], ['dead', 1], ['fight', 1], ['parts pressed']],
       mien.map((e) => ({ clic: 'appareil:' + e.uid,
