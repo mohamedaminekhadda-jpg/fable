@@ -223,6 +223,26 @@
     try { var u = new URL(v); return u.protocol === 'http:' || u.protocol === 'https:'; } catch (e) { return false; }
   }
 
+  /* ── POURQUOI ON RECHARGE LE SDK TOUT SEUL ──────────────────────────────
+     Le SDK ne se chargeait QUE lorsqu'on cliquait « se connecter ». Consequence
+     que personne ne voyait en developpement et que tout le monde voyait en
+     vrai : apres un rafraichissement, plus rien n'allait demander a Firebase
+     « est-ce que quelqu'un est connecte ? ». La session etait intacte dans le
+     navigateur, et la page l'ignorait — bouton « Se connecter », aucun nom,
+     aucun onglet de proprietaire. On se croyait deconnecte a chaque F5 et on
+     se reconnectait pour rien.
+
+     On ne peut pas non plus charger le SDK pour tout le monde : trois cents
+     kilo-octets imposes a un visiteur qui lit un livre hors ligne et n'aura
+     jamais de compte. Il faut donc savoir, AVANT de charger, s'il y a une
+     session a restaurer — et la seule facon honnete est de l'avoir note
+     soi-meme au moment de la connexion. C'est ce « 1 » : il ne dit pas QUI,
+     il dit QU'IL Y A QUELQU'UN. Efface a la deconnexion. */
+  var CLE_VU = 'fable-compte-vu';
+  function peutEtreConnecte() {
+    try { return localStorage.getItem(CLE_VU) === '1'; } catch (e) { return false; }
+  }
+
   var BASE = './', VERSION_Q = '';
   (function () {
     var sc = document.currentScript;
@@ -274,7 +294,21 @@
       a: auth, f: fs,
     };
     fb.a.onAuthStateChanged(fb.auth, function (u) {
+      /* UN ANONYME N'EST PAS QUELQU'UN. Le collecteur de l'essai ouvre une
+         session ANONYME sur le meme projet — c'est ainsi qu'un appareil a un
+         identifiant stable sans qu'on demande un nom a un mineur. Firebase
+         la signale donc ici comme un utilisateur, et le compte affichait un
+         bouton « connecte » sans nom ni adresse, sur le telephone d'un eleve
+         qui ne s'etait jamais connecte a rien. Pour cette fenetre-la, une
+         session anonyme est une absence. */
+      if (u && u.isAnonymous) u = null;
       etat.utilisateur = u ? { uid: u.uid, email: u.email || '', nom: u.displayName || '', photo: u.photoURL || '' } : null;
+      /* LA TRACE QUI PERMET DE SE RECONNAITRE AU PROCHAIN CHARGEMENT. Elle ne
+         contient rien : un « 1 ». Voir `peutEtreConnecte` plus bas. */
+      try {
+        if (u) localStorage.setItem(CLE_VU, '1');
+        else localStorage.removeItem(CLE_VU);
+      } catch (e) { /* stockage refuse */ }
       prevenir();
       if (u) synchroniser();
     });
@@ -745,6 +779,9 @@
         etat.pret = !!(cfg.CONFIG_FIREBASE && cfg.CONFIG_FIREBASE.apiKey && cfg.CONFIG_FIREBASE.projectId);
         proprietaires = (cfg.PROPRIETAIRES || []).map(function (e) { return String(e).trim().toLowerCase(); }).filter(Boolean);
       } catch (e) { etat.pret = false; }
+      /* Sans attendre : la page doit s'afficher tout de suite, et le nom
+         apparaitra une demi-seconde plus tard quand Firebase aura repondu. */
+      if (etat.pret && peutEtreConnecte()) charger().catch(function () { /* hors ligne */ });
       return etat.pret;
     },
     surChangement: function (f) { ecouteurs.push(f); try { f(etat); } catch (e) { /* ignore */ } },

@@ -60,7 +60,10 @@ async function firebase() {
 }
 
 function proprietaire(u) {
-  return !!(u && u.email && (PROPRIETAIRES || []).indexOf(String(u.email).toLowerCase()) >= 0);
+  /* `isAnonymous` d'abord : le collecteur de l'essai ouvre une session
+     anonyme sur le meme projet, et elle n'a ni adresse ni droits. */
+  return !!(u && !u.isAnonymous && u.email
+    && (PROPRIETAIRES || []).indexOf(String(u.email).toLowerCase()) >= 0);
 }
 
 /* ── QUAND FIRESTORE DIT NON ─────────────────────────────────────────────
@@ -112,6 +115,15 @@ async function demarrer() {
   await firebase();
   A.onAuthStateChanged(auth, async (u) => {
     $('#ess-attente').hidden = true;
+    /* LA MEME TRACE QUE `compte.js`. Se connecter ici est se connecter
+       partout — meme projet, meme session — mais la barre du haut ne le
+       saurait pas : elle ne recharge le SDK que si cette marque existe. Sans
+       cette ligne, on se connectait a la console et l'en-tete continuait
+       d'afficher « Se connecter » sur toutes les autres pages. */
+    try {
+      if (u && !u.isAnonymous) localStorage.setItem('fable-compte-vu', '1');
+      else localStorage.removeItem('fable-compte-vu');
+    } catch (e) { /* stockage refuse */ }
     if (!proprietaire(u)) {
       $('#ess-porte').hidden = false;
       $('#ess-console').hidden = true;
