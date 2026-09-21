@@ -3633,7 +3633,7 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
 
 </style>
 <script>(function(){try{var k="alice-in-wonderland_theme";var m=localStorage.getItem(k);if(!m){m="auto";if(m==='auto')m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(m==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=muaxjypv";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=mubkbmo2";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>.fable-vise{outline:3px solid #e4402a;outline-offset:6px;border-radius:4px;animation:fable-vise-arrive .5s ease-out}@keyframes fable-vise-arrive{from{outline-color:transparent;outline-offset:22px}}@media (prefers-reduced-motion:reduce){.fable-vise{animation:none}}</style><script>/* ALLER VOIR — ouvrir le livre exactement là où le rapport pointe.
  *
  * Ce fichier n'est jamais servi tel quel : la construction le RECOPIE dans le
@@ -3702,9 +3702,14 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
     addEventListener('keydown', oter, true);
   }
 
-  /* ON ATTEND LE LIVRE ENTIER. Même piège que le collecteur : `<body>` arrive
-     à l'octet 277 000 d'un fichier qui en fait 1 800 000, donc à
-     DOMContentLoaded la figure visée peut ne pas exister encore. Le `load`
+  /* ON ATTEND LE LIVRE ENTIER. Même piège que le collecteur : l'ouverture du
+     corps arrive à l'octet 288 000 d'un fichier qui en fait 1 800 000, donc à
+     DOMContentLoaded la figure visée peut ne pas exister encore.
+
+     (Le nom de cette balise n'est pas écrit ici, et ce n'est pas de la
+     coquetterie : ce fichier est recopié tel quel dans le livre, et une
+     balise citée dans un commentaire est une balise que la construction
+     trouvera avant la vraie. C'est arrivé.) Le `load`
      attend aussi les images, ce qui compte ici : une figure dont les images
      ne sont pas posées n'a pas encore sa hauteur définitive, et on viserait
      à côté. */
@@ -3713,8 +3718,100 @@ html.dark .iw-map{--map-land:#2a2f3a;--map-stroke:rgba(255,255,255,.15)}
   else addEventListener('load', lancer);
 })();
 </script>
-</head>
-<body dir="">
+<style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-charge{position:fixed;inset:0;z-index:2147482000;display:flex;align-items:center;justify-content:center;background:var(--fb-pap);transition:opacity .45s ease;font:400 14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}.fb-charge.fb-parti{opacity:0;pointer-events:none}.fb-charge-in{display:flex;flex-direction:column;align-items:center;gap:.9rem;padding:1.5rem;max-inline-size:22rem;text-align:center}.fb-charge .fb-marque{inline-size:2.6rem;block-size:2.6rem}.fb-charge-titre{margin:0;font-size:1rem;font-weight:650;letter-spacing:-.01em;color:var(--fb-enc)}.fb-charge-piste{inline-size:min(15rem,60vw);block-size:3px;border-radius:2px;background:var(--fb-tr);overflow:hidden}.fb-charge-piste i{display:block;block-size:100%;background:var(--fb-acc);transform-origin:left center;transform:scaleX(.01);transition:transform .35s ease}[dir="rtl"] .fb-charge-piste i{transform-origin:right center}.fb-charge-mot{margin:0;font-size:.78rem;color:var(--fb-dou);font-variant-numeric:tabular-nums}@media (prefers-reduced-motion:reduce){.fb-charge{transition:none}.fb-charge-piste i{transition:none}}</style><script>window.__fbChapitres=1;window.__fbMots={"sur":"$1 of $2 chapters"};</script><style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
+<body dir=""><div class='fb-charge' id='fbCharge' role='status' aria-live='polite'><div class='fb-charge-in'><svg class='fb-marque' viewBox='-46 -52 512 512' aria-hidden='true' focusable='false'><rect x='-46' y='-52' width='512' height='512' rx='104' fill='#17140f'/><polygon fill='#e4402a' points='295.47 44.02 506.38 44.02 295.47 173.54'/><polygon fill='#f4f1e9' points='924.3 882.59 603.82 882.59 425 703.76 198.82 703.76 24.3 529.24 24.3 74.02 88.23 .1 251.45 0 295.48 44.02 295.48 173.54 392.56 270.63 825.69 703.76 745.47 703.76 924.3 882.59'/><polygon fill='#bdb7ad' points='825.69 703.76 295.48 703.76 207.41 615.7 207.41 358.69 295.48 270.63 392.56 270.63 825.69 703.76'/><rect fill='#17140f' x='187.37' y='57.2' width='36.52' height='36.52'/></svg><p class='fb-charge-titre'>Alice’s Adventures in Wonderland</p><div class='fb-charge-piste'><i id='fbChargeBarre'></i></div><p class='fb-charge-mot' id='fbChargeMot'></p></div></div><script>/* L'ÉCRAN DE CHARGEMENT D'UN LIVRE.
+ *
+ * Recopié dans chaque livre publié, jamais servi à côté : un livre est un
+ * fichier autonome, et aller chercher un script ailleurs pour afficher
+ * « ça charge » serait exactement le contraire de ce qu'on annonce.
+ *
+ * ── LE PROBLÈME ──────────────────────────────────────────────────────────
+ *
+ * Un manuel pèse de deux à treize méga-octets dans UN fichier. Sur un
+ * téléphone marocain en 3G, cela fait plusieurs secondes de page blanche,
+ * puis plusieurs secondes de texte nu pendant que les styles arrivent. Rien
+ * ne dit que quelque chose se passe, et l'écran blanc est indiscernable
+ * d'une panne : on recharge, ce qui recommence tout.
+ *
+ * ── UNE VRAIE MESURE, PAS UN SABLIER ─────────────────────────────────────
+ *
+ * La charte dit : « aucune boucle d'animation qui ne se termine pas ». Un
+ * disque qui tourne indéfiniment la viole, et surtout il ment — il tourne
+ * pareil qu'on soit à un pour cent ou à quatre-vingt-dix.
+ *
+ * On compte donc ce qui est VRAIMENT arrivé. Le navigateur analyse le
+ * fichier de haut en bas ; les chapitres apparaissent dans le document au
+ * fur et à mesure. On compte les `.book-chapter` présents et on les rapporte
+ * au total, que la construction a écrit ici parce qu'elle le connaît. La
+ * barre avance quand le livre avance, s'arrête quand il s'arrête, et
+ * l'unique mouvement se termine avec le chargement.
+ *
+ * ── ELLE NE PEUT PAS RESTER COINCÉE ──────────────────────────────────────
+ *
+ * Trois sorties, et la dernière est celle qui compte : la fin de l'analyse,
+ * l'événement `load`, et un délai maximum. Un écran de chargement qui reste
+ * en place sur un défaut est pire que pas d'écran du tout — il cache un
+ * livre qui, lui, marchait.
+ */
+(function () {
+  'use strict';
+  var ecran = document.getElementById('fbCharge');
+  if (!ecran) return;
+
+  var barre = document.getElementById('fbChargeBarre');
+  var mot = document.getElementById('fbChargeMot');
+  var TOTAL = Math.max(1, window.__fbChapitres || 1);
+  var MOTS = window.__fbMots || {};
+  var parti = false;
+
+  function dire(n) {
+    if (!mot) return;
+    var texte = (MOTS.sur || '$1 of $2 chapters')
+      .replace('$1', n).replace('$2', TOTAL);
+    if (mot.textContent !== texte) mot.textContent = texte;
+  }
+
+  function avance() {
+    var n = document.querySelectorAll('.book-chapter').length;
+    /* Un centième au minimum : une barre parfaitement vide ressemble à une
+       barre cassée, et les premières centaines de milliseconde d'un gros
+       fichier n'ont encore produit aucun chapitre. */
+    var p = Math.max(0.01, Math.min(1, n / TOTAL));
+    if (barre) barre.style.transform = 'scaleX(' + p + ')';
+    dire(Math.min(n, TOTAL));
+    return n;
+  }
+
+  function fini() {
+    if (parti) return;
+    parti = true;
+    clearInterval(guet);
+    if (barre) barre.style.transform = 'scaleX(1)';
+    dire(TOTAL);
+    ecran.classList.add('fb-parti');
+    /* On l'enlève du document une fois le fondu passé : laisser un calque
+       plein écran, même transparent, au-dessus d'un livre qu'on lit est le
+       genre de chose qui se remarque six mois plus tard, sur le seul
+       appareil où `pointer-events` se comporte autrement. */
+    setTimeout(function () {
+      if (ecran && ecran.parentNode) ecran.parentNode.removeChild(ecran);
+    }, 700);
+  }
+
+  var guet = setInterval(function () {
+    if (avance() >= TOTAL && document.readyState !== 'loading') fini();
+  }, 120);
+  avance();
+
+  if (document.readyState === 'complete') fini();
+  else addEventListener('load', fini);
+
+  /* LE FILET. Vingt secondes, et on rend la page quoi qu'il arrive : une
+     image qui ne revient jamais ne doit pas retenir un livre entièrement
+     lisible derrière un écran d'attente. */
+  setTimeout(fini, 20000);
+})();
+</script>
 
 <div class="ad-loader" id="adLoader" role="status" aria-label="Loading">
   <div class="ad-eye-wrap"><div class="ad-eye2"><div class="eye-outer"><div class="eye-white"><div class="eye-iris"><div class="eye-pupil"></div></div></div></div></div></div>
@@ -17485,5 +17582,6 @@ if('IntersectionObserver' in window && _links.length){
 
 
 
+<a class='fb-retour' href='../../' title='Back to Fable'><svg class='fb-marque' viewBox='-46 -52 512 512' aria-hidden='true' focusable='false'><rect x='-46' y='-52' width='512' height='512' rx='104' fill='#17140f'/><polygon fill='#e4402a' points='295.47 44.02 506.38 44.02 295.47 173.54'/><polygon fill='#f4f1e9' points='924.3 882.59 603.82 882.59 425 703.76 198.82 703.76 24.3 529.24 24.3 74.02 88.23 .1 251.45 0 295.48 44.02 295.48 173.54 392.56 270.63 825.69 703.76 745.47 703.76 924.3 882.59'/><polygon fill='#bdb7ad' points='825.69 703.76 295.48 703.76 207.41 615.7 207.41 358.69 295.48 270.63 392.56 270.63 825.69 703.76'/><rect fill='#17140f' x='187.37' y='57.2' width='36.52' height='36.52'/></svg><span>Fable</span></a>
 </body>
 </html>

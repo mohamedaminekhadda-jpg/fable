@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="compagnon.css?v=muaxjypv">
+<link rel="stylesheet" href="compagnon.css?v=mubkbmo2">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -639,14 +639,114 @@ body::after{
 .btn-2{border-color:var(--rule);color:var(--ink)}
 .btn-2:hover{border-color:var(--ink-3);background:var(--card);color:var(--ink);transform:translateY(-2px)}
 
+/* ── LE BANDEAU, PARTAGE ─────────────────────────────────────────────
+   Il vivait dans la feuille PRIVEE de l'accueil, et les trois autres
+   pages s'en servaient quand meme : elles portaient bien `band`,
+   `band-h` et `band-p` dans leur balisage, et aucune regle pour les
+   habiller. Le bandeau y perdait ses couleurs et, surtout, `band-p`
+   perdait sa largeur maximale — cent quarante-quatre caracteres par
+   ligne, le double de ce qu'un oeil suit sans se perdre. Deplace ici,
+   il est le meme partout, ce qu'il pretendait deja etre. */
+/* Two slow lights drift behind everything in this band. It is a transform on
+   one pseudo-element, which the compositor runs on its own - the page does not
+   wake up for it, and a tab in the background costs nothing. */
+.band{position:relative;overflow:hidden;isolation:isolate}
+.band::before{
+  content:"";position:absolute;inset:-25%;z-index:-1;pointer-events:none;
+  /* Half the strength of the dark band's: the same lights have far more to
+     bite on over a pale ground, and at full alpha they turn it to soup. */
+  background:
+    radial-gradient(34% 40% at 28% 34%,rgba(228,64,42,.20),transparent 70%),
+    radial-gradient(32% 38% at 74% 64%,rgba(51,64,221,.15),transparent 70%),
+    radial-gradient(26% 30% at 54% 92%,rgba(138,82,240,.13),transparent 70%);
+}
+@media (prefers-reduced-motion:no-preference){
+  .band::before{animation:aurore 38s ease-in-out infinite alternate}
+}
+@keyframes aurore{
+  from{transform:translate3d(-4%,-3%,0) scale(1.04) rotate(-3deg)}
+  to{transform:translate3d(5%,4%,0) scale(1.2) rotate(4deg)}
+}
+/* ── clair ── */
+.band{
+  --paper:#efe9dd; --card:#fffdf8; --ink:#17140f; --ink-2:#544d44; --ink-3:#847c71;
+  --rule:#dbd1bf; --rule-soft:#e5dccb; --accent:#e4402a; --accent-ink:#b52f19;
+  --accent-wash:#fbe4dc; --seyes:#7d8cb5;
+  color:var(--ink);
+  padding-block:var(--s8);margin-block:var(--s6);
+  border-block:1px solid #e0d6c4;
+  background:
+    radial-gradient(115% 85% at 10% 0%,rgba(228,64,42,.10),transparent 58%),
+    radial-gradient(95% 85% at 92% 100%,rgba(51,64,221,.09),transparent 60%),
+    #efe9dd;
+}
+/* ── sombre ── */
+/* The page's own two selectors, repeated: a choice made in the header, and the
+   system preference guarded so that a deliberate light choice still wins. */
+:root[data-theme="dark"] .band{
+  --paper:#16131a; --card:#1c1820; --ink:#f0e9df; --ink-2:#bab1a5; --ink-3:#8f8579;
+  --rule:#3a3139; --rule-soft:#2b2530; --accent:#e6958b; --accent-ink:#f2aca3;
+  --accent-wash:#2f2220; --seyes:#5d6788;
+  border-block-color:transparent;
+  background:
+    radial-gradient(115% 85% at 10% 0%,rgba(150,52,45,.30),transparent 58%),
+    radial-gradient(95% 85% at 92% 100%,rgba(58,78,140,.24),transparent 60%),
+    #16131a;
+}
+:root[data-theme="dark"] .band::before{
+  background:
+    radial-gradient(34% 40% at 28% 34%,rgba(228,64,42,.42),transparent 70%),
+    radial-gradient(32% 38% at 74% 64%,rgba(51,64,221,.38),transparent 70%),
+    radial-gradient(26% 30% at 54% 92%,rgba(138,82,240,.3),transparent 70%);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .band{
+    --paper:#16131a; --card:#1c1820; --ink:#f0e9df; --ink-2:#bab1a5; --ink-3:#8f8579;
+    --rule:#3a3139; --rule-soft:#2b2530; --accent:#e6958b; --accent-ink:#f2aca3;
+    --accent-wash:#2f2220; --seyes:#5d6788;
+    border-block-color:transparent;
+    background:
+      radial-gradient(115% 85% at 10% 0%,rgba(150,52,45,.30),transparent 58%),
+      radial-gradient(95% 85% at 92% 100%,rgba(58,78,140,.24),transparent 60%),
+      #16131a;
+  }
+  :root:not([data-theme="light"]) .band::before{
+    background:
+      radial-gradient(34% 40% at 28% 34%,rgba(228,64,42,.42),transparent 70%),
+      radial-gradient(32% 38% at 74% 64%,rgba(51,64,221,.38),transparent 70%),
+      radial-gradient(26% 30% at 54% 92%,rgba(138,82,240,.3),transparent 70%);
+  }
+}
+.band-grid{display:grid;gap:var(--s7);grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center}
+@media (max-width:62rem){.band-grid{grid-template-columns:1fr;gap:var(--s5)}}
+.band-h{font-size:clamp(1.8rem,3.6vw,2.8rem);margin-block:var(--s3) var(--s4);
+  letter-spacing:-.032em;font-variation-settings:"opsz" 60,"wdth" 100}
+.band-p{color:var(--ink-2);max-width:36rem;font-size:1rem}
+
 /* ─── la page ──────────────────────────────────────────────── */
-.sec{padding-block:var(--s7);scroll-margin-block-start:6rem}
+.sec{padding-block:clamp(3.25rem,6.5vw,6rem);scroll-margin-block-start:6rem}
+/* DE L'AIR ENTRE LES PARTIES. Trois rem fixes tenaient sur un telephone
+   et serraient tout sur un grand ecran : neuf parties se suivaient sans
+   qu'on voie ou l'une finit. L'ecart suit maintenant la largeur, comme
+   les titres, et c'est le blanc qui dit « nouvelle idee » avant meme
+   qu'on lise le titre. */
 .sec-head{display:flex;align-items:baseline;gap:var(--s4);flex-wrap:wrap;margin-block-end:var(--s5)}
 .sec-head h2{font-size:2rem;letter-spacing:-.03em;font-variation-settings:"opsz" 40,"wdth" 98}
 .sec-head .filet{flex:1;min-inline-size:2rem;block-size:1px;
   background:linear-gradient(90deg,var(--rule),color-mix(in oklab,var(--rule) 15%,transparent))}
 @media (max-width:34rem){.sec-head h2{white-space:normal}.sec-head .filet{display:none}}
-.mesure{color:var(--ink-2);max-width:66ch}
+.mesure{color:var(--ink-2);max-inline-size:min(100%,36rem)}
+/* PAS EN `ch`, ET C'EST UNE VRAIE MESURE. L'unite `ch` vaut la largeur du
+   zero de la police ; dans Bricolage Grotesque ce zero fait 10,4 px, donc
+   « 66ch » valait 687 px, c'est-a-dire QUATRE-VINGT-SIX caracteres par
+   ligne — vingt de plus que ce qu'on croyait ecrire, et bien au-dela de ce
+   qu'un oeil suit sans perdre la ligne suivante. Trente-six rem font
+   soixante-douze caracteres, et ne dependent d'aucune police.
+
+   Et la prose qui n'a pas demande de classe est bornee aussi : sans ca,
+   un paragraphe pose directement dans une partie courait sur cent quinze
+   caracteres. */
+.sec p:not([class]),.sec li:not([class]),.sec dd{max-inline-size:min(100%,38rem)}
 .fin{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s5)}
 
 /* ─── un sommaire qui suit ─────────────────────────────────── */
@@ -766,6 +866,7 @@ body::after{
 @keyframes demo-avance{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 .ecran-pied{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+  max-inline-size:52rem;
   margin-block-start:var(--s3);font-size:.8125rem;color:var(--ink-3)}
 .ecran-pied b{font-family:var(--font-display);font-weight:700;font-size:.9375rem;
   font-variation-settings:"opsz" 18;letter-spacing:-.015em;color:var(--ink)}
@@ -851,7 +952,7 @@ body::after{
   .tome-inner{transform:none!important}
 }
 </style>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=muaxjypv";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mubkbmo2";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/project.jpg?v=222a6ada74">
@@ -977,7 +1078,12 @@ body::after{
       <h2 data-i18n="prProbH">A figure in a textbook is a photograph of a thought</h2>
       <span class="filet" aria-hidden="true"></span>
     </div>
-    <div style="display:grid;gap:var(--s5);grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))">
+    <!-- VINGT-QUATRE REM ET NON DIX-HUIT. A dix-huit, un grand ecran tenait
+         trois colonnes de quarante-six caracteres : trois colonnes de prose
+         etroites lues cote a cote, ce qui est la definition meme d une page
+         chargee. A vingt-quatre il en tient deux, de soixante-dix, et le
+         telephone en garde une comme avant. -->
+    <div style="display:grid;gap:var(--s5) var(--s6);grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))">
       <p class="mesure" data-i18n="prProb1">Someone drew it once, at one set of values, and printed it. It cannot be asked anything. A pupil who wonders what happens at a different angle, a different concentration, a different coefficient has nowhere to put the question — and that question is the moment the lesson was working.</p>
       <p class="mesure" data-i18n="prProb2">The digital editions mostly reproduce the problem at greater expense: a PDF of the same picture, or a video of one run chosen by someone else. Both are recordings. Neither can be interrogated, and a recording cannot be wrong in an interesting way.</p>
       <p class="mesure" data-i18n="prProb3">Fable's figures are solved, on the page, from the same few lines of mathematics the lesson is about. That is the whole idea, and everything else here follows from it.</p>
@@ -1046,7 +1152,12 @@ body::after{
       <span class="filet" aria-hidden="true"></span>
       <span style="margin-inline-start:auto;font-size:.875rem;color:var(--ink-3)" data-i18n="prShopN">live figures, not screenshots</span>
     </div>
-    <div style="display:grid;gap:var(--s5);grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))">
+    <!-- VINGT-QUATRE REM ET NON DIX-HUIT. A dix-huit, un grand ecran tenait
+         trois colonnes de quarante-six caracteres : trois colonnes de prose
+         etroites lues cote a cote, ce qui est la definition meme d une page
+         chargee. A vingt-quatre il en tient deux, de soixante-dix, et le
+         telephone en garde une comme avant. -->
+    <div style="display:grid;gap:var(--s5) var(--s6);grid-template-columns:repeat(auto-fit,minmax(24rem,1fr))">
       <p class="mesure" data-i18n-html="prShop1">Every figure below is the real one, lifted straight out of the demonstration textbook and run by the same engine that serves it to a pupil. Nothing here is a picture of the product. It <em>is</em> the product, with the page around it removed.</p>
       <p class="mesure" data-i18n="prShop2">A cursor works each one for you — pressing a tab, choosing from a list, dragging a slider — and every one of those gestures is a real event on a real control, which is why the figure answers. Touch it and the cursor stands down: from then on you are the one driving.</p>
     </div>
@@ -1274,7 +1385,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=muaxjypv"></script>
+<script src="compte.js?v=mubkbmo2"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -2448,7 +2559,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=muaxjypv"></script>
+<script src="chrome-pages.js?v=mubkbmo2"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait

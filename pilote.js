@@ -150,6 +150,10 @@
      connaît ni les variables ni les classes. Tout ce qui suit est préfixé et
      ne dépend de rien du document hôte — sauf `prefers-color-scheme`, qui
      est du navigateur et non de la page. */
+  /* LA PASTILLE DE L'ESSAI EST UN CRAN AU-DESSUS DU RETOUR. Le coin en bas
+     a gauche est desormais celui de « Fable », sur les livres, le cahier et
+     sfy — exactement la ou celle-ci se posait. Empilees elles se lisent ;
+     superposees on n'en voit qu'une, et c'est la mauvaise. */
   var CSS = ''
     + '.flt-fond{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;'
     + 'padding:16px;background:rgba(20,17,14,.55);backdrop-filter:blur(3px);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}'
@@ -163,7 +167,7 @@
     + '.flt-b-oui{background:#8c2f2a;color:#fff;font-weight:600}'
     + '.flt-b-non{background:transparent;color:#4a423a;border-color:rgba(33,29,25,.22)}'
     + '.flt-b:focus-visible{outline:2px solid #8c2f2a;outline-offset:2px}'
-    + '.flt-pastille{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147482000;'
+    + '.flt-pastille{position:fixed;inset-block-end:52px;inset-inline-start:12px;z-index:2147482000;'
     + 'font:500 10px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.06em;text-transform:uppercase;'
     + 'padding:5px 9px;border-radius:999px;cursor:pointer;background:rgba(247,244,237,.92);color:#6b6058;'
     + 'border:1px solid rgba(33,29,25,.18);box-shadow:0 2px 8px rgba(20,17,14,.14)}'
