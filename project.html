@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="compagnon.css?v=mu8g0b1u">
+<link rel="stylesheet" href="compagnon.css?v=muatcpjc">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -522,6 +522,13 @@ kbd{
 .theme-btn:active{background:var(--accent-wash)}
 /* ── la rangée des pages ── */
 .pages{border-block-start:1px solid var(--rule-soft)}
+/* Le groupe du proprietaire : un filet le detache des pages publiques, et
+   un point marque les trois qui vivent sur la machine et non sur le site. */
+.pages-sep{flex:none;inline-size:1px;background:var(--rule);margin-inline:.45rem;
+  margin-block:.35rem;align-self:stretch}
+.pages a.p-local::before{content:"";display:inline-block;inline-size:5px;block-size:5px;
+  border-radius:50%;background:var(--marigold);margin-inline-end:.4rem;vertical-align:.5px}
+.pages a.p-local.eteint::before{background:var(--rule)}
 .pages .wrap{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none;
   padding-block:.3rem .35rem}
 .pages .wrap::-webkit-scrollbar{display:none}
@@ -615,6 +622,13 @@ body::after{
   font-family:var(--font-display);font-size:.9375rem;font-weight:600;
   font-variation-settings:"opsz" 16;letter-spacing:-.005em;
   padding:.7rem 1.35rem;border-radius:100px;text-decoration:none;border:1px solid transparent;
+  /* LE FOND EST REMIS À PLAT, ET C'EST INDISPENSABLE SUR UN <button>. Jusqu'ici
+     cette classe n'avait servi que sur des <a>, qui n'ont aucun fond par
+     défaut ; posée sur un vrai bouton, elle héritait du fond gris clair du
+     navigateur. En thème sombre, cela donnait une pastille blanche avec du
+     texte clair dessus — un bouton parfaitement invisible, et rien dans la
+     feuille ne le laissait prévoir. `.btn-1` repose son fond juste après. */
+  background:transparent;color:var(--ink);cursor:pointer;
   transition:transform .16s ease,box-shadow .16s ease,background .16s,border-color .16s,color .16s;
 }
 /* Le texte du bouton plein prend la couleur du PAPIER, pas un blanc fixe :
@@ -837,6 +851,7 @@ body::after{
   .tome-inner{transform:none!important}
 }
 </style>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=muatcpjc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/project.jpg?v=222a6ada74">
@@ -918,6 +933,21 @@ body::after{
       <a href="simulations.html" data-p="simulations" data-i18n="navSims">See for yourself</a>
       <a href="notebook.html" data-p="notebook" data-i18n="navNb">Le Jaguar</a>
       <a href="project.html" data-p="project" aria-current="page" data-i18n="navProj">The project</a>
+      <!-- CE QUI SUIT N'EXISTE QUE POUR LE PROPRIETAIRE. Les liens sont dans la
+           page pour tout le monde — un hebergement statique ne cache rien — mais
+           ils restent `hidden` tant que compte.js n'a pas reconnu une adresse de
+           PROPRIETAIRES. Ce n'est pas une serrure : c'est du rangement. Les
+           serrures sont dans firestore.rules pour l'essai, et dans le fait que
+           les trois outils locaux n'ecoutent que 127.0.0.1.
+
+           Les trois derniers ne sont pas des pages du site : ce sont des
+           serveurs sur la machine de l'auteur. Le clic essaie le port, et s'il
+           ne repond pas il demande a Windows de lancer l'outil. -->
+      <span class="pages-sep" data-chezsoi hidden aria-hidden="true"></span>
+      <a href="trial.html" data-p="trial" data-chezsoi hidden data-i18n="navTrial">The trial</a>
+      <a href="#" data-outil="console" data-chezsoi hidden class="p-local">Console</a>
+      <a href="#" data-outil="studio" data-chezsoi hidden class="p-local">Studio</a>
+      <a href="#" data-outil="classeur" data-chezsoi hidden class="p-local">Le Classeur</a>
     </div>
   </nav>
   <i class="progres" aria-hidden="true"></i>
@@ -1244,7 +1274,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mu8g0b1u"></script>
+<script src="compte.js?v=muatcpjc"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1464,6 +1494,7 @@ body::after{
       navSims: "جرّب بنفسك",
       navNb: "لوجاݣوار",
       navProj: "المشروع",
+      navTrial: "التجربة",
       rubanEyebrow: "ماذا في داخلها فعلًا",
       rubanH: "مئةٌ ونوعان من الأشكال، <em>كلها حيّة</em>",
       lede: "الشكل لا يشرح الدرس، بل يحلّه أمامك، بنفس السطور القليلة التي يقوم عليها الدرس.",
@@ -1740,6 +1771,7 @@ body::after{
                'Je sais compter jusqu’à trois. Le reste, c’est votre travail.'],
       navHome: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
       navNb: 'Le Jaguar', navProj: 'Le projet',
+      navTrial: "L’essai",
       rubanEyebrow: 'Ce qu\u2019il y a vraiment dedans',
       rubanH: 'Cent deux sortes de figure, <em>toutes vivantes</em>',
       lede: 'La figure n’illustre pas la leçon : elle la résout, sous vos yeux, avec les mêmes quelques lignes de mathématiques dont la leçon parle.',
@@ -1995,6 +2027,7 @@ body::after{
                'I can count to three. The rest is your job.'],
       navHome: 'The library', navSims: 'See for yourself',
       navNb: 'Le Jaguar', navProj: 'The project',
+      navTrial: "The trial",
       rubanEyebrow: 'What is actually in them',
       rubanH: 'A hundred and two kinds of figure, <em>every one of them alive</em>',
       lede: 'The figure does not illustrate the lesson. It works it out, while you watch, from the same few lines of mathematics the lesson is about.',
@@ -2066,7 +2099,17 @@ body::after{
     document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
     /* L'onglet et la description suivent : c'est ce qu'on lit dans les
        favoris, et ce que reprend un moteur de recherche. */
-    if (TEXTES[LANG].pageTitle) document.title = TEXTES[LANG].pageTitle;
+    /* LE TITRE N'EST TRADUIT QUE SI LA PAGE LE DEMANDE. Ce bloc est repris
+       tel quel dans les quatre autres pages, et il y ecrasait leur titre par
+       celui de l'accueil : « Le projet — Fable » devenait « Fable — livres et
+       manuels interactifs » une fraction de seconde apres l'affichage. Quatre
+       onglets du meme nom, quatre resultats de recherche identiques, et un
+       partage qui annonce la mauvaise page. La balise de l'accueil porte donc
+       `data-i18n="pageTitle"` ; celles des autres pages ne le portent pas et
+       restent ce qu'elles sont. */
+    if (TEXTES[LANG].pageTitle && document.querySelector('title[data-i18n="pageTitle"]')) {
+      document.title = TEXTES[LANG].pageTitle;
+    }
     var d = document.querySelector('meta[name="description"]');
     if (d && TEXTES[LANG].pageDesc) d.setAttribute('content', TEXTES[LANG].pageDesc);
     var n, i;
@@ -2405,7 +2448,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mu8g0b1u"></script>
+<script src="chrome-pages.js?v=muatcpjc"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait

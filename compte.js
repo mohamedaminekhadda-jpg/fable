@@ -126,11 +126,16 @@
     'Password': 'Mot de passe',
     'One account for the books, the notebook and the simulations. Your notebooks stay on this device — the account keeps a copy, so you can find them again elsewhere.': 'Un seul compte pour les livres, le cahier et les simulations. Vos cahiers restent sur cet appareil — le compte en garde une copie, pour les retrouver ailleurs.',
     'your workshop': 'votre atelier',
+    'The trial': 'L’essai',
+    'launch a group, follow it, stop it': 'lancer un groupe, le suivre, l’arrêter',
+    'On the site, not on this machine — it reads what the trial copies send back.': 'Sur le site, pas sur cette machine — elle lit ce que renvoient les copies d’essai.',
     'what is online, build, deploy': 'ce qui est en ligne, construire, déployer',
     'write and build the textbooks': 'écrire et construire les manuels',
     'the platform: classes, reports, exams': 'la plateforme : classes, bulletins, examens',
     'They run on this machine. Anywhere else these links open an empty port — which is exactly the protection: they listen on 127.0.0.1 only. ': 'Ils tournent sur cette machine. Ailleurs, ces liens ouvrent un port vide — ce qui est exactement la protection : ils n’écoutent que 127.0.0.1. ',
     'Change an address…': 'Changer une adresse…',
+    'Nothing answered on ': 'Rien n’a répondu sur ',
+    '. On this machine, run « npm run lanceur » once; elsewhere, these tools do not exist.': '. Sur cette machine, lancez « npm run lanceur » une fois ; ailleurs, ces outils n’existent pas.',
     'Which tool? (': 'Quel outil ? (',
     'Address of ': 'Adresse de ',
     ' — a port (4310), or a full URL (https://studio.my-tailnet.ts.net):': ' — un port (4310), ou une URL complète (https://studio.mon-tailnet.ts.net) :',
@@ -544,7 +549,19 @@
 
   function atelierHtml() {
     var adr = adresses();
+    /* L'ESSAI EST A PART, ET EN PREMIER. Les trois autres sont des serveurs
+       qui tournent sur la machine de l'auteur : ailleurs, leurs liens ouvrent
+       un port vide. La console de l'essai, elle, est une page du site — elle
+       s'ouvre depuis n'importe quel appareil, y compris le telephone avec
+       lequel on vient de tester un lien. La melanger aux trois autres aurait
+       laisse croire qu'elle a la meme limite. */
     return '<div class="fc-ou">' + echappe(t('your workshop')) + '</div>'
+      + '<ul class="fc-outils">'
+      + '<li><a href="' + racineDuSite() + 'trial.html">'
+      + '<b>' + echappe(t('The trial')) + '</b>'
+      + '<span>' + echappe(t('launch a group, follow it, stop it')) + '</span></a></li>'
+      + '</ul>'
+      + '<p class="fc-note">' + echappe(t('On the site, not on this machine — it reads what the trial copies send back.')) + '</p>'
       + '<ul class="fc-outils">'
       + OUTILS.map(function (o) {
         var u = adresseDe(o, adr);
@@ -579,9 +596,101 @@
     };
   }
 
+  /* La racine du site. `compte.js` est publie a la racine et charge depuis
+     trois profondeurs ; son propre dossier est donc la racine, y compris sur
+     GitHub Pages ou le site vit sous /<depot>/. Une adresse absolue ecrite a
+     la main aurait vise la racine du domaine, c'est-a-dire a cote. */
+  function racineDuSite() { return BASE; }
+
   function echappe(t) {
     return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x];
+    });
+  }
+
+
+  /* ── LES ONGLETS DU PROPRIETAIRE ─────────────────────────────────────────
+     La barre de navigation porte quatre entrees de plus, cachees, que l'on
+     decouvre quand une adresse de PROPRIETAIRES est connectee. Trois d'entre
+     elles ne sont PAS des pages du site : ce sont des serveurs Node sur la
+     machine de l'auteur.
+
+     UN LIEN VERS UN PORT MORT EST UNE PORTE PEINTE SUR UN MUR. Avant, cliquer
+     « Console » ouvrait `http://localhost:4310/` et, neuf fois sur dix, une
+     page d'erreur du navigateur : l'outil n'etait pas lance. On frappe donc
+     d'abord, et on ne va la-bas que si quelqu'un repond.
+
+     S'IL NE REPOND PAS, ON DEMANDE A WINDOWS DE LANCER L'OUTIL. Une page web
+     ne peut pas demarrer un programme — et c'est tres bien ainsi — mais elle
+     peut ouvrir une adresse `fable://console`, et le systeme sait a quel
+     programme donner ces adresses-la si on l'a enregistre une fois
+     (`npm run lanceur`). On frappe ensuite toutes les demi-secondes, et des
+     que le port repond on y va. Rien d'enregistre : le lien ne fait rien, et
+     l'onglet le dit au lieu de faire semblant. */
+  var PORTS = { console: 4310, studio: 4000, classeur: 4300 };
+
+  function adresseOutil(id) {
+    var t = adresses(), v = t[id];
+    if (!v) return 'http://localhost:' + PORTS[id] + '/';
+    if (/^\d+$/.test(String(v))) return 'http://localhost:' + v + '/';
+    return String(v).replace(/\/*$/, '/');
+  }
+
+  /* On frappe avec `no-cors` : la reponse est opaque et illisible, ce qui est
+     exactement suffisant. Ce qu'on veut savoir n'est pas CE QUE dit le
+     serveur mais S'IL dit quelque chose, et une requete lisible aurait exige
+     des en-tetes CORS sur trois outils qui n'ont aucune raison d'en porter. */
+  function repond(u, ms) {
+    return new Promise(function (ok) {
+      var fini = false;
+      var minuteur = setTimeout(function () { if (!fini) { fini = true; ok(false); } }, ms || 1200);
+      fetch(u, { mode: 'no-cors', cache: 'no-store' }).then(function () {
+        if (fini) return;
+        fini = true; clearTimeout(minuteur); ok(true);
+      }).catch(function () {
+        if (fini) return;
+        fini = true; clearTimeout(minuteur); ok(false);
+      });
+    });
+  }
+
+  async function ouvrirOutil(a, id) {
+    var u = adresseOutil(id);
+    var nom = a.textContent.replace(/\u2026$/, '');
+    if (await repond(u)) { window.open(u, '_blank', 'noopener'); return; }
+
+    /* Il dort. On demande son reveil, et on attend en le disant. */
+    a.classList.add('eteint');
+    var avant = a.textContent;
+    a.textContent = nom + '\u2026';
+    try { location.href = 'fable://' + id; } catch (e) { /* protocole absent */ }
+
+    for (var i = 0; i < 24; i++) {
+      await new Promise(function (r) { setTimeout(r, 500); });
+      if (await repond(u, 600)) {
+        a.textContent = avant; a.classList.remove('eteint');
+        window.open(u, '_blank', 'noopener');
+        return;
+      }
+    }
+    a.textContent = avant;
+    /* Douze secondes sans reponse : soit le protocole n'est pas enregistre,
+       soit ce n'est pas la bonne machine. On le dit une fois, sans insister. */
+    dire(t('Nothing answered on ') + u + t('. On this machine, run « npm run lanceur » once; elsewhere, these tools do not exist.'));
+    alert(t('Nothing answered on ') + u + t('. On this machine, run « npm run lanceur » once; elsewhere, these tools do not exist.'));
+  }
+
+  function onglets(e) {
+    var chez = !!e.chezSoi;
+    var n = document.querySelectorAll('[data-chezsoi]');
+    for (var i = 0; i < n.length; i++) n[i].hidden = !chez;
+    if (!chez || onglets.branches) return;
+    onglets.branches = true;
+    document.addEventListener('click', function (ev) {
+      var a = ev.target.closest ? ev.target.closest('[data-outil]') : null;
+      if (!a) return;
+      ev.preventDefault();
+      ouvrirOutil(a, a.getAttribute('data-outil'));
     });
   }
 
@@ -593,6 +702,7 @@
     if (!hote) return false;
     if (!(await window.FableCompte.configure())) return false;
     window.FableCompte.surChangement(function (e) {
+      onglets(e);
       hote.innerHTML = '';
       var b = document.createElement('button');
       b.type = 'button';

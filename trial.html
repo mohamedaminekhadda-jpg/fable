@@ -3,15 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Jaguar — Fable</title>
-<meta name="description" content="A pupil's notebook on real Séyès ruled paper. Clip a passage out of any textbook, annotate it, keep it. Everything stays on the device.">
-<meta property="og:title" content="Le Jaguar — the notebook">
-<meta property="og:description" content="Real Séyès paper, in a browser. Everything stays on the device, and no account is asked for.">
+<title>The trial — Fable</title>
+<!-- PAS D'INDEXATION, ET PAS DE CARTE DE PARTAGE. Cette page n'est pas une
+     vitrine : elle n'a rien à montrer à un moteur de recherche, et une
+     aperçu social d'une console d'administration serait au mieux inutile.
+     Elle n'est pas non plus dans le plan du site ni dans la barre de
+     navigation. Tout cela la rend DISCRÈTE et non PROTÉGÉE : ce qui la
+     protège est dans firestore.rules, vérifié par le serveur de Google. -->
+<meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-46 -52 512 512'><rect x='-46' y='-52' width='512' height='512' rx='104' fill='%2317140f'/><polygon fill='%23e4402a' points='295.47 44.02 506.38 44.02 295.47 173.54'/><polygon fill='%23f4f1e9' points='924.3 882.59 603.82 882.59 425 703.76 198.82 703.76 24.3 529.24 24.3 74.02 88.23 .1 251.45 0 295.48 44.02 295.48 173.54 392.56 270.63 825.69 703.76 745.47 703.76 924.3 882.59'/><polygon fill='%23bdb7ad' points='825.69 703.76 295.48 703.76 207.41 615.7 207.41 358.69 295.48 270.63 392.56 270.63 825.69 703.76'/><rect fill='%2317140f' x='187.37' y='57.2' width='36.52' height='36.52'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="compagnon.css?v=muatcpjc">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -639,105 +642,88 @@ body::after{
 .btn-2{border-color:var(--rule);color:var(--ink)}
 .btn-2:hover{border-color:var(--ink-3);background:var(--card);color:var(--ink);transform:translateY(-2px)}
 
-/* ─── la page ──────────────────────────────────────────────── */
-.sec{padding-block:var(--s7);scroll-margin-block-start:6rem}
-.sec-head{display:flex;align-items:baseline;gap:var(--s4);flex-wrap:wrap;margin-block-end:var(--s5)}
-.sec-head h2{font-size:2rem;letter-spacing:-.03em;font-variation-settings:"opsz" 40,"wdth" 98}
-.sec-head .filet{flex:1;min-inline-size:2rem;block-size:1px;
-  background:linear-gradient(90deg,var(--rule),color-mix(in oklab,var(--rule) 15%,transparent))}
-@media (max-width:34rem){.sec-head h2{white-space:normal}.sec-head .filet{display:none}}
-.mesure{color:var(--ink-2);max-width:66ch}
-.fin{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s5)}
+/* ─── la console ───────────────────────────────────────────── */
+.ess{padding-block:var(--s6) var(--s8)}
+.ess-tete{margin-block-end:var(--s6)}
+.ess-tete h1{font-size:clamp(2rem,4.4vw,2.9rem);letter-spacing:-.035em;
+  font-variation-settings:"opsz" 40,"wdth" 98;margin-block:.2rem .35rem}
+.ess-tete p{color:var(--ink-2);max-width:60ch}
 
-/* ─── DU VRAI SÉYÈS, ET ON PEUT ÉCRIRE DESSUS ──────────────────
-   Not a picture of ruled paper: the ruling is four gradients, and the writing
-   area sits on it with a 20px line-height, so what you type lands ON the
-   lines. That is the whole argument of this page made in one element - a
-   notebook that is paper rather than a text box with a background. */
-.feuille{
-  border:1px solid var(--rule);border-radius:var(--r-lg);overflow:hidden;
-  box-shadow:var(--shadow);background:var(--card);
-}
-.feuille-top{
-  display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);
-  border-block-end:1px solid var(--rule-soft);font-size:.8125rem;color:var(--ink-3);
-}
-.feuille-top b{font-family:var(--font-display);font-weight:700;color:var(--ink);font-size:.9375rem;
-  font-variation-settings:"opsz" 18}
-.papier{
-  /* Le vrai Séyès : une forte tous les 20 px, trois fines entre, les
-     verticales au même pas, et la marge rouge à 21 px. */
-  background:
-    linear-gradient(to right,transparent 0 21px,var(--accent) 21px 22px,transparent 22px),
-    repeating-linear-gradient(to right,var(--seyes) 0 1px,transparent 1px 20px),
-    repeating-linear-gradient(to bottom,var(--seyes) 0 .5px,transparent .5px 5px),
-    repeating-linear-gradient(to bottom,var(--seyes) 0 1px,transparent 1px 20px),
-    var(--card);
-  background-position:0 0;
-  min-block-size:240px;
-  /* 6px at the top so the first BASELINE lands on a ruling rather than 6px
-     above it; after that the 20px line-height keeps every line on one. */
-  padding:6px var(--s4) var(--s4) 34px;
-  /* 20px exactly, or the writing drifts off the ruling a line at a time. */
-  font:400 15px/20px var(--font-body);
-  font-variation-settings:"opsz" 14;
-  color:var(--ink);
-  outline:none;
-  caret-color:var(--accent);
-}
-.papier:focus-visible{box-shadow:inset 0 0 0 2px var(--focus)}
-.papier p{margin:0}
-.papier .clip{
-  display:block;border-inline-start:2px solid var(--accent);padding-inline-start:10px;
-  color:var(--ink-2);font-style:italic;font-family:var(--font-ital);font-size:17px;
-}
-.feuille-pied{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);align-items:baseline;
-  padding:var(--s3) var(--s4);border-block-start:1px solid var(--rule-soft);
-  font-size:.75rem;color:var(--ink-3)}
-.feuille-pied b{font-family:var(--font-mono);font-size:.75rem;color:var(--accent-ink);font-weight:500}
+.ess-porte{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--s6);text-align:center;box-shadow:var(--shadow)}
+.ess-porte h2{font-size:1.25rem;letter-spacing:-.02em;margin-block-end:.3rem}
+.ess-porte p{color:var(--ink-2);max-width:46ch;margin:0 auto var(--s5)}
 
-/* ─── le voyage d'un passage ───────────────────────────────── */
-.voyage{display:grid;gap:var(--s4);grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));
-  counter-reset:etape}
-.voyage>div{position:relative;border-block-start:2px solid var(--rule);padding-block-start:var(--s4)}
-.voyage>div::before{
-  counter-increment:etape;content:counter(etape);
-  position:absolute;inset-block-start:-1.1rem;inset-inline-start:0;
-  font-family:var(--font-mono);font-size:.75rem;color:var(--paper);
-  background:var(--accent);inline-size:1.5rem;block-size:1.5rem;border-radius:100px;
-  display:grid;place-items:center;
-}
-.voyage h3{font-size:1.0625rem;font-weight:700;font-variation-settings:"opsz" 24;
-  letter-spacing:-.02em;margin-block-end:var(--s2)}
-.voyage p{color:var(--ink-2);font-size:.9375rem;margin:0}
+.ess-bloc{margin-block-start:var(--s7)}
+.ess-bloc > h2{font-family:var(--font-display);font-size:1.45rem;letter-spacing:-.025em;
+  font-variation-settings:"opsz" 30,"wdth" 98;margin-block-end:.25rem}
+.ess-bloc > p.ess-intro{color:var(--ink-2);max-width:62ch;margin-block-end:var(--s5)}
 
-/* ─── une étagère de cahiers ───────────────────────────────── */
-.cahiers{display:grid;gap:var(--s4);grid-template-columns:repeat(auto-fit,minmax(11rem,1fr))}
-.cah{
-  border:1px solid var(--rule);border-radius:var(--r-lg);overflow:hidden;background:var(--card);
-  box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease;
-}
-.cah:hover{transform:translateY(-3px);box-shadow:var(--lift)}
-.cah .dos{block-size:5.5rem;background:
-  repeating-linear-gradient(to bottom,transparent 0 9px,color-mix(in oklab,var(--h) 26%,transparent) 9px 10px),
-  color-mix(in oklab,var(--h) 12%,var(--card))}
-.cah .nom{padding:var(--s3) var(--s4);font-weight:700;font-size:.9375rem;
-  font-variation-settings:"opsz" 18,"wdth" 92;letter-spacing:-.012em}
-.cah .cmb{padding:0 var(--s4) var(--s3);font-size:.75rem;color:var(--ink-3);font-variant-numeric:lining-nums}
+/* lancer */
+.ess-lancer{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--s5);display:grid;gap:var(--s3)}
+.ess-lancer label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-3);margin-block-end:.3rem}
+.ess-lancer input,.ess-lancer textarea{inline-size:100%;font:inherit;font-size:.9375rem;
+  color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+  padding:.55rem .7rem}
+.ess-lancer textarea{resize:vertical;min-block-size:2.6rem}
+.ess-lancer input:focus-visible,.ess-lancer textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.ess-deux{display:grid;gap:var(--s3);grid-template-columns:minmax(12rem,1fr) minmax(12rem,2fr)}
+@media (max-width:40rem){.ess-deux{grid-template-columns:1fr}}
 
-/* ─── ici, et nulle part ailleurs ──────────────────────────── */
-.ici{display:grid;gap:var(--s5);grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));align-items:start}
-.ici h3{font-size:1.125rem;font-weight:700;font-variation-settings:"opsz" 24;letter-spacing:-.02em;
-  margin-block-end:var(--s2)}
-.ici p{color:var(--ink-2);font-size:.9375rem;margin:0 0 var(--s3)}
-.puce{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;letter-spacing:.06em;
-  text-transform:uppercase;font-weight:600;color:var(--jade-ink);
-  border:1px solid color-mix(in oklab,var(--jade-ink) 40%,transparent);
-  background:color-mix(in oklab,var(--jade-ink) 9%,transparent);
-  border-radius:100px;padding:.2rem .6rem}
+/* un groupe */
+.ess-g{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--s4) var(--s5);margin-block-end:var(--s3)}
+.ess-g-ferme{opacity:.6}
+.ess-g-t{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.ess-g-t b{font-size:1.02rem;letter-spacing:-.01em}
+.ess-g-n{color:var(--ink-3);font-size:.8125rem;margin-inline-start:auto}
+.ess-g-note{color:var(--ink-2);font-size:.875rem;margin-block:.35rem 0;max-width:62ch}
+.ess-g-l{display:flex;gap:.45rem;margin-block-start:var(--s3);flex-wrap:wrap}
+.ess-lien{flex:1;min-inline-size:14rem;font-family:var(--font-mono);font-size:.78rem;
+  color:var(--ink-2);background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--r);padding:.42rem .6rem}
 
-.dit{display:flex;align-items:center;gap:calc(var(--s5) + .4rem);flex-wrap:wrap;margin-block-start:var(--s6)}
-.dit .cw{inline-size:auto;block-size:4.5rem;cursor:pointer;overflow:visible}
+/* les chiffres */
+.ess-cartes{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+  gap:var(--s3);margin-block:var(--s4) var(--s6)}
+.ess-c{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);padding:var(--s4)}
+.ess-c b{display:block;font-family:var(--font-display);font-size:1.9rem;font-weight:700;
+  font-variation-settings:"opsz" 30,"wdth" 100;letter-spacing:-.035em;line-height:1.1}
+.ess-c span{font-size:.78rem;color:var(--ink-3)}
+.ess-c-fort{border-color:var(--accent);background:var(--accent-wash)}
+.ess-c-fort b{color:var(--accent-ink)}
+
+/* les tableaux */
+.ess-h{font-family:var(--font-display);font-size:1.18rem;letter-spacing:-.02em;
+  font-variation-settings:"opsz" 24,"wdth" 98;margin-block:var(--s6) .2rem}
+.ess-hn{color:var(--ink-3);font-weight:400;font-size:.9rem;letter-spacing:0}
+.ess-why{color:var(--ink-2);font-size:.85rem;max-width:66ch;margin-block-end:var(--s3)}
+.ess-why b{color:var(--ink);font-weight:600}
+.ess-tw{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r-lg);background:var(--card)}
+.ess-t{inline-size:100%;border-collapse:collapse;font-size:.82rem}
+.ess-t th,.ess-t td{text-align:start;padding:.44rem .7rem;border-block-end:1px solid var(--rule-soft);white-space:nowrap}
+.ess-t th{font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)}
+.ess-t td.n,.ess-t th.n{text-align:end;font-variant-numeric:tabular-nums}
+.ess-t tr:last-child td{border-block-end:none}
+.ess-bar{display:inline-block;block-size:7px;border-radius:4px;background:var(--accent);vertical-align:middle;min-inline-size:2px}
+.ess-tag{display:inline-block;font-family:var(--font-mono);font-size:.68rem;padding:.08rem .4rem;
+  border-radius:100px;border:1px solid var(--rule);color:var(--ink-3)}
+.ess-rien{color:var(--ink-3);font-size:.85rem}
+.ess-mal{color:var(--accent-ink);font-weight:600}
+.ess-bof{color:var(--ink-2)}
+.ess-etat{color:var(--ink-3);font-size:.85rem;min-block-size:1.3em;margin-block:var(--s3)}
+.ess-rangee{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-block-start:var(--s4)}
+.ess-qui{color:var(--ink-3);font-size:.82rem}
+
+/* la liste à cocher */
+.ess-check{background:var(--card);border:1px solid var(--rule);border-radius:var(--r-lg);
+  padding:var(--s5);margin-block-start:var(--s5)}
+.ess-check ol{margin:0;padding-inline-start:1.1rem;color:var(--ink-2);font-size:.875rem}
+.ess-check li{margin-block:.4rem}
+.ess-check code{font-family:var(--font-mono);font-size:.82em;background:var(--paper);
+  border:1px solid var(--rule);border-radius:4px;padding:.05rem .3rem}
 
 /* ─── footer ──────────────────────────────────────────────── */
 .foot{border-block-start:1px solid var(--rule);margin-block-start:var(--s7);position:relative}
@@ -783,22 +769,10 @@ body::after{
   .tome-inner{transform:none!important}
 }
 </style>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=muatcpjc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
-<link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/notebook.html">
-<meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/notebook.html">
-<meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/notebook.jpg?v=fad8c677cb">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A Fable revision deck, open on its first card.">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#f4f1e9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#121016" media="(prefers-color-scheme: dark)">
-<script>if("serviceWorker"in navigator)addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
-<meta name="twitter:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/notebook.jpg?v=fad8c677cb">
 </head>
-<body class="a-compagnon">
-<div id="sentinelle" aria-hidden="true"></div>
+<body>
+<a class="skip" href="#ess">Skip to the console</a>
+
 <header class="masthead" id="masthead">
   <div class="wrap">
     <!-- LE CORBEAU. The drawing is SVG/logo.svg, unchanged in shape; only its
@@ -863,7 +837,7 @@ body::after{
     <div class="wrap">
       <a href="./" data-p="accueil" data-i18n="navHome">The library</a>
       <a href="simulations.html" data-p="simulations" data-i18n="navSims">See for yourself</a>
-      <a href="notebook.html" data-p="notebook" aria-current="page" data-i18n="navNb">Le Jaguar</a>
+      <a href="notebook.html" data-p="notebook" data-i18n="navNb">Le Jaguar</a>
       <a href="project.html" data-p="project" data-i18n="navProj">The project</a>
       <!-- CE QUI SUIT N'EXISTE QUE POUR LE PROPRIETAIRE. Les liens sont dans la
            page pour tout le monde — un hebergement statique ne cache rien — mais
@@ -885,162 +859,91 @@ body::after{
   <i class="progres" aria-hidden="true"></i>
 </header>
 
-<main>
-  <section class="hero wrap" data-mot="cmpNbHero">
-    <div class="hero-grid">
-      <div class="hero-txt">
-        <p class="eyebrow" data-i18n="nbEyebrow">The notebook</p>
-        <h1 data-i18n-html="nbH1">Paper that <em>keeps what you put on it</em></h1>
-        <p class="lede" data-i18n="nbLede">Le Jaguar is a pupil's notebook on real Séyès ruling — the same paper they already write on, drawn rather than photographed. Clip a passage out of any textbook, annotate it, keep it. Everything stays on the device, and no account is asked for.</p>
-        <div class="cta">
-          <a class="btn btn-1" href="cahier/" data-i18n="nbOpen">Open the notebook</a>
-          <a class="btn btn-2" href="./" data-i18n="nbLib">Back to the library</a>
+<main id="ess">
+  <div class="wrap ess">
+
+    <div class="ess-tete">
+      <p class="eyebrow">Owner only</p>
+      <h1>The trial</h1>
+      <p>Hand a group a link, and every copy opened through it reports how the book is
+         used — never what anyone writes. Close a group and its copies stop and erase
+         themselves.</p>
+    </div>
+
+    <!-- LA PORTE. Elle cache, elle ne protège pas : les mesures sont gardées par
+         firestore.rules, côté serveur. -->
+    <!-- VISIBLE PAR DEFAUT, et cachee seulement quand un proprietaire est
+         reconnu. Cachee au depart, une panne de Firebase - reseau coupe,
+         SDK injoignable - laissait une page entierement blanche : ni porte,
+         ni console, ni explication. Une page qui ne dit rien est pire qu'une
+         page qui dit non. -->
+    <section class="ess-porte" id="ess-porte">
+      <h2>Sign in</h2>
+      <p>This console is for the owner of the project. Everyone else sees nothing,
+         and Firestore refuses them the data itself.</p>
+      <button class="btn btn-1" id="ess-entrer">Sign in with Google</button>
+      <p class="ess-qui" id="ess-qui" style="margin-block-start:var(--s4)"></p>
+    </section>
+
+    <section id="ess-console" hidden>
+
+      <div class="ess-rangee">
+        <button class="btn btn-2" id="ess-rafraichir">Refresh</button>
+        <button class="btn btn-2" id="ess-csv" hidden>Download CSV</button>
+        <button class="btn btn-2" id="ess-pause">Stop everything</button>
+        <span class="ess-qui" id="ess-qui2"></span>
+        <span class="ess-mal" id="ess-pausemot"></span>
+      </div>
+      <p class="ess-etat" id="ess-etat"></p>
+
+      <div class="ess-bloc">
+        <h2>Launch a group</h2>
+        <p class="ess-intro">A group is one link. Give the same link to everyone in it —
+          it does not identify anybody, it only says which trial the measurements came
+          from, so two groups can be compared.</p>
+        <div class="ess-lancer">
+          <div class="ess-deux">
+            <div>
+              <label for="ess-nom">Name</label>
+              <input id="ess-nom" placeholder="Soutien — bac, group 1" maxlength="60">
+            </div>
+            <div>
+              <label for="ess-note">Note to yourself</label>
+              <textarea id="ess-note" rows="1" maxlength="300"
+                placeholder="Six former pupils, physics. Two weeks from today."></textarea>
+            </div>
+          </div>
+          <div><button class="btn btn-1" id="ess-lancer">Create the link</button></div>
         </div>
       </div>
 
-      <!-- CE N'EST PAS UNE IMAGE DE PAPIER RÉGLÉ.
-           The ruling is four gradients and the writing sits on it at a 20px
-           line-height, so what you type lands ON the lines. Try it. -->
-      <figure class="feuille" style="margin:0">
-        <div class="feuille-top">
-          <b data-i18n="nbSheetName">Optics — 12 March</b>
-          <span style="margin-inline-start:auto" data-i18n="nbSheetHint">Write on it</span>
-        </div>
-        <div class="papier" id="papier" contenteditable="true" spellcheck="false"
-             role="textbox" aria-multiline="true" aria-label="A sheet of Séyès paper you can write on">
-          <p class="clip">The reflected ray is not drawn. It is solved on every movement.</p>
-          <p>— clipped from Optique géométrique, ch. 2</p>
-          <p><br></p>
-          <p>so the angle out is the angle in, always</p>
-          <p><br></p>
-        </div>
-        <figcaption class="feuille-pied">
-          <span data-i18n="nbSheetFoot">Séyès, drawn: one strong line every 20px, three fine ones between, verticals at the same pitch, and the red margin.</span>
-          <span style="margin-inline-start:auto"><b data-i18n="nbSheetLocal">on this device only</b></span>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="sec wrap" data-mot="cmpNbVoyage">
-    <div class="sec-head">
-      <h2 data-i18n="nbTripH">How a passage gets there</h2>
-      <span class="filet" aria-hidden="true"></span>
-    </div>
-    <div class="voyage">
-      <div>
-        <h3 data-i18n="nbT1H">Select it in the book</h3>
-        <p data-i18n="nbT1P">Any passage of any textbook in the library. A figure too — the live ones come across still working, not as a screenshot of themselves.</p>
+      <div class="ess-bloc">
+        <h2>Groups</h2>
+        <p class="ess-intro">Closing a group is not a label: each copy checks this when it
+          opens, and a closed one stops collecting and wipes what it had.</p>
+        <div id="ess-groupes"></div>
       </div>
-      <div>
-        <h3 data-i18n="nbT2H">It arrives with its address</h3>
-        <p data-i18n="nbT2P">The clipping remembers which book and which chapter it came from, so months later it still says where to go back to. A quotation that has lost its source is a rumour.</p>
-      </div>
-      <div>
-        <h3 data-i18n="nbT3H">Write around it</h3>
-        <p data-i18n="nbT3P">Your own words above and below, on the ruling. The clipping keeps its rule down the side so it stays visibly someone else's.</p>
-      </div>
-      <div>
-        <h3 data-i18n="nbT4H">It stays</h3>
-        <p data-i18n="nbT4P">In the browser's own storage, on that device. Closing the tab, losing the network, or never signing in changes nothing.</p>
-      </div>
-    </div>
-  </section>
 
-  <section class="sec wrap" data-mot="cmpNbEtagere">
-    <div class="sec-head">
-      <h2 data-i18n="nbManyH">As many as they like, named as they like</h2>
-      <span class="filet" aria-hidden="true"></span>
-    </div>
-    <p class="mesure" data-i18n="nbManyP">One notebook per subject, per term, per teacher, per whim. They are made, renamed, duplicated and thrown away from a shelf that behaves like a shelf — because a pupil who is given exactly one notebook stops using it the week it gets messy.</p>
-    <div class="cahiers" style="margin-block-start:var(--s5)">
-      <div class="cah" style="--h:var(--accent-ink)"><div class="dos"></div><div class="nom">Physique — Terminale</div><div class="cmb">14 pages · 6 clippings</div></div>
-      <div class="cah" style="--h:var(--ultra-ink)"><div class="dos"></div><div class="nom">Maths, le brouillon</div><div class="cmb">31 pages · 2 clippings</div></div>
-      <div class="cah" style="--h:var(--marigold-ink)"><div class="dos"></div><div class="nom">Moby-Dick, notes</div><div class="cmb">9 pages · 22 clippings</div></div>
-      <div class="cah" style="--h:var(--jade-ink)"><div class="dos"></div><div class="nom">SVT — révisions</div><div class="cmb">5 pages · 1 clipping</div></div>
-    </div>
-    <p class="mesure" style="margin-block-start:var(--s4);font-size:.875rem;color:var(--ink-3)" data-i18n="nbManyNote">Those four are an illustration of the shelf, not a reading of yours.</p>
-  </section>
-
-  <section class="band" data-mot="cmpNbOu">
-    <div class="wrap band-grid">
-      <div>
-        <p class="eyebrow" data-i18n="nbWhereE">Where the writing lives</p>
-        <h2 class="band-h" data-i18n="nbWhereH">The device is the original.</h2>
-        <p class="band-p" data-i18n="nbWhereP">Le Jaguar works whole with no account and no connection, because a pupil whose network drops mid-lesson must keep writing, and a notebook must not vanish because a service changed its mind. Signing in is optional and adds one thing only: a copy that follows the person to another device. The original stays where it was written.</p>
+      <div class="ess-bloc">
+        <h2>What came back</h2>
+        <div id="ess-rapport"></div>
       </div>
-      <div class="ici">
-        <div>
-          <span class="puce" data-i18n="nbNoAcc">No account required</span>
-          <h3 style="margin-block-start:var(--s3)" data-i18n="nbIci1H">Nothing is sent anywhere</h3>
-          <p data-i18n="nbIci1P">Until someone chooses to sign in, no notebook has left the device it was written on. There is no server of ours in the middle to leave it on.</p>
-        </div>
-        <div>
-          <h3 data-i18n="nbIci2H">If two devices both wrote</h3>
-          <p data-i18n="nbIci2P">The most recent wins, notebook by notebook. That is not a line-by-line merge and does not pretend to be: saying so is more honest than implying a magic that does not exist.</p>
-        </div>
+
+      <div class="ess-check">
+        <p class="eyebrow">If nothing arrives</p>
+        <ol>
+          <li>Publish <code>firestore.rules</code> — Firebase console → Firestore Database → Rules.
+              Until then every write and every read is refused.</li>
+          <li>Enable <b>Anonymous</b> sign-in — Authentication → Sign-in method. It is how a
+              device gets a stable id without anyone giving a name.</li>
+          <li>Open a link yourself on a phone, accept the panel, read a chapter, then come
+              back here and press Refresh.</li>
+        </ol>
       </div>
-    </div>
-  </section>
 
-  <section class="sec wrap" data-mot="cmpNbOuvrir">
-    <div class="sec-head">
-      <h2 data-i18n="nbOpenH">Open it</h2>
-      <span class="filet" aria-hidden="true"></span>
-    </div>
-    <p class="mesure" data-i18n="nbOpenP">It opens empty, on a fresh sheet, with no sign-up and nothing to dismiss first.</p>
-
-    <!-- Le corbeau qui se tenait ici est parti en bas a droite : il y en
-         avait deux sur la meme page, a quelques centimetres l un de l autre. -->
-
-    <div class="fin">
-      <a class="btn btn-1" href="cahier/" data-i18n="nbOpen2">Open the notebook</a>
-      <a class="btn btn-2" href="simulations.html" data-i18n="nbSims">And the simulations it clips from</a>
-    </div>
-  </section>
+    </section>
+  </div>
 </main>
-
-<!-- LE CORBEAU QUI SUIT LA LECTURE.
-     Un seul oiseau par page : celui du pied s'efface (voir compagnon.css) et
-     celui-ci commente la section qu'on est en train de lire. Le `<use>` devient
-     une vraie copie du dessin a la construction - un clone ne s'anime pas. -->
-<aside class="compagnon" id="compagnon" aria-live="polite">
-  <p class="bulle bulle-muette">
-    <span class="bulle-boite">Go on, then. I will keep up.</span>
-    <svg class="bulle-queue" viewBox="0 0 8 6" aria-hidden="true" focusable="false">
-      <polygon class="bq-ink" points="0,0 8,0 8,6 3,6 3,3 0,3"/>
-      <polygon class="bq-card" points="1,1 8,1 8,5 4,5 4,2 1,2"/>
-    </svg>
-  </p>
-  <svg class="cw" data-vivant data-entier viewBox="0 0 924.3 953.19" aria-hidden="true" focusable="false">
-    <g>
-        <!-- The perch and the legs stay put. They are outside the moving group
-             on purpose: a bird whose feet slide off its own branch is exactly
-             what looked broken before. -->
-        <g class="cw-perche">
-          <polygon points="332.89 953.19 0 953.19 24.3 928.89 308.59 928.89 332.89 953.19"/>
-          <polygon points="240.81 798.46 110.38 928.89 76.47 928.89 206.9 798.46 240.81 798.46"/>
-          <polygon points="376.47 798.46 246.04 928.89 212.13 928.89 342.56 798.46 376.47 798.46"/>
-        </g>
-        <rect class="cw-patte" x="198.82" y="703.76" width="49.3" height="94.7"/>
-        <rect class="cw-patte" x="332.89" y="703.76" width="49.3" height="94.7"/>
-        <g class="cw-bete">
-          <!-- The bill is painted UNDER the body and its root runs back to
-               x=230, inside the skull, so the joint stays hidden whether it is
-               opening or crossed to the other side. -->
-          <g class="cw-bec-tour"><polygon class="cw-bec" points="230 44.02 506.38 44.02 295.47 173.54 230 173.54"/></g>
-          <polygon class="cw-tronc" points="924.3 882.59 603.82 882.59 425 703.76 198.82 703.76 24.3 529.24 24.3 74.02 88.23 .1 251.45 0 295.48 44.02 295.48 173.54 392.56 270.63 825.69 703.76 745.47 703.76 924.3 882.59"/>
-          <polygon class="cw-aile" points="825.69 703.76 295.48 703.76 207.41 615.7 207.41 358.69 295.48 270.63 392.56 270.63 825.69 703.76"/>
-          <!-- Following, crossing and blinking are three different jobs, so
-               they are three groups; one element would have them fighting over
-               a single `transform`. -->
-          <g class="cw-regard"><g class="cw-tourne"><g class="cw-paupiere">
-            <rect class="cw-oeil" x="187.37" y="57.2" width="36.52" height="36.52"/>
-          </g></g></g>
-        </g>
-      </g>
-  </svg>
-</aside>
 
 <footer class="foot">
   <!-- The bird and what it has to say, perched together on the footer's rule.
@@ -1097,10 +1000,6 @@ body::after{
 </footer>
 
 <script src="compte.js?v=muatcpjc"></script>
-<script>
-(function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
-</script>
-
 <script>
 /* ── LA LANGUE ────────────────────────────────────────────────────────────
    Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
@@ -2269,27 +2168,7 @@ body::after{
   else poser();
 })();
 </script>
-
 <script src="chrome-pages.js?v=muatcpjc"></script>
-<script>
-/* ── LA FEUILLE ──
-   It is a real writing surface, so it behaves like one: Enter makes a new
-   paragraph rather than a <div> soup, and nothing is kept. This sheet is a
-   demonstration on a marketing page - saving it would be quietly collecting
-   writing from people who never opened the notebook. */
-(function () {
-  var p = document.getElementById('papier');
-  if (!p) return;
-  try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {}
-  /* Paste arrives as plain text: a stray <h1> from somewhere else would break
-     the 20px rhythm the ruling depends on, and the line would sit off the
-     line for the rest of the page. */
-  p.addEventListener('paste', function (e) {
-    e.preventDefault();
-    var t = (e.clipboardData || window.clipboardData).getData('text');
-    document.execCommand('insertText', false, t);
-  });
-})();
-</script>
+<script type="module" src="trial.js?v=muatcpjc"></script>
 </body>
 </html>
