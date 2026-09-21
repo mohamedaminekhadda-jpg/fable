@@ -100,61 +100,6 @@
         "Littérature",
         "Anglais"
       ],
-      "level": "Collège",
-      "subjectsEn": [
-        "Literature",
-        "English"
-      ],
-      "levelEn": "Lower secondary",
-      "tags": [
-        "roman",
-        "fantaisie",
-        "victorien",
-        "nonsense",
-        "court"
-      ],
-      "tagsEn": [
-        "novel",
-        "fantasy",
-        "Victorian",
-        "nonsense",
-        "short read"
-      ],
-      "genre": "Livre",
-      "genreEn": "Book",
-      "year": "1865",
-      "yearEn": "1865",
-      "translator": "",
-      "translatorEn": "",
-      "dir": "books/alice-au-pays-des-merveilles",
-      "slug": "alice-au-pays-des-merveilles",
-      "source": "Alice in wonderland",
-      "title": "Alice’s Adventures in Wonderland",
-      "author": "Lewis Carroll",
-      "tagline": "",
-      "lang": "en",
-      "dir_texte": "ltr",
-      "look": "classic",
-      "accent": "#8c2f2a",
-      "resume": "Une petite fille tombe dans un terrier et trouve un monde qui raisonne de travers — avec une rigueur parfaite.",
-      "resumeEn": "A girl falls down a rabbit-hole into a world that reasons crookedly, and does it with perfect rigour.",
-      "droits": "domaine public",
-      "chapters": 1,
-      "built": true,
-      "chapterList": [
-        {
-          "file": "01-map.md",
-          "title": "A map of the world",
-          "rendu": "01.html"
-        }
-      ]
-    },
-    {
-      "cover": "cover.jpg",
-      "subjects": [
-        "Littérature",
-        "Anglais"
-      ],
       "level": "Lycée",
       "subjectsEn": [
         "Literature",
