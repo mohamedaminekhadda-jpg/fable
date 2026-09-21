@@ -48,6 +48,24 @@ export function groupesInventes() {
   ];
 }
 
+/* Les invitations inventees portent les MEMES uid que les appareils
+   inventes : c'est la jointure adresse -> mesures, et sans elle la table
+   des personnes s'afficherait vide alors que le rapport est plein. */
+export function invitesInventes() {
+  const u = (d) => 'demo' + d + 'x'.repeat(8);
+  return [
+    { adresse: 'yasmine@example.com', code: 'soutien-bac-1', actif: true, uid: u(0), cree: Date.now() - 11 * 864e5 },
+    { adresse: 'omar@example.com', code: 'soutien-bac-1', actif: true, uid: u(1), cree: Date.now() - 11 * 864e5 },
+    { adresse: 'salma@example.com', code: 'soutien-bac-1', actif: true, uid: u(2), cree: Date.now() - 10 * 864e5 },
+    { adresse: 'reda@example.com', code: 'soutien-bac-2', actif: true, uid: u(3), cree: Date.now() - 5 * 864e5 },
+    { adresse: 'nada@example.com', code: 'soutien-bac-2', actif: true, uid: u(4), cree: Date.now() - 5 * 864e5 },
+    /* Une invitee qui n'est jamais venue, et une retiree : ce sont les deux
+       etats qu'on veut reconnaitre d'un coup d'oeil. */
+    { adresse: 'karim@example.com', code: 'soutien-bac-2', actif: true, cree: Date.now() - 4 * 864e5 },
+    { adresse: 'ancien@example.com', code: 'soutien-bac-1', actif: false, uid: u(1), cree: Date.now() - 12 * 864e5 },
+  ];
+}
+
 export function essaiInvente() {
   const q = (n) => 'q' + n;
   const inv = [];

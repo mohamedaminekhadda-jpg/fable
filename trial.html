@@ -795,6 +795,13 @@ body::after{
 .ess-tag{display:inline-block;font-family:var(--font-mono);font-size:.68rem;padding:.08rem .4rem;
   border-radius:100px;border:1px solid var(--rule);color:var(--ink-3)}
 .ess-rien{color:var(--ink-3);font-size:.85rem}
+/* Les boutons d'une ligne de tableau : assez petits pour trois de suite
+   dans une cellule, assez grands pour un pouce. */
+.ess-mini{font-size:.72rem;padding:.24rem .55rem;margin-inline-end:.3rem}
+.ess-lancer select{inline-size:100%;font:inherit;font-size:.9375rem;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+  padding:.55rem .7rem}
+.ess-lancer select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .ess-voir{font-size:.72rem;font-weight:600;letter-spacing:.02em;white-space:nowrap;
   color:var(--accent-ink);text-decoration:none;border-bottom:1px solid var(--accent);
   padding-block-end:1px}
@@ -1101,6 +1108,28 @@ body::after{
       </div>
 
       <div class="ess-bloc">
+        <h2>People</h2>
+        <p class="ess-intro">Invite someone by address. They sign in with that same address and
+          their reading carries their name instead of an anonymous device id — which is the
+          whole point, and also the thing to tell a parent before you start.</p>
+        <div class="ess-lancer">
+          <div class="ess-deux">
+            <div>
+              <label for="ess-courriel">E-mail address</label>
+              <input id="ess-courriel" type="email" inputmode="email" autocomplete="off"
+                placeholder="eleve@example.com" maxlength="120">
+            </div>
+            <div>
+              <label for="ess-groupe">Group</label>
+              <select id="ess-groupe"></select>
+            </div>
+          </div>
+          <div><button class="btn btn-1" id="ess-inviter">Invite</button></div>
+        </div>
+        <div id="ess-invites" style="margin-block-start:var(--s4)"></div>
+      </div>
+
+      <div class="ess-bloc">
         <h2>What came back</h2>
         <div id="ess-rapport"></div>
       </div>
@@ -1181,7 +1210,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mubo2eej"></script>
+<script src="compte.js?v=mubolwgx"></script>
 <script>
 /* ── LA LANGUE ────────────────────────────────────────────────────────────
    Deux langues, un seul choix, rangé sous `fable:lang`. L'accueil, le cahier
@@ -2350,7 +2379,7 @@ body::after{
   else poser();
 })();
 </script>
-<script src="chrome-pages.js?v=mubo2eej"></script>
-<script type="module" src="trial.js?v=mubo2eej"></script>
+<script src="chrome-pages.js?v=mubolwgx"></script>
+<script type="module" src="trial.js?v=mubolwgx"></script>
 </body>
 </html>

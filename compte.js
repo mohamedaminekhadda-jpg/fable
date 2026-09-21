@@ -134,6 +134,8 @@
     'the platform: classes, reports, exams': 'la plateforme : classes, bulletins, examens',
     'They run on this machine. Anywhere else these links open an empty port — which is exactly the protection: they listen on 127.0.0.1 only. ': 'Ils tournent sur cette machine. Ailleurs, ces liens ouvrent un port vide — ce qui est exactement la protection : ils n’écoutent que 127.0.0.1. ',
     'Change an address…': 'Changer une adresse…',
+    'Confirm the address your invitation was sent to:': 'Confirmez l’adresse à laquelle l’invitation a été envoyée :',
+    'That link did not work. Ask for a new one — they expire.': 'Ce lien n’a pas fonctionné. Demandez-en un autre — ils expirent.',
     'Nothing answered on ': 'Rien n’a répondu sur ',
     '. On this machine, run « npm run lanceur » once; elsewhere, these tools do not exist.': '. Sur cette machine, lancez « npm run lanceur » une fois ; ailleurs, ces outils n’existent pas.',
     'Which tool? (': 'Quel outil ? (',
@@ -261,6 +263,48 @@
     var q = /[?&](v=[^&]*)/.exec(u);
     if (q) VERSION_Q = '?' + q[1];
   })();
+
+  /* ── ARRIVER PAR UN LIEN D'INVITATION ──────────────────────────────────
+     Firebase sait envoyer un lien de connexion a une adresse : on clique, on
+     revient ici, et la session s'ouvre. Aucun mot de passe a inventer pour un
+     eleve de terminale, et aucun serveur a nous — c'est Firebase qui poste.
+
+     LE COURRIEL N'EST PAS DANS L'ADRESSE. La methode habituelle range
+     l'adresse dans le navigateur AVANT d'envoyer ; ici c'est le professeur
+     qui envoie, depuis sa machine, et l'eleve arrive sur la sienne. On la
+     lui demande donc, une fois. La mettre dans le lien aurait evite la
+     question et promene une adresse de mineur dans un historique, une barre
+     d'adresse et tous les journaux qu'un lien traverse.
+
+     On ne charge le SDK que si l'adresse EN A L'AIR : la marque de Firebase
+     est un parametre `apiKey` accompagne d'un `oobCode`. Un visiteur
+     ordinaire ne paie rien. */
+  function ressembleAUnLien() {
+    var q = location.search || '';
+    return q.indexOf('oobCode=') >= 0 && q.indexOf('apiKey=') >= 0;
+  }
+
+  async function finirInvitation() {
+    if (!ressembleAUnLien()) return;
+    var x;
+    try { x = await charger(); } catch (e) { return; }
+    if (!x.a.isSignInWithEmailLink(x.auth, location.href)) return;
+    var adresse = '';
+    try { adresse = localStorage.getItem('fable-invite-adresse') || ''; } catch (e) { adresse = ''; }
+    if (!adresse) {
+      adresse = (window.prompt(t('Confirm the address your invitation was sent to:')) || '').trim();
+    }
+    if (!adresse) return;
+    try {
+      await x.a.signInWithEmailLink(x.auth, adresse, location.href);
+      try { localStorage.removeItem('fable-invite-adresse'); } catch (e) { /* rien */ }
+      /* On nettoie l'adresse : le code a servi, il ne doit pas rester dans
+         l'historique ni repartir dans un partage. */
+      history.replaceState(null, '', location.pathname);
+    } catch (e) {
+      alert(t('That link did not work. Ask for a new one — they expire.'));
+    }
+  }
 
   function prevenir() { etat.chezSoi = chezSoi(); ecouteurs.forEach(function (f) { try { f(etat); } catch (e) { /* un écouteur fautif ne casse pas les autres */ } }); }
   function dire(m) { etat.dernier = m; prevenir(); }
@@ -782,6 +826,8 @@
       /* Sans attendre : la page doit s'afficher tout de suite, et le nom
          apparaitra une demi-seconde plus tard quand Firebase aura repondu. */
       if (etat.pret && peutEtreConnecte()) charger().catch(function () { /* hors ligne */ });
+      /* Et si on arrive par un lien d'invitation, on le termine. */
+      if (etat.pret && ressembleAUnLien()) finirInvitation();
       return etat.pret;
     },
     surChangement: function (f) { ecouteurs.push(f); try { f(etat); } catch (e) { /* ignore */ } },

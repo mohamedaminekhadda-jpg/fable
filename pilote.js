@@ -95,7 +95,26 @@
   }
   if (venu) ecrire(CLE_CODE, String(venu).slice(0, 40));
   var CODE = lire(CLE_CODE);
-  if (!CODE) return;                      // pas dans l'essai : on n'existe pas
+
+  /* ── DEUX FACONS D'ETRE DANS L'ESSAI ─────────────────────────────────
+     Par le LIEN, avec un code de groupe : l'appareil est anonyme, on ne
+     sait jamais qui lit. C'etait la seule facon jusqu'ici.
+
+     Par INVITATION, maintenant : le professeur inscrit une adresse, la
+     personne se connecte avec, et c'est son compte qui porte la lecture.
+     Ce n'est plus anonyme, et le panneau le dit autrement dans ce cas —
+     voir MOTS.jamaisCompte. Un essai nominatif se decide, il ne se
+     decouvre pas.
+
+     On ne va chercher l'invitation que si quelqu'un s'est deja connecte
+     sur cet appareil : sans cette marque, un visiteur de passage
+     telechargerait le SDK pour apprendre qu'il n'est invite a rien. */
+  var CLE_INVITE = 'fable-pilote-invite';
+  function marqueCompte() {
+    try { return localStorage.getItem('fable-compte-vu') === '1'; } catch (e) { return false; }
+  }
+  var invitePossible = !CODE && marqueCompte();
+  if (!CODE && !invitePossible) return;   // pas dans l'essai : on n'existe pas
 
   /* ── LA LANGUE ─────────────────────────────────────────────────────────
      Le site range son choix sous `fable:lang` et les pages le posent sur
@@ -125,6 +144,20 @@
       en: 'What you write never leaves this device — your notebook, your notes and your written answers stay here. Nothing sent identifies you.',
       fr: 'Ce que vous écrivez ne quitte jamais l’appareil — votre cahier, vos notes et vos réponses rédigées restent ici. Rien de ce qui part ne vous identifie.',
       ar: 'ما تكتبه لا يغادر هذا الجهاز أبدًا — دفترك وملاحظاتك وإجاباتك المكتوبة تبقى هنا. ولا شيء مما يُرسل يدلّ عليك.',
+    },
+    /* QUAND C'EST NOMINATIF, ON LE DIT. L'autre phrase promet que rien ne
+       vous identifie ; invite par son adresse, c'est faux, et une promesse
+       fausse a un mineur est la seule chose qu'on ne puisse pas rattraper. */
+    jamaisCompte: {
+      en: 'Your teacher invited this address, so what you read here is shown to them under it. '
+        + 'What you WRITE still never leaves this device — your notebook, your notes and your '
+        + 'written answers stay here.',
+      fr: 'Votre professeur a invité cette adresse : ce que vous lisez ici lui est montré sous '
+        + 'ce nom. Ce que vous ÉCRIVEZ ne quitte toujours pas l’appareil — votre cahier, vos '
+        + 'notes et vos réponses rédigées restent ici.',
+      ar: 'دعاك أستاذك بهذا العنوان، '
+        + 'فما تقرأه هنا يُعرض عليه باسمك. '
+        + 'أمّا ما تكتبه فلا يغادر هذا الجهاز.',
     },
     oui: { en: 'Allow', fr: 'Accepter', ar: 'أوافق' },
     non: { en: 'No thanks', fr: 'Non merci', ar: 'لا، شكرًا' },
@@ -217,7 +250,7 @@
     var boite = elem('div', 'flt-boite');
     boite.appendChild(elem('h2', '', T('titre')));
     boite.appendChild(elem('p', '', demande ? T('corps') : T('actif')));
-    boite.appendChild(elem('p', 'flt-jamais', T('jamais')));
+    boite.appendChild(elem('p', 'flt-jamais', T(PAR_INVITATION ? 'jamaisCompte' : 'jamais')));
 
     var rang = elem('div', 'flt-rang');
     if (demande) {
@@ -336,13 +369,36 @@
          identités anonymes pour un seul appareil. */
       var application = app.getApps().length ? app.getApp() : app.initializeApp(C);
       var a = auth.getAuth(application);
-      /* ANONYME, et c'est un choix. Firebase tire un identifiant stable pour
-         cet appareil sans jamais demander un nom, une adresse ni un mot de
-         passe. On peut donc suivre « le même appareil est revenu trois fois »
-         — la mesure qui compte — sans détenir la moindre donnée personnelle
-         d'un mineur. Il faut avoir activé « Anonymous » dans la console. */
-      if (!a.currentUser) await auth.signInAnonymously(a);
-      fb = { a: a, f: fs, db: fs.getFirestore(application), uid: a.currentUser.uid };
+      /* ── QUI PORTE LA LECTURE ──
+         UN COMPTE CONNECTE D'ABORD. S'il y en a un, c'est lui : le
+         professeur a invite une personne, il doit retrouver cette personne.
+
+         ANONYME SINON, et c'est toujours le bon defaut. Firebase tire un
+         identifiant stable pour l'appareil sans demander ni nom ni adresse :
+         un essai distribue par lien ne detient alors aucune donnee
+         personnelle d'un mineur. Il faut avoir active « Anonymous » dans la
+         console, et « Email link » pour les invitations.
+
+         ON N'ATTEND PAS LA RESTAURATION DE SESSION AVANT DE DECIDER. Firebase
+         relit IndexedDB de facon asynchrone ; `currentUser` est nul pendant
+         un aller-retour, et ouvrir une session anonyme dans cet intervalle
+         couperait la lecture en deux moities qui ne se rejoindraient jamais.
+         On laisse donc `onAuthStateChanged` parler une premiere fois. */
+      var qui = await new Promise(function (ok) {
+        var fait = false;
+        var stop = auth.onAuthStateChanged(a, function (u) {
+          if (fait) return;
+          fait = true; stop();
+          ok(u);
+        });
+        setTimeout(function () { if (!fait) { fait = true; ok(a.currentUser); } }, 4000);
+      });
+      if (!qui) { await auth.signInAnonymously(a); qui = a.currentUser; }
+      fb = {
+        a: a, f: fs, db: fs.getFirestore(application), uid: qui.uid,
+        anonyme: !!qui.isAnonymous,
+        adresse: (qui.email || '').toLowerCase(),
+      };
       return fb;
     })();
     return chargement;
@@ -1010,8 +1066,46 @@
     if (accord === 'oui') { poserPastille(); demarrer(); return; }
     ouvrirPanneau(true);
   }
-  if (document.body) lancer();
-  else addEventListener('DOMContentLoaded', lancer);
+
+  /* ── EST-ON ATTENDU ? ──────────────────────────────────────────────────
+     Si aucun code n'a ete distribue par lien, on regarde si le compte
+     connecte porte une invitation. La reponse decide de DEUX choses : si
+     l'essai existe du tout pour cette personne, et ce que le panneau lui
+     promet. On attend donc Firebase avant d'ouvrir la bouche — un panneau
+     qui annonce l'anonymat puis se ravise ne vaut rien.
+
+     Une invitation retiree fait disparaitre l'essai a la visite suivante :
+     `actif` est relu a chaque fois, jamais mis en cache. */
+  var PAR_INVITATION = false;
+  function partir() {
+    if (document.body) lancer();
+    else addEventListener('DOMContentLoaded', lancer);
+  }
+
+  if (CODE) partir();
+  else {
+    charger().then(function (x) {
+      if (x.anonyme || !x.adresse) return null;
+      var d = x.f;
+      return d.getDoc(d.doc(x.db, 'invites', x.adresse)).then(function (r) {
+        if (!r || !r.exists || !r.exists()) return null;
+        var v = r.data() || {};
+        if (v.actif === false) return null;
+        CODE = String(v.code || 'invite').slice(0, 40);
+        PAR_INVITATION = true;
+        /* On tamponne l'invitation : c'est ce qui permet au professeur de
+           savoir qui est venu, et c'est la SEULE jointure entre une adresse
+           et un identifiant de mesure. Les regles ne laissent ecrire que
+           ces deux champs-la. */
+        var neuf = { uid: x.uid };
+        if (!v.vu) neuf.vu = d.serverTimestamp();
+        return d.setDoc(d.doc(x.db, 'invites', x.adresse), neuf, { merge: true })
+          .catch(function () { /* tant pis, la lecture compte plus */ });
+      });
+    }).then(function () {
+      if (CODE) partir();
+    }).catch(function () { /* hors ligne, ou rien pour nous : on n'existe pas */ });
+  }
 
   /* Une poignée pour la console du navigateur, quand on teste sur un vrai
      téléphone et qu'on veut savoir ce qui attend. Elle ne lit rien de plus

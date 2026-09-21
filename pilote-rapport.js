@@ -59,7 +59,7 @@ export function evenements(tout) {
   return out;
 }
 
-const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) =>
+export const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const med = (a) => (a.length ? a.slice().sort((x, y) => x - y)[Math.floor(a.length / 2)] : null);
 const mn = (s) => (s < 60 ? Math.round(s) + 's' : Math.round(s / 60) + ' min');
@@ -235,7 +235,10 @@ function gravite(f) {
   return g;
 }
 
-function table(tetes, lignes) {
+/* Exporte : la console des invitations dresse le meme genre de tableau,
+   et deux mises en page du meme objet finiraient par ne plus se
+   ressembler. */
+export function table(tetes, lignes) {
   if (!lignes.length) return '<p class="ess-rien">Nothing yet.</p>';
   const th = tetes.map((t) => `<th${t[1] ? ' class="n"' : ''}>${esc(t[0])}</th>`).join('');
   const tr = lignes.map((l) => {
