@@ -60,6 +60,43 @@ function proprietaire(u) {
   return !!(u && u.email && (PROPRIETAIRES || []).indexOf(String(u.email).toLowerCase()) >= 0);
 }
 
+/* ── QUAND FIRESTORE DIT NON ─────────────────────────────────────────────
+   « Missing or insufficient permissions » est exact et parfaitement inutile :
+   il ne dit ni qui demandait, ni ce qu'attendaient les regles, ni quoi faire
+   ensuite. Or ici la cause est presque toujours la meme et elle se corrige en
+   cinq minutes — les regles ne sont pas publiees.
+
+   On montre donc l'identite telle que la BASE la voit, parce que c'est la
+   seule qui compte : la page laisse entrer sur une comparaison en minuscules,
+   les regles comparaient autrefois a la lettre pres, et un compte a majuscule
+   passait la porte pour se faire refuser derriere. */
+function refus(e) {
+  return e && (e.code === 'permission-denied'
+    || /insufficient permissions|PERMISSION_DENIED/i.test(e.message || ''));
+}
+
+function expliquerRefus(ou) {
+  var u = auth && auth.currentUser;
+  var html = '<div class="ess-check">'
+    + '<p class="eyebrow ess-mal">Firestore refused</p>'
+    + '<p class="ess-why">The database turned the request down. That is the rules speaking, '
+    + 'not the page \u2014 and almost always because they have not been published yet.</p>'
+    + '<ol>'
+    + '<li><b>Publish the rules.</b> Firebase console \u2192 your project \u2192 Firestore Database '
+    + '\u2192 <b>Rules</b> \u2192 paste <code>firestore.rules</code> \u2192 Publish. '
+    + 'Nothing can be written or read until this is done.</li>'
+    + '<li><b>Enable Anonymous sign-in.</b> Authentication \u2192 Sign-in method \u2192 Anonymous.</li>'
+    + '</ol>'
+    + '<p class="ess-why" style="margin-block-start:.7rem">What the database sees of you right now:<br>'
+    + '<code>' + esc((u && u.email) || 'not signed in') + '</code> \u00b7 '
+    + 'verified: <code>' + ((u && u.emailVerified) ? 'yes' : 'no') + '</code><br>'
+    + 'The rules must list that address, in lower case. It is also in '
+    + '<code>PROPRIETAIRES</code> in <code>web/firebase-config.js</code>, and the two are kept '
+    + 'in step by hand.</p>'
+    + '</div>';
+  $(ou).innerHTML = html;
+}
+
 /* ── LA PORTE ──────────────────────────────────────────────────────────── */
 async function demarrer() {
   await firebase();
@@ -92,7 +129,11 @@ async function chargerGroupes() {
   try {
     const s = await F.getDocs(F.collection(db, 'pilote-groupes'));
     groupes = s.docs.map((d) => ({ code: d.id, ...d.data() }));
-  } catch (e) { etat('Cannot read the groups: ' + e.message, 1); groupes = []; }
+  } catch (e) {
+    etat('Cannot read the groups: ' + e.message, 1);
+    if (refus(e)) expliquerRefus('#ess-rapport');
+    groupes = [];
+  }
 }
 async function chargerReglages() {
   try {
@@ -136,7 +177,10 @@ async function lancer() {
        on a besoin dans la minute qui suit. */
     const l = document.getElementById('lien-' + code);
     if (l) { l.scrollIntoView({ block: 'center' }); l.focus(); l.select && l.select(); }
-  } catch (e) { etat('Could not create the group: ' + e.message, 1); }
+  } catch (e) {
+    etat('Could not create the group: ' + e.message, 1);
+    if (refus(e)) expliquerRefus('#ess-rapport');
+  }
 }
 
 function lienDe(code) { return RACINE + '?pilote=' + encodeURIComponent(code); }
@@ -228,9 +272,7 @@ async function chargerMesures() {
     etat('');
   } catch (e) {
     etat('Refused: ' + e.message, 1);
-    $('#ess-rapport').innerHTML =
-      '<p class="ess-rien">Firestore refused the read. The usual cause is that '
-      + '<code>firestore.rules</code> has not been published in the Firebase console.</p>';
+    expliquerRefus('#ess-rapport');
   }
 }
 
