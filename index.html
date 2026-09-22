@@ -1663,7 +1663,7 @@ body::after{
   .vt-texte{min-block-size:0;padding:var(--s5) var(--s4) var(--s4)}
   .vt-scene{min-block-size:22rem}
   .vt-onglets{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
-    margin-inline:calc(var(--s5) * -1);padding-inline:var(--s5)}
+    margin-inline:calc(var(--s4) * -1);padding-inline:var(--s4)}
   .vt-onglets::-webkit-scrollbar{display:none}
   .vt-onglets button{white-space:nowrap}
   .vt-f0,.vt-f2,.vt-f3,.vt-f4{inset-inline-end:-.8rem}
@@ -1678,8 +1678,132 @@ body::after{
   .vt-vue.on .vt-rangs b,.vt-segs i.on::after{animation:none}
   .vt-par,.vt-vue{transition:none}
 }
+
+/* ── LE RECIT ──────────────────────────────────────────────────────────────
+   La scene epinglee n'existe que sous .rc-vivant, que le script pose sur
+   <html> quand il prend la main. Sans lui — pas de JavaScript, ou mouvement
+   reduit — la section est une page ordinaire : le livre ouvert a l'etat
+   final et les six etapes en liste. Les valeurs par defaut des variables
+   sont donc celles de la FIN de l'histoire.
+
+   Le defilement ne pilote que des transformations et des opacites ; les
+   courbes, elles, sont recoupees par le script a chaque trame demandee.
+   Rien de tout cela n'est une animation : c'est l'etat que dicte la position
+   de la page, et il ne change que quand elle change. */
+.recit{--ouvre:1;--gauche:1;--axes:1;--p:1;position:relative;padding-block:var(--s7)}
+.rc-grille{inline-size:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:var(--s7);
+  align-items:center}
+
+/* ── le texte ── */
+.rc-texte{position:relative}
+.rc-texte .eyebrow{margin-block-end:var(--s4)}
+.rc-etapes{list-style:none;margin:0;padding:0;display:grid;gap:var(--s6)}
+.rc-etapes b{display:block;font-family:var(--font-display);font-size:.78rem;letter-spacing:.14em;
+  color:var(--accent-ink);font-variant-numeric:lining-nums;margin-block-end:.5rem}
+.rc-etapes h3{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;
+  letter-spacing:-.035em;line-height:1.08;margin:0 0 .7rem;font-variation-settings:"opsz" 60,"wdth" 96}
+.rc-etapes p{margin:0;color:var(--ink-2);font-size:1.05rem;line-height:1.6;max-inline-size:28rem}
+.rc-eq{display:none;margin-block-start:.7rem;font-family:var(--font-mono);font-size:.78rem;color:var(--ink-2);
+  direction:ltr;unicode-bidi:isolate}
+.rc-cta{margin-block-start:var(--s5)}
+.rc-jauge{display:none}
+
+/* ── le livre ── */
+.rc-livre{perspective:2200px;display:grid;place-items:center}
+.rc-volume{position:relative;inline-size:min(38rem,100%);aspect-ratio:1.5;
+  transform-style:preserve-3d;
+  transform:translateX(calc((1 - var(--ouvre)) * -25%)) rotateX(calc((1 - var(--ouvre)) * 8deg));
+  transition:transform .08s linear}
+[dir="rtl"] .rc-volume{transform:translateX(calc((1 - var(--ouvre)) * 25%)) rotateX(calc((1 - var(--ouvre)) * 8deg))}
+.rc-page{position:absolute;inset-block:0;inline-size:50%;box-sizing:border-box;
+  padding:1.3rem 1.35rem 1.1rem;background:var(--card);color:var(--ink);
+  display:flex;flex-direction:column;overflow:hidden}
+.rc-gauche{inset-inline-start:0;border-radius:6px 0 0 6px;opacity:var(--gauche);
+  background-image:linear-gradient(90deg,transparent 78%,rgba(20,17,14,.07));
+  box-shadow:-18px 28px 50px -30px rgba(20,17,14,.45)}
+.rc-droite{inset-inline-end:0;border-radius:0 6px 6px 0;
+  background-image:linear-gradient(90deg,rgba(20,17,14,.08),transparent 22%);
+  box-shadow:18px 28px 50px -30px rgba(20,17,14,.45)}
+[dir="rtl"] .rc-gauche{border-radius:0 6px 6px 0;background-image:linear-gradient(270deg,transparent 78%,rgba(20,17,14,.07))}
+[dir="rtl"] .rc-droite{border-radius:6px 0 0 6px;background-image:linear-gradient(270deg,rgba(20,17,14,.08),transparent 22%)}
+
+/* LA COUVERTURE pivote sur le dos du livre. Face cachee au-dela de 90° : ce
+   qui la remplace est la page de gauche, qui apparait a mesure. En arabe le
+   livre s'ouvre par l'autre bord — rotateY est physique, il faut donc le
+   retourner a la main (voir la note de l'etagere, meme piege). */
+.rc-couv{position:absolute;inset-block:0;inset-inline-end:0;inline-size:50%;
+  transform-origin:left center;transform:translateZ(1px) rotateY(calc(var(--ouvre) * -180deg));
+  backface-visibility:hidden;border-radius:0 6px 6px 0;overflow:hidden;
+  box-shadow:0 30px 60px -28px rgba(20,17,14,.55)}
+[dir="rtl"] .rc-couv{transform-origin:right center;transform:translateZ(1px) rotateY(calc(var(--ouvre) * 180deg));
+  border-radius:6px 0 0 6px}
+.rc-couv img{display:block;inline-size:100%;block-size:100%;object-fit:cover}
+
+.rc-entete{margin:0 0 .9rem;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3)}
+.rc-fin{text-align:end}
+.rc-question{margin:0 0 1rem;font-size:.82rem;line-height:1.5;color:var(--ink)}
+.rc-question b{color:var(--accent-ink)}
+.rc-calcul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;direction:ltr;unicode-bidi:isolate}
+.rc-calcul li{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-2);padding:.3rem .45rem;
+  border-radius:6px;transition:opacity .45s ease,transform .45s ease,background-color .45s ease}
+.rc-calcul .rc-conclu{color:var(--accent-ink);font-weight:600;
+  background:color-mix(in oklab,var(--accent) 10%,transparent)}
+.rc-folio{margin:auto 0 0;font-size:.62rem;color:var(--ink-3);font-variant-numeric:lining-nums}
+
+.rc-fig{display:block;inline-size:100%;block-size:auto;direction:ltr}
+.rc-axes{opacity:var(--axes);transition:opacity .3s ease}
+.rc-axes line{stroke:var(--ink-3);stroke-width:1.2}
+.rc-axes text,.rc-graduations text{font-size:9.5px;fill:var(--ink-3)}
+.rc-graduations line{stroke:var(--ink-3);stroke-width:1}
+.rc-trajet{fill:none;stroke-width:2.6;stroke-linecap:round}
+.rc-point{transition:opacity .25s ease,transform .25s ease;transform-box:fill-box;transform-origin:center}
+.rc-portee line{stroke-width:1.4;stroke-dasharray:3 3}
+.rc-portee text{font-size:11px;font-weight:700;font-family:var(--font-display)}
+.rc-droite .rc-fig{margin-block-start:auto}
+.rc-portee circle:not([fill="none"]){stroke:var(--card);stroke-width:1.5}
+.rc-lecture{display:flex;justify-content:space-between;gap:.6rem;margin-block-start:.4rem;
+  font-family:var(--font-mono);font-size:.66rem;color:var(--ink-3);direction:ltr}
+.rc-lecture .rc-l-angle{font-weight:700;color:var(--ink)}
+
+/* ── EPINGLE, quand le script est la ────────────────────────────────────── */
+.rc-vivant .recit{block-size:600vh;padding:0}
+.rc-vivant .rc-scene{position:sticky;inset-block-start:0;block-size:100vh;block-size:100svh;
+  display:grid;align-items:center;padding-block:5.5rem 2rem;overflow:hidden}
+.rc-vivant .rc-etapes{display:block;position:relative;min-block-size:17rem}
+.rc-vivant .rc-etapes li{position:absolute;inset-inline:0;inset-block-start:0;opacity:0;
+  transform:translateY(18px);pointer-events:none;
+  transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.rc-vivant .rc-etapes li.on{opacity:1;transform:none;pointer-events:auto}
+.rc-vivant .rc-etapes li.passe{transform:translateY(-18px)}
+.rc-vivant .rc-jauge{display:block;position:absolute;inset-inline-start:-1.6rem;inset-block:2.6rem 0;
+  inline-size:2px;border-radius:1px;background:var(--rule)}
+.rc-vivant .rc-jauge i{position:absolute;inset:0;border-radius:1px;background:var(--accent);
+  transform-origin:top center;transform:scaleY(var(--p))}
+.rc-vivant .rc-calcul li:not(.vu){opacity:0;transform:translateY(6px)}
+.rc-vivant .rc-point:not(.vu){opacity:0;transform:scale(.2)}
+.rc-vivant .rc-portee:not(.vu){opacity:0}
+.rc-portee{transition:opacity .4s ease}
+
+/* ── un telephone : une page, pas une double page ── */
+@media (max-width:52rem){
+  .rc-grille{grid-template-columns:1fr;gap:var(--s5)}
+  .rc-volume{inline-size:min(19rem,76vw,calc((100svh - 25rem) * .75));aspect-ratio:.75;transform:none}
+  [dir="rtl"] .rc-volume{transform:none}
+  .rc-gauche{display:none}
+  .rc-droite,.rc-couv{inline-size:100%;border-radius:6px}
+  .rc-eq{display:block}
+  .rc-vivant .rc-etapes{min-block-size:13.5rem}
+  .rc-vivant .rc-scene{padding-block:6.8rem 1rem;align-content:start}
+  .rc-etapes h3{font-size:clamp(1.35rem,6vw,1.8rem)}
+  .rc-etapes p{font-size:.95rem}
+  .rc-vivant .rc-jauge{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .rc-volume,.rc-calcul li,.rc-point,.rc-portee,.rc-axes{transition:none}
+}
 </style>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mud77bub";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mud89d1w";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/accueil.jpg?v=db495b97e7">
@@ -1841,6 +1965,102 @@ body::after{
        taille qu'elle mérite. Elle est sombre dans les deux thèmes — ses jetons
        de couleur sont redéfinis sur `.band`, donc tout ce qu'elle contient
        suit sans le savoir. -->
+  <!-- ── LE RECIT ──────────────────────────────────────────────────────────
+       Une page de manuel, lue lentement. La section fait six ecrans de haut ;
+       la scene reste epinglee pendant qu'on les traverse, et le defilement
+       fait avancer l'histoire : le livre s'ouvre, une question, les axes, puis
+       la figure RESOUT le probleme trajectoire par trajectoire.
+
+       L'histoire a un retournement, et il est vrai : lance a 30° puis a 60°,
+       le ballon retombe AU MEME ENDROIT, parce que sin 2θ vaut la meme chose
+       pour les deux. Puis 45°, entre les deux, va plus loin que l'un et
+       l'autre. Personne ne l'a dessine : les trois courbes sont calculees au
+       chargement a partir des equations du mouvement.
+
+       SANS JAVASCRIPT, OU AU CALME, on voit l'etat final — livre ouvert, trois
+       trajectoires, la reponse — et les etapes en liste. Le defilement
+       epingle n'existe que si le script l'a mis en place. -->
+  <section class="recit" id="recit" aria-labelledby="rc-h">
+    <div class="rc-scene">
+      <div class="rc-grille wrap">
+
+        <div class="rc-texte">
+          <p class="eyebrow" id="rc-h" data-i18n="rcEye">One page, read slowly</p>
+          <ol class="rc-etapes">
+            <li data-e="0"><b>01</b>
+              <h3 data-i18n="rcH0">It starts as a book.</h3>
+              <p data-i18n="rcP0">A physics textbook — the one every pupil in terminale carries.</p></li>
+            <li data-e="1"><b>02</b>
+              <h3 data-i18n="rcH1">Open it, and it asks a question.</h3>
+              <p data-i18n="rcP1">At what angle does a thrown ball land furthest? On paper, you would take the answer on trust.</p></li>
+            <li data-e="2"><b>03</b>
+              <h3 data-i18n="rcH2">The figure arrives, and it is live.</h3>
+              <p data-i18n="rcP2">Axes, like any textbook's. But it runs the lesson's own equations.</p>
+              <code class="rc-eq">y = x·tan θ − g·x² / (2v₀²·cos²θ)</code></li>
+            <li data-e="3"><b>04</b>
+              <h3 data-i18n="rcH3">It works the problem out, point by point.</h3>
+              <p data-i18n="rcP3">Thrown at 30°, every position is computed from the lesson's own equation.</p>
+              <code class="rc-eq">θ = 30° → R = 14.2 m</code></li>
+            <li data-e="4"><b>05</b>
+              <h3 data-i18n="rcH4">Then 60° — and it lands in the same place.</h3>
+              <p data-i18n="rcP4">Not a coincidence: sin 2θ is the same for both. The figure found that; nobody drew it.</p>
+              <code class="rc-eq">θ = 60° → R = 14.2 m</code></li>
+            <li data-e="5"><b>06</b>
+              <h3 data-i18n="rcH5">45° goes furthest. That is the answer.</h3>
+              <p data-i18n="rcP5">A textbook that does the mathematics while you read it. That is the whole idea.</p>
+              <code class="rc-eq">θ = 45° → R = 16.4 m</code>
+              <a class="btn btn-1 rc-cta" href="library/manuel-bac-demo/" data-i18n="rcCta">Open this book</a></li>
+          </ol>
+          <div class="rc-jauge" aria-hidden="true"><i></i></div>
+        </div>
+
+        <div class="rc-livre" aria-hidden="true">
+          <div class="rc-volume">
+
+            <div class="rc-page rc-gauche">
+              <p class="rc-entete" data-i18n="rcCh">Chapter 4 · Motion in a field</p>
+              <p class="rc-question"><b data-i18n="rcEx">Exercise 3.</b> <span data-i18n="rcQ">A ball leaves the ground at 12.7 m/s. At what angle does it land furthest?</span></p>
+              <ol class="rc-calcul">
+                <li data-l="1"><span>x(t) = v₀ cos θ · t</span></li>
+                <li data-l="1"><span>y(t) = v₀ sin θ · t − ½ g t²</span></li>
+                <li data-l="2"><span>y = 0 ⇒ t = 2 v₀ sin θ / g</span></li>
+                <li data-l="3"><span>R = v₀² · sin 2θ / g</span></li>
+                <li data-l="4" class="rc-conclu"><span>sin 2θ max at 2θ = 90° ⇒ θ = 45°</span></li>
+              </ol>
+              <p class="rc-folio">112</p>
+            </div>
+
+            <div class="rc-page rc-droite">
+              <p class="rc-entete rc-fin" data-i18n="rcFig">Figure 4.7</p>
+              <svg class="rc-fig" viewBox="0 0 320 214">
+                <g class="rc-axes">
+                  <line x1="20" y1="160" x2="306" y2="160"/>
+                  <line x1="20" y1="160" x2="20" y2="44"/>
+                  <text x="306" y="176" text-anchor="end">x (m)</text>
+                  <text x="26" y="48">y</text>
+                  <g class="rc-graduations"></g>
+                </g>
+                <g class="rc-trajets"></g>
+                <g class="rc-portees"></g>
+              </svg>
+              <div class="rc-lecture">
+                <span class="rc-l-angle">θ = 30°</span>
+                <span class="rc-l-pos">x = 0.0 m · y = 0.0 m</span>
+              </div>
+              <p class="rc-folio rc-fin">113</p>
+            </div>
+
+            <div class="rc-couv">
+              <img src="library/manuel-bac-demo/cover.jpg" alt="" width="600" height="800" loading="lazy" decoding="async">
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <section class="band" aria-labelledby="band-h">
     <div class="wrap band-grid">
       <div>
@@ -4027,6 +4247,25 @@ body::after{
       navNb: "لوجاݣوار",
       navProj: "المشروع",
       navTrial: "التجربة",
+      /* le recit */
+      rcEye: "صفحة واحدة، تُقرأ على مهل",
+      rcH0: "في البداية، هو كتاب.",
+      rcP0: "كتاب فيزياء — ذاك الذي يحمله كلّ تلميذ في السنة النهائية.",
+      rcH1: "افتحه، فيطرح سؤالًا.",
+      rcP1: "بأيّ زاوية تسقط الكرة المقذوفة أبعد ما يمكن؟ على الورق، ستأخذ الجواب على الثقة.",
+      rcH2: "يظهر الشكل، وهو حيّ.",
+      rcP2: "محاور كما في أيّ كتاب مدرسي. لكنّه يشغّل معادلات الدرس نفسها.",
+      rcH3: "يحلّ المسألة نقطةً نقطة.",
+      rcP3: "عند القذف بزاوية 30°، تُحسب كلّ نقطة بمعادلة الدرس نفسها.",
+      rcH4: "ثمّ 60° — فتسقط في المكان نفسه.",
+      rcP4: "ليست صدفة: sin 2θ واحد للزاويتين. الشكل هو من وجد ذلك، ولم يرسمه أحد.",
+      rcH5: "45° تذهب أبعد. هذا هو الجواب.",
+      rcP5: "كتاب مدرسي يُجري الرياضيات بينما تقرؤه. هذه هي الفكرة كلّها.",
+      rcCta: "افتح هذا الكتاب",
+      rcCh: "الفصل 4 · الحركة في مجال",
+      rcFig: "الشكل 4.7",
+      rcEx: "التمرين 3.",
+      rcQ: "تغادر كرة الأرض بسرعة 12.7 م/ث. بأيّ زاوية تسقط أبعد ما يمكن؟",
       /* la vitrine */
       vtH: "ما يفعله، في خمس خطوات",
       vtT0: "اقرأ",
@@ -4336,6 +4575,25 @@ body::after{
       navHome: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
       navNb: 'Le Jaguar', navProj: 'Le projet',
       navTrial: "L’essai",
+      /* le recit */
+      rcEye: "Une page, lue lentement",
+      rcH0: "Au départ, c’est un livre.",
+      rcP0: "Un manuel de physique — celui que chaque élève de terminale a dans son sac.",
+      rcH1: "On l’ouvre, et il pose une question.",
+      rcP1: "Sous quel angle un ballon lancé retombe-t-il le plus loin ? Sur papier, on croirait la réponse sur parole.",
+      rcH2: "La figure arrive, et elle est vivante.",
+      rcP2: "Des axes, comme dans n’importe quel manuel. Mais elle exécute les équations mêmes de la leçon.",
+      rcH3: "Elle résout le problème, point par point.",
+      rcP3: "Lancé à 30°, chaque position est calculée avec l’équation même de la leçon.",
+      rcH4: "Puis 60° — et il retombe au même endroit.",
+      rcP4: "Ce n’est pas un hasard : sin 2θ est le même pour les deux. La figure l’a trouvé ; personne ne l’a dessiné.",
+      rcH5: "45° va le plus loin. C’est la réponse.",
+      rcP5: "Un manuel qui fait les mathématiques pendant qu’on le lit. Toute l’idée est là.",
+      rcCta: "Ouvrir ce livre",
+      rcCh: "Chapitre 4 · Mouvement dans un champ",
+      rcFig: "Figure 4.7",
+      rcEx: "Exercice 3.",
+      rcQ: "Un ballon quitte le sol à 12,7 m/s. Sous quel angle retombe-t-il le plus loin ?",
       /* la vitrine */
       vtH: "Ce qu’il fait, en cinq gestes",
       vtT0: "Lire",
@@ -6042,11 +6300,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mud77bub). Non remplacée —
+  /* La version est posée par la construction (mud89d1w). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mud77bub')
+  fetch('library/library.json?v=mud89d1w')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -6057,7 +6315,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mud77bub"></script>
+<script src="compte.js?v=mud89d1w"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
@@ -6226,6 +6484,144 @@ body::after{
       scene.style.setProperty('--my', 0);
     });
   }
+})();
+</script>
+<script>
+/* LE RECIT — la position de la page EST l'horloge. Un ecouteur de
+   defilement passif demande une trame, la trame lit ou en est la section et
+   pose l'etat qui correspond ; si personne ne defile, rien ne tourne.
+   animation-timeline ferait la meme chose sans script, mais Firefox ne le
+   connait pas et il reste actif en permanence — la note de l'accueil l'a
+   deja ecarte une fois.
+
+   LES COURBES SONT CALCULEES, pas dessinees : x = v0 cos θ t, y = v0 sin θ t
+   - g t^2 / 2, echantillonnees sur le temps de vol. Le trace coupe la courbe
+   a la fraction voulue et le point de tete est le dernier point : la lecture
+   affichee est donc exactement la position du ballon a l'ecran. */
+(function () {
+  'use strict';
+  var s = document.getElementById('recit');
+  if (!s) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var V0 = 12.7, G = 9.81, OX = 20, OY = 160, K = 16; /* 16 px par metre */
+  var N = 72;
+  var calme = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var etapes = [].slice.call(s.querySelectorAll('.rc-etapes li'));
+  var lignes = [].slice.call(s.querySelectorAll('.rc-calcul li'));
+  var lAngle = s.querySelector('.rc-l-angle');
+  var lPos = s.querySelector('.rc-l-pos');
+  var fig = s.querySelector('.rc-fig');
+
+  function el(nom, attrs, parent) {
+    var e = document.createElementNS(NS, nom);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function portee(deg) { return V0 * V0 * Math.sin(2 * deg * Math.PI / 180) / G; }
+
+  /* graduations tous les 2 m */
+  var grad = fig.querySelector('.rc-graduations');
+  for (var m = 2; m <= 16; m += 2) {
+    el('line', { x1: OX + m * K, y1: OY, x2: OX + m * K, y2: OY + 3 }, grad);
+    el('text', { x: OX + m * K, y: OY + 12, 'text-anchor': 'middle' }, grad).textContent = m;
+  }
+
+  /* Trois trajectoires, dans l'ordre ou l'histoire les lance. */
+  var TRAJ = [
+    { deg: 30, de: .36, a: .52, teinte: 'var(--ultra)' },
+    { deg: 60, de: .56, a: .72, teinte: 'var(--lilac)' },
+    { deg: 45, de: .78, a: .92, teinte: 'var(--accent)' }
+  ];
+  var gT = fig.querySelector('.rc-trajets'), gP = fig.querySelector('.rc-portees');
+  TRAJ.forEach(function (t) {
+    var th = t.deg * Math.PI / 180, T = 2 * V0 * Math.sin(th) / G;
+    t.pts = [];
+    for (var i = 0; i <= N; i++) {
+      var u = T * i / N;
+      var x = V0 * Math.cos(th) * u, y = V0 * Math.sin(th) * u - G * u * u / 2;
+      t.pts.push([x, Math.max(0, y)]);
+    }
+    t.R = portee(t.deg);
+    t.path = el('path', { class: 'rc-trajet', stroke: t.teinte }, gT);
+    t.tete = el('circle', { class: 'rc-point', r: 4, fill: t.teinte }, gT);
+    var X = OX + t.R * K;
+    t.marque = el('g', { class: 'rc-portee' }, gP);
+    /* Les portees s'ecrivent SOUS l'axe, a l'abri des courbes : 14,2 m
+       tire a gauche du point, 16,4 m a droite, et le retournement de 60°
+       prend une deuxieme ligne sous la premiere. */
+    if (t.deg === 60) {
+      el('circle', { cx: X, cy: OY, r: 7.5, fill: 'none', stroke: t.teinte, 'stroke-width': 1.6 }, t.marque);
+      el('text', { x: X + 4, y: OY + 42, 'text-anchor': 'end', fill: t.teinte }, t.marque).textContent = '30° = 60°';
+    } else {
+      el('circle', { cx: X, cy: OY, r: 4.5, fill: t.teinte }, t.marque);
+      el('text', { x: t.deg === 45 ? X - 4 : X + 4, y: OY + 28, 'text-anchor': t.deg === 45 ? 'start' : 'end',
+        fill: t.teinte }, t.marque).textContent = t.R.toFixed(1) + ' m';
+    }
+  });
+
+  function seg(p, a, b) { return Math.min(1, Math.max(0, (p - a) / (b - a))); }
+  function doux(x) { return x * x * (3 - 2 * x); }
+  var PAS = [0, .14, .30, .36, .54, .76];
+  var LIGNE = { 1: .28, 2: .44, 3: .62, 4: .86 };
+
+  var dernier = -1;
+  function poser(p) {
+    if (p === dernier) return;
+    dernier = p;
+    s.style.setProperty('--p', p.toFixed(4));
+    s.style.setProperty('--ouvre', doux(seg(p, .08, .24)).toFixed(4));
+    s.style.setProperty('--gauche', seg(p, .16, .26).toFixed(4));
+    s.style.setProperty('--axes', seg(p, .26, .34).toFixed(4));
+
+    var e = 0;
+    for (var i = 0; i < PAS.length; i++) if (p >= PAS[i]) e = i;
+    etapes.forEach(function (li, i) {
+      li.classList.toggle('on', i === e);
+      li.classList.toggle('passe', i < e);
+    });
+    lignes.forEach(function (li) { li.classList.toggle('vu', p >= LIGNE[li.getAttribute('data-l')]); });
+
+    var actif = null;
+    TRAJ.forEach(function (t) {
+      var f = seg(p, t.de, t.a);
+      var n = Math.round(f * N), d = '';
+      for (var i = 0; i <= n; i++) d += (i ? 'L' : 'M') + (OX + t.pts[i][0] * K).toFixed(1) + ' ' + (OY - t.pts[i][1] * K).toFixed(1);
+      t.path.setAttribute('d', n ? d : '');
+      var q = t.pts[n];
+      t.tete.setAttribute('cx', (OX + q[0] * K).toFixed(1));
+      t.tete.setAttribute('cy', (OY - q[1] * K).toFixed(1));
+      t.tete.classList.toggle('vu', f > 0);
+      t.marque.classList.toggle('vu', f >= 1);
+      if (f > 0) actif = { t: t, q: q };
+    });
+    if (!actif) actif = { t: TRAJ[0], q: [0, 0] };
+    lAngle.textContent = 'θ = ' + actif.t.deg + '°';
+    lPos.textContent = 'x = ' + actif.q[0].toFixed(1) + ' m · y = ' + actif.q[1].toFixed(1) + ' m';
+  }
+
+  /* Au calme : l'etat final, sans epingle. C'est aussi ce que voit une page
+     sans script, a la figure pres. */
+  if (calme) { poser(1); return; }
+
+  document.documentElement.classList.add('rc-vivant');
+  var attente = false;
+  function lire() {
+    attente = false;
+    var r = s.getBoundingClientRect();
+    var course = r.height - window.innerHeight;
+    poser(course > 0 ? Math.min(1, Math.max(0, -r.top / course)) : 1);
+  }
+  function demander() { if (!attente) { attente = true; requestAnimationFrame(lire); } }
+  window.addEventListener('scroll', demander, { passive: true });
+  window.addEventListener('resize', demander);
+  /* Le bouton de la derniere etape peut recevoir le focus au clavier avant
+     qu'on y soit : on amene alors la page a la fin du recit. */
+  var cta = s.querySelector('.rc-cta');
+  if (cta) cta.addEventListener('focus', function () {
+    if (dernier < PAS[5]) window.scrollTo(0, s.getBoundingClientRect().top + pageYOffset + s.offsetHeight - window.innerHeight);
+  });
+  lire();
 })();
 </script>
 </body>
