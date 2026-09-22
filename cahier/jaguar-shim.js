@@ -122,7 +122,7 @@
   let _biblio = null;
   function biblio() {
     if (_biblio) return Promise.resolve(_biblio);
-    return vraiFetch('../library/library.json?v=mudb2j1o')
+    return vraiFetch('../library/library.json?v=mudbqpcu')
       .then((r) => (r.ok ? r.json() : { books: [] }))
       .catch(() => ({ books: [] }))
       .then((j) => { _biblio = j && j.books ? j : { books: [] }; return _biblio; });
@@ -568,6 +568,10 @@
       + 'box-shadow:0 18px 44px rgba(0,0,0,.4);transform-origin:bottom left;'
       + 'transition:opacity .16s ease,transform .2s cubic-bezier(.2,.8,.2,1)}'
       + '#jaguar-save.js-plie .js-panneau{opacity:0;transform:translateY(6px) scale(.98);pointer-events:none;visibility:hidden}'
+      /* PLIE, LE CONTENEUR NE PREND AUCUN CLIC. Le panneau cache garde sa place
+         dans la mise en page ; dans l'espace de travail cette place tombait
+         pile sur l'onglet « + » des matieres, qui ne repondait donc plus. */
+      + '#jaguar-save.js-plie{pointer-events:none}#jaguar-save .js-puce{pointer-events:auto}'
       + '#jaguar-save b{font-weight:700}'
       + '#jaguar-save .js-etat{margin-bottom:4px;font-size:13px}'
       + '#jaguar-save .js-note{opacity:.72;margin-bottom:10px}'

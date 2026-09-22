@@ -840,13 +840,59 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
   .pop,.pop .box,.tab,.add-grid button,.toast{animation:none!important;transition:none!important}
   #work .left{transition:none!important}
 }
+
+/* ── les matieres : crayon sur l'onglet, fenetre d'edition, groupes ── */
+/* le crayon suit le nom au lieu du bord droit : l'onglet deborde parfois de
+   la fenetre, et un crayon colle au bord etait alors hors de l'ecran */
+.tab .tnm{padding-right:4px;flex:0 1 auto;min-width:0}
+.tab:hover{transform:translateX(calc(-8px - var(--deborde,0px)))}
+.tab.on{transform:translateX(calc(-15px - var(--deborde,0px)))}
+.tab:active{transform:translateX(calc(-8px - var(--deborde,0px))) scale(.97)}
+.me-apercu .tab.on{transform:none!important}
+.tab .tedit{flex:0 0 24px;width:24px;height:24px;margin-right:10px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#fff;background:rgba(255,255,255,.14);opacity:0;pointer-events:none;transition:opacity .2s,background .15s}
+.tab:hover .tedit,.tab.on .tedit{opacity:1;pointer-events:auto}
+.tab .tedit:hover{background:rgba(255,255,255,.3)}
+.tab .tedit .ico{width:13px;height:13px;stroke-width:2}
+.subjects .grp-label{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.subjects .grp-label.perso{margin-top:6px}
+.me-apercu{display:flex;justify-content:center;padding:4px 0 14px}
+.me-apercu .tab{transform:none!important;animation:none!important;width:auto!important;min-width:190px;max-width:100%;border-radius:10px;cursor:default;outline:none;
+  box-shadow:0 12px 26px -14px rgba(0,0,0,.55)}
+.me-apercu .tab .tnm{opacity:1;transform:none;padding-right:22px}
+.me-syms{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-bottom:8px}
+.me-syms button{height:38px;border:1px solid var(--rule);border-radius:10px;background:var(--paper-deep);color:var(--ink);display:flex;align-items:center;justify-content:center;
+  font-family:var(--ui);font-size:11px;font-weight:650;transition:border-color .15s}
+.me-syms button .ico{width:18px;height:18px}
+.me-syms button:hover{border-color:var(--slate)}
+.me-syms button.on{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--ink) inset}
+.me-cols{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.me-cols button{width:30px;height:30px;border-radius:50%;border:3px solid var(--paper);box-shadow:0 0 0 1px rgba(0,0,0,.14)}
+.me-cols button.on{box-shadow:0 0 0 2px var(--ink)}
+.pop .me-cols input[type=color]{width:44px;height:32px;padding:2px;border-radius:8px}
+.me-grps{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.me-grps button{font-family:var(--ui);font-size:12px;font-weight:600;padding:5px 12px;border:1px solid var(--rule);border-radius:999px;background:var(--paper-deep);color:var(--ink-soft)}
+.me-grps button.on{border-color:var(--ink);color:var(--ink);background:var(--paper)}
+.pop input:disabled{opacity:.6}
+.pop .actions .danger{margin-right:auto;color:#a5332b;border-color:rgba(165,51,43,.35)}
+.pop .actions .danger:hover{border-color:#a5332b}
+.rail-mat .sec-h .add{opacity:1!important;width:auto;padding:0;display:flex}
+.rm-grp{font-family:var(--ui);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);padding:10px 26px 2px}
+.rm-row{display:flex;align-items:center}
+.rm-row [data-subj]{flex:1;min-width:0}
+.rail-mat button i{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-family:var(--mono);font-size:10px;font-weight:700}
+.rail-mat button i .ico{width:13px;height:13px}
+.rail-mat .rm-ed{width:34px;padding:0;height:34px;flex:0 0 34px;color:var(--slate);display:flex;align-items:center;justify-content:center;margin-right:12px;border-radius:50%}
+.rail-mat .rm-ed:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+.rail-mat .rm-ed .ico{width:14px;height:14px}
+@media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudb2j1o"></script>
-<script src="sanitize.js?v=mudb2j1o"></script>
-<script src="jaguar-shim.js?v=mudb2j1o"></script>
-<script src="../compte.js?v=mudb2j1o"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudb2j1o";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudbqpcu"></script>
+<script src="sanitize.js?v=mudbqpcu"></script>
+<script src="jaguar-shim.js?v=mudbqpcu"></script>
+<script src="../compte.js?v=mudbqpcu"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudbqpcu";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -1139,6 +1185,37 @@ function currentPages(){ const s=currentSubject(); return s.sections[state.secti
 function currentPage(){ return currentPages().find(p=>p.id===state.pageId); }
 function countPages(s){ return SECTIONS.reduce((a,x)=>a+(s.sections[x.key]||[]).length,0); }
 
+/* ═════ les matieres : symbole, groupe, onglet ═════ */
+/* LE SYMBOLE DE L'ETIQUETTE. `sym` est ce que l'eleve a choisi : « ico:clé »
+   pour un des dessins, ou un texte court (« Fr », « ∑ », un emoji). Sans
+   choix, c'est comme avant : un dessin devine d'apres le nom, sinon les deux
+   premieres lettres. */
+function symboleMatiere(s){
+  const v=s&&s.sym;
+  if(v&&v.indexOf('ico:')===0&&SUBJ_ICO[v.slice(4)]) return svg(SUBJ_ICO[v.slice(4)]);
+  if(v) return esc(Array.from(v).slice(0,3).join(''));
+  const ic=subjectSVG(s&&s.name); return ic?svg(ic):esc(Array.from(s&&s.icon||((s&&s.name)||'?')[0]).slice(0,2).join(''));
+}
+/* LES GROUPES. L'ecole d'abord (ses matieres ne se regroupent pas), puis
+   ceux de l'eleve dans l'ordre ou ils apparaissent ; une matiere sans groupe
+   va sous « Perso », comme avant. */
+function groupesMatieres(nb){
+  const out=[]; const official=nb.subjects.filter(s=>s.origin==='official');
+  if(official.length) out.push({nom:'École',officiel:true,liste:official});
+  nb.subjects.filter(s=>s.origin!=='official').forEach(s=>{
+    const g=String(s.group||'').trim()||'Perso';
+    let x=out.find(y=>!y.officiel&&y.nom===g); if(!x){ x={nom:g,liste:[]}; out.push(x); }
+    x.liste.push(s);
+  });
+  if(!out.some(g=>!g.officiel)) out.push({nom:'Perso',liste:[]});
+  return out;
+}
+function tabMatiere(s,i,apercu){
+  return '<div class="tab '+(apercu||s.id===state.subjectId?'on':'')+'"'+(apercu?'':' data-subj="'+s.id+'"')+' style="background:'+esc(s.color||'#8c2f2a')+';--i:'+(i||0)+'" title="'+esc(s.name)+(s.origin==='official'?' · matière de l’école':'')+' · double-clic pour modifier">'
+    +'<span class="tsym">'+symboleMatiere(s)+'</span><span class="tnm">'+esc(s.name||'Matière')+(s.origin==='official'?' <span class="tlk">✦</span>':'')+'</span>'
+    +(apercu?'':'<button type="button" class="tedit" data-edit-subj="'+s.id+'" title="Modifier la matière"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>')+'</div>';
+}
+
 function renderRails(){
   const nb=state.nb, subj=currentSubject();
   $('#navBrand').textContent=nb.brand.title||'Le Jaguar';
@@ -1146,8 +1223,14 @@ function renderRails(){
   $('#lhName').textContent=(nb.student.prenom+' '+nb.student.nom).trim()||nb.nom||nb.brand.title;
   $('#lhClass').textContent=nb.student.classe||'';
   // left: sections
-  const railMat='<div class="rail-mat"><div class="sec-h"><span class="lbl">Matières</span><span class="rl"></span></div>'
-    +nb.subjects.map(s=>'<button type="button" data-subj="'+s.id+'" class="'+(s.id===state.subjectId?'on':'')+'"><i style="background:'+esc(s.color||'#8c2f2a')+'"></i>'+esc(s.name)+'</button>').join('')+'</div>';
+  let railMat='<div class="rail-mat"><div class="sec-h"><span class="lbl">Matières</span><span class="rl"></span>'
+    +'<button class="add" data-mat-add title="Nouvelle matière"><svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg></button></div>';
+  groupesMatieres(nb).forEach(g=>{
+    railMat+='<div class="rm-grp">'+esc(g.nom)+'</div>'+g.liste.map(s=>'<div class="rm-row"><button type="button" data-subj="'+s.id+'" class="'+(s.id===state.subjectId?'on':'')+'">'
+      +'<i style="background:'+esc(s.color||'#8c2f2a')+'">'+symboleMatiere(s)+'</i>'+esc(s.name)+'</button>'
+      +'<button type="button" class="rm-ed" data-edit-subj="'+s.id+'" title="Modifier la matière"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button></div>').join('');
+  });
+  railMat+='</div>';
   $('#sections').innerHTML=railMat+SECTIONS.map(sec=>{
     const pages=subj.sections[sec.key]||[];
     const items=pages.length? pages.map(p=>'<li data-page="'+p.id+'" class="'+(p.id===state.pageId?'on':'')+'">'
@@ -1160,15 +1243,11 @@ function renderRails(){
       +'<ul class="pages">'+items+'</ul></div>';
   }).join('');
   // right: subject tabs, grouped École (official, from the class) then Perso (student-added)
-  const tabHtml=(s,i)=>{ const ic=subjectSVG(s.name);
-    const sym=ic?svg(ic):esc((s.icon||(s.name||'?')[0])).slice(0,2);
-    return '<div class="tab '+(s.id===state.subjectId?'on':'')+'" data-subj="'+s.id+'" style="background:'+esc(s.color||'#8c2f2a')+';--i:'+i+'" title="'+esc(s.name)+(s.origin==='official'?' · matière de l’école':' · double-clic pour renommer')+'">'
-      +'<span class="tsym">'+sym+'</span><span class="tnm">'+esc(s.name)+(s.origin==='official'?' <span class="tlk">✦</span>':'')+'</span></div>'; };
-  const official=nb.subjects.filter(s=>s.origin==='official');
-  const perso=nb.subjects.filter(s=>s.origin!=='official');
   let html='', i=0;
-  if(official.length) html+='<div class="grp-label" title="Matières affectées par l’école">École</div>'+official.map(s=>tabHtml(s,i++)).join('');
-  html+='<div class="grp-label perso" title="Vos matières personnelles">Perso</div>'+perso.map(s=>tabHtml(s,i++)).join('');
+  groupesMatieres(nb).forEach((g,gi)=>{
+    html+='<div class="grp-label'+(g.officiel?'':' perso')+'" title="'+(g.officiel?'Matières affectées par l’école':'Groupe « '+esc(g.nom)+' »')+'">'+esc(g.nom)+'</div>'
+      +g.liste.map(s=>tabMatiere(s,i++)).join('');
+  });
   html+='<div class="tab addtab" id="addSubj" title="Ajouter une matière personnelle" style="--i:'+i+'"><span class="tsym">+</span><span class="tnm">Matière</span></div>';
   $('#subjects').innerHTML=html;
   // taskbar
@@ -1182,7 +1261,10 @@ function renderRails(){
   requestAnimationFrame(positionTabs); setTimeout(positionTabs,220); setTimeout(positionTabs,650);
 }
 // anchor the subject tab rail to the sheet's right edge so the open tab rests on the page at any width
-function positionTabs(){ const s=$('#sheet'); if(!s)return; const r=s.getBoundingClientRect(); if(r.right>0)$('#subjects').style.left=Math.round(r.right-9)+'px'; }
+function positionTabs(){ const s=$('#sheet'); if(!s)return; const r=s.getBoundingClientRect(); if(r.right>0){ const g=Math.round(r.right-9); const box=$('#subjects'); box.style.left=g+'px';
+  /* un onglet ouvert fait 222 px : sur une fenetre etroite il sortait de l'ecran, nom et crayon compris.
+     Seul l'onglet OUVERT rentre de ce qu'il faut ; les autres restent au bord de la page. */
+  box.style.setProperty('--deborde',Math.max(0,g+222-15-window.innerWidth+8)+'px'); } }
 window.addEventListener('resize',positionTabs);
 // keep tabs glued to the page edge across font-load, zoom and layout shifts
 try{ new ResizeObserver(positionTabs).observe($('#sheet')); new ResizeObserver(positionTabs).observe($('#center')); }catch(_){}
@@ -1790,6 +1872,8 @@ function ensurePage(){ if(currentPage())return; const s=currentSubject(); for(co
 
 /* ═════ rail events ═════ */
 $('#sections').addEventListener('click',e=>{
+  const med=e.target.closest('[data-edit-subj]'); if(med){ editerMatiere(med.getAttribute('data-edit-subj')); return; }
+  if(e.target.closest('[data-mat-add]')){ editerMatiere(null); return; }
   const del=e.target.closest('[data-del]'), add=e.target.closest('[data-add]'), li=e.target.closest('li[data-page]');
   if(del){e.stopPropagation();delPage(del.getAttribute('data-del'));return;}
   if(add){e.stopPropagation();addPage(add.getAttribute('data-add'));return;}
@@ -1799,7 +1883,8 @@ $('#sections').addEventListener('click',e=>{
 });
 $('#sections').addEventListener('dblclick',e=>{ const li=e.target.closest('li[data-page]'); if(li)renamePage(li.getAttribute('data-page')); });
 $('#subjects').addEventListener('click',e=>{
-  const add=e.target.closest('#addSubj'), subj=e.target.closest('[data-subj]');
+  const add=e.target.closest('#addSubj'), subj=e.target.closest('[data-subj]'), ed=e.target.closest('[data-edit-subj]');
+  if(ed){e.stopPropagation();editerMatiere(ed.getAttribute('data-edit-subj'));return;}
   if(add){addSubject();return;}
   if(subj){capturePage();state.subjectId=subj.getAttribute('data-subj');state.section='lecons';const p=currentPages();state.pageId=p[0]?p[0].id:null;loadPage();}
 });
@@ -1836,13 +1921,93 @@ function teinteMatiere(nom){
   let h=0; for(const ch of n) h=(h*31+ch.charCodeAt(0))>>>0;
   return [TEINTES.ultra,TEINTES.lilas,TEINTES.jade,TEINTES.souci][h%4];
 }
-function renommerMatiere(id){
-  const s=state.nb.subjects.find(x=>x.id===id); if(!s) return;
-  if(s.origin==='official'){ toast('Matière de l’école — verrouillée.'); return; }
-  namePrompt('Renommer la matière',s.name||'','Renommer',nm=>{ if(!nm) return; s.name=nm; s.icon=nm.slice(0,2); renderRails(); persist(); });
+/* LA FENETRE D'UNE MATIERE — pour en creer une ou la modifier : son nom, le
+   symbole de son etiquette, sa couleur, son groupe. Un apercu de l'onglet
+   suit chaque changement : on voit l'etiquette avant de la poser. Les
+   matieres de l'ecole gardent leur nom et leur groupe (c'est l'ecole qui les
+   fixe) ; leur symbole et leur couleur restent a l'eleve. */
+const TEINTES_CHOIX=['#3340dd','#8a52f0','#0d9a72','#c98a0c','#5b6cff','#2f8a7a','#8c2f2a','#c2703a','#6b7089','#1a2238'];
+function editerMatiere(id){
+  if(state.review){ toast('Mode enseignant — lecture seule.'); return; }
+  const nb=state.nb; const s=id?nb.subjects.find(x=>x.id===id):null;
+  if(id&&!s) return;
+  const officiel=!!(s&&s.origin==='official');
+  const b={ name:s?s.name:'', sym:s?(s.sym||''):'', color:s?(s.color||''):'', group:s?(s.group||''):'', origin:s?s.origin:'student' };
+  let couleurChoisie=!!s;
+  const groupes=[...new Set(nb.subjects.filter(x=>x.origin!=='official').map(x=>String(x.group||'').trim()).filter(Boolean))];
+  const syms='<button type="button" data-me-sym="" title="Automatique (d’après le nom)">Auto</button>'
+    +Object.keys(SUBJ_ICO).map(k=>'<button type="button" data-me-sym="ico:'+k+'" title="'+k+'">'+svg(SUBJ_ICO[k])+'</button>').join('');
+  const cols=TEINTES_CHOIX.map(c=>'<button type="button" data-me-col="'+c+'" style="background:'+c+'" title="'+c+'"></button>').join('');
+  const chips=['Perso'].concat(groupes.filter(g=>g!=='Perso')).map(g=>'<button type="button" data-me-grp="'+esc(g)+'">'+esc(g)+'</button>').join('');
+  popup(s?'Modifier la matière':'Nouvelle matière', officiel?'matière de l’école — nom et groupe fixés par l’école':'',
+    '<div class="me">'
+    +'<div class="me-apercu" id="meApercu"></div>'
+    +'<div class="fld"><label>Nom</label><input id="meNom" autocomplete="off" placeholder="Maths, Français, Journal…"'+(officiel?' disabled':'')+'></div>'
+    +'<div class="fld"><label>Symbole de l’étiquette</label><div class="me-syms" id="meSyms">'+syms+'</div>'
+    +'<input id="meTxt" maxlength="6" autocomplete="off" placeholder="… ou 1 à 3 caractères : Fr, ∑, 🌍"></div>'
+    +'<div class="fld"><label>Couleur</label><div class="me-cols" id="meCols">'+cols+'<input type="color" id="meCol" title="Autre couleur"></div></div>'
+    +(officiel?'':'<div class="fld"><label>Groupe</label><div class="me-grps" id="meGrps">'+chips+'</div>'
+      +'<input id="meGrp" autocomplete="off" placeholder="… ou un nouveau groupe : Sciences, Langues, Perso…"></div>')
+    +'<div class="actions">'+(s&&!officiel?'<button type="button" class="danger" id="meSuppr">Supprimer</button>':'')
+    +'<button type="button" onclick="closePopup()">Annuler</button><button type="button" class="primary" id="meOk">'+(s?'Enregistrer':'Ajouter')+'</button></div>'
+    +'</div>');
+  const nomI=$('#meNom'), txt=$('#meTxt'), col=$('#meCol'), grp=$('#meGrp');
+  nomI.value=b.name; if(grp) grp.value=b.group;
+  if(b.sym&&b.sym.indexOf('ico:')!==0) txt.value=b.sym;
+  const peindre=()=>{
+    if(!couleurChoisie) b.color=teinteMatiere(b.name||'');
+    $('#meApercu').innerHTML=tabMatiere(b,0,true);
+    $$('#meSyms [data-me-sym]').forEach(x=>x.classList.toggle('on',x.getAttribute('data-me-sym')===(b.sym.indexOf('ico:')===0||!b.sym?b.sym:'#texte')));
+    $$('#meCols [data-me-col]').forEach(x=>x.classList.toggle('on',x.getAttribute('data-me-col').toLowerCase()===String(b.color).toLowerCase()));
+    col.value=/^#[0-9a-f]{6}$/i.test(b.color)?b.color:'#8c2f2a';
+    $$('#meGrps [data-me-grp]').forEach(x=>x.classList.toggle('on',x.getAttribute('data-me-grp')===(String(b.group||'').trim()||'Perso')));
+  };
+  nomI.oninput=()=>{ b.name=nomI.value; peindre(); };
+  txt.oninput=()=>{ b.sym=Array.from(txt.value.trim()).slice(0,3).join(''); peindre(); };
+  $('#meSyms').onclick=e=>{ const x=e.target.closest('[data-me-sym]'); if(!x) return; b.sym=x.getAttribute('data-me-sym'); txt.value=''; peindre(); };
+  $('#meCols').onclick=e=>{ const x=e.target.closest('[data-me-col]'); if(!x) return; b.color=x.getAttribute('data-me-col'); couleurChoisie=true; peindre(); };
+  col.oninput=()=>{ b.color=col.value; couleurChoisie=true; peindre(); };
+  if(grp){
+    $('#meGrps').onclick=e=>{ const x=e.target.closest('[data-me-grp]'); if(!x) return; const g=x.getAttribute('data-me-grp'); b.group=g==='Perso'?'':g; grp.value=b.group; peindre(); };
+    grp.oninput=()=>{ b.group=grp.value; peindre(); };
+  }
+  const valider=()=>{
+    const nom=(officiel?s.name:nomI.value).trim();
+    if(!nom){ nomI.focus(); toast('Donne un nom à la matière.'); return; }
+    const groupe=officiel?'':String(b.group||'').trim();
+    const cible=s||{id:uid('s'),origin:'student',sections:{lecons:[],exams:[],exercices:[],outline:[]}};
+    if(!officiel){ cible.name=nom; if(groupe&&groupe!=='Perso') cible.group=groupe; else delete cible.group; }
+    if(b.sym) cible.sym=b.sym; else delete cible.sym;
+    cible.icon=(b.sym&&b.sym.indexOf('ico:')!==0)?b.sym:nom.slice(0,2);
+    cible.color=b.color||teinteMatiere(nom);
+    if(!s){
+      /* une matiere neuve ouvre sur une page, pas sur « Aucune page » */
+      const p={id:uid(),title:'Nouvelle leçon',template:'seyes',origin:'student',html:'<p><br></p>',created:Date.now(),updated:Date.now(),grade:null,comments:[]};
+      cible.sections.lecons.push(p);
+      nb.subjects.push(cible); capturePage(); state.subjectId=cible.id; state.section='lecons'; state.pageId=p.id;
+    }
+    closePopup(); if(s) renderRails(); else loadPage(); persist(); toast(s?'Matière modifiée':'Matière ajoutée');
+  };
+  $('#meOk').onclick=valider;
+  nomI.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); valider(); } };
+  const sup=$('#meSuppr');
+  if(sup) sup.onclick=()=>{
+    if(nb.subjects.length<=1){ toast('Il faut garder au moins une matière.'); return; }
+    const n=SECTIONS.reduce((a,x)=>a+(s.sections[x.key]||[]).length,0);
+    /* on dit ce qui part : un cahier est le travail de quelqu'un */
+    confirmPopup('Supprimer « '+s.name+' »'+(n?' et ses '+n+' page'+(n>1?'s':''):'')+' ? C’est définitif.','Supprimer',()=>{
+      const i=nb.subjects.indexOf(s); if(i<0) return;
+      nb.subjects.splice(i,1);
+      if(state.subjectId===s.id){ state.subjectId=nb.subjects[0].id; state.section='lecons'; const p=currentPages(); state.pageId=p[0]?p[0].id:null; }
+      loadPage(); persist(); toast('Matière supprimée');
+    });
+  };
+  peindre();
+  setTimeout(()=>{ if(!officiel){ nomI.focus(); nomI.select(); } },40);
 }
-$('#subjects').addEventListener('dblclick',e=>{ const t=e.target.closest('[data-subj]'); if(t) renommerMatiere(t.getAttribute('data-subj')); });
-$('#lhKicker').addEventListener('dblclick',()=>{ if(state.nb) renommerMatiere(currentSubject().id); });
+$('#subjects').addEventListener('dblclick',e=>{ const t=e.target.closest('[data-subj]'); if(t) editerMatiere(t.getAttribute('data-subj')); });
+$('#subjects').addEventListener('contextmenu',e=>{ const t=e.target.closest('[data-subj]'); if(t){ e.preventDefault(); editerMatiere(t.getAttribute('data-subj')); } });
+$('#lhKicker').addEventListener('dblclick',()=>{ if(state.nb) editerMatiere(currentSubject().id); });
 const PAGE_DEFAULTS={lecons:'Nouvelle leçon',exams:'Nouvel examen',exercices:'Nouvel exercice',outline:'Nouvelle page'};
 function addPage(section){const s=currentSubject();
   namePrompt('Nouvelle page',PAGE_DEFAULTS[section]||'Nouvelle page','Créer',(title)=>{
@@ -1851,7 +2016,7 @@ function addPage(section){const s=currentSubject();
 }
 function renamePage(id){const s=currentSubject();for(const sec of SECTIONS){const p=(s.sections[sec.key]||[]).find(x=>x.id===id);if(p){ if(p.origin==='official'){toast('Page officielle — verrouillée.');return;} namePrompt('Renommer la page',p.title||'','Renommer',(nm)=>{ if(nm){p.title=nm;renderRails();persist();} }); return; }}}
 function delPage(id){const s=currentSubject();for(const sec of SECTIONS){const arr=s.sections[sec.key]||[];const i=arr.findIndex(p=>p.id===id);if(i>=0){if(arr[i].origin==='official'){toast('Page officielle — verrouillée.');return;}confirmPopup('Supprimer cette page ?','Supprimer',()=>{arr.splice(i,1);if(state.pageId===id){state.section=sec.key;state.pageId=(arr[0]||{}).id||null;}loadPage();persist();});return;}}}
-function addSubject(){namePrompt('Nouvelle matière','','Ajouter',(name)=>{ if(!name)return; const s={id:uid('s'),name,icon:name.slice(0,2),color:teinteMatiere(name),origin:'student',sections:{lecons:[],exams:[],exercices:[],outline:[]}};state.nb.subjects.push(s);state.subjectId=s.id;state.section='lecons';state.pageId=null;loadPage();persist();toast('Matière ajoutée'); });}
+function addSubject(){ editerMatiere(null); }
 
 /* ═════ formatting ═════ */
 const paper=$('#paper');
