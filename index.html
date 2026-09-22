@@ -1451,8 +1451,235 @@ body::after{
     animation-duration:.22s;height:auto;
   }
 }
+
+/* ── LA VITRINE ────────────────────────────────────────────────────────────
+   Cinq onglets, une carte en deux : le texte a gauche, une scene a droite
+   ou des cartes arrivent. Tout ce qui bouge ici est une transformation ou
+   une opacite, et tout se termine — voir le commentaire du balisage.
+
+   L'ETAT DE REPOS EST L'ETAT FINAL. Chaque animation part d'une image-cle
+   « from » cachee et revient au style de base, qui est visible et en place.
+   Sans animation — mouvement reduit, navigateur ancien — rien ne reste
+   cache : la figure est deja tracee, les barres deja pleines. */
+.vitrine{padding-block:clamp(3rem,7vw,6rem)}
+.vt-onglets{display:flex;justify-content:center;gap:.3rem;flex-wrap:wrap;
+  margin-block:0 var(--s5)}
+.vt-onglets button{font:inherit;font-family:var(--font-display);font-size:.9375rem;font-weight:600;
+  letter-spacing:-.005em;color:var(--ink-3);background:transparent;border:0;
+  padding:.58rem 1.15rem;border-radius:12px;cursor:pointer;
+  transition:color .2s ease,background-color .25s ease,transform .2s ease}
+.vt-onglets button:hover{color:var(--ink)}
+.vt-onglets button[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.vt-onglets button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+.vt-carte{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:var(--s4);
+  background:var(--card);border:1px solid var(--rule);border-radius:28px;padding:var(--s3);
+  box-shadow:0 30px 60px -44px rgba(20,17,14,.35)}
+
+/* ── le texte ── */
+.vt-texte{display:flex;flex-direction:column;padding:var(--s6) var(--s5) var(--s5);
+  min-block-size:30rem}
+.vt-pan{display:none;flex-direction:column;flex:1}
+.vt-pan.on{display:flex;animation:vt-texte .55s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vt-texte{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vt-num{display:flex;align-items:center;gap:.7rem;margin:0;font-size:.72rem;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);font-variant-numeric:lining-nums}
+.vt-num b{color:var(--lilac-ink)}
+.vt-num span{border-inline-start:1px solid var(--rule);padding-inline-start:.7rem}
+.vt-pan h3{font-family:var(--font-display);font-size:clamp(1.5rem,2.5vw,2.05rem);font-weight:700;
+  letter-spacing:-.032em;line-height:1.14;margin:.85rem 0 .7rem;
+  font-variation-settings:"opsz" 40,"wdth" 98}
+.vt-p{margin:0;color:var(--ink-2);max-inline-size:33rem;line-height:1.62}
+.vt-liste{list-style:none;padding:0;margin:auto 0 0;border-block-start:1px solid var(--rule-soft);
+  padding-block-start:0}
+.vt-pan .vt-liste{margin-block-start:var(--s6)}
+.vt-liste a{display:flex;align-items:center;gap:.8rem;padding:.78rem .15rem;
+  border-block-end:1px solid var(--rule-soft);color:var(--ink);text-decoration:none;
+  font-size:.9375rem;transition:color .15s ease}
+.vt-liste a:hover{color:var(--lilac-ink)}
+.vt-ico{display:grid;place-items:center;inline-size:1.25rem;block-size:1.25rem;flex:none}
+.vt-ico svg{inline-size:1.05rem;block-size:1.05rem;fill:none;stroke:var(--lilac);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+.vt-fl{margin-inline-start:auto;color:var(--ink-3);transition:transform .2s ease}
+.vt-liste a:hover .vt-fl{transform:translateX(3px)}
+[dir="rtl"] .vt-fl{transform:scaleX(-1)}
+[dir="rtl"] .vt-liste a:hover .vt-fl{transform:scaleX(-1) translateX(3px)}
+
+/* LES CINQ TRAITS. Celui de l'onglet courant se remplit pendant la duree de
+   l'onglet ; a la fin de son animation, on passe au suivant. C'est la meme
+   horloge qui dessine et qui decide — une seule, donc elles ne peuvent pas se
+   desaccorder. */
+.vt-segs{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem;margin-block-start:var(--s5)}
+.vt-segs i{position:relative;block-size:3px;border-radius:2px;background:var(--rule);overflow:hidden}
+.vt-segs i::after{content:"";position:absolute;inset:0;background:var(--ink);
+  transform:scaleX(0);transform-origin:left center}
+[dir="rtl"] .vt-segs i::after{transform-origin:right center}
+.vt-segs i.fait::after{transform:scaleX(1)}
+.vt-segs i.on::after{animation:vt-seg var(--vt-duree,7s) linear forwards}
+.vitrine.vt-pause .vt-segs i.on::after{animation-play-state:paused}
+@keyframes vt-seg{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ── la scene ──
+   Les lueurs de l'aurore du bandeau, arretees : elles ne derivent pas ici,
+   il y a deja assez de mouvement dans les cartes. */
+.vt-scene{position:relative;overflow:hidden;border-radius:22px;min-block-size:30rem;
+  --mx:0;--my:0;
+  background:
+    radial-gradient(70% 65% at 88% 8%,color-mix(in oklab,var(--lilac) 34%,transparent),transparent 70%),
+    radial-gradient(70% 70% at 6% 96%,color-mix(in oklab,var(--ultra) 26%,transparent),transparent 70%),
+    radial-gradient(40% 40% at 30% 20%,color-mix(in oklab,var(--accent) 10%,transparent),transparent 70%),
+    linear-gradient(160deg,color-mix(in oklab,var(--lilac) 14%,var(--paper)),
+                           color-mix(in oklab,var(--ultra) 12%,var(--paper)))}
+.vt-vue{position:absolute;inset:0;display:grid;place-items:center;padding:var(--s5);
+  opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.vt-vue.on{opacity:1;visibility:visible}
+.vt-pile{position:relative;inline-size:min(20.5rem,78%)}
+
+/* LA PROFONDEUR. Chaque carte suit le pointeur d'autant plus qu'elle est
+   « pres » (`--d`). Le mouvement n'existe qu'au passage du pointeur : sans
+   lui, rien ne se calcule. */
+.vt-par{transform:translate3d(calc(var(--mx) * var(--d,1) * 7px),calc(var(--my) * var(--d,1) * 7px),0);
+  transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.vt-flotte{position:absolute}
+
+.vt-c{position:relative;background:var(--card);border:1px solid var(--rule-soft);border-radius:18px;
+  padding:1.05rem 1.2rem;color:var(--ink);
+  box-shadow:14px 14px 0 -3px color-mix(in oklab,var(--lilac) 30%,transparent),
+             0 18px 40px -26px rgba(20,17,14,.45)}
+[dir="rtl"] .vt-c{box-shadow:-14px 14px 0 -3px color-mix(in oklab,var(--lilac) 30%,transparent),
+             0 18px 40px -26px rgba(20,17,14,.45)}
+.vt-vue.on .vt-c{animation:vt-entre .75s cubic-bezier(.2,.85,.25,1) both;
+  animation-delay:calc(var(--k,0) * 140ms)}
+@keyframes vt-entre{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+.vt-lab{display:flex;align-items:center;gap:.45rem;margin:0;font-size:.66rem;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.vt-pt{inline-size:7px;block-size:7px;border-radius:50%;background:var(--t,var(--accent));flex:none}
+.vt-tit{margin:.35rem 0 .7rem;font-family:var(--font-display);font-weight:700;font-size:1rem;
+  letter-spacing:-.015em;line-height:1.25}
+.vt-lecture{display:flex;align-items:baseline;justify-content:space-between;margin-block-start:.75rem;
+  padding-block-start:.7rem;border-block-start:1px solid var(--rule-soft);font-size:.8rem;color:var(--ink-3)}
+.vt-lecture strong{font-family:var(--font-display);font-size:1.35rem;color:var(--ink);
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.vt-mini{padding:.75rem .95rem}
+.vt-mini .vt-tit{margin:.25rem 0 0;font-size:.92rem}
+.vt-mini code{display:block;margin-block-start:.4rem;font-family:var(--font-mono);font-size:.7rem;
+  color:var(--ink-2);white-space:nowrap}
+.vt-grand{margin:0;font-family:var(--font-display);font-weight:700;font-size:2rem;line-height:1;
+  letter-spacing:-.04em;color:var(--lilac-ink)}
+
+/* 01 · la figure : l'arc est decouvert par un voile qui s'ecarte, puis la
+   bille apparait au sommet. Un voile et non un pointille anime : la charte
+   ne permet que transformations et opacites. */
+.vt-courbe{display:block;inline-size:100%;block-size:auto;overflow:hidden}
+.vt-arc{fill:none;stroke:var(--ultra);stroke-width:3;stroke-linecap:round}
+.vt-axe{stroke:var(--rule);stroke-width:1.5}
+.vt-voile{fill:var(--card);transform:translateX(262px)}
+.vt-vue.on .vt-voile{animation:vt-voile 1.25s .45s cubic-bezier(.5,0,.25,1) both}
+@keyframes vt-voile{from{transform:translateX(0)}to{transform:translateX(262px)}}
+.vt-bille{fill:var(--accent);transform-box:fill-box;transform-origin:center}
+.vt-vue.on .vt-bille{animation:vt-pop .45s 1.55s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes vt-pop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:none}}
+.vt-curseur{display:flex;align-items:center;gap:.7rem;margin-block-start:.6rem;font-size:.75rem;color:var(--ink-3)}
+.vt-curseur i{position:relative;flex:1;block-size:4px;border-radius:2px;background:var(--rule-soft)}
+.vt-curseur i::before{content:"";position:absolute;inset:0;border-radius:2px;background:var(--ultra);
+  transform-origin:left center;transform:scaleX(.56)}
+[dir="rtl"] .vt-curseur i::before{transform-origin:right center}
+.vt-curseur b{position:absolute;inset-block-start:50%;inset-inline-start:56%;inline-size:14px;block-size:14px;
+  margin:-7px 0 0 -7px;border-radius:50%;background:var(--card);border:2px solid var(--ultra)}
+.vt-curseur em{font-style:normal;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.vt-vue.on .vt-curseur i::before{animation:vt-remplit .9s .25s cubic-bezier(.3,.8,.3,1) both}
+@keyframes vt-remplit{from{transform:scaleX(.3)}}
+.vt-f0{inset-block-start:-3.9rem;inset-inline-end:-3rem}
+
+/* 02 · le cahier et ses passages */
+.vt-seyes{block-size:17rem;padding-inline-start:2.8rem;
+  background-color:var(--card);
+  background-image:
+    linear-gradient(90deg,transparent 2.1rem,color-mix(in oklab,var(--accent) 45%,transparent) 2.1rem 2.2rem,transparent 2.2rem),
+    repeating-linear-gradient(180deg,transparent 0 13px,color-mix(in oklab,var(--seyes) 42%,transparent) 13px 14px)}
+.vt-clip{inline-size:14.5rem;padding:.8rem .95rem}
+.vt-de{display:flex;align-items:center;gap:.4rem;margin:0;font-size:.66rem;font-weight:600;color:var(--ink-3)}
+.vt-cit{margin:.35rem 0 .45rem;font-size:.86rem;font-weight:600;line-height:1.35}
+.vt-quand{display:flex;align-items:center;gap:.4rem;margin:0;font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--jade-ink)}
+.vt-quand i{inline-size:6px;block-size:6px;border-radius:50%;background:var(--jade)}
+.vt-c1{inset-block-start:-1.4rem;inset-inline-start:-2.6rem}
+.vt-c2{inset-block-start:5.4rem;inset-inline-end:-3rem}
+.vt-c3{inset-block-end:-1.6rem;inset-inline-start:-1.4rem}
+
+/* 03 · la simulation : les franges se levent depuis le centre */
+.vt-puces{display:flex;flex-wrap:wrap;gap:.35rem;margin-block-end:.8rem}
+.vt-puces span{font-size:.68rem;font-weight:600;padding:.2rem .55rem;border-radius:100px;
+  background:color-mix(in oklab,var(--ink) 6%,transparent);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.vt-puces .vt-va{background:color-mix(in oklab,var(--jade) 16%,transparent);color:var(--jade-ink)}
+.vt-barres{display:flex;align-items:flex-end;gap:2px;block-size:5.5rem}
+.vt-barres i{flex:1;block-size:100%;border-radius:3px 3px 1px 1px;
+  background:linear-gradient(180deg,var(--jade),color-mix(in oklab,var(--jade) 40%,var(--ultra)));
+  transform-origin:bottom center;transform:scaleY(var(--h,.5))}
+.vt-vue.on .vt-barres i{animation:vt-leve .8s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(.25s + var(--j,0) * 30ms)}
+@keyframes vt-leve{from{transform:scaleY(0)}}
+.vt-f2{inset-block-start:-3.9rem;inset-inline-end:-2.8rem;text-align:start}
+
+/* 04 · Studio : les blocs s'empilent */
+.vt-tete{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.vt-tete .vt-tit{margin:0}
+.vt-etiq{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .5rem;border-radius:100px;background:color-mix(in oklab,var(--marigold) 18%,transparent);
+  color:var(--marigold-ink)}
+.vt-blocs{list-style:none;margin:.85rem 0 0;padding:0;display:grid;gap:.45rem}
+.vt-blocs li{display:flex;align-items:center;gap:.65rem;padding:.5rem .55rem;border-radius:11px;
+  border:1px solid var(--rule-soft);font-size:.84rem;font-weight:600}
+.vt-blocs em{margin-inline-start:auto;font-style:normal;font-family:var(--font-mono);font-size:.66rem;
+  font-weight:400;color:var(--ink-3)}
+.vt-tuile{display:grid;place-items:center;inline-size:1.6rem;block-size:1.6rem;border-radius:7px;
+  font-size:.85rem;font-weight:700;color:#fff;background:var(--t,var(--ultra));flex:none}
+.vt-vue.on .vt-blocs li{animation:vt-glisse .55s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(.15s + var(--k,0) * 150ms)}
+@keyframes vt-glisse{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+[dir="rtl"] .vt-vue.on .vt-blocs li{animation-name:vt-glisse-rtl}
+@keyframes vt-glisse-rtl{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+.vt-f3{inset-block-end:-2rem;inset-inline-end:-2.6rem}
+
+/* 05 · l'essai : les barres de profondeur */
+.vt-rangs{list-style:none;margin:.9rem 0 0;padding:0;display:grid;gap:.72rem}
+.vt-rangs li{display:grid;grid-template-columns:7.2rem 1fr 3rem;align-items:center;gap:.7rem;
+  font-size:.82rem;font-weight:600}
+.vt-rangs span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vt-rangs i{position:relative;block-size:7px;border-radius:4px;background:var(--rule-soft);overflow:hidden}
+.vt-rangs b{position:absolute;inset:0;border-radius:4px;background:var(--t,var(--jade));
+  transform-origin:left center;transform:scaleX(var(--v,.5))}
+[dir="rtl"] .vt-rangs b{transform-origin:right center}
+.vt-rangs strong{text-align:end;font-family:var(--font-display);font-variant-numeric:tabular-nums}
+.vt-vue.on .vt-rangs b{animation:vt-rang .95s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay:calc(.2s + var(--k,0) * 110ms)}
+@keyframes vt-rang{from{transform:scaleX(0)}}
+.vt-f4{inset-block-start:-3.6rem;inset-inline-end:-2.6rem}
+
+/* ── un telephone ── */
+@media (max-width:56rem){
+  .vt-carte{grid-template-columns:1fr;border-radius:22px}
+  .vt-texte{min-block-size:0;padding:var(--s5) var(--s4) var(--s4)}
+  .vt-scene{min-block-size:22rem}
+  .vt-onglets{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    margin-inline:calc(var(--s5) * -1);padding-inline:var(--s5)}
+  .vt-onglets::-webkit-scrollbar{display:none}
+  .vt-onglets button{white-space:nowrap}
+  .vt-f0,.vt-f2,.vt-f3,.vt-f4{inset-inline-end:-.8rem}
+  .vt-c1{inset-inline-start:-.8rem}.vt-c2{inset-inline-end:-1rem}.vt-c3{inset-inline-start:-.4rem}
+  .vt-clip{inline-size:12.5rem}
+}
+
+/* ── au calme ── */
+@media (prefers-reduced-motion:reduce){
+  .vt-pan.on,.vt-vue.on .vt-c,.vt-vue.on .vt-voile,.vt-vue.on .vt-bille,
+  .vt-vue.on .vt-curseur i::before,.vt-vue.on .vt-barres i,.vt-vue.on .vt-blocs li,
+  .vt-vue.on .vt-rangs b,.vt-segs i.on::after{animation:none}
+  .vt-par,.vt-vue{transition:none}
+}
 </style>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mubolwgx";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mud77bub";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/accueil.jpg?v=db495b97e7">
@@ -1663,6 +1890,203 @@ body::after{
           </span>
         </figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- ── LA VITRINE ─────────────────────────────────────────────────────
+       Cinq gestes, cinq onglets, un panneau qui s'anime. Ce qu'on y voit n'est
+       pas une publicite dessinee pour l'occasion : chaque carte reprend une
+       chose qui existe dans Fable — une figure qui se resout, le cahier, une
+       simulation, les blocs de Studio, le rapport de l'essai.
+
+       LA CHARTE TIENT. Chaque animation se termine : une carte entre en sept
+       dixiemes de seconde, une barre se remplit une fois, un nombre compte en
+       neuf cents millisecondes. Le seul minuteur est celui du carrousel, deja a
+       l'inventaire, et il s'arrete quand la section sort de l'ecran, quand
+       l'onglet est cache, quand on survole la carte, et pour de bon sous
+       `prefers-reduced-motion`. L'etat de repos de chaque element est son etat
+       FINAL : sans animation, tout est deja en place, rien n'est cache. -->
+  <section class="section wrap vitrine" id="vitrine" aria-labelledby="vt-h">
+    <div class="section-head">
+      <h2 id="vt-h" data-i18n="vtH">What it does, in five moves</h2>
+      <span class="filet" aria-hidden="true"></span>
+    </div>
+
+    <div class="vt-onglets" role="tablist" aria-labelledby="vt-h">
+      <button type="button" role="tab" id="vt-t0" aria-controls="vt-carte" aria-selected="true" tabindex="0" data-i="0" data-i18n="vtT0">Read</button>
+      <button type="button" role="tab" id="vt-t1" aria-controls="vt-carte" aria-selected="false" tabindex="-1" data-i="1" data-i18n="vtT1">Take notes</button>
+      <button type="button" role="tab" id="vt-t2" aria-controls="vt-carte" aria-selected="false" tabindex="-1" data-i="2" data-i18n="vtT2">Experiment</button>
+      <button type="button" role="tab" id="vt-t3" aria-controls="vt-carte" aria-selected="false" tabindex="-1" data-i="3" data-i18n="vtT3">Write</button>
+      <button type="button" role="tab" id="vt-t4" aria-controls="vt-carte" aria-selected="false" tabindex="-1" data-i="4" data-i18n="vtT4">Measure</button>
+    </div>
+
+    <div class="vt-carte" id="vt-carte" role="tabpanel" aria-labelledby="vt-t0">
+      <div class="vt-texte">
+
+        <div class="vt-pan on" data-i="0">
+          <p class="vt-num"><b>01</b><span data-i18n="vtT0">Read</span></p>
+          <h3 data-i18n="vtH0">A figure that works it out while you watch.</h3>
+          <p class="vt-p" data-i18n="vtP0">Every figure in a Fable book is computed on the page from the lesson's own equations. Move a value and the answer follows — the same mathematics the chapter is about, not a picture of it.</p>
+          <ul class="vt-liste">
+            <li><a href="#library"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M3 15c3-9 11-9 14 0"/><circle cx="10" cy="7.8" r="1.6"/></svg></span><span data-i18n="vtL0a">102 kinds of figure</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="project.html#tourne"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 3h7l3 3v11H5z"/><path d="M12 3v3h3"/></svg></span><span data-i18n="vtL0b">One file, works offline</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="#library"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M3 10h14M10 3c3 3.5 3 10.5 0 14M10 3c-3 3.5-3 10.5 0 14"/></svg></span><span data-i18n="vtL0c">French, English, Arabic</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+
+        <div class="vt-pan" data-i="1">
+          <p class="vt-num"><b>02</b><span data-i18n="vtT1">Take notes</span></p>
+          <h3 data-i18n="vtH1">Clip any passage into a real notebook.</h3>
+          <p class="vt-p" data-i18n="vtP1">Le Jaguar is a pupil's notebook on Séyès ruled paper. Lift a paragraph or a figure out of any textbook, annotate it, and it keeps its address — one tap takes you back to the page it came from.</p>
+          <ul class="vt-liste">
+            <li><a href="notebook.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="6" cy="14" r="2.3"/><circle cx="14" cy="14" r="2.3"/><path d="M7.6 12.4 15 3M12.4 12.4 5 3"/></svg></span><span data-i18n="vtL1a">Clip from any book</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="notebook.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="5" y="2.5" width="10" height="15" rx="2"/><path d="M9 15h2"/></svg></span><span data-i18n="vtL1b">Stays on the device</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="cahier/"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 3h10a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2z"/><path d="M4 15a2 2 0 0 1 2-2h10"/></svg></span><span data-i18n="vtL1c">Open the notebook</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+
+        <div class="vt-pan" data-i="2">
+          <p class="vt-num"><b>03</b><span data-i18n="vtT2">Experiment</span></p>
+          <h3 data-i18n="vtH2">Run the experiment, not a video of it.</h3>
+          <p class="vt-p" data-i18n="vtP2">See for yourself lifts the simulations out of the books. Set the values, run it, and watch what the equations do — including the cases no textbook had room to print.</p>
+          <ul class="vt-liste">
+            <li><a href="simulations.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M7.5 3h5M8.5 3v5L4 16a1 1 0 0 0 1 1.5h10A1 1 0 0 0 16 16l-4.5-8V3"/></svg></span><span data-i18n="vtL2a">36 simulations</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="simulations.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="5.5" height="5.5" rx="1.2"/><rect x="11.5" y="3" width="5.5" height="5.5" rx="1.2"/><rect x="3" y="11.5" width="5.5" height="5.5" rx="1.2"/><rect x="11.5" y="11.5" width="5.5" height="5.5" rx="1.2"/></svg></span><span data-i18n="vtL2b">Four subjects</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="sfy/"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M6 4l10 6-10 6z"/></svg></span><span data-i18n="vtL2c">Open a simulation</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+
+        <div class="vt-pan" data-i="3">
+          <p class="vt-num"><b>04</b><span data-i18n="vtT3">Write</span></p>
+          <h3 data-i18n="vtH3">Build a textbook from blocks.</h3>
+          <p class="vt-p" data-i18n="vtP3">Studio assembles a chapter from 102 kinds of block — a map, an orbit, a circuit, a quiz — and builds the whole book into one HTML file that opens anywhere, the school's oldest laptop included.</p>
+          <ul class="vt-liste">
+            <li><a href="project.html#pieces"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="4" rx="1.2"/><rect x="3" y="9" width="9" height="4" rx="1.2"/><rect x="3" y="15" width="11" height="2.5" rx="1.2"/></svg></span><span data-i18n="vtL3a">102 blocks</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="project.html#tourne"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M5 3h7l3 3v11H5z"/><path d="M8 11l2 2 3-4"/></svg></span><span data-i18n="vtL3b">One file per book</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="project.html#atelier"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="2.6"/><path d="M10 2.5v2.4M10 15.1v2.4M2.5 10h2.4M15.1 10h2.4M4.7 4.7l1.7 1.7M13.6 13.6l1.7 1.7M4.7 15.3l1.7-1.7M13.6 6.4l1.7-1.7"/></svg></span><span data-i18n="vtL3c">See the pieces</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+
+        <div class="vt-pan" data-i="4">
+          <p class="vt-num"><b>05</b><span data-i18n="vtT4">Measure</span></p>
+          <h3 data-i18n="vtH4">See exactly where pupils stop.</h3>
+          <p class="vt-p" data-i18n="vtP4">A trial copy reports how a book is read: the chapter abandoned two thirds of the way down, the figure taken for a button, what breaks on their phone. Never what they write.</p>
+          <ul class="vt-liste">
+            <li><a href="project.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 16V9M10 16V4M16 16v-5"/></svg></span><span data-i18n="vtL4a">Every figure graded</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="project.html"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3.2"/><path d="M3.8 17c1.2-3.3 3.4-4.8 6.2-4.8s5 1.5 6.2 4.8"/></svg></span><span data-i18n="vtL4b">Named or anonymous</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+            <li><a href="project.html#parler"><span class="vt-ico" aria-hidden="true"><svg viewBox="0 0 20 20"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="M3 5.5l7 5.5 7-5.5"/></svg></span><span data-i18n="vtL4c">Talk to us</span><span class="vt-fl" aria-hidden="true">&rarr;</span></a></li>
+          </ul>
+        </div>
+
+        <div class="vt-segs" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="vt-scene" aria-hidden="true">
+
+        <!-- 01 · une figure qui se resout -->
+        <div class="vt-vue on" data-i="0">
+          <div class="vt-pile">
+            <div class="vt-par" style="--d:1"><div class="vt-c vt-fig" style="--k:0">
+              <p class="vt-lab"><i class="vt-pt" style="--t:var(--ultra)"></i>Live figure · Physics</p>
+              <p class="vt-tit">Projectile, re-solved as you move it</p>
+              <svg class="vt-courbe" viewBox="0 0 260 112">
+                <path class="vt-arc" d="M8 104 Q124 -14 246 104"/>
+                <rect class="vt-voile" x="0" y="0" width="262" height="100"/>
+                <line class="vt-axe" x1="4" y1="104" x2="256" y2="104"/>
+                <circle class="vt-bille" cx="127" cy="45" r="5"/>
+              </svg>
+              <div class="vt-curseur"><span>Angle</span><i><b></b></i><em>42°</em></div>
+              <div class="vt-lecture"><span>Range</span><strong><span data-compte="16.4" data-dec="1">16.4</span> m</strong></div>
+            </div></div>
+            <div class="vt-par vt-flotte vt-f0" style="--d:2.2"><div class="vt-c vt-mini" style="--k:2">
+              <p class="vt-lab"><i class="vt-pt" style="--t:var(--jade)"></i>Solved, not drawn</p>
+              <code>y = x·tan θ − g·x² / 2v²·cos²θ</code>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- 02 · le cahier : des passages arrivent -->
+        <div class="vt-vue" data-i="1">
+          <div class="vt-pile vt-p1">
+            <div class="vt-par" style="--d:.5"><div class="vt-c vt-seyes" style="--k:0">
+              <p class="vt-lab">Le Jaguar · Physique</p>
+            </div></div>
+            <div class="vt-par vt-flotte vt-c1" style="--d:1.5"><div class="vt-c vt-clip" style="--k:1">
+              <p class="vt-de"><i class="vt-pt" style="--t:var(--accent)"></i>From Manuel du Bac · ch. 4</p>
+              <p class="vt-cit">Energy chain of a filament lamp</p>
+              <p class="vt-quand"><i></i>Just now</p>
+            </div></div>
+            <div class="vt-par vt-flotte vt-c2" style="--d:2.1"><div class="vt-c vt-clip" style="--k:2">
+              <p class="vt-de"><i class="vt-pt" style="--t:var(--ultra)"></i>From The Odyssey · book IX</p>
+              <p class="vt-cit">Why does he give a false name?</p>
+              <p class="vt-quand"><i></i>3 min ago</p>
+            </div></div>
+            <div class="vt-par vt-flotte vt-c3" style="--d:1.2"><div class="vt-c vt-clip" style="--k:3">
+              <p class="vt-de"><i class="vt-pt" style="--t:var(--jade)"></i>From Manuel du Bac · ch. 2</p>
+              <p class="vt-cit">Karyotype — count the pairs</p>
+              <p class="vt-quand"><i></i>Yesterday</p>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- 03 · une simulation : les franges se levent -->
+        <div class="vt-vue" data-i="2">
+          <div class="vt-pile">
+            <div class="vt-par" style="--d:1"><div class="vt-c vt-sim" style="--k:0">
+              <p class="vt-lab"><i class="vt-pt" style="--t:var(--jade)"></i>See for yourself · Waves</p>
+              <p class="vt-tit">Interference of two sources</p>
+              <div class="vt-puces"><span>f · 440 Hz</span><span>d · 3 cm</span><span class="vt-va">running</span></div>
+              <div class="vt-barres"></div>
+              <div class="vt-lecture"><span>Fringe spacing</span><strong><span data-compte="1.2" data-dec="1">1.2</span> cm</strong></div>
+            </div></div>
+            <div class="vt-par vt-flotte vt-f2" style="--d:2.2"><div class="vt-c vt-mini" style="--k:2">
+              <p class="vt-grand"><span data-compte="36">36</span></p>
+              <p class="vt-lab">simulations · 4 subjects</p>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- 04 · Studio : les blocs s'empilent -->
+        <div class="vt-vue" data-i="3">
+          <div class="vt-pile">
+            <div class="vt-par" style="--d:1"><div class="vt-c vt-studio" style="--k:0">
+              <div class="vt-tete"><p class="vt-tit">Chapter 4 · Energy</p><span class="vt-etiq">Draft</span></div>
+              <ul class="vt-blocs">
+                <li style="--k:1"><span class="vt-tuile" style="--t:var(--ultra)">¶</span>Opening paragraph<em>text</em></li>
+                <li style="--k:2"><span class="vt-tuile" style="--t:var(--marigold)">◐</span>The lamp's energy chain<em>energy</em></li>
+                <li style="--k:3"><span class="vt-tuile" style="--t:var(--jade)">∿</span>Two waves meeting<em>wave</em></li>
+                <li style="--k:4"><span class="vt-tuile" style="--t:var(--lilac)">✓</span>Check yourself<em>quiz</em></li>
+              </ul>
+            </div></div>
+            <div class="vt-par vt-flotte vt-f3" style="--d:2"><div class="vt-c vt-mini vt-build" style="--k:6">
+              <p class="vt-lab"><i class="vt-pt" style="--t:var(--jade)"></i>Built</p>
+              <p class="vt-tit">1 HTML file · 1.8 MB</p>
+              <p class="vt-lab">opens offline</p>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- 05 · l'essai : ou la lecture s'arrete -->
+        <div class="vt-vue" data-i="4">
+          <div class="vt-pile">
+            <div class="vt-par" style="--d:1"><div class="vt-c vt-mesure" style="--k:0">
+              <p class="vt-lab">Where reading stops · this week</p>
+              <ul class="vt-rangs">
+                <li style="--v:.92;--t:var(--jade);--k:1"><span>Mathématiques</span><i><b></b></i><strong><span data-compte="92">92</span>%</strong></li>
+                <li style="--v:.61;--t:var(--ultra);--k:2"><span>SVT</span><i><b></b></i><strong><span data-compte="61">61</span>%</strong></li>
+                <li style="--v:.44;--t:var(--lilac);--k:3"><span>Physique-chimie</span><i><b></b></i><strong><span data-compte="44">44</span>%</strong></li>
+                <li style="--v:.31;--t:var(--marigold);--k:4"><span>Français</span><i><b></b></i><strong><span data-compte="31">31</span>%</strong></li>
+                <li style="--v:.18;--t:var(--accent);--k:5"><span>Géographie</span><i><b></b></i><strong><span data-compte="18">18</span>%</strong></li>
+              </ul>
+            </div></div>
+            <div class="vt-par vt-flotte vt-f4" style="--d:2.3"><div class="vt-c vt-mini" style="--k:7">
+              <p class="vt-lab"><i class="vt-pt" style="--t:var(--accent)"></i>map · taken for a button</p>
+              <p class="vt-tit"><span data-compte="8">8</span> dead clicks</p>
+            </div></div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -3603,6 +4027,38 @@ body::after{
       navNb: "لوجاݣوار",
       navProj: "المشروع",
       navTrial: "التجربة",
+      /* la vitrine */
+      vtH: "ما يفعله، في خمس خطوات",
+      vtT0: "اقرأ",
+      vtT1: "دوِّن",
+      vtT2: "جرِّب",
+      vtT3: "اكتب",
+      vtT4: "قِس",
+      vtH0: "شكلٌ يُجري الحساب أمام عينيك.",
+      vtP0: "كلّ شكل في كتب Fable يُحسَب على الصفحة نفسها، انطلاقًا من معادلات الدرس ذاتها. غيِّر قيمةً فتتبعها النتيجة — رياضيات الفصل نفسها، لا صورةٌ عنها.",
+      vtL0a: "102 نوعًا من الأشكال",
+      vtL0b: "ملف واحد يعمل دون اتصال",
+      vtL0c: "الفرنسية والإنجليزية والعربية",
+      vtH1: "اقتطع أيّ فقرة إلى دفتر حقيقي.",
+      vtP1: "Le Jaguar دفتر تلميذ على ورق Séyès المسطَّر. اقتطع فقرةً أو شكلًا من أيّ كتاب ودوِّن عليه ملاحظاتك، فيحتفظ بعنوانه: لمسة واحدة تعيدك إلى الصفحة التي جاء منها.",
+      vtL1a: "اقتطع من أيّ كتاب",
+      vtL1b: "يبقى على جهازك",
+      vtL1c: "افتح الدفتر",
+      vtH2: "التجربة نفسها، لا مقطعًا مصوَّرًا عنها.",
+      vtP2: "يُخرج See for yourself المحاكاةَ من الكتب. اضبط القيم وشغِّلها وشاهد ما تفعله المعادلات — بما في ذلك الحالات التي لم يتّسع لها أيّ كتاب مدرسي.",
+      vtL2a: "36 محاكاة",
+      vtL2b: "أربع مواد",
+      vtL2c: "افتح محاكاة",
+      vtH3: "كتاب مدرسي يُبنى من كتل.",
+      vtP3: "يجمع Studio الفصلَ من 102 نوعًا من الكتل — خريطة، مدار، دارة، اختبار — ويبني الكتاب كلّه في ملف HTML واحد يُفتح في أيّ مكان، حتى على أقدم حاسوب في المدرسة.",
+      vtL3a: "102 كتلة",
+      vtL3b: "ملف واحد لكلّ كتاب",
+      vtL3c: "اطّلع على المكوّنات",
+      vtH4: "اعرف بالضبط أين يتوقف التلاميذ.",
+      vtP4: "تُخبرك نسخة التجربة كيف يُقرأ الكتاب: الفصل الذي يُترك عند ثلثيه، والشكل الذي يُظنّ زرًّا، وما يتعطّل على هواتفهم. وليس ما يكتبونه أبدًا.",
+      vtL4a: "تقييم كلّ شكل",
+      vtL4b: "بالاسم أو دون اسم",
+      vtL4c: "راسلنا",
       rubanEyebrow: "ماذا في داخلها فعلًا",
       rubanH: "مئةٌ ونوعان من الأشكال، <em>كلها حيّة</em>",
       lede: "الشكل لا يشرح الدرس، بل يحلّه أمامك، بنفس السطور القليلة التي يقوم عليها الدرس.",
@@ -3880,6 +4336,38 @@ body::after{
       navHome: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
       navNb: 'Le Jaguar', navProj: 'Le projet',
       navTrial: "L’essai",
+      /* la vitrine */
+      vtH: "Ce qu’il fait, en cinq gestes",
+      vtT0: "Lire",
+      vtT1: "Prendre des notes",
+      vtT2: "Expérimenter",
+      vtT3: "Écrire",
+      vtT4: "Mesurer",
+      vtH0: "Une figure qui fait le calcul sous vos yeux.",
+      vtP0: "Chaque figure d’un livre Fable est calculée sur la page, à partir des équations mêmes de la leçon. Changez une valeur et la réponse suit — les mathématiques du chapitre, pas une image d’elles.",
+      vtL0a: "102 sortes de figures",
+      vtL0b: "Un seul fichier, hors ligne",
+      vtL0c: "Français, anglais, arabe",
+      vtH1: "Découpez n’importe quel passage dans un vrai cahier.",
+      vtP1: "Le Jaguar est un cahier d’élève sur papier Séyès. Prélevez un paragraphe ou une figure dans n’importe quel manuel, annotez-le : il garde son adresse, et un geste vous ramène à la page d’où il vient.",
+      vtL1a: "Découper dans n’importe quel livre",
+      vtL1b: "Reste sur l’appareil",
+      vtL1c: "Ouvrir le cahier",
+      vtH2: "L’expérience elle-même, pas sa vidéo.",
+      vtP2: "See for yourself sort les simulations des livres. Réglez les valeurs, lancez, et regardez ce que font les équations — y compris les cas qu’aucun manuel n’avait la place d’imprimer.",
+      vtL2a: "36 simulations",
+      vtL2b: "Quatre matières",
+      vtL2c: "Ouvrir une simulation",
+      vtH3: "Un manuel construit par blocs.",
+      vtP3: "Studio assemble un chapitre à partir de 102 sortes de blocs — une carte, une orbite, un circuit, un quiz — et construit le livre entier en un seul fichier HTML qui s’ouvre partout, le plus vieil ordinateur de l’école compris.",
+      vtL3a: "102 blocs",
+      vtL3b: "Un fichier par livre",
+      vtL3c: "Voir les pièces",
+      vtH4: "Voir exactement où les élèves s’arrêtent.",
+      vtP4: "Une copie d’essai rapporte comment un livre est lu : le chapitre abandonné aux deux tiers, la figure qu’on prend pour un bouton, ce qui casse sur leur téléphone. Jamais ce qu’ils écrivent.",
+      vtL4a: "Chaque figure notée",
+      vtL4b: "Nominatif ou anonyme",
+      vtL4c: "Nous écrire",
       rubanEyebrow: 'Ce qu\u2019il y a vraiment dedans',
       rubanH: 'Cent deux sortes de figure, <em>toutes vivantes</em>',
       lede: 'La figure n’illustre pas la leçon : elle la résout, sous vos yeux, avec les mêmes quelques lignes de mathématiques dont la leçon parle.',
@@ -5554,11 +6042,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mubolwgx). Non remplacée —
+  /* La version est posée par la construction (mud77bub). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mubolwgx')
+  fetch('library/library.json?v=mud77bub')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -5569,13 +6057,175 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mubolwgx"></script>
+<script src="compte.js?v=mud77bub"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
 (function(){
   if(!window.FableCompte) return;
   window.FableCompte.poserBouton(document.getElementById('compte-hote'));
+})();
+</script>
+<script>
+/* LA VITRINE — cinq onglets, un minuteur, et rien qui tourne pour rien.
+   Le minuteur N'EST PAS un setInterval : c'est l'animation du trait courant.
+   Quand elle se termine, on passe a l'onglet suivant. Une seule horloge qui
+   dessine et decide ; mettre le trait en pause (survol, onglet cache,
+   section hors ecran), c'est donc mettre le carrousel en pause, sans rien
+   de plus a synchroniser. */
+(function () {
+  'use strict';
+  var v = document.getElementById('vitrine');
+  if (!v) return;
+  var onglets = [].slice.call(v.querySelectorAll('[role="tab"]'));
+  var pans = [].slice.call(v.querySelectorAll('.vt-pan'));
+  var vues = [].slice.call(v.querySelectorAll('.vt-vue'));
+  var segs = [].slice.call(v.querySelectorAll('.vt-segs i'));
+  var scene = v.querySelector('.vt-scene');
+  var carte = document.getElementById('vt-carte');
+  var N = onglets.length;
+  var calme = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var courant = 0;
+
+  /* Les franges : l'intensite de deux sources qui interferent, cos² sous une
+     enveloppe qui retombe vers les bords. Calculees, pas recopiees — c'est
+     le principe de la maison, meme pour une vignette. */
+  var boite = v.querySelector('.vt-barres');
+  for (var k = 0; k < 35; k++) boite.appendChild(document.createElement('i'));
+  var barres = [].slice.call(boite.children);
+  var m = (barres.length - 1) / 2;
+  barres.forEach(function (b, j) {
+    var x = (j - m) / 7 * Math.PI;
+    var env = Math.max(0.18, 1 - Math.abs(j - m) / (m + 3));
+    var h = 0.1 + 0.9 * Math.pow(Math.cos(x), 2) * env;
+    b.style.setProperty('--h', h.toFixed(3));
+    b.style.setProperty('--j', Math.abs(j - m));
+  });
+
+  /* Rejouer une animation CSS : retirer la classe, forcer un reflux, la
+     remettre. Sans le reflux, le navigateur ne voit rien changer. */
+  function rejouer(el, cls) {
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+
+  /* LES NOMBRES COMPTENT, une fois, en neuf cents millisecondes — la duree
+     que la charte donne deja au compteur de l'accueil — puis s'arretent. */
+  function compter(racine) {
+    var cibles = racine.querySelectorAll('[data-compte]');
+    for (var i = 0; i < cibles.length; i++) (function (el) {
+      var fin = parseFloat(el.getAttribute('data-compte'));
+      var dec = parseInt(el.getAttribute('data-dec') || '0', 10);
+      if (calme || !isFinite(fin)) { el.textContent = fin.toFixed(dec); return; }
+      var t0 = 0, D = 900;
+      el.textContent = (0).toFixed(dec);
+      function pas(t) {
+        if (!t0) t0 = t;
+        var p = Math.min(1, (t - t0) / D);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = (fin * e).toFixed(dec);
+        if (p < 1) requestAnimationFrame(pas);
+      }
+      setTimeout(function () { requestAnimationFrame(pas); }, 350);
+    })(cibles[i]);
+  }
+
+  function montrer(n) {
+    courant = (n + N) % N;
+    onglets.forEach(function (o, i) {
+      var oui = i === courant;
+      o.setAttribute('aria-selected', oui ? 'true' : 'false');
+      o.tabIndex = oui ? 0 : -1;
+    });
+    carte.setAttribute('aria-labelledby', onglets[courant].id);
+    pans.forEach(function (p, i) {
+      if (i === courant) rejouer(p, 'on'); else p.classList.remove('on');
+    });
+    vues.forEach(function (w, i) {
+      if (i === courant) rejouer(w, 'on'); else w.classList.remove('on');
+    });
+    segs.forEach(function (s, i) {
+      s.classList.toggle('fait', i < courant);
+      if (i === courant) { if (calme) s.classList.remove('on'); else rejouer(s, 'on'); }
+      else s.classList.remove('on');
+    });
+    compter(vues[courant]);
+  }
+
+  /* Fin du trait courant = onglet suivant. L'evenement remonte du
+     pseudo-element `::after` jusqu'au trait lui-meme. */
+  segs.forEach(function (s, i) {
+    s.addEventListener('animationend', function () {
+      if (i === courant) montrer(courant + 1);
+    });
+  });
+
+  onglets.forEach(function (o, i) {
+    o.addEventListener('click', function () { montrer(i); });
+  });
+  /* Les fleches entre onglets, Debut et Fin — le clavier d'une vraie liste
+     d'onglets. En arabe la droite et la gauche s'echangent. */
+  v.querySelector('[role="tablist"]').addEventListener('keydown', function (e) {
+    var rtl = document.documentElement.dir === 'rtl';
+    var d = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 }[e.key];
+    var n = null;
+    /* Depuis l'onglet qui a le FOCUS, pas depuis celui qui est affiche : les
+       deux different des qu'on clique un onglet puis qu'on tabule ailleurs. */
+    var ici = onglets.indexOf(document.activeElement);
+    if (ici < 0) ici = courant;
+    if (d) n = ici + d;
+    else if (e.key === 'Home') n = 0;
+    else if (e.key === 'End') n = N - 1;
+    if (n === null) return;
+    e.preventDefault();
+    montrer(n);
+    onglets[courant].focus();
+  });
+
+  /* LA PAUSE, pour trois raisons et une seule classe. On lit la carte
+     qu'on survole ; un onglet cache ne regarde rien ; une section hors de
+     l'ecran n'a personne devant elle. */
+  var survol = false, cache = false, dehors = true;
+  function juger() { v.classList.toggle('vt-pause', survol || cache || dehors); }
+  carte.addEventListener('pointerenter', function () { survol = true; juger(); });
+  carte.addEventListener('pointerleave', function () { survol = false; juger(); });
+  carte.addEventListener('focusin', function () { survol = true; juger(); });
+  carte.addEventListener('focusout', function () { survol = false; juger(); });
+  document.addEventListener('visibilitychange', function () { cache = document.hidden; juger(); });
+  if ('IntersectionObserver' in window) {
+    var premier = true;
+    new IntersectionObserver(function (es) {
+      dehors = !es[0].isIntersecting;
+      /* La premiere entree rejoue l'onglet : ses cartes ont fait leur entree
+         hors de l'ecran, au chargement, et personne ne les a vues. */
+      if (!dehors && premier) { premier = false; montrer(courant); }
+      juger();
+    }, { threshold: 0.3 }).observe(carte);
+  } else { dehors = false; }
+  juger();
+
+  /* LA PROFONDEUR, au pointeur seulement. Rien ne se calcule tant que le
+     pointeur ne bouge pas ; une trame au plus par mouvement. */
+  if (!calme && scene) {
+    var attente = false, mx = 0, my = 0;
+    scene.addEventListener('pointermove', function (e) {
+      var r = scene.getBoundingClientRect();
+      mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      if (attente) return;
+      attente = true;
+      requestAnimationFrame(function () {
+        attente = false;
+        scene.style.setProperty('--mx', mx.toFixed(3));
+        scene.style.setProperty('--my', my.toFixed(3));
+      });
+    });
+    scene.addEventListener('pointerleave', function () {
+      scene.style.setProperty('--mx', 0);
+      scene.style.setProperty('--my', 0);
+    });
+  }
 })();
 </script>
 </body>
