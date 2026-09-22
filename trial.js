@@ -206,9 +206,11 @@ async function inviter() {
 }
 
 /* Le lien d'invitation « a la main » : la meme page, avec le code du groupe.
-   Il ouvre l'essai tout de suite, en anonyme, et le compte prendra le relais
-   des que la personne se connectera avec l'adresse invitee. Un eleve n'est
-   donc jamais bloque derriere une boite mail qu'il ne lit pas. */
+   Il ouvre l'essai tout de suite, en anonyme, et le compte prend le relais
+   des que la personne se connecte avec l'adresse invitee (pilote.js cherche
+   l'invitation de tout compte connecte, lien ou pas). Ce qui a ete lu
+   avant reste anonyme ; seul ce qui suit porte son nom. Un eleve n'est donc
+   jamais bloque derriere une boite mail qu'il ne lit pas. */
 const lienInvite = (inv) => RACINE + '?pilote=' + encodeURIComponent(inv.code);
 
 async function posterLien(adresse) {

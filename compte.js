@@ -48,6 +48,7 @@
      anglais sur une page entierement arabe - sur CHAQUE page, puisque le
      bouton est dans la barre. */
   var AR = {
+    'You are in. Open any book below — the trial starts there.': 'تمّ الدخول. افتح أيّ كتاب أدناه — تبدأ التجربة هناك.',
     'The browser blocked Google\'s window. Allow pop-ups for this site, or use e-mail instead.': 'حجب المتصفّح نافذة Google. اسمح بالنوافذ المنبثقة لهذا الموقع، أو استعمل البريد الإلكتروني بدلًا منها.',
     'Google\'s window was closed before it finished.': 'أُغلقت نافذة Google قبل أن تنتهي.',
     'Another sign-in window was already open.': 'كانت هناك نافذة دخول أخرى مفتوحة سلفًا.',
@@ -136,7 +137,8 @@
     'Change an address…': 'Changer une adresse…',
     'Confirm the address your invitation was sent to:': 'Confirmez l’adresse à laquelle l’invitation a été envoyée :',
     'That link did not work. Ask for a new one — they expire.': 'Ce lien n’a pas fonctionné. Demandez-en un autre — ils expirent.',
-    'Nothing answered on ': 'Rien n’a répondu sur ',
+    'You are in. Open any book below — the trial starts there.': 'C’est fait. Ouvrez n’importe quel livre ci-dessous — l’essai commence là.',
+    'Nothing answered on ':'Rien n’a répondu sur ',
     '. On this machine, run « npm run lanceur » once; elsewhere, these tools do not exist.': '. Sur cette machine, lancez « npm run lanceur » une fois ; ailleurs, ces outils n’existent pas.',
     'Which tool? (': 'Quel outil ? (',
     'Address of ': 'Adresse de ',
@@ -301,9 +303,27 @@
       /* On nettoie l'adresse : le code a servi, il ne doit pas rester dans
          l'historique ni repartir dans un partage. */
       history.replaceState(null, '', location.pathname);
+      bienvenue();
     } catch (e) {
       alert(t('That link did not work. Ask for a new one — they expire.'));
     }
+  }
+
+  /* L'invitation arrive sur l'accueil, et l'essai vit dans les livres. Sans
+     un mot, la personne connectee regarde une page d'accueil et se demande
+     ce qu'elle devait faire. On le lui dit une fois, et on l'amene a
+     l'etagere. */
+  function bienvenue() {
+    var etagere = document.getElementById('library');
+    if (etagere) etagere.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var m = document.createElement('div');
+    m.setAttribute('role', 'status');
+    m.textContent = t('You are in. Open any book below — the trial starts there.');
+    m.style.cssText = 'position:fixed;inset-inline:16px;inset-block-end:20px;margin-inline:auto;max-inline-size:26rem;'
+      + 'z-index:2147483000;padding:.8rem 1rem;border-radius:12px;font:500 .9rem/1.45 system-ui,sans-serif;'
+      + 'background:#17140f;color:#f3efe6;box-shadow:0 12px 32px rgba(0,0,0,.28);text-align:center';
+    document.body.appendChild(m);
+    setTimeout(function () { if (m.parentNode) m.parentNode.removeChild(m); }, 9000);
   }
 
   function prevenir() { etat.chezSoi = chezSoi(); ecouteurs.forEach(function (f) { try { f(etat); } catch (e) { /* un écouteur fautif ne casse pas les autres */ } }); }

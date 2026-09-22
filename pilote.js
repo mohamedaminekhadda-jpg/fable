@@ -70,6 +70,14 @@
   var CLE_ACCORD = 'fable-pilote-accord';      // 'oui' | 'non'
   var CLE_FILE = 'fable-pilote-file';
   var CLE_SEANCE = 'fable-pilote-seance';
+  /* L'essai NOMINATIF a son propre accord et sa propre file. Un « oui »
+     donne sous la phrase « rien ne vous identifie » ne vaut pas pour une
+     lecture qui porte un nom ; et des evenements recueillis en anonyme ne
+     doivent pas repartir sous un compte. L'accord garde l'uid de la personne
+     qui l'a donne — un appareil partage n'herite pas du oui d'un autre. */
+  var CLE_ACCORD_NOM = 'fable-pilote-accord-compte';   // 'oui:<uid>' | 'non:<uid>'
+  var CLE_FILE_NOM = 'fable-pilote-file-compte';
+  var TOUTES = [CLE_CODE, CLE_ACCORD, CLE_FILE, CLE_ACCORD_NOM, CLE_FILE_NOM];
 
   function lire(c) { try { return localStorage.getItem(c); } catch (e) { return null; } }
   function ecrire(c, v) { try { localStorage.setItem(c, v); return true; } catch (e) { return false; } }
@@ -89,12 +97,18 @@
      avant toute autre décision — quelqu'un qui veut sortir doit pouvoir
      sortir même si le reste du fichier a un défaut. */
   if (venu === 'off') {
-    [CLE_CODE, CLE_ACCORD, CLE_FILE].forEach(oublier);
+    TOUTES.forEach(oublier);
     try { sessionStorage.removeItem(CLE_SEANCE); } catch (e) { /* rien */ }
     return;
   }
   if (venu) ecrire(CLE_CODE, String(venu).slice(0, 40));
   var CODE = lire(CLE_CODE);
+  /* Le code du LIEN, garde a part : une invitation peut remplacer CODE par
+     son propre groupe, et ce qui a ete recueilli en anonyme repart sous le
+     code sous lequel on l'a recueilli. */
+  var CODE_LIEN = CODE;
+  /* L'uid du compte invite, quand l'essai est nominatif ; null sinon. */
+  var NOM = null;
 
   /* ── DEUX FACONS D'ETRE DANS L'ESSAI ─────────────────────────────────
      Par le LIEN, avec un code de groupe : l'appareil est anonyme, on ne
@@ -108,13 +122,22 @@
 
      On ne va chercher l'invitation que si quelqu'un s'est deja connecte
      sur cet appareil : sans cette marque, un visiteur de passage
-     telechargerait le SDK pour apprendre qu'il n'est invite a rien. */
-  var CLE_INVITE = 'fable-pilote-invite';
+     telechargerait le SDK pour apprendre qu'il n'est invite a rien. Et une
+     reponse « rien pour vous » est retenue pour l'onglet (sessionStorage) :
+     un compte ordinaire ne recharge pas le SDK a chaque page pour
+     entendre la meme chose. L'amorce des pages lit la meme marque. */
+  var SS_INVITE = 'fable-pilote-invite';          // 'non' = deja verifie, rien
   function marqueCompte() {
     try { return localStorage.getItem('fable-compte-vu') === '1'; } catch (e) { return false; }
   }
-  var invitePossible = !CODE && marqueCompte();
-  if (!CODE && !invitePossible) return;   // pas dans l'essai : on n'existe pas
+  function dejaNon() {
+    try { return sessionStorage.getItem(SS_INVITE) === 'non'; } catch (e) { return false; }
+  }
+  function noterNon() {
+    try { sessionStorage.setItem(SS_INVITE, 'non'); } catch (e) { /* rien */ }
+  }
+  var aVerifier = marqueCompte() && !dejaNon();
+  if (!CODE && !aVerifier) return;   // pas dans l'essai : on n'existe pas
 
   /* ── LA LANGUE ─────────────────────────────────────────────────────────
      Le site range son choix sous `fable:lang` et les pages le posent sur
@@ -296,12 +319,19 @@
     pastille = null;
   }
 
+  function accorde() {
+    return NOM ? lire(CLE_ACCORD_NOM) === 'oui:' + NOM : lire(CLE_ACCORD) === 'oui';
+  }
+  function refuse() {
+    return NOM ? lire(CLE_ACCORD_NOM) === 'non:' + NOM : lire(CLE_ACCORD) === 'non';
+  }
   function repondre(accepte) {
-    ecrire(CLE_ACCORD, accepte ? 'oui' : 'non');
+    if (NOM) ecrire(CLE_ACCORD_NOM, (accepte ? 'oui:' : 'non:') + NOM);
+    else ecrire(CLE_ACCORD, accepte ? 'oui' : 'non');
     if (accepte) { poserPastille(); demarrer(); }
     else {
       retirerPastille();
-      oublier(CLE_FILE);          // ce qui attendait ne partira pas
+      oublier(NOM ? CLE_FILE_NOM : CLE_FILE);   // ce qui attendait ne partira pas
       arrete = true;
     }
   }
@@ -319,13 +349,15 @@
   var PLAFOND = 2000;
   var arrete = false;
 
-  function file() {
-    try { var f = JSON.parse(lire(CLE_FILE) || '[]'); return Array.isArray(f) ? f : []; }
+  function file(cle) {
+    cle = cle || (NOM ? CLE_FILE_NOM : CLE_FILE);
+    try { var f = JSON.parse(lire(cle) || '[]'); return Array.isArray(f) ? f : []; }
     catch (e) { return []; }
   }
-  function poserFile(f) {
+  function poserFile(f, cle) {
+    cle = cle || (NOM ? CLE_FILE_NOM : CLE_FILE);
     if (f.length > PLAFOND) f = f.slice(f.length - PLAFOND);
-    ecrire(CLE_FILE, JSON.stringify(f));
+    ecrire(cle, JSON.stringify(f));
   }
 
   var SEANCE = (function () {
@@ -338,7 +370,7 @@
 
   function pousser(ev) {
     if (arrete || !ev || !FORMES[ev.k]) return;
-    if (lire(CLE_ACCORD) !== 'oui') return;
+    if (!accorde()) return;
     ev.q = SEANCE;
     ev.t = Date.now();
     var f = file();
@@ -350,58 +382,92 @@
      Le SDK pèse quelques centaines de kilo-octets. On ne le charge qu'au
      premier envoi réel, et jamais sur un appareil qui a dit non : un élève
      qui refuse ne doit pas payer le poids de ce qu'il a refusé. */
-  var fb = null, chargement = null;
-  function charger() {
-    if (fb) return Promise.resolve(fb);
-    if (chargement) return chargement;
-    chargement = (async function () {
+  /* ── QUI PORTE LA LECTURE ──────────────────────────────────────────────
+     DEUX IDENTITES, DANS DEUX APPLICATIONS FIREBASE.
+
+     INVITE : le compte connecte, dans l'application par defaut — celle de
+     compte.js. Le professeur a invite une personne ; il doit la retrouver.
+
+     SINON, UN ANONYME DANS UNE APPLICATION A PART (« fable-pilote »), meme
+     si quelqu'un est connecte. Avant, un lecteur venu par lien mais connecte
+     a son compte envoyait sous l'uid de ce compte — alors que le panneau
+     lui avait promis que rien ne l'identifiait. Une seconde application a sa
+     propre session : l'identifiant anonyme reste stable pour l'appareil et
+     ne touche jamais au compte. Il faut « Anonymous » actif dans la console.
+
+     ON N'ATTEND PAS LA RESTAURATION DE SESSION AVANT DE DECIDER. Firebase
+     relit IndexedDB de facon asynchrone ; `currentUser` est nul pendant un
+     aller-retour. On laisse donc `onAuthStateChanged` parler une premiere
+     fois avant de conclure qu'il n'y a personne. */
+  var sdkP = null, compteP = null, anonP = null;
+  function sdk() {
+    if (sdkP) return sdkP;
+    sdkP = (async function () {
       var cfg = await import(BASE + 'firebase-config.js' + VERSION_Q);
       var C = cfg.CONFIG_FIREBASE || {};
       if (!C.apiKey || !C.projectId) throw new Error('Firebase non configuré');
       var base = 'https://www.gstatic.com/firebasejs/' + (cfg.VERSION_SDK || '10.12.0') + '/';
-      var app = await import(base + 'firebase-app.js');
-      var auth = await import(base + 'firebase-auth.js');
-      var fs = await import(base + 'firebase-firestore.js');
-      /* `getApps()` d'abord : sur le cahier et l'accueil, `compte.js` a déjà
-         initialisé l'application par défaut, et `initializeApp` une seconde
-         fois lève. On se greffe sur la sienne plutôt que d'en ouvrir une
-         seconde — deux applications, ce seraient deux sessions, donc deux
-         identités anonymes pour un seul appareil. */
-      var application = app.getApps().length ? app.getApp() : app.initializeApp(C);
-      var a = auth.getAuth(application);
-      /* ── QUI PORTE LA LECTURE ──
-         UN COMPTE CONNECTE D'ABORD. S'il y en a un, c'est lui : le
-         professeur a invite une personne, il doit retrouver cette personne.
-
-         ANONYME SINON, et c'est toujours le bon defaut. Firebase tire un
-         identifiant stable pour l'appareil sans demander ni nom ni adresse :
-         un essai distribue par lien ne detient alors aucune donnee
-         personnelle d'un mineur. Il faut avoir active « Anonymous » dans la
-         console, et « Email link » pour les invitations.
-
-         ON N'ATTEND PAS LA RESTAURATION DE SESSION AVANT DE DECIDER. Firebase
-         relit IndexedDB de facon asynchrone ; `currentUser` est nul pendant
-         un aller-retour, et ouvrir une session anonyme dans cet intervalle
-         couperait la lecture en deux moities qui ne se rejoindraient jamais.
-         On laisse donc `onAuthStateChanged` parler une premiere fois. */
-      var qui = await new Promise(function (ok) {
-        var fait = false;
-        var stop = auth.onAuthStateChanged(a, function (u) {
-          if (fait) return;
-          fait = true; stop();
-          ok(u);
-        });
-        setTimeout(function () { if (!fait) { fait = true; ok(a.currentUser); } }, 4000);
-      });
-      if (!qui) { await auth.signInAnonymously(a); qui = a.currentUser; }
-      fb = {
-        a: a, f: fs, db: fs.getFirestore(application), uid: qui.uid,
-        anonyme: !!qui.isAnonymous,
-        adresse: (qui.email || '').toLowerCase(),
+      return {
+        C: C,
+        app: await import(base + 'firebase-app.js'),
+        auth: await import(base + 'firebase-auth.js'),
+        f: await import(base + 'firebase-firestore.js'),
       };
-      return fb;
     })();
-    return chargement;
+    sdkP.catch(function () { sdkP = null; });
+    return sdkP;
+  }
+  function premierEtat(m, a) {
+    return new Promise(function (ok) {
+      var fait = false;
+      var stop = m.auth.onAuthStateChanged(a, function (u) {
+        if (fait) return;
+        fait = true; stop();
+        ok(u);
+      });
+      setTimeout(function () { if (!fait) { fait = true; ok(a.currentUser); } }, 4000);
+    });
+  }
+  /* Le compte de l'application par defaut, ou null. JAMAIS de session
+     anonyme ouverte ici : sur le cahier et l'accueil cette application est
+     celle de compte.js, et on s'y greffe plutot que d'en ouvrir une autre. */
+  function compte() {
+    if (compteP) return compteP;
+    compteP = sdk().then(function (m) {
+      var application = m.app.getApps().some(function (x) { return x.name === '[DEFAULT]'; })
+        ? m.app.getApp() : m.app.initializeApp(m.C);
+      var a = m.auth.getAuth(application);
+      return premierEtat(m, a).then(function (u) {
+        return { a: a, f: m.f, db: m.f.getFirestore(application), u: a.currentUser || u };
+      });
+    });
+    compteP.catch(function () { compteP = null; });
+    return compteP;
+  }
+  function anonyme() {
+    if (anonP) return anonP;
+    anonP = sdk().then(function (m) {
+      var application = m.app.getApps().filter(function (x) { return x.name === 'fable-pilote'; })[0]
+        || m.app.initializeApp(m.C, 'fable-pilote');
+      var a = m.auth.getAuth(application);
+      return premierEtat(m, a).then(function (u) {
+        if (u) return u;
+        return m.auth.signInAnonymously(a).then(function () { return a.currentUser; });
+      }).then(function (u) {
+        return { f: m.f, db: m.f.getFirestore(application), uid: u.uid };
+      });
+    });
+    anonP.catch(function () { anonP = null; });
+    return anonP;
+  }
+  /* L'identite sous laquelle part une file. Si le compte invite s'est
+     deconnecte entre-temps, on ne l'envoie pas sous quelqu'un d'autre : on
+     garde, et ca repartira quand il reviendra. */
+  function identite(nominatif) {
+    if (!nominatif) return anonyme();
+    return compte().then(function (o) {
+      return (o.u && o.u.uid === NOM) ? { f: o.f, db: o.db, uid: NOM } : null;
+    });
   }
 
   /* Ce qu'on sait de l'appareil, et qui tient en une ligne. Pas la chaîne
@@ -449,42 +515,40 @@
      Éteint, l'appareil ne se contente pas de se taire : il efface la file, le
      code et l'accord. À la visite suivante il est redevenu un visiteur
      ordinaire, et le panneau ne lui redemandera rien. */
-  var verdictArret = null;
-  function interrupteur(x) {
-    if (verdictArret) return verdictArret;
+  var verdicts = {};
+  function interrupteur(x, code) {
+    if (verdicts[code]) return verdicts[code];
     var d = x.f;
-    verdictArret = d.getDoc(d.doc(x.db, 'reglages', 'pilote')).then(function (r) {
+    verdicts[code] = d.getDoc(d.doc(x.db, 'reglages', 'pilote')).then(function (r) {
       var v = (r && r.exists && r.exists()) ? (r.data() || {}) : {};
       var fermes = v.fermes || [];
-      var eteint = v.pause === true || fermes.indexOf(CODE) >= 0;
+      var eteint = v.pause === true || fermes.indexOf(code) >= 0;
       if (!eteint) return false;
       arrete = true;
-      [CLE_FILE, CLE_CODE, CLE_ACCORD].forEach(oublier);
+      TOUTES.forEach(oublier);
       retirerPastille();
       return true;
     }).catch(function () {
       /* Injoignable — hors ligne, règles absentes. On continue : un essai qui
          s'arrête parce que le réseau a toussé perdrait la séance entière, et
          le réglage sera relu à la prochaine. */
-      verdictArret = null;
+      verdicts[code] = null;
       return false;
     });
-    return verdictArret;
+    return verdicts[code];
   }
 
-  var envoiEnCours = false;
-  function vider(dernier) {
-    if (arrete || envoiEnCours) return Promise.resolve();
-    if (lire(CLE_ACCORD) !== 'oui') return Promise.resolve();
-    var f = file();
-    if (!f.length) return Promise.resolve();
-    envoiEnCours = true;
-    var lot = f.slice();
-    return charger().then(function (x) {
-      return interrupteur(x).then(function (eteint) {
-        if (eteint) { envoiEnCours = false; return null; }
-        return x;
-      });
+  /* UNE FILE PART SOUS L'IDENTITE SOUS LAQUELLE ON L'A RECUEILLIE. En
+     general il n'y en a qu'une. Il y en a deux quand quelqu'un a lu par le
+     lien, en anonyme, puis s'est connecte avec l'adresse invitee : ce qu'il
+     a lu avant repart en anonyme, sous le code du lien, et seulement ce qui
+     suit porte son nom. */
+  function envoyer(t, dernier) {
+    var lot = file(t.cle).slice();
+    if (!lot.length) return Promise.resolve();
+    return identite(t.nominatif).then(function (x) {
+      if (!x) return null;
+      return interrupteur(x, t.code).then(function (eteint) { return eteint ? null : x; });
     }).then(function (x) {
       if (!x) return null;
       var d = x.f;
@@ -492,14 +556,14 @@
          l'écriture : trois cents clics d'un élève, c'est un document ici et
          trois cents là-bas. Le palier gratuit tient un essai entier. */
       var p = d.addDoc(d.collection(x.db, 'pilote', x.uid, 'lots'), {
-        code: CODE, seance: SEANCE, n: lot.length, ev: lot,
+        code: t.code, seance: SEANCE, n: lot.length, ev: lot,
         recu: d.serverTimestamp(), envoye: Date.now(), fin: !!dernier,
       });
       /* Le profil, fusionné : il ne grandit pas, il se met à jour. C'est lui
          qu'on lit pour compter les appareils et les retours. */
       var prof = d.setDoc(d.doc(x.db, 'pilote', x.uid), {
-        code: CODE, vu: d.serverTimestamp(), appareil: appareil(),
-        debut: d.serverTimestamp(),
+        code: t.code, vu: d.serverTimestamp(), appareil: appareil(),
+        invite: !!t.nominatif,
       }, { merge: true });
       return Promise.all([p, prof]);
     }).then(function (fait) {
@@ -507,10 +571,25 @@
       /* On retire EXACTEMENT ce qui est parti, pas la file entière : des
          événements ont pu s'ajouter pendant l'envoi, et un `removeItem`
          franc les aurait emportés avec. */
-      var reste = file().slice(lot.length);
-      poserFile(reste);
+      poserFile(file(t.cle).slice(lot.length), t.cle);
+    });
+  }
+
+  var envoiEnCours = false;
+  function vider(dernier) {
+    if (arrete || envoiEnCours) return Promise.resolve();
+    var taches = [];
+    if (NOM && accorde() && file(CLE_FILE_NOM).length)
+      taches.push({ cle: CLE_FILE_NOM, nominatif: true, code: CODE });
+    if (CODE_LIEN && lire(CLE_ACCORD) === 'oui' && file(CLE_FILE).length)
+      taches.push({ cle: CLE_FILE, nominatif: false, code: CODE_LIEN });
+    if (!taches.length) return Promise.resolve();
+    envoiEnCours = true;
+    return taches.reduce(function (p, t) {
+      return p.then(function () { if (!arrete) return envoyer(t, dernier); });
+    }, Promise.resolve()).then(function () {
       envoiEnCours = false;
-    }).catch(function () {
+    }, function () {
       /* Réseau coupé, règles refusées, quota : on garde tout et on réessaiera.
          Aucun message : ce n'est pas le problème de l'élève. */
       envoiEnCours = false;
@@ -1061,58 +1140,86 @@
      On attend que `body` existe : le panneau et la pastille s'y accrochent,
      et ce script est chargé dans le `<head>` des livres. */
   function lancer() {
-    var accord = lire(CLE_ACCORD);
-    if (accord === 'non') { arrete = true; return; }
-    if (accord === 'oui') { poserPastille(); demarrer(); return; }
+    if (refuse()) { arrete = true; return; }
+    if (accorde()) { poserPastille(); demarrer(); return; }
     ouvrirPanneau(true);
   }
 
   /* ── EST-ON ATTENDU ? ──────────────────────────────────────────────────
-     Si aucun code n'a ete distribue par lien, on regarde si le compte
-     connecte porte une invitation. La reponse decide de DEUX choses : si
-     l'essai existe du tout pour cette personne, et ce que le panneau lui
-     promet. On attend donc Firebase avant d'ouvrir la bouche — un panneau
-     qui annonce l'anonymat puis se ravise ne vaut rien.
+     Des qu'un compte est connecte, on regarde s'il porte une invitation —
+     QU'IL SOIT VENU PAR LE LIEN OU NON. Avant, un code de lien suffisait a
+     sauter la question : la personne invitee qui avait d'abord ouvert le
+     lien a copier ne voyait jamais son invitation tamponnee, et la console
+     la montrait « not yet » pour toujours, lecture ou pas.
 
-     Une invitation retiree fait disparaitre l'essai a la visite suivante :
-     `actif` est relu a chaque fois, jamais mis en cache. */
+     La reponse decide de trois choses : si l'essai existe pour cette
+     personne, sous quelle identite il part, et ce que le panneau promet. On
+     attend donc Firebase avant d'ouvrir la bouche — un panneau qui annonce
+     l'anonymat puis se ravise ne vaut rien.
+
+     Une invitation RETIREE arrete tout, lien compris : « Revoke » dans la
+     console doit vouloir dire que cette personne n'est plus mesuree. `actif`
+     est relu a chaque visite, jamais mis en cache. */
   var PAR_INVITATION = false;
   function partir() {
     if (document.body) lancer();
     else addEventListener('DOMContentLoaded', lancer);
   }
 
-  if (CODE) partir();
-  else {
-    charger().then(function (x) {
-      if (x.anonyme || !x.adresse) return null;
-      var d = x.f;
-      return d.getDoc(d.doc(x.db, 'invites', x.adresse)).then(function (r) {
-        if (!r || !r.exists || !r.exists()) return null;
+  function chercherInvitation() {
+    return compte().then(function (o) {
+      var u = o.u;
+      if (!u || u.isAnonymous || !u.email) return 'personne';
+      var adresse = String(u.email).toLowerCase();
+      var d = o.f;
+      return d.getDoc(d.doc(o.db, 'invites', adresse)).then(function (r) {
+        if (!r || !r.exists || !r.exists()) return 'aucune';
         var v = r.data() || {};
-        if (v.actif === false) return null;
+        if (v.actif === false) return 'retiree';
         CODE = String(v.code || 'invite').slice(0, 40);
+        NOM = u.uid;
         PAR_INVITATION = true;
         /* On tamponne l'invitation : c'est ce qui permet au professeur de
            savoir qui est venu, et c'est la SEULE jointure entre une adresse
            et un identifiant de mesure. Les regles ne laissent ecrire que
            ces deux champs-la. */
-        var neuf = { uid: x.uid };
+        var neuf = {};
+        if (v.uid !== u.uid) neuf.uid = u.uid;
         if (!v.vu) neuf.vu = d.serverTimestamp();
-        return d.setDoc(d.doc(x.db, 'invites', x.adresse), neuf, { merge: true })
-          .catch(function () { /* tant pis, la lecture compte plus */ });
+        if (!Object.keys(neuf).length) return 'invite';
+        return d.setDoc(d.doc(o.db, 'invites', adresse), neuf, { merge: true })
+          .catch(function () { /* tant pis, la lecture compte plus */ })
+          .then(function () { return 'invite'; });
       });
-    }).then(function () {
+    });
+  }
+
+  if (!aVerifier) partir();
+  else {
+    chercherInvitation().then(function (r) {
+      if (r === 'retiree') {
+        arrete = true;
+        TOUTES.forEach(oublier);
+        noterNon();
+        return;
+      }
+      if (r !== 'invite' && !CODE) { noterNon(); return; }
+      partir();
+    }).catch(function () {
+      /* Hors ligne, regles refusees (adresse non verifiee) : l'invitation
+         ne peut pas etre confirmee. Le lien, s'il y en a un, reste valable. */
       if (CODE) partir();
-    }).catch(function () { /* hors ligne, ou rien pour nous : on n'existe pas */ });
+    });
   }
 
   /* Une poignée pour la console du navigateur, quand on teste sur un vrai
      téléphone et qu'on veut savoir ce qui attend. Elle ne lit rien de plus
      que ce que ce fichier a déjà en main. */
   window.FablePilote = {
-    code: CODE,
-    etat: function () { return { accord: lire(CLE_ACCORD), enAttente: file().length, seance: SEANCE, ou: OU }; },
+    get code() { return CODE; },
+    etat: function () {
+      return { mode: NOM ? 'invite' : 'anonyme', accord: accorde(), enAttente: file().length, seance: SEANCE, ou: OU };
+    },
     vider: function () { return vider(false); },
   };
 })();

@@ -1803,7 +1803,7 @@ body::after{
   .rc-volume,.rc-calcul li,.rc-point,.rc-portee,.rc-axes{transition:none}
 }
 </style>
-<script>(function(){try{var c=null;try{c=localStorage.getItem("fable-pilote-code")}catch(e){}if(!c&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mud89d1w";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mud91fpe";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/accueil.jpg?v=db495b97e7">
@@ -6300,11 +6300,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mud89d1w). Non remplacée —
+  /* La version est posée par la construction (mud91fpe). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mud89d1w')
+  fetch('library/library.json?v=mud91fpe')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -6315,7 +6315,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mud89d1w"></script>
+<script src="compte.js?v=mud91fpe"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
