@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notebook — Le Jaguar</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,900;9..144,1,400;9..144,1,600&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,0,900;9..144,1,400;9..144,1,600&family=Spline+Sans+Mono:wght@400;500;600&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#1a2238; --ink-soft:#3d4663; --paper:#f4f1ea; --paper-deep:#ebe6db; --desk:#e5ded0;
@@ -734,13 +734,119 @@ body.nb-op{cursor:grabbing;user-select:none}
 .sh-compte .qui{color:var(--ink)}
 .sh-etat{font-size:10px;letter-spacing:.06em;color:var(--slate)}
 
+
+/* ══════════ LA CHARTE DE FABLE, PAR TOUCHES ══════════
+   Le Jaguar garde son identite — la barre marine, l'or, le papier et sa
+   Fraunces. Ce qui vient de Fable, c'est la langue des COMMANDES : une seule
+   famille variable pour l'interface (Bricolage Grotesque), le vermillon pour
+   ce qu'on presse et rien d'autre, des pilules, un anneau de focus visible,
+   et du mouvement qui se termine toujours.
+
+   RIEN DE CE QUI SUIT NE TOUCHE AU PAPIER. La police, la taille, l'interligne
+   et le decalage des lignes de .paper et de tout ce qu'il contient sont
+   exactement ceux d'avant : c'est ce qui pose chaque mot sur sa ligne, et
+   c'est verifie par test (check-jaguar : la grille est photographiee et
+   comparee). */
+:root{--ui:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --press:#e4402a;--press-dark:#c2331c;--focus:#3340dd}
+.tb-txt,.nav-sel,.savedot,.nav-brand{font-family:var(--ui)}
+.nav-brand{font-style:normal;font-weight:700;letter-spacing:-.01em;font-variation-settings:"opsz" 24,"wdth" 90}
+.tb-txt,.nav-sel{letter-spacing:.06em;font-weight:600}
+.left-head .nm,.pop h3,.sh-tete h1,.cah-titre,.nbdrawer header h3,.gfull-head span,.ex-lk-t{font-family:var(--ui);font-weight:700;letter-spacing:-.02em;font-variation-settings:"opsz" 40}
+.sh-tete h1{font-size:34px;font-variation-settings:"opsz" 72}
+.kicker,.sec-h .lbl,.pagehead .ph-k,.pagehead .date,.task,.pop label,.add-group,.add-grid button small,.imp-foot .cnt,.imp-row .m,.imp-row .m2,.imp-back,
+.dock-menu button,.dock-tools button,.sh-tete .compte,.sh-pied,.cah-meta,.cah-actions button,.cah-neuf,.nbdrawer header .k,.nbdrawer footer button,
+.nbnote-card .src,.nbnote-card .acts button,.nbnote button,.nbsel .sb,.calc-t,.gfull-label,.gfull-head button,.wfe-fld>label,.wfe-add,.cov b,.pop .actions button,.imp-foot .primary{font-family:var(--ui);letter-spacing:.08em}
+.add-grid button,.imp-row .t{font-family:var(--ui);font-weight:600;letter-spacing:-.01em}
+/* ce qu'on presse : vermillon, en pilule */
+.pop .actions .primary,.imp-foot .primary,.dock-menu button.primary,.rvdock .cmt-add button,.nbshare .row .dl{background:var(--press);color:#fff;border-color:transparent;font-weight:650}
+.pop .actions .primary:hover,.imp-foot .primary:hover,.dock-menu button.primary:hover{background:var(--press-dark);color:#fff;filter:none}
+.pop .actions button,.imp-foot .primary,.dock-menu button,.dock-tools button,.nbdrawer footer button,.nbnote button,.nbshare .row button{border-radius:999px}
+.dock-menu button{letter-spacing:.12em}
+/* les fenetres : une entree courte, qui se termine */
+.pop{animation:jgFond .18s ease}
+.pop .box{border-radius:16px;border-top-color:var(--press);animation:jgBoite .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes jgFond{from{opacity:0}}
+@keyframes jgBoite{from{opacity:0;transform:translateY(10px) scale(.98)}}
+.add-grid button{border-radius:12px;transition:border-color .15s,background .15s,transform .15s}
+.add-grid button:hover{transform:translateY(-1px)}
+.imp-list,.imp-preview{border-radius:12px}
+.toast{font-family:var(--ui);font-size:13px;letter-spacing:0;background:#17140f;color:#f3efe6;border-radius:999px;padding:10px 18px;transform:translate(-50%,8px);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
+.toast.show{transform:translate(-50%,0)}
+/* le focus se voit, au clavier seulement ; le papier garde le sien */
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible,.tab:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.booknav button:focus-visible,.booknav select:focus-visible{outline-color:var(--gold)}
+#paper:focus-visible{outline:none}
+/* l'etat de l'enregistrement */
+.savedot.echec{color:#ff9078}
+/* les tiroirs fermes ne laissent plus leur ombre sur le bord droit */
+.nbdrawer:not(.show),.nblook:not(.show){visibility:hidden;transition:transform .34s cubic-bezier(.36,.02,.1,1),visibility 0s .34s}
+.nbdrawer.show,.nblook.show{visibility:visible}
+/* la charte : rien ne tourne sans fin. L'alerte du minuteur bat trois fois,
+   le chargement le dit en mots. */
+.sp-h .ex-timer.urgent,.exam-bar .ex-timer.urgent{animation-iteration-count:3}
+.nblook .body.loading::before{content:"Chargement…";width:auto;height:auto;border:0;border-radius:0;animation:none;font-style:italic;color:rgba(244,241,234,.55);margin:0}
+
+/* ── la barre du haut : la fin reste en vue ──
+   Elle etait plus large que l'ecran des 1500 px, et ce qui depassait — Notes,
+   Lire, la taille du texte, l'etat de l'enregistrement — etait coupe sans
+   barre de defilement. Les mots des boutons partent d'abord (l'icone et
+   l'infobulle restent), puis la barre defile, et sa fin ne defile jamais. */
+.nav-fin{position:sticky;right:-14px;display:flex;align-items:center;gap:4px;align-self:stretch;flex-shrink:0;
+  margin-right:-14px;padding:0 14px 0 22px;background:linear-gradient(90deg,rgba(26,34,56,0),var(--nav-bg) 18px)}
+@media (max-width:1600px){
+  .booknav .tb-txt{font-size:0;gap:0;min-width:32px}
+  .booknav .tb-txt .nb-count{font-size:9px}
+}
+@media (max-width:1320px){ .nav-brand{display:none} }
+
+/* ── dans l'espace de travail, la pastille « Fable » passe au-dessus de la
+   barre du bas, au lieu de cacher l'avatar ── */
+#work.on ~ .fb-retour{inset-block-end:calc(var(--taskh) + 8px)}
+#work.on ~ .flt-pastille{inset-block-end:calc(var(--taskh) + 48px)}
+
+/* les matieres, dans le tiroir du telephone */
+.rail-mat{display:none;padding:0 0 8px}
+.rail-mat button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 26px;font-family:var(--ui);font-size:15px;font-weight:600;color:var(--ink-soft);text-align:left}
+.rail-mat button i{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
+.rail-mat button.on{color:var(--ink)}
+
+/* ── le telephone ── */
+@media (max-width:760px){
+  :root{--navh:50px;--taskh:34px}
+  #work,#work.left-hidden{grid-template-columns:0 1fr}
+  #work .left,#work.left-hidden .left{position:fixed;top:var(--navh);bottom:var(--taskh);left:0;width:min(300px,86vw);z-index:75;
+    opacity:1;pointer-events:auto;padding:22px 0 40px;overflow-y:auto;border-right:1px solid var(--rule);
+    transform:translateX(-104%);transition:transform .28s cubic-bezier(.2,.8,.2,1);box-shadow:18px 0 40px -20px rgba(0,0,0,.45)}
+  #work.rail-ouvert .left{transform:none}
+  .rail-mat{display:block}
+  .center{padding:14px 8px 40px}
+  .paper{padding-right:16px}
+  .paper:not(.tpl-seyes):not(.tpl-cornell){padding-left:18px}
+  .subjects{display:none}
+  .pagehead{flex-wrap:wrap;gap:6px 12px}
+  .task .zoom,#tbClock,.task .who #tbName{display:none}
+  .tgrp:has([data-cmd="justifyLeft"]),.tgrp:has(#calcBtn),.tgrp:has(#tsPlus) .small{display:none}
+  .cover-label{transform:scale(.78) rotate(-2.4deg);transform-origin:top left;top:14px;left:14px}
+  .cover-dock{padding:14px;gap:10px}
+  .dock-menu{justify-content:flex-start}
+  .dock-menu button{padding:10px 12px;font-size:10px;letter-spacing:.1em}
+  .sh-wrap{padding:28px 16px 80px}
+  .sh-grille{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:22px 16px}
+  .pop .box{padding:22px 18px}
+  .nb-clip,.nb-clip.fl-right,.nb-clip.fl-left{float:none;margin:0 0 var(--gap);max-width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .pop,.pop .box,.tab,.add-grid button,.toast{animation:none!important;transition:none!important}
+  #work .left{transition:none!important}
+}
 </style>
 
-<script src="model.js?v=mud91fpe"></script>
-<script src="sanitize.js?v=mud91fpe"></script>
-<script src="jaguar-shim.js?v=mud91fpe"></script>
-<script src="../compte.js?v=mud91fpe"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mud91fpe";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudb2j1o"></script>
+<script src="sanitize.js?v=mudb2j1o"></script>
+<script src="jaguar-shim.js?v=mudb2j1o"></script>
+<script src="../compte.js?v=mudb2j1o"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudb2j1o";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -838,8 +944,10 @@ body.nb-op{cursor:grabbing;user-select:none}
       <button class="tb small" id="tsPlus" title="Texte plus grand" style="font-size:16px">A+</button>
     </div>
     <span class="sp"></span>
+    <div class="nav-fin">
     <button class="tb tb-txt" id="notesBtn" title="Notes &amp; surlignages"><svg class="ico" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h5"/></svg>Notes<span class="nb-count" id="notesCount" data-empty="1">0</span></button>
     <span class="savedot" id="saveDot">enregistré</span>
+    </div>
   </div>
 
   <aside class="left">
@@ -1035,10 +1143,12 @@ function renderRails(){
   const nb=state.nb, subj=currentSubject();
   $('#navBrand').textContent=nb.brand.title||'Le Jaguar';
   $('#lhKicker').textContent=subj.name;
-  $('#lhName').textContent=(nb.student.prenom+' '+nb.student.nom).trim()||nb.brand.title;
+  $('#lhName').textContent=(nb.student.prenom+' '+nb.student.nom).trim()||nb.nom||nb.brand.title;
   $('#lhClass').textContent=nb.student.classe||'';
   // left: sections
-  $('#sections').innerHTML=SECTIONS.map(sec=>{
+  const railMat='<div class="rail-mat"><div class="sec-h"><span class="lbl">Matières</span><span class="rl"></span></div>'
+    +nb.subjects.map(s=>'<button type="button" data-subj="'+s.id+'" class="'+(s.id===state.subjectId?'on':'')+'"><i style="background:'+esc(s.color||'#8c2f2a')+'"></i>'+esc(s.name)+'</button>').join('')+'</div>';
+  $('#sections').innerHTML=railMat+SECTIONS.map(sec=>{
     const pages=subj.sections[sec.key]||[];
     const items=pages.length? pages.map(p=>'<li data-page="'+p.id+'" class="'+(p.id===state.pageId?'on':'')+'">'
       +(p.origin==='official'?svg(ICON.lock,'lk'):'')
@@ -1052,7 +1162,7 @@ function renderRails(){
   // right: subject tabs, grouped École (official, from the class) then Perso (student-added)
   const tabHtml=(s,i)=>{ const ic=subjectSVG(s.name);
     const sym=ic?svg(ic):esc((s.icon||(s.name||'?')[0])).slice(0,2);
-    return '<div class="tab '+(s.id===state.subjectId?'on':'')+'" data-subj="'+s.id+'" style="background:'+esc(s.color||'#8c2f2a')+';--i:'+i+'" title="'+esc(s.name)+(s.origin==='official'?' · matière de l’école':'')+'">'
+    return '<div class="tab '+(s.id===state.subjectId?'on':'')+'" data-subj="'+s.id+'" style="background:'+esc(s.color||'#8c2f2a')+';--i:'+i+'" title="'+esc(s.name)+(s.origin==='official'?' · matière de l’école':' · double-clic pour renommer')+'">'
       +'<span class="tsym">'+sym+'</span><span class="tnm">'+esc(s.name)+(s.origin==='official'?' <span class="tlk">✦</span>':'')+'</span></div>'; };
   const official=nb.subjects.filter(s=>s.origin==='official');
   const perso=nb.subjects.filter(s=>s.origin!=='official');
@@ -1062,8 +1172,8 @@ function renderRails(){
   html+='<div class="tab addtab" id="addSubj" title="Ajouter une matière personnelle" style="--i:'+i+'"><span class="tsym">+</span><span class="tnm">Matière</span></div>';
   $('#subjects').innerHTML=html;
   // taskbar
-  const st=nb.student, nm=(st.prenom+' '+st.nom).trim()||nb.brand.title;
-  $('#tbName').textContent=nm; $('#tbAv').textContent=(st.prenom||st.nom||'?').slice(0,1).toUpperCase();
+  const st=nb.student, nm=(st.prenom+' '+st.nom).trim()||nb.nom||nb.brand.title;
+  $('#tbName').textContent=nm; $('#tbAv').textContent=(st.prenom||st.nom||nb.nom||'?').slice(0,1).toUpperCase();
   $('#tbSubject').textContent=subj.name;
   const pages=currentPages(), idx=pages.findIndex(p=>p.id===state.pageId);
   $('#tbPage').textContent='Page '+(idx<0?0:idx+1)+' / '+pages.length;
@@ -1373,7 +1483,38 @@ function capturePage(){ const p=currentPage(); if(!p)return;
   c.querySelectorAll('.nb-clip').forEach(cl=>cl.removeAttribute('data-bound'));
   c.querySelectorAll('.pgspacer').forEach(s=>s.remove()); // pagination spacers are regenerated, never stored
   p.html=c.innerHTML; p.updated=Date.now(); }
-async function persist(){ capturePage(); try{ await api.save(state.id,state.nb); const d=$('#saveDot'); d.textContent='enregistré'; d.classList.remove('dirty'); }catch(e){ $('#saveDot').textContent='hors ligne'; localStorage.setItem('nb_backup_'+state.id,JSON.stringify(state.nb)); } }
+/* L'ENREGISTREMENT, UN A LA FOIS, ET QUI DIT LA VERITE.
+   Avant, chaque frappe pouvait lancer un enregistrement pendant qu'un autre
+   etait encore en route : deux ecritures du meme cahier se croisaient, et la
+   plus ancienne pouvait arriver la derniere. Et une reponse d'erreur du
+   serveur ({error:…}) etait lue comme un succes — « enregistré » s'affichait
+   sur un cahier qui ne l'etait pas. Desormais une seule ecriture a la fois ;
+   ce qui arrive pendant ce temps est repris juste apres, avec l'etat le plus
+   recent ; un echec le dit, garde une copie sur l'appareil, et reessaie. */
+let _ecriture=null, _encore=false;
+async function persist(){
+  capturePage();
+  if(!state.id||!state.nb) return;
+  if(_ecriture){ _encore=true; return _ecriture; }
+  _ecriture=(async()=>{
+    do{
+      _encore=false;
+      const d=$('#saveDot');
+      try{
+        const r=await api.save(state.id,state.nb);
+        if(!r||r.error) throw new Error((r&&r.error)||'refus');
+        d.textContent='enregistré'; d.classList.remove('dirty','echec');
+        try{ localStorage.removeItem('nb_backup_'+state.id); }catch(_){}
+      }catch(e){
+        d.textContent='non enregistré'; d.classList.add('dirty','echec');
+        try{ localStorage.setItem('nb_backup_'+state.id,JSON.stringify(state.nb)); }catch(_){}
+        clearTimeout(saveTimer); saveTimer=setTimeout(persist,5000);
+        break;
+      }
+    }while(_encore);
+  })();
+  try{ await _ecriture; } finally { _ecriture=null; }
+}
 
 /* ═════ boot ═════ */
 async function boot(){
@@ -1474,6 +1615,12 @@ async function ouvrirCahier(id){
      appareil. On ne plante pas : on revient à l'étagère. */
   if(!r||!r.notebook){ localStorage.removeItem('nb_last'); return ouvrirEtagere(false); }
   state.id=id; state.nb=r.notebook;
+  /* Un enregistrement qui avait echoue a laisse une copie sur l'appareil.
+     Si elle est plus recente que ce qu'on vient de charger, c'est elle qui
+     a raison : on la reprend et on la renvoie. */
+  try{ const b=JSON.parse(localStorage.getItem('nb_backup_'+id)||'null');
+    if(b&&Array.isArray(b.subjects)&&(b.updated||0)>(state.nb.updated||0)){ state.nb=b; setTimeout(()=>{persist();toast('Modifications non enregistrées récupérées');},400); }
+  }catch(_){}
   localStorage.setItem('nb_last',id);
   state.subjectId=r.notebook.subjects[0]&&r.notebook.subjects[0].id;
   $('#shelf').classList.add('hidden');
@@ -1508,8 +1655,20 @@ function nouveauCahier(premier){
   const valide=async function(){
     const nom=$('#nvNom').value.trim()||'Cahier';
     const r=await api.create(nom);
+    if(!r||!r.notebook){ toast('Création impossible'); return; }
     const nb=r.notebook;
     nb.nom=nom;
+    /* Le modele range le nom recu dans le PRENOM : c'est juste pour la
+       plateforme, qui cree le cahier d'un eleve a son nom. Ici c'est le nom
+       du cahier — « Maths » — et il s'affichait sur l'etiquette comme si
+       l'eleve s'appelait Maths. */
+    if(nb.student&&nb.student.prenom===nom) nb.student.prenom='';
+    /* La premiere matiere prend le nom du cahier et sa teinte : un cahier
+       « Maths » ouvre sur « Maths », pas sur « Matière ». Et le Jaguar est un
+       cahier Seyes : sa premiere page l'est aussi, comme les suivantes. */
+    const s0=nb.subjects&&nb.subjects[0];
+    if(s0&&s0.name==='Matière'&&$('#nvNom').value.trim()){ s0.name=nom; s0.icon=nom.slice(0,2); s0.color=teinteMatiere(nom); }
+    if(s0&&s0.sections) (s0.sections.lecons||[]).forEach(p=>{ if(p.template==='lined'&&!p.html) p.template='seyes'; });
     nb.brand.cover=pap;
     nb.brand.accent=$('#nvAcc').value;
     await api.save(r.id,nb);
@@ -1617,7 +1776,7 @@ async function importerFichier(fichier){
 }
 
 /* ═════ cover events ═════ */
-['pNom','pPrenom','pClasse'].forEach(id=>$('#'+id).oninput=()=>{state.nb.student.nom=$('#pNom').value;state.nb.student.prenom=$('#pPrenom').value;state.nb.student.classe=$('#pClasse').value;$('#coverEyebrow').textContent=state.nb.student.classe||'Cahier de l’élève';markDirty();});
+['pNom','pPrenom','pClasse'].forEach(id=>$('#'+id).oninput=()=>{state.nb.student.nom=$('#pNom').value;state.nb.student.prenom=$('#pPrenom').value;state.nb.student.classe=$('#pClasse').value;markDirty();});
 $('#mShelf').onclick=()=>{persist();ouvrirEtagere(false);};
 $('#shImporter').onclick=()=>$('#shFichier').click();
 $('#shFichier').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)importerFichier(f);};
@@ -1625,7 +1784,7 @@ $('#mStart').onclick=()=>{persist();ensurePage();$('#cover').classList.add('hidd
 $('#goCover').onclick=()=>{persist();$('#work').classList.remove('on');$('#cover').classList.remove('hidden');renderCover();};
 $('#mQuit').onclick=()=>{persist();toast('Enregistré — tu peux fermer l’onglet.');};
 $('#mTextbook').onclick=openTextbook;
-$('#mInfo').onclick=()=>popup('À propos','', '<p>Ton cahier <b>'+esc(state.nb.brand.title)+'</b> est enregistré sur cet ordinateur. Écris librement, choisis un modèle de page, et importe des passages ou des figures depuis ton manuel avec le bouton <b>Manuel</b>.</p><p>Les pages verrouillées sont posées par l’école et en lecture seule.</p><div class="actions"><button onclick="closePopup()">Fermer</button><button class="primary" onclick="window.open(\'/manual\',\'_blank\')">Ouvrir le guide</button></div>');
+$('#mInfo').onclick=()=>popup('À propos','', '<p>Ton cahier <b>'+esc(state.nb.brand.title)+'</b> est enregistré sur cet ordinateur. Écris librement, choisis un modèle de page, et importe des passages ou des figures depuis ton manuel avec le bouton <b>Manuel</b>.</p><p>Les pages verrouillées sont posées par l’école et en lecture seule.</p><div class="actions"><button onclick="closePopup()">Fermer</button><button class="primary" onclick="window.open(\'manual.html\',\'_blank\')">Ouvrir le guide</button></div>');
 $('#mSettings').onclick=openSettings;
 function ensurePage(){ if(currentPage())return; const s=currentSubject(); for(const sec of SECTIONS){ if((s.sections[sec.key]||[]).length){state.section=sec.key;state.pageId=s.sections[sec.key][0].id;return;} } addPage('lecons'); }
 
@@ -1634,7 +1793,9 @@ $('#sections').addEventListener('click',e=>{
   const del=e.target.closest('[data-del]'), add=e.target.closest('[data-add]'), li=e.target.closest('li[data-page]');
   if(del){e.stopPropagation();delPage(del.getAttribute('data-del'));return;}
   if(add){e.stopPropagation();addPage(add.getAttribute('data-add'));return;}
-  if(li){capturePage();state.section=li.closest('.sec').querySelector('.add').getAttribute('data-add');state.pageId=li.getAttribute('data-page');loadPage();}
+  if(li){capturePage();state.section=li.closest('.sec').querySelector('.add').getAttribute('data-add');state.pageId=li.getAttribute('data-page');loadPage();fermerTiroir();return;}
+  const m=e.target.closest('.rail-mat [data-subj]');
+  if(m){capturePage();state.subjectId=m.getAttribute('data-subj');state.section='lecons';const p=currentPages();state.pageId=p[0]?p[0].id:null;loadPage();}
 });
 $('#sections').addEventListener('dblclick',e=>{ const li=e.target.closest('li[data-page]'); if(li)renamePage(li.getAttribute('data-page')); });
 $('#subjects').addEventListener('click',e=>{
@@ -1645,10 +1806,10 @@ $('#subjects').addEventListener('click',e=>{
 /* In-app naming / confirm dialogs — native prompt()/confirm() are blocked in the
    embedded (portal) context, so page/subject creation silently failed. */
 const NP_INP='flex:1;font-family:inherit;font-size:15px;padding:10px 12px;border:1px solid rgba(0,0,0,.18);border-radius:9px;background:#fff;color:#222;outline:none';
-const NP_BTN='background:#8c2f2a;color:#fff;border:0;border-radius:9px;padding:0 16px;font-weight:600;cursor:pointer;white-space:nowrap';
-const NP_ALT='background:transparent;border:1px solid rgba(0,0,0,.2);border-radius:9px;padding:9px 14px;cursor:pointer;color:inherit';
-function namePrompt(title,def,okLabel,cb){
-  popup(title,'','<div style="display:flex;gap:8px;margin-top:2px"><input id="npIn" style="'+NP_INP+'" placeholder="Titre"><button id="npOk" style="'+NP_BTN+'">'+esc(okLabel||'Créer')+'</button></div>');
+const NP_BTN='background:var(--press);color:#fff;border:0;border-radius:999px;padding:0 18px;font-family:var(--ui);font-weight:650;cursor:pointer;white-space:nowrap';
+const NP_ALT='background:transparent;border:1px solid rgba(0,0,0,.2);border-radius:999px;padding:9px 16px;font-family:var(--ui);cursor:pointer;color:inherit';
+function namePrompt(title,def,okLabel,cb,ph){
+  popup(title,'','<div style="display:flex;gap:8px;margin-top:2px"><input id="npIn" style="'+NP_INP+'" placeholder="'+esc(ph||'Titre')+'"><button id="npOk" style="'+NP_BTN+'">'+esc(okLabel||'Créer')+'</button></div>');
   const inp=$('#npIn'), ok=$('#npOk'); if(!inp)return; inp.value=def||'';
   const go=()=>{ const v=(inp.value||'').trim(); closePopup(); cb(v); };
   ok.onclick=go; inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();go();} });
@@ -1658,6 +1819,30 @@ function confirmPopup(msg,okLabel,cb){
   popup('Confirmer','','<p style="margin:0 0 16px;line-height:1.5">'+esc(msg)+'</p><div style="display:flex;gap:8px;justify-content:flex-end"><button id="cpNo" style="'+NP_ALT+'">Annuler</button><button id="cpYes" style="'+NP_BTN+'">'+esc(okLabel||'Supprimer')+'</button></div>');
   const y=$('#cpYes'),n=$('#cpNo'); if(!y)return; y.onclick=()=>{ closePopup(); cb(); }; n.onclick=closePopup;
 }
+/* LA TEINTE D'UNE MATIERE SE CHERCHE, ELLE NE SE CHOISIT PAS — la regle de
+   la charte de Fable. Outremer pour les maths, lilas pour la physique-chimie,
+   jade pour les sciences de la vie, souci pour les lettres et les langues.
+   Le vermillon est reserve a ce qu'on presse, jamais a une matiere. Une
+   matiere inconnue est hachee vers l'une des quatre plutot que laissee
+   grise. Seules les NOUVELLES matieres la recoivent : une couleur deja
+   choisie par l'eleve n'est jamais repeinte. */
+const TEINTES={ultra:'#3340dd',lilas:'#8a52f0',jade:'#0d9a72',souci:'#c98a0c'};
+function teinteMatiere(nom){
+  const n=String(nom||'').toLowerCase(); const a=(...k)=>k.some(x=>n.includes(x));
+  if(a('math','algèbre','algebre','géométr','geometr','calcul')) return TEINTES.ultra;
+  if(a('physique','chimie','pc')) return TEINTES.lilas;
+  if(a('svt','vie et de la terre','biolog','sciences de la vie','nature')) return TEINTES.jade;
+  if(a('franç','franc','lettre','arab','angl','langue','lecture','philo','espagnol','allemand')) return TEINTES.souci;
+  let h=0; for(const ch of n) h=(h*31+ch.charCodeAt(0))>>>0;
+  return [TEINTES.ultra,TEINTES.lilas,TEINTES.jade,TEINTES.souci][h%4];
+}
+function renommerMatiere(id){
+  const s=state.nb.subjects.find(x=>x.id===id); if(!s) return;
+  if(s.origin==='official'){ toast('Matière de l’école — verrouillée.'); return; }
+  namePrompt('Renommer la matière',s.name||'','Renommer',nm=>{ if(!nm) return; s.name=nm; s.icon=nm.slice(0,2); renderRails(); persist(); });
+}
+$('#subjects').addEventListener('dblclick',e=>{ const t=e.target.closest('[data-subj]'); if(t) renommerMatiere(t.getAttribute('data-subj')); });
+$('#lhKicker').addEventListener('dblclick',()=>{ if(state.nb) renommerMatiere(currentSubject().id); });
 const PAGE_DEFAULTS={lecons:'Nouvelle leçon',exams:'Nouvel examen',exercices:'Nouvel exercice',outline:'Nouvelle page'};
 function addPage(section){const s=currentSubject();
   namePrompt('Nouvelle page',PAGE_DEFAULTS[section]||'Nouvelle page','Créer',(title)=>{
@@ -1666,7 +1851,7 @@ function addPage(section){const s=currentSubject();
 }
 function renamePage(id){const s=currentSubject();for(const sec of SECTIONS){const p=(s.sections[sec.key]||[]).find(x=>x.id===id);if(p){ if(p.origin==='official'){toast('Page officielle — verrouillée.');return;} namePrompt('Renommer la page',p.title||'','Renommer',(nm)=>{ if(nm){p.title=nm;renderRails();persist();} }); return; }}}
 function delPage(id){const s=currentSubject();for(const sec of SECTIONS){const arr=s.sections[sec.key]||[];const i=arr.findIndex(p=>p.id===id);if(i>=0){if(arr[i].origin==='official'){toast('Page officielle — verrouillée.');return;}confirmPopup('Supprimer cette page ?','Supprimer',()=>{arr.splice(i,1);if(state.pageId===id){state.section=sec.key;state.pageId=(arr[0]||{}).id||null;}loadPage();persist();});return;}}}
-function addSubject(){namePrompt('Nouvelle matière','','Ajouter',(name)=>{ if(!name)return; const cols=['#5b6cff','#2f8a7a','#8c2f2a','#c9a054','#6c4bb0','#c2703a'];const s={id:uid('s'),name,icon:name.slice(0,2),color:cols[state.nb.subjects.length%cols.length],origin:'student',sections:{lecons:[],exams:[],exercices:[],outline:[]}};state.nb.subjects.push(s);state.subjectId=s.id;state.section='lecons';state.pageId=null;loadPage();persist();toast('Matière ajoutée'); });}
+function addSubject(){namePrompt('Nouvelle matière','','Ajouter',(name)=>{ if(!name)return; const s={id:uid('s'),name,icon:name.slice(0,2),color:teinteMatiere(name),origin:'student',sections:{lecons:[],exams:[],exercices:[],outline:[]}};state.nb.subjects.push(s);state.subjectId=s.id;state.section='lecons';state.pageId=null;loadPage();persist();toast('Matière ajoutée'); });}
 
 /* ═════ formatting ═════ */
 const paper=$('#paper');
@@ -1701,7 +1886,27 @@ function setBlockStyle(v){
 }
 $('#txtColor').oninput=e=>{document.execCommand('foreColor',false,e.target.value);markDirty();};
 $('#checkBtn').onclick=()=>{insertHTML('<ul class="nb-task"><li data-done="0"><span class="chk" contenteditable="false"></span>Tâche</li></ul>');markDirty();};
-$('#linkBtn').onclick=()=>{const u=prompt('URL du lien :','https://');if(u)document.execCommand('createLink',false,u);markDirty();};
+/* LE LIEN. prompt() est bloque dans le portail (voir namePrompt) : le bouton
+   ne faisait rien la-bas. Et ouvrir une fenetre fait perdre la selection, donc
+   on la garde avant, et on la remet avant de poser le lien. Seuls http(s) et
+   mailto passent : un lien « javascript: » dans un cahier partage serait un
+   piege pour celui qui clique. */
+$('#linkBtn').onclick=()=>{
+  const sel=window.getSelection();
+  const r=(sel.rangeCount&&paper.contains(sel.anchorNode))?sel.getRangeAt(0).cloneRange():null;
+  const n=r&&(r.startContainer.nodeType===1?r.startContainer:r.startContainer.parentElement);
+  const deja=n&&n.closest?n.closest('#paper a'):null;
+  namePrompt(deja?'Modifier le lien':'Insérer un lien',deja?deja.getAttribute('href'):'','OK',(u)=>{
+    if(!u) return;
+    if(!/^(https?:|mailto:)/i.test(u)) u='https://'+u.replace(/^\/+/,'');
+    if(/^\s*javascript:/i.test(u)) return;
+    paper.focus(); const s=window.getSelection(); s.removeAllRanges(); if(r) s.addRange(r);
+    if(deja) deja.setAttribute('href',u);
+    else if(r&&!r.collapsed) document.execCommand('createLink',false,u);
+    else insertHTML('<a href="'+esc(u)+'">'+esc(u.replace(/^https?:\/\//,'').replace(/\/$/,''))+'</a>&nbsp;');
+    markDirty();
+  },'https://…');
+};
 $('#imgBtn').onclick=pickImage;
 $('#importBtn').onclick=openImport;
 $('#addElBtn').onclick=openAddPanel;
@@ -1789,7 +1994,16 @@ $('#tsMinus').onclick=()=>setScale((state.textScale||1)-0.1);
 function setScale(s){ state.textScale=Math.max(0.8,Math.min(1.7,Math.round(s*10)/10)); applyScale(); saveSettings(); toast('Texte '+Math.round(state.textScale*100)+'%'); }
 function saveSettings(){ if(!state.nb)return; state.nb.settings=state.nb.settings||{}; state.nb.settings.view=state.view; state.nb.settings.textScale=state.textScale; state.nb.settings.leftHidden=state.leftHidden; persist(); }
 function applyLeft(){ $('#work').classList.toggle('left-hidden',state.leftHidden); $('#leftToggle').classList.toggle('on',state.leftHidden); requestAnimationFrame(positionTabs); setTimeout(positionTabs,280); }
-$('#leftToggle').onclick=()=>{ state.leftHidden=!state.leftHidden; applyLeft(); saveSettings(); };
+/* SUR UN TELEPHONE LE PANNEAU DE GAUCHE EST UN TIROIR. Le laisser dans la
+   grille ecrasait la page a une lettre par ligne. Ouvert, il passe par-dessus
+   la page ; il se referme des qu'on a choisi une page ou touche a cote. Ce
+   choix-la n'est pas enregistre : il ne vaut que pour cet ecran. */
+const TELEPHONE=window.matchMedia?matchMedia('(max-width:760px)'):{matches:false};
+function fermerTiroir(){ $('#work').classList.remove('rail-ouvert'); }
+$('#leftToggle').onclick=()=>{
+  if(TELEPHONE.matches){ $('#work').classList.toggle('rail-ouvert'); return; }
+  state.leftHidden=!state.leftHidden; applyLeft(); saveSettings(); };
+$('#center').addEventListener('pointerdown',()=>{ if(TELEPHONE.matches) fermerTiroir(); });
 // open hyperlinks: plain click in reading mode, Ctrl/Cmd-click while editing
 paper.addEventListener('click',e=>{ const a=e.target.closest('a'); if(a&&a.getAttribute('href')&&(state.mode==='read'||e.ctrlKey||e.metaKey)){ e.preventDefault(); window.open(a.href,'_blank','noopener'); } });
 // hover a link → a small popup to open it (useful in edit mode, where a click just places the caret)
@@ -1853,18 +2067,34 @@ function insertHTML(h){ paper.focus(); const sel=window.getSelection();
   markDirty(); }
 
 /* ═════ image ═════ */
-function pickImage(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=async()=>{const f=inp.files[0];if(!f)return;const data=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f);});const {url}=await api.asset(state.id,f.name,data);
+function pickImage(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=()=>{const f=inp.files[0];if(f)insererImage(f);};inp.click();}
+/* Une capture d'ecran collee, ou une photo glissee sur la page, passe par le
+   meme chemin que le bouton : elle est reduite avant d'entrer (le shim le
+   fait sur le web), et elle devient un encadre deplacable. Collee telle
+   quelle, le navigateur l'inserait en pleine taille dans le texte — quatre
+   mega-octets au milieu d'une ligne, et la grille cassee sous elle. */
+async function insererImage(f){ if(!f||!/^image\//.test(f.type||'')) return;
+  if(state.mode==='read'||paper.contentEditable!=='true'){ toast('Passe en mode écriture pour ajouter une image.'); return; }
+  let url;
+  try{ const data=await new Promise((ok,ko)=>{const fr=new FileReader();fr.onload=()=>ok(fr.result);fr.onerror=ko;fr.readAsDataURL(f);});
+    const r=await api.asset(state.id,f.name||'image.png',data); url=r&&r.url; }catch(_){ url=null; }
+  if(!url){ toast('Image impossible à ajouter.'); return; }
   // insert as a movable, resizable image clip (float so text wraps; drag bar to move, red dot to resize)
   const cid='i'+Math.random().toString(36).slice(2,9);
   const html='<div class="nb-clip nb-img fl-right" data-cid="'+cid+'" contenteditable="false" data-w="320" style="width:320px"><div class="bar">'
     +CARET+'<span class="src" contenteditable="true" title="Titre (modifiable)">Image</span><span class="sp"></span>'
     +'<button data-flip title="Placement : droite / gauche / bloc (sans habillage)">&#8646;</button><button data-rm title="Retirer">&#10005;</button></div>'
     +'<div class="nb-clip-body"><img src="'+url+'" style="width:100%;display:block"></div><span class="rz" title="Redimensionner"></span></div>&nbsp;';
-  insertHTML(html); const clip=paper.querySelector('.nb-clip[data-cid="'+cid+'"]'); if(clip)clip.style.width='320px'; bindClips(paper); markDirty();};inp.click();}
+  insertHTML(html); const clip=paper.querySelector('.nb-clip[data-cid="'+cid+'"]'); if(clip)clip.style.width='320px'; bindClips(paper); markDirty();}
+paper.addEventListener('dragover',e=>{ if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files')) e.preventDefault(); });
+paper.addEventListener('drop',e=>{ const f=e.dataTransfer&&[...e.dataTransfer.files].find(x=>/^image\//.test(x.type)); if(!f) return; e.preventDefault();
+  const pos=document.caretRangeFromPoint?document.caretRangeFromPoint(e.clientX,e.clientY):null;
+  if(pos&&paper.contains(pos.startContainer)){ const s=window.getSelection(); s.removeAllRanges(); s.addRange(pos); }
+  insererImage(f); });
 
 /* ═════ textbook import — bring in individual ELEMENTS that notes wrap around ═════ */
 let impState={dir:null,file:null,fullHtml:null,sel:new Set()};
-async function openImport(){const {books}=await api.books();popup('Importer','depuis le manuel',renderBookList(books));}
+async function openImport(){ try{ const {books}=await api.books(); popup('Importer','depuis le manuel',renderBookList(books||[])); }catch(_){ toast('Manuels indisponibles pour l’instant.'); } }
 function renderBookList(books){if(!books.length)return '<p>Aucun manuel trouvé dans <code>books/</code>.</p>';return '<div class="imp-list">'+books.map(b=>'<div class="imp-row" data-book="'+esc(b.dir)+'"><div><div class="t">'+esc(b.title)+'</div><div class="m">'+b.chapters+' chapitre(s)</div></div><span class="m2">'+(b.built?'compilé':'')+'</span></div>').join('')+'</div>';}
 async function showChapters(dir){impState.dir=dir;const {chapters}=await api.chapters(dir);const bx=$('.pop .box');if(bx)bx.classList.remove('imp-wide');const html='<button class="imp-back" id="impBackBooks">‹ Manuels</button><div class="imp-list">'+chapters.map(c=>'<div class="imp-row" data-file="'+esc(c.file)+'"><div><div class="t">'+esc(c.title)+'</div><div class="m">'+esc(c.file)+'</div></div><span class="m2">choisir ›</span></div>').join('')+'</div>';$('.pop .imp-body').innerHTML=html;}
 async function showPicker(dir,file){
@@ -2206,13 +2436,57 @@ paper.addEventListener('click',e=>{const j=e.target.closest('[data-jump]'),rm=e.
 // Paste: our imported clips/widgets keep their content only in data-* (the live
 // iframe srcdoc is never stored), so a raw paste drops a blank iframe. Strip the
 // stale srcdoc, re-id the clips, insert at the caret, then re-hydrate to rebuild.
+/* LE COLLAGE GARDE LE SENS, PAS LA MISE EN FORME D'AILLEURS. Un paragraphe
+   copie d'une page web ou d'un traitement de texte arrive avec ses tailles,
+   ses interlignes et ses marges : il sortait des lignes du papier, et tout ce
+   qui suivait avec lui. On ne garde que la structure (paragraphes, titres,
+   listes, gras, italique, liens, tableaux, images) et nos propres elements ;
+   le reste est deballe. Les titres trop petits (h3 a h6) deviennent des h2,
+   le seul format de sous-titre qui tombe juste sur la grille. */
+const COLLE_OK={P:1,BR:1,B:1,STRONG:1,I:1,EM:1,U:1,S:1,SUB:1,SUP:1,CODE:1,A:1,UL:1,OL:1,LI:1,H1:1,H2:1,BLOCKQUOTE:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TD:1,TH:1,IMG:1,HR:1};
+const COLLE_BLOC=/^(DIV|SECTION|ARTICLE|HEADER|FOOTER|MAIN|ASIDE|FIGURE|FIGCAPTION|PRE|ADDRESS|DD|DT|DL)$/;
+function nettoyerCollage(src){
+  const out=document.createElement('div');
+  const garderClasse=c=>/^(nb-|nbhl|pt$|chk$|has-note$|fl-|block$|collapsed$)/.test(c);
+  (function copie(n,dest,dansBloc){
+    [...n.childNodes].forEach(c=>{
+      if(c.nodeType===3){ dest.appendChild(document.createTextNode(c.nodeValue)); return; }
+      if(c.nodeType!==1) return;
+      // nos elements a nous (extraits, tableaux) : ils se redessinent eux-memes
+      if(c.classList.contains('nb-clip')||c.classList.contains('nb-tablew')||c.classList.contains('nb-embed')){ dest.appendChild(c.cloneNode(true)); return; }
+      let t=c.tagName;
+      if(/^H[3-6]$/.test(t)) t='H2';
+      if(COLLE_BLOC.test(t)){
+        // un bloc d'ailleurs : un paragraphe s'il ne contient que du texte, deballe sinon
+        const aBlocs=c.querySelector('p,div,h1,h2,h3,h4,h5,h6,ul,ol,table,blockquote,section,article');
+        if(aBlocs||dansBloc){ copie(c,dest,dansBloc); return; }
+        t='P';
+      }
+      const garderSpan=t==='SPAN'&&[...c.classList].some(x=>/^nbhl|^chk$/.test(x));
+      if(!COLLE_OK[t]&&!garderSpan){ copie(c,dest,dansBloc); return; }
+      const e=document.createElement(t);
+      if(t==='A'){ const h=c.getAttribute('href')||''; if(/^(https?:|mailto:)/i.test(h)) e.setAttribute('href',h); }
+      if(t==='IMG'){ const h=c.getAttribute('src')||''; if(/^(https?:|data:image\/)/i.test(h)) e.setAttribute('src',h); else return; }
+      if(t==='TD'||t==='TH'){ ['colspan','rowspan'].forEach(a=>{ if(c.getAttribute(a)) e.setAttribute(a,c.getAttribute(a)); }); }
+      const cl=[...c.classList].filter(garderClasse); if(cl.length) e.className=cl.join(' ');
+      ['data-note','data-done'].forEach(a=>{ if(c.hasAttribute(a)) e.setAttribute(a,c.getAttribute(a)); });
+      if(garderSpan&&c.classList.contains('chk')) e.setAttribute('contenteditable','false');
+      dest.appendChild(e);
+      copie(c,e,dansBloc||/^(P|H1|H2|LI|TD|TH|BLOCKQUOTE)$/.test(t));
+    });
+  })(src,out,false);
+  return out;
+}
 paper.addEventListener('paste',e=>{
   const cd=e.clipboardData; if(!cd)return;
+  const img=[...(cd.files||[])].find(f=>/^image\//.test(f.type));
+  if(img&&!cd.getData('text/html')){ e.preventDefault(); insererImage(img); return; }
   const html=cd.getData('text/html');
   if(html){
     e.preventDefault();
-    const tmp=document.createElement('div'); tmp.innerHTML=html;
-    tmp.querySelectorAll('script,style,meta,link,title').forEach(n=>n.remove());
+    const brut=document.createElement('div'); brut.innerHTML=html;
+    brut.querySelectorAll('script,style,meta,link,title,template,noscript').forEach(n=>n.remove());
+    const tmp=nettoyerCollage(brut);
     tmp.querySelectorAll('iframe').forEach(f=>{ f.removeAttribute('srcdoc'); f.style.height=''; });
     tmp.querySelectorAll('[data-bound]').forEach(n=>n.removeAttribute('data-bound'));
     tmp.querySelectorAll('.nb-clip[data-cid]').forEach(c=>c.setAttribute('data-cid','c'+Math.random().toString(36).slice(2,9)));
@@ -2291,7 +2565,7 @@ function popup(title,sub,bodyHtml){closePopup();const p=document.createElement('
     if(e.target.closest('[data-import]')){openImport();return;}
   });}
 function closePopup(){const p=$('.pop');if(p)p.remove();}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();persist();toast('Enregistré');}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();persist().then(()=>toast($('#saveDot').classList.contains('echec')?'Pas encore enregistré — nouvel essai dans 5 s':'Enregistré'));}});
 function openSettings(){const nb=state.nb;popup('Réglages','du cahier','<div class="fld"><label>Titre</label><input id="setTitle" value="'+esc(nb.brand.title)+'"></div><div class="fld"><label>Sous-titre</label><input id="setSub" value="'+esc(nb.brand.subtitle||'')+'"></div><div class="fld"><label>Couleur d’accent</label><input type="color" id="setAccent" value="'+(nb.brand.accent||'#c9a054')+'" style="width:60px;height:40px;padding:2px"></div><div class="fld"><label>Couverture</label><div id="setCovers" class="cov-choix"></div></div><div class="actions"><button onclick="closePopup()">Fermer</button><button class="primary" id="setSave">Enregistrer</button></div>');$('#setSave').onclick=()=>{nb.brand.title=$('#setTitle').value;nb.brand.subtitle=$('#setSub').value;nb.brand.accent=$('#setAccent').value;renderCover();persist();closePopup();toast('Réglages enregistrés');};
   /* Le choix de la couverture s'applique tout de suite : on veut la VOIR pour
      choisir, pas valider en aveugle puis rouvrir les réglages. */
@@ -2387,13 +2661,16 @@ function openDrawer(){ const notes=collectNotes();
     if(dl){delNote(notes[+dl.getAttribute('data-del')]);return;}
     if(card){gotoNote(notes[+card.getAttribute('data-i')]);}
   };
-  setTimeout(()=>{ backdropEl.classList.add('show'); drawerEl.classList.add('show'); },15);
+  /* l'ouverture attend une trame pour que la transition parte ; une fermeture
+     dans cet intervalle (Echap tout de suite) doit l'annuler, sinon le tiroir
+     se rouvrait tout seul derriere elle */
+  clearTimeout(drawerEl._t); drawerEl._t=setTimeout(()=>{ backdropEl.classList.add('show'); drawerEl.classList.add('show'); },15);
 }
-function closeDrawer(){ if(drawerEl)drawerEl.classList.remove('show'); if(backdropEl)backdropEl.classList.remove('show'); }
+function closeDrawer(){ if(drawerEl){ clearTimeout(drawerEl._t); drawerEl.classList.remove('show'); } if(backdropEl)backdropEl.classList.remove('show'); }
 function gotoNote(n){ closeDrawer(); state.subjectId=n.subjId; state.section=n.section; state.pageId=n.pageId; loadPage();
   setTimeout(()=>{ const sp=$$('#paper .nbhl')[n.idx]; if(sp){ sp.scrollIntoView({block:'center',behavior:'smooth'}); const o=sp.style.outline; sp.style.outline='2px solid var(--accent)'; sp.style.outlineOffset='2px'; setTimeout(()=>{sp.style.outline=o;sp.style.outlineOffset='';},1400); } },350); }
-function delNote(n){ if(!confirm('Supprimer ce surlignage ?'))return; state.subjectId=n.subjId; state.section=n.section; state.pageId=n.pageId; loadPage();
-  setTimeout(()=>{ const sp=$$('#paper .nbhl')[n.idx]; if(sp)unwrap(sp); markDirty(); persist(); refreshNotesCount(); openDrawer(); },300); }
+function delNote(n){ closeDrawer(); confirmPopup('Supprimer ce surlignage ?','Supprimer',()=>{ state.subjectId=n.subjId; state.section=n.section; state.pageId=n.pageId; loadPage();
+  setTimeout(()=>{ const sp=$$('#paper .nbhl')[n.idx]; if(sp)unwrap(sp); markDirty(); persist(); refreshNotesCount(); openDrawer(); },300); }); }
 function exportNotes(){ const notes=collectNotes(); if(!notes.length){toast('Aucune note à exporter.');return;}
   let md='# Notes — '+(state.nb.brand.title||'Cahier')+'\n\n'; let last='';
   notes.forEach(n=>{ const head=n.subj+' › '+n.sec+' › '+n.page; if(head!==last){md+='\n## '+head+'\n\n';last=head;} md+='> '+n.excerpt.replace(/\n/g,' ')+'\n'; if(n.note)md+='\n'+n.note+'\n'; md+='\n'; });

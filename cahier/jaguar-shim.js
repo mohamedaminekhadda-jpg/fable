@@ -122,7 +122,7 @@
   let _biblio = null;
   function biblio() {
     if (_biblio) return Promise.resolve(_biblio);
-    return vraiFetch('../library/library.json?v=mud91fpe')
+    return vraiFetch('../library/library.json?v=mudb2j1o')
       .then((r) => (r.ok ? r.json() : { books: [] }))
       .catch(() => ({ books: [] }))
       .then((j) => { _biblio = j && j.books ? j : { books: [] }; return _biblio; });
@@ -529,37 +529,116 @@
     try { localStorage.removeItem(ATTENTE); } catch { /* rien à faire */ }
   }
 
-  /* ── la barre de sauvegarde ────────────────────────────────────────────── */
+  /* ── la barre de sauvegarde ──────────────────────────────────────────────
+   *
+   * ELLE ETAIT TOUJOURS OUVERTE, ET PAR-DESSUS TOUT. Un grand encadre sombre
+   * en bas a gauche, au-dessus de la page, des fenetres et des tiroirs
+   * (z-index 99999), et sur la pastille « Fable ». Or son etat de depart —
+   * « jamais sauvegardé » — est celui de tout le monde a la premiere visite :
+   * c'etait donc, pour chacun, un panneau de plus sur le cahier.
+   *
+   * C'est maintenant une PUCE : un point de couleur et trois mots. Le panneau
+   * s'ouvre quand on la touche. Dans l'espace de travail la puce disparait et
+   * c'est l'etat « enregistré » de la barre du haut qui la remplace — un point
+   * de la meme couleur, et un clic ouvre le meme panneau. Elle passe SOUS les
+   * fenetres et les tiroirs du cahier : elle informe, elle ne bloque pas.
+   */
   let barre = null;
   function construireBarre() {
     barre = document.createElement('div');
     barre.id = 'jaguar-save';
+    barre.className = 'js-plie';
     barre.innerHTML = ''
       + '<style>'
-      + '#jaguar-save{position:fixed;left:12px;bottom:12px;z-index:99999;font:12px/1.35 system-ui,sans-serif;'
-      + 'background:#14161c;color:#e7e9ee;border:1px solid #2a2f3a;border-radius:10px;'
-      + 'box-shadow:0 6px 22px rgba(0,0,0,.35);padding:8px 10px;max-width:330px}'
-      + '#jaguar-save b{font-weight:650}'
-      + '#jaguar-save .js-etat{display:flex;align-items:center;gap:7px;margin-bottom:6px}'
-      + '#jaguar-save .js-point{width:8px;height:8px;border-radius:50%;background:#3ecf8e;flex:0 0 auto}'
-      + '#jaguar-save.js-ambre .js-point{background:#e8b23a}#jaguar-save.js-rouge .js-point{background:#e8543a}'
-      + '#jaguar-save.js-ambre{border-color:#6b5320}#jaguar-save.js-rouge{border-color:#7a2f22}'
+      + '#jaguar-save{position:fixed;left:12px;bottom:12px;z-index:590;'
+      + 'font:500 12px/1.4 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;color:#f3efe6}'
+      + '#jaguar-save .js-puce{display:inline-flex;align-items:center;gap:7px;cursor:pointer;'
+      + 'background:#17140f;color:#f3efe6;border:1px solid rgba(243,239,230,.16);border-radius:999px;'
+      + 'padding:5px 11px 5px 9px;font:inherit;box-shadow:0 2px 10px rgba(20,17,14,.22);transition:transform .15s}'
+      + '#jaguar-save .js-puce:hover{transform:translateY(-1px)}'
+      + '#jaguar-save .js-puce:focus-visible,#jaguar-save button:focus-visible{outline:2px solid #3340dd;outline-offset:2px}'
+      + '#jaguar-save .js-point,#saveDot[data-sauvegarde]::before{width:7px;height:7px;border-radius:50%;background:#3ecf8e;flex:0 0 auto}'
+      + '#jaguar-save.js-ambre .js-point,#saveDot[data-sauvegarde="ambre"]::before{background:#e8b23a}'
+      + '#jaguar-save.js-rouge .js-point,#saveDot[data-sauvegarde="rouge"]::before{background:#ff6f52}'
+      + '#saveDot[data-sauvegarde]{cursor:pointer;display:inline-flex;align-items:center;gap:6px}'
+      + '#saveDot[data-sauvegarde]::before{content:""}'
+      + '#saveDot[data-sauvegarde]:hover{color:#f4f1ea}'
+      + '#jaguar-save .js-panneau{position:absolute;left:0;bottom:calc(100% + 8px);width:min(320px,calc(100vw - 24px));'
+      + 'background:#17140f;border:1px solid rgba(243,239,230,.16);border-radius:14px;padding:12px 14px 12px;'
+      + 'box-shadow:0 18px 44px rgba(0,0,0,.4);transform-origin:bottom left;'
+      + 'transition:opacity .16s ease,transform .2s cubic-bezier(.2,.8,.2,1)}'
+      + '#jaguar-save.js-plie .js-panneau{opacity:0;transform:translateY(6px) scale(.98);pointer-events:none;visibility:hidden}'
+      + '#jaguar-save b{font-weight:700}'
+      + '#jaguar-save .js-etat{margin-bottom:4px;font-size:13px}'
+      + '#jaguar-save .js-note{opacity:.72;margin-bottom:10px}'
       + '#jaguar-save .js-boutons{display:flex;flex-wrap:wrap;gap:6px}'
-      + '#jaguar-save button{font:inherit;cursor:pointer;background:#232833;color:#e7e9ee;'
-      + 'border:1px solid #333a49;border-radius:7px;padding:4px 9px}'
-      + '#jaguar-save button:hover{background:#2c323f}'
-      + '#jaguar-save button.js-fort{background:#2f6d4f;border-color:#3b8a63}'
-      + '#jaguar-save .js-note{opacity:.72;margin-top:6px}'
-      + '#jaguar-save .js-plier{position:absolute;top:4px;right:6px;border:0;background:none;padding:2px 4px;opacity:.6}'
-      + '#jaguar-save.js-plie .js-boutons,#jaguar-save.js-plie .js-note{display:none}'
+      + '#jaguar-save .js-boutons button{font:inherit;cursor:pointer;background:rgba(243,239,230,.08);color:#f3efe6;'
+      + 'border:1px solid rgba(243,239,230,.18);border-radius:999px;padding:5px 11px}'
+      + '#jaguar-save .js-boutons button:hover{background:rgba(243,239,230,.14)}'
+      + '#jaguar-save .js-boutons button.js-fort{background:#e4402a;border-color:#e4402a;color:#fff;font-weight:650}'
+      /* dans l'espace de travail : pas de puce, le panneau pend sous la barre */
+      + '#jaguar-save.js-travail .js-puce{display:none}'
+      + '#jaguar-save.js-travail{left:auto!important;right:12px;bottom:auto;top:calc(var(--navh,54px) + 8px)}'
+      + '#jaguar-save.js-travail .js-panneau{position:static;transform-origin:top right}'
+      + '#jaguar-save.js-travail.js-plie .js-panneau{transform:translateY(-6px) scale(.98)}'
+      + '@media print{#jaguar-save{display:none}}'
+      + '@media (prefers-reduced-motion:reduce){#jaguar-save .js-panneau,#jaguar-save .js-puce{transition:none}}'
       + '</style>'
-      + '<button class="js-plier" title="Réduire">—</button>'
-      + '<div class="js-etat"><span class="js-point"></span><span class="js-texte">…</span></div>'
-      + '<div class="js-boutons"></div>'
-      + '<div class="js-note"></div>';
+      + '<button class="js-puce" type="button" aria-expanded="false" title="Sauvegarde du cahier">'
+      + '<span class="js-point"></span><span class="js-court">…</span></button>'
+      + '<div class="js-panneau" role="dialog" aria-label="Sauvegarde du cahier">'
+      + '<div class="js-etat"><span class="js-texte">…</span></div>'
+      + '<div class="js-note"></div>'
+      + '<div class="js-boutons"></div></div>';
     document.body.appendChild(barre);
-    barre.querySelector('.js-plier').onclick = () => barre.classList.toggle('js-plie');
+
+    const basculer = (ouvrir) => {
+      const o = ouvrir === undefined ? barre.classList.contains('js-plie') : ouvrir;
+      barre.classList.toggle('js-plie', !o);
+      barre.querySelector('.js-puce').setAttribute('aria-expanded', o ? 'true' : 'false');
+    };
+    barre.querySelector('.js-puce').onclick = () => basculer();
+    // dans l'espace de travail, l'etat « enregistré » de la barre du haut ouvre le panneau
+    document.addEventListener('click', (e) => {
+      const point = e.target.closest && e.target.closest('#saveDot');
+      if (point) { basculer(); return; }
+      if (!barre.classList.contains('js-plie') && !barre.contains(e.target)) basculer(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') basculer(false);
+      else if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.id === 'saveDot') { e.preventDefault(); basculer(); }
+    });
+
+    /* La puce se range a droite de la pastille « Fable », sur la meme ligne,
+       plutot que de s'y superposer. On relit sa place quand l'espace de
+       travail s'ouvre ou se ferme, et quand la fenetre change de taille. */
+    ['work', 'cover', 'shelf'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) new MutationObserver(placer).observe(el, { attributes: true, attributeFilter: ['class'] });
+    });
+    addEventListener('resize', placer);
+    setTimeout(placer, 300);
+    placer();
     return barre;
+  }
+
+  function placer() {
+    if (!barre) return;
+    const w = document.getElementById('work');
+    const auTravail = !!(w && w.classList.contains('on'));
+    barre.classList.toggle('js-travail', auTravail);
+    const p = document.querySelector('.fb-retour');
+    /* Sur la couverture, le bas de l'ecran est au dock (« Mes cahiers »,
+       « Commencer ») : la pastille et la puce montent juste au-dessus au
+       lieu de le recouvrir. Ailleurs, la feuille de style decide. */
+    const cov = document.getElementById('cover');
+    const dock = cov && !cov.classList.contains('hidden') && !auTravail && cov.querySelector('.cover-dock');
+    const bas = dock ? Math.round(dock.getBoundingClientRect().height + 10) + 'px' : '';
+    if (p) p.style.insetBlockEnd = bas;
+    if (auTravail) { barre.style.bottom = ''; return; }
+    barre.style.bottom = bas;
+    const r = p && p.getBoundingClientRect();
+    barre.style.left = ((r && r.width) ? Math.round(r.right + 8) : 12) + 'px';
   }
 
   const AGE = (ms) => {
@@ -580,20 +659,35 @@
     const t = barre.querySelector('.js-texte');
     const b = barre.querySelector('.js-boutons');
     const n = barre.querySelector('.js-note');
+    const court = barre.querySelector('.js-court');
 
     if (poignee && autorise) {
       t.innerHTML = '<b>Enregistré dans votre fichier</b>';
+      court.textContent = 'Fichier à jour';
       n.textContent = (poignee.name || 'fichier') + ' — ' + (AGE(quand) || 'à l’instant')
         + '. Vider le navigateur n’y touche pas.';
     } else if (poignee) {
       t.innerHTML = '<b>Fichier à reconnecter</b>';
+      court.textContent = 'Fichier à reconnecter';
       n.textContent = 'Le navigateur demande un clic pour réécrire ' + (poignee.name || 'votre fichier') + '.';
     } else if (quand == null) {
       t.innerHTML = '<b>Jamais sauvegardé</b>';
+      court.textContent = 'Jamais sauvegardé';
       n.textContent = 'Le cahier est dans ce navigateur seulement. Effacer les données de navigation l’effacerait.';
     } else {
       t.innerHTML = 'Dernière sauvegarde : <b>' + AGE(quand) + '</b>';
+      court.textContent = 'Sauvegardé ' + AGE(quand);
       n.textContent = 'Le cahier vit dans ce navigateur. Une sauvegarde le met à l’abri.';
+    }
+    /* Le meme point de couleur sur l'etat « enregistré » de la barre du haut :
+       dans l'espace de travail, c'est lui qui porte l'alerte. */
+    const point = document.getElementById('saveDot');
+    if (point) {
+      const niveau = (poignee && autorise) ? 'ok' : (poignee || vieux >= ROUGE) ? 'rouge' : vieux >= AMBRE ? 'ambre' : 'ok';
+      point.setAttribute('data-sauvegarde', niveau);
+      point.setAttribute('title', 'Sauvegarde du cahier — ' + court.textContent.toLowerCase());
+      point.setAttribute('role', 'button');
+      point.setAttribute('tabindex', '0');
     }
 
     b.innerHTML = '';
