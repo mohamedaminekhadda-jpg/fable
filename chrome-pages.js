@@ -58,7 +58,7 @@
     if (!b || document.getElementById('palette')) return;
     var a = document.createElement('a');
     a.className = b.className;
-    a.href = './';
+    a.href = 'library.html';
     a.innerHTML = b.innerHTML;
     a.style.textDecoration = 'none';
     var kbd = a.querySelector('kbd');

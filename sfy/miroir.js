@@ -14,7 +14,7 @@
  * foyer) pour la normale et les arcs, et le vermillon --live pour les rayons,
  * puisqu'il ne dit qu'une chose : une mesure tourne en ce moment.
  */
-import { T } from './langue.js?v=mue7a3c0';
+import { T } from './langue.js?v=muejommc';
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 

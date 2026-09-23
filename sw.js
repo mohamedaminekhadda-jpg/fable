@@ -31,7 +31,7 @@
 /* Posée par la construction. Elle nomme le cache, donc une publication neuve
    part d'un cache neuf et l'ancien est jeté entier — pas de mélange possible
    entre deux versions du même fichier. */
-var VERSION = 'mue7a3c0';
+var VERSION = 'muejommc';
 var CACHE = 'fable-' + VERSION;
 
 /* Le strict nécessaire pour que le site s'ouvre sans réseau. Pas les livres :
@@ -39,6 +39,7 @@ var CACHE = 'fable-' + VERSION;
    de confiance, pas une fonctionnalité. */
 var COQUE = [
   './',
+  './library.html',
   './simulations.html',
   './notebook.html',
   './project.html',

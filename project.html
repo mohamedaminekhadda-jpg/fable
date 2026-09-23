@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Instrument+Serif:ital@0;1&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="compagnon.css?v=mue7a3c0">
+<link rel="stylesheet" href="compagnon.css?v=muejommc">
 <style>
 /* ─── tokens ──────────────────────────────────────────────── */
 :root{
@@ -952,8 +952,11 @@ body::after{
   html{scroll-behavior:auto}
   .tome-inner{transform:none!important}
 }
+.demande{margin:0 0 var(--s5);padding:0;list-style:none;display:grid;gap:var(--s3);max-inline-size:44rem}
+.demande li{position:relative;padding-inline-start:1.6rem;font-size:1.1rem;line-height:1.55;color:var(--ink-2)}
+.demande li::before{content:"";position:absolute;inset-inline-start:0;inset-block-start:.62em;inline-size:.6rem;block-size:.6rem;border-radius:50%;background:var(--accent)}
 </style>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mue7a3c0";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=muejommc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/project.html">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/project.jpg?v=222a6ada74">
@@ -1031,7 +1034,8 @@ body::after{
        press before you know the site has more than one page. -->
   <nav class="pages" aria-label="Pages">
     <div class="wrap">
-      <a href="./" data-p="accueil" data-i18n="navHome">The library</a>
+      <a href="./" data-p="accueil" data-i18n="navHome">Home</a>
+      <a href="library.html" data-p="library" data-i18n="navLib">The library</a>
       <a href="simulations.html" data-p="simulations" data-i18n="navSims">See for yourself</a>
       <a href="notebook.html" data-p="notebook" data-i18n="navNb">Le Jaguar</a>
       <a href="project.html" data-p="project" aria-current="page" data-i18n="navProj">The project</a>
@@ -1067,8 +1071,12 @@ body::after{
         <a href="#pieces" data-i18n="prPlan3">The parts</a>
         <a href="#atelier" data-i18n="prPlan4">The workshop</a>
         <a href="#qui" data-i18n="prPlan5">Who it is for</a>
+        <a href="#cible" data-i18n="prPlanC">Where it starts</a>
+        <a href="#modele" data-i18n="prPlanM">How it pays</a>
+        <a href="#avantage" data-i18n="prPlanV">Why it can win</a>
         <a href="#tourne" data-i18n="prPlan6">What it runs on</a>
         <a href="#suite" data-i18n="prPlan7">What is next</a>
+        <a href="#cherche" data-i18n="prPlanA">What I am looking for</a>
         <a href="#parler" data-i18n="prPlan8">Talk to me</a>
       </nav>
     </div>
@@ -1099,7 +1107,7 @@ body::after{
     </div>
     <div class="chiffres">
       <div><b>102</b><span data-i18n="prN1">kinds of live figure</span><em data-i18n="prN1D">Each is a component an author places and fills in; each solves itself in the reader.</em></div>
-      <div><b>7</b><span data-i18n="prN2">books published</span><em data-i18n="prN2D">242 chapters, built and online, including a full demonstration textbook.</em></div>
+      <div><b>6</b><span data-i18n="prN2">books published</span><em><span>241</span> <span data-i18n="prN2D">chapters, built and online, including a full demonstration textbook.</span></em></div>
       <div><b>36</b><span data-i18n="prN3">simulations</span><em data-i18n="prN3D">Across four subjects, each usable inside a book or on its own.</em></div>
       <div><b>3</b><span data-i18n="prN4">languages</span><em data-i18n="prN4D">French, English and Arabic, right-to-left included, from one string table.</em></div>
     </div>
@@ -1249,6 +1257,83 @@ body::after{
     </div>
   </section>
 
+  <section class="sec wrap" id="cible" data-mot="cmpPrCible">
+    <div class="sec-head">
+      <h2 data-i18n="prCibH">Where it starts</h2>
+      <span class="filet" aria-hidden="true"></span>
+    </div>
+    <p class="mesure" data-i18n="prCibP">In this order — each step pays for the next and proves something to it.</p>
+    <div class="qui">
+      <div>
+        <h3 data-i18n="prC1H">1 · Private lycées preparing the bac</h3>
+        <div><p data-i18n="prC1P">The first customer. A private school can decide within a term, already equips its classrooms, and competes on results that parents can see. One subject, one year group, one term to begin with — physics-chemistry in the final year is where the figures matter most.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prC2H">2 · School publishers</h3>
+        <div><p data-i18n="prC2P">Moroccan and French-language publishers with a catalogue to bring to life. Fable converts a title without rewriting it, and the publisher keeps the files and the rights.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prC3H">3 · Public schools, through pilots</h3>
+        <div><p data-i18n="prC3P">Larger and slower: one pilot at a time, with the regional academies and the ministry. Fable already runs on the machines public schools own, offline, in French and in Arabic.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prC4H">4 · Beyond Morocco</h3>
+        <div><p data-i18n="prC4P">French-speaking Africa teaches in the same languages. Every book is a single file, and a single file travels.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="modele" data-mot="cmpPrModele">
+    <div class="sec-head">
+      <h2 data-i18n="prModH">How it pays for itself</h2>
+      <span class="filet" aria-hidden="true"></span>
+      <span style="margin-inline-start:auto;font-size:.875rem;color:var(--ink-3)" data-i18n="prModN">a proposed model — the first pilots will set the prices</span>
+    </div>
+    <div class="qui">
+      <div>
+        <h3 data-i18n="prM1H">Schools — a licence per class</h3>
+        <div><p data-i18n="prM1P">A yearly licence per class and subject: the books, Studio for the teachers, Le Classeur for the administration. Installed on the school’s own machines.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prM2H">Publishers — conversion, then a licence</h3>
+        <div><p data-i18n="prM2P">A fee per converted title, then a yearly licence for the engine. The publisher owns what comes out.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prM3H">Teachers and trainers — Studio</h3>
+        <div><p data-i18n="prM3P">A subscription for anyone who wants to write an interactive course of their own.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prM4H">Pupils — free, for good</h3>
+        <div><p data-i18n="prM4P">Le Jaguar and See for yourself stay free. No advertising, and pupils’ data is never sold: it does not even leave their device.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="avantage" data-mot="cmpPrAvantage">
+    <div class="sec-head">
+      <h2 data-i18n="prWinH">Why it can win</h2>
+      <span class="filet" aria-hidden="true"></span>
+    </div>
+    <div class="qui">
+      <div>
+        <h3 data-i18n="prV1H">Figures that compute</h3>
+        <div><p data-i18n="prV1P">A hundred and two kinds of figure that solve themselves. A PDF or a video shows one case; a Fable figure answers the next question.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prV2H">It runs on what schools own</h3>
+        <div><p data-i18n="prV2P">One file per book, offline, on old laptops and school tablets. No server to maintain, no account to create.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prV3H">French, Arabic, English</h3>
+        <div><p data-i18n="prV3P">Right-to-left included, from one string table — the languages Moroccan classrooms actually use.</p></div>
+      </div>
+      <div>
+        <h3 data-i18n="prV4H">Cheap to make</h3>
+        <div><p data-i18n="prV4P">An import pipeline turns a PDF or an EPUB into chapters, and one person built the whole system. The cost of a new book is the cost of its figures.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section class="sec wrap" id="suite" data-mot="cmpPrSuite">
     <div class="sec-head">
       <h2 data-i18n="prNextH">What is next</h2>
@@ -1271,6 +1356,20 @@ body::after{
     </div>
   </section>
 
+  <section class="sec wrap" id="cherche" data-mot="cmpPrCherche">
+    <div class="sec-head">
+      <h2 data-i18n="prAskH">What I am looking for</h2>
+      <span class="filet" aria-hidden="true"></span>
+    </div>
+    <ul class="demande">
+      <li data-i18n="prA1">Two or three pilot schools — one subject, one year group, one term.</li>
+      <li data-i18n="prA2">A publisher willing to convert one title.</li>
+      <li data-i18n="prA3">Funding for a small team: authors who know the official programmes subject by subject, and a developer.</li>
+      <li data-i18n="prA4">Advice from people who know how Moroccan schools buy.</li>
+    </ul>
+    <p><a class="btn btn-1" href="mailto:mohamedaminekhadda@gmail.com" data-i18n="prAskCta">Write to me</a></p>
+  </section>
+
   <section class="sec wrap" id="parler" data-mot="cmpPrParler">
     <div class="sec-head">
       <h2 data-i18n="prTalkH">Talk to me</h2>
@@ -1285,7 +1384,7 @@ body::after{
 
     <div class="fin">
       <a class="btn btn-1" href="library/manuel-bac-demo/" data-i18n="prDemo">Open the demonstration textbook</a>
-      <a class="btn btn-2" href="./" data-i18n="prLib">See the whole library</a>
+      <a class="btn btn-2" href="library.html" data-i18n="prLib">See the whole library</a>
     </div>
   </section>
 </main>
@@ -1387,7 +1486,7 @@ body::after{
   </div>
 </footer>
 
-<script src="compte.js?v=mue7a3c0"></script>
+<script src="compte.js?v=muejommc"></script>
 <script>
 (function(){ if(window.FableCompte) window.FableCompte.poserBouton(document.getElementById('compte-hote')); })();
 </script>
@@ -1532,7 +1631,6 @@ body::after{
       prN1: "نوعًا من الأشكال الحيّة",
       prN1D: "كلٌّ منها مكوّن يضعه المؤلف ويملؤه، ثم يحلّ نفسه عند القارئ.",
       prN2: "كتب منشورة",
-      prN2D: "242 فصلًا مبنيًّا ومنشورًا، منها مقرّر عرضٍ كامل.",
       prN3: "محاكاة",
       prN3D: "في أربع مواد، تصلح داخل كتاب أو وحدها.",
       prN4: "لغات",
@@ -1569,6 +1667,50 @@ body::after{
       prR3: "الكتاب يُرسَل بالبريد أو يُنسَخ أو يُمرَّر على مفتاح.",
       prR4: "ومنها الكتابة من اليمين، وتحترمها الأشكال كذلك.",
       prWhoH: "لمن هذا العمل",
+      prCibH: "من أين نبدأ",
+      prCibP: "بهذا الترتيب: كل خطوة تموّل التي تليها وتُثبت لها شيئًا.",
+      prC1H: "1 · الثانويات الخاصة التي تُعدّ للبكالوريا",
+      prC1P: "الزبون الأول. المؤسسة الخاصة تقرّر في فصل دراسي، وقاعاتها مجهّزة، وتتنافس بنتائج يراها الآباء. مادة واحدة ومستوى واحد وفصل واحد للبداية: الفيزياء والكيمياء في السنة الختامية، حيث تهمّ الأشكال أكثر.",
+      prC2H: "2 · الناشرون المدرسيون",
+      prC2P: "ناشرون مغاربة وفرنكوفونيون لديهم كتب يريدون إحياءها. يحوّل Fable العنوان دون إعادة كتابته، ويحتفظ الناشر بالملفات وبالحقوق.",
+      prC3H: "3 · المدرسة العمومية، عبر تجارب",
+      prC3P: "أكبر وأبطأ: تجربة بعد تجربة، مع الأكاديميات الجهوية والوزارة. يعمل Fable أصلًا على أجهزة المدرسة العمومية، دون اتصال، بالفرنسية وبالعربية.",
+      prC4H: "4 · ما بعد المغرب",
+      prC4P: "إفريقيا الفرنكوفونية تُدرّس باللغات نفسها. كل كتاب ملف واحد، والملف الواحد يسافر.",
+      prModH: "كيف يموّل المشروع نفسه",
+      prModN: "نموذج مقترح، والتجارب الأولى هي التي ستحدّد الأسعار",
+      prM1H: "المدارس: ترخيص لكل قسم",
+      prM1P: "ترخيص سنوي لكل قسم ومادة: الكتب، وStudio للأساتذة، وLe Classeur للإدارة. يُثبَّت على أجهزة المؤسسة.",
+      prM2H: "الناشرون: التحويل ثم ترخيص",
+      prM2P: "مبلغ عن كل عنوان محوَّل، ثم ترخيص سنوي للمحرّك. يملك الناشر كل ما يخرج منه.",
+      prM3H: "الأساتذة والمكوّنون: Studio",
+      prM3P: "اشتراك لكل من يريد أن يكتب درسه التفاعلي الخاص.",
+      prM4H: "التلاميذ: مجانًا، إلى الأبد",
+      prM4P: "يبقى Le Jaguar وSee for yourself مجانيين. لا إعلانات، ولا تُباع بيانات التلاميذ أبدًا: إنها لا تغادر أجهزتهم أصلًا.",
+      prWinH: "لماذا يمكن أن ينجح",
+      prV1H: "أشكال تحسب",
+      prV1P: "مئة واثنان من أنواع الأشكال التي تحلّ نفسها. الملف أو الفيديو يعرض حالة واحدة؛ أما شكل Fable فيجيب عن السؤال التالي.",
+      prV2H: "يعمل على ما تملكه المدرسة",
+      prV2P: "ملف واحد لكل كتاب، دون اتصال، على حواسيب قديمة وألواح مدرسية. لا خادم يحتاج صيانة، ولا حساب يحتاج إنشاء.",
+      prV3H: "الفرنسية والعربية والإنجليزية",
+      prV3P: "بما في ذلك الكتابة من اليمين إلى اليسار، من جدول نصوص واحد: لغات الأقسام المغربية.",
+      prV4H: "قليل التكلفة",
+      prV4P: "سلسلة استيراد تحوّل ملف PDF أو EPUB إلى فصول، وشخص واحد بنى النظام كله. تكلفة كتاب جديد هي تكلفة أشكاله.",
+      prAskH: "ما الذي أبحث عنه",
+      prA1: "مدرستان أو ثلاث للتجربة: مادة واحدة، مستوى واحد، فصل واحد.",
+      prA2: "ناشر مستعد لتحويل عنوان واحد.",
+      prA3: "تمويل لفريق صغير: مؤلفون يعرفون البرامج الرسمية مادة بمادة، ومطوّر.",
+      prA4: "نصائح أشخاص يعرفون كيف تشتري المدارس المغربية.",
+      prAskCta: "راسلني",
+      prPlanC: "من أين نبدأ",
+      prPlanM: "التمويل",
+      prPlanV: "لماذا يمكن أن ينجح",
+      prPlanA: "ما الذي أبحث عنه",
+      prN2D: "فصلًا، مبنية ومنشورة، منها كتاب تجريبي كامل.",
+      cmpPrCible: "الخاص أولًا. يقرّر في فصل واحد.",
+      cmpPrModele: "مجاني للتلاميذ. سألتُ عن ذلك مرتين.",
+      cmpPrAvantage: "ملف واحد دون اتصال. جرّبته على الحواسيب القديمة.",
+      cmpPrCherche: "قائمة قصيرة، وكل سطر فيها حقيقي.",
       prW1H: "المؤسسات التعليمية",
       prW1P: "تعتمد شعبةٌ كتاب مادة واحدة لمستوى واحد. وللأستاذ أن يعدّله، وهذا هو مقصد الورشة، فيتبع الكتابُ طريقته في التدريس لا العكس.",
       prW1a: "يشتغل على ما تملكه المؤسسة اليوم.",
@@ -1595,7 +1737,7 @@ body::after{
       prBulle: "ما في هذه الصفحة شيء مفتعل. تحققتُ. مرّتين.",
       prDemo: "افتح مقرّر العرض",
       prLib: "انظر المكتبة كلها",
-      skip: "انتقل إلى الكتب",
+      skip: "انتقل إلى المحتوى",
       dark: "داكن",
       light: "فاتح",
       searchBtn: "بحث",
@@ -1603,7 +1745,8 @@ body::after{
       h1: "كتبٌ يمكنك أن <em>تسحب منحنياتها</em>",
       h1Mots: ["تسحب منحنياتها", "تفكّك دارتها", "تدير مرآتها", "تدفع كواكبها", "تفتح جُمَلها"],
       bulles: ["قرأتُ الأغلفة كلها. الداخل أحسن.", "ألقِ الحصى يرتفع الماء. فيزياء، وغداء.", "الغراب يحفظ الوجه سنين. جرّب أنت أن تحفظ صيغة.", "لا شيء هنا لامع. وبقيتُ مع ذلك.", "اسحب المنحنى، فهو لا يعضّ.", "لا أرسم الأشكال، بل أشاهدها وهي تحسب.", "أعدّ إلى ثلاثة. والباقي عليك."],
-      navHome: "المكتبة",
+      navHome: "الرئيسية",
+      navLib: "المكتبة",
       navSims: "جرّب بنفسك",
       navNb: "لوجاݣوار",
       navProj: "المشروع",
@@ -1623,6 +1766,15 @@ body::after{
       rcH5: "45° تذهب أبعد. هذا هو الجواب.",
       rcP5: "كتاب مدرسي يُجري الرياضيات بينما تقرؤه. هذه هي الفكرة كلّها.",
       rcCta: "افتح هذا الكتاب",
+      libEyebrow: "المكتبة",
+      libH1: "افتح كتابًا، <em>وأمسك شكلًا بيدك</em>",
+      libLede: "كتب مدرسية تحلّ أشكالُها الدرسَ وأنت تقرأ، وروايات كلاسيكية بمعجم تحت كل كلمة صعبة. مجانية للقراءة، بالفرنسية والإنجليزية والعربية.",
+      libCta: "عرض الرف",
+      libDemo: "افتح الكتاب التجريبي",
+      derH: "من وراء المشروع",
+      derP: "Fable حتى الآن عمل شخص واحد: محرّك يصنع هذه الكتب، ومشغل يكتبها فيه الأساتذة، والدفتر والمحاكاة. كل هذا الموقع خرج منه. تقول صفحة المشروع ما الموجود، ولمن هو، وما الذي يلزم لوضعه أمام كل تلميذ.",
+      derCta: "المشروع",
+      derMail: "راسلني",
       rcOuvT: "الحركة في مجال",
       rcS1: "مجال الثقالة",
       rcS2: "السقوط الحر",
@@ -1878,7 +2030,6 @@ body::after{
       prN1: "sortes de figure vivante",
       prN1D: "Chacune est un composant qu’un auteur pose et remplit ; chacune se résout chez le lecteur.",
       prN2: "livres publiés",
-      prN2D: "242 chapitres, construits et en ligne, dont un manuel de démonstration complet.",
       prN3: "simulations",
       prN3D: "Dans quatre matières, chacune utilisable dans un livre ou toute seule.",
       prN4: "langues",
@@ -1915,6 +2066,50 @@ body::after{
       prR3: "Un livre s’envoie par courriel, se copie ou se passe sur une clé.",
       prR4: "Y compris de droite à gauche, ce que les figures respectent aussi.",
       prWhoH: "À qui cela s’adresse",
+      prCibH: "Par où commencer",
+      prCibP: "Dans cet ordre — chaque étape paie la suivante et lui prouve quelque chose.",
+      prC1H: "1 · Les lycées privés qui préparent au bac",
+      prC1P: "Le premier client. Un établissement privé décide en un trimestre, équipe déjà ses salles, et se distingue par des résultats que les parents voient. Une matière, un niveau, un trimestre pour commencer — la physique-chimie de terminale, là où les figures comptent le plus.",
+      prC2H: "2 · Les éditeurs scolaires",
+      prC2P: "Les éditeurs marocains et francophones qui ont un catalogue à faire vivre. Fable convertit un titre sans le réécrire, et l’éditeur garde les fichiers et les droits.",
+      prC3H: "3 · L’école publique, par des pilotes",
+      prC3P: "Plus grand et plus lent : un pilote à la fois, avec les académies régionales et le ministère. Fable tourne déjà sur les machines que possède l’école publique, hors ligne, en français et en arabe.",
+      prC4H: "4 · Au-delà du Maroc",
+      prC4P: "L’Afrique francophone enseigne dans les mêmes langues. Chaque livre est un seul fichier, et un fichier voyage.",
+      prModH: "Comment cela se finance",
+      prModN: "un modèle proposé — les premiers pilotes fixeront les prix",
+      prM1H: "Écoles — une licence par classe",
+      prM1P: "Une licence annuelle par classe et par matière : les livres, Studio pour les enseignants, Le Classeur pour l’administration. Installée sur les machines de l’établissement.",
+      prM2H: "Éditeurs — la conversion, puis une licence",
+      prM2P: "Un forfait par titre converti, puis une licence annuelle du moteur. L’éditeur possède ce qui en sort.",
+      prM3H: "Enseignants et formateurs — Studio",
+      prM3P: "Un abonnement pour qui veut écrire son propre cours interactif.",
+      prM4H: "Élèves — gratuit, pour de bon",
+      prM4P: "Le Jaguar et See for yourself restent gratuits. Pas de publicité, et les données des élèves ne sont jamais vendues : elles ne quittent même pas leur appareil.",
+      prWinH: "Pourquoi cela peut gagner",
+      prV1H: "Des figures qui calculent",
+      prV1P: "Cent deux sortes de figures qui se résolvent seules. Un PDF ou une vidéo montre un cas ; une figure Fable répond à la question suivante.",
+      prV2H: "Ça tourne sur ce que l’école possède",
+      prV2P: "Un fichier par livre, hors ligne, sur de vieux portables et des tablettes scolaires. Pas de serveur à entretenir, pas de compte à créer.",
+      prV3H: "Français, arabe, anglais",
+      prV3P: "De droite à gauche compris, depuis une seule table de textes — les langues des classes marocaines.",
+      prV4H: "Peu coûteux à produire",
+      prV4P: "Une chaîne d’import transforme un PDF ou un EPUB en chapitres, et une seule personne a construit tout le système. Le coût d’un nouveau livre, c’est le coût de ses figures.",
+      prAskH: "Ce que je cherche",
+      prA1: "Deux ou trois écoles pilotes — une matière, un niveau, un trimestre.",
+      prA2: "Un éditeur prêt à convertir un titre.",
+      prA3: "Un financement pour une petite équipe : des auteurs qui connaissent les programmes officiels matière par matière, et un développeur.",
+      prA4: "Les conseils de personnes qui savent comment les écoles marocaines achètent.",
+      prAskCta: "M’écrire",
+      prPlanC: "Par où commencer",
+      prPlanM: "Le financement",
+      prPlanV: "Pourquoi cela peut gagner",
+      prPlanA: "Ce que je cherche",
+      prN2D: "chapitres, construits et en ligne, dont un manuel de démonstration complet.",
+      cmpPrCible: "Le privé d’abord. Il décide en un trimestre.",
+      cmpPrModele: "Gratuit pour les élèves. J’ai posé la question deux fois.",
+      cmpPrAvantage: "Un fichier, hors ligne. Je l’ai essayé sur les vieux portables.",
+      cmpPrCherche: "Liste courte. Chaque ligne est vraie.",
       prW1H: "Établissements",
       prW1P: "Un département adopte le livre d’une matière pour un niveau. Le professeur peut le modifier — c’est tout l’objet de Studio — donc le livre suit la façon dont il enseigne déjà, et non l’inverse.",
       prW1a: "Tourne sur ce que l’établissement possède déjà.",
@@ -1941,7 +2136,7 @@ body::after{
       prBulle: "Rien sur cette page n’est une maquette. J’ai vérifié. Deux fois.",
       prDemo: "Ouvrir le manuel de démonstration",
       prLib: "Voir toute la bibliothèque",
-      skip: 'Aller aux livres',
+      skip: 'Aller au contenu',
       dark: 'Sombre', light: 'Clair',
       searchBtn: 'Chercher',
       eyebrow: 'Les figures sont calculées, jamais dessinées',
@@ -1955,7 +2150,7 @@ body::after{
                'Tirez sur la courbe. Elle ne mord pas.',
                'Je ne dessine pas les figures. Je les regarde se résoudre.',
                'Je sais compter jusqu’à trois. Le reste, c’est votre travail.'],
-      navHome: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
+      navHome: 'Accueil', navLib: 'La biblioth\u00e8que', navSims: 'Voir par soi-m\u00eame',
       navNb: 'Le Jaguar', navProj: 'Le projet',
       navTrial: "L’essai",
       /* le recit */
@@ -1973,6 +2168,15 @@ body::after{
       rcH5: "45° va le plus loin. C’est la réponse.",
       rcP5: "Un manuel qui fait les mathématiques pendant qu’on le lit. Toute l’idée est là.",
       rcCta: "Ouvrir ce livre",
+      libEyebrow: 'La bibliothèque',
+      libH1: 'Ouvrez un livre, <em>prenez une figure en main</em>',
+      libLede: 'Des manuels dont les figures résolvent la leçon pendant qu’on lit, et des romans classiques avec un lexique sous chaque mot difficile. Libres à lire, en français, en anglais et en arabe.',
+      libCta: 'Voir l’étagère',
+      libDemo: 'Ouvrir le manuel de démonstration',
+      derH: 'Qui est derrière',
+      derP: 'Fable est, pour l’instant, le travail d’une seule personne : un moteur qui fabrique ces livres, un atelier où les enseignants les écrivent, le cahier et les simulations. Tout ce site en est sorti. La page du projet dit ce qui existe, à qui cela s’adresse, et ce qu’il faudrait pour le mettre devant chaque élève.',
+      derCta: 'Le projet',
+      derMail: 'M’écrire',
       rcOuvT: "Mouvement dans un champ",
       rcS1: "Le champ de pesanteur",
       rcS2: "La chute libre",
@@ -2204,7 +2408,6 @@ body::after{
       prN1: "kinds of live figure",
       prN1D: "Each is a component an author places and fills in; each solves itself in the reader.",
       prN2: "books published",
-      prN2D: "242 chapters, built and online, including a full demonstration textbook.",
       prN3: "simulations",
       prN3D: "Across four subjects, each usable inside a book or on its own.",
       prN4: "languages",
@@ -2241,6 +2444,50 @@ body::after{
       prR3: "A book can be emailed, copied or handed over on a stick.",
       prR4: "Including right-to-left, which the figures respect too.",
       prWhoH: "Who it is for",
+      prCibH: "Where it starts",
+      prCibP: "In this order — each step pays for the next and proves something to it.",
+      prC1H: "1 · Private lycées preparing the bac",
+      prC1P: "The first customer. A private school can decide within a term, already equips its classrooms, and competes on results that parents can see. One subject, one year group, one term to begin with — physics-chemistry in the final year is where the figures matter most.",
+      prC2H: "2 · School publishers",
+      prC2P: "Moroccan and French-language publishers with a catalogue to bring to life. Fable converts a title without rewriting it, and the publisher keeps the files and the rights.",
+      prC3H: "3 · Public schools, through pilots",
+      prC3P: "Larger and slower: one pilot at a time, with the regional academies and the ministry. Fable already runs on the machines public schools own, offline, in French and in Arabic.",
+      prC4H: "4 · Beyond Morocco",
+      prC4P: "French-speaking Africa teaches in the same languages. Every book is a single file, and a single file travels.",
+      prModH: "How it pays for itself",
+      prModN: "a proposed model — the first pilots will set the prices",
+      prM1H: "Schools — a licence per class",
+      prM1P: "A yearly licence per class and subject: the books, Studio for the teachers, Le Classeur for the administration. Installed on the school’s own machines.",
+      prM2H: "Publishers — conversion, then a licence",
+      prM2P: "A fee per converted title, then a yearly licence for the engine. The publisher owns what comes out.",
+      prM3H: "Teachers and trainers — Studio",
+      prM3P: "A subscription for anyone who wants to write an interactive course of their own.",
+      prM4H: "Pupils — free, for good",
+      prM4P: "Le Jaguar and See for yourself stay free. No advertising, and pupils’ data is never sold: it does not even leave their device.",
+      prWinH: "Why it can win",
+      prV1H: "Figures that compute",
+      prV1P: "A hundred and two kinds of figure that solve themselves. A PDF or a video shows one case; a Fable figure answers the next question.",
+      prV2H: "It runs on what schools own",
+      prV2P: "One file per book, offline, on old laptops and school tablets. No server to maintain, no account to create.",
+      prV3H: "French, Arabic, English",
+      prV3P: "Right-to-left included, from one string table — the languages Moroccan classrooms actually use.",
+      prV4H: "Cheap to make",
+      prV4P: "An import pipeline turns a PDF or an EPUB into chapters, and one person built the whole system. The cost of a new book is the cost of its figures.",
+      prAskH: "What I am looking for",
+      prA1: "Two or three pilot schools — one subject, one year group, one term.",
+      prA2: "A publisher willing to convert one title.",
+      prA3: "Funding for a small team: authors who know the official programmes subject by subject, and a developer.",
+      prA4: "Advice from people who know how Moroccan schools buy.",
+      prAskCta: "Write to me",
+      prPlanC: "Where it starts",
+      prPlanM: "How it pays",
+      prPlanV: "Why it can win",
+      prPlanA: "What I am looking for",
+      cmpPrCible: "Private schools first. They decide in a term.",
+      cmpPrModele: "Free for pupils. I asked that twice.",
+      cmpPrAvantage: "One file, offline. I have tried it on the old laptops.",
+      cmpPrCherche: "Short list. Every line of it is real.",
+      prN2D: "chapters, built and online, including a full demonstration textbook.",
       prW1H: "Schools",
       prW1P: "A department adopts one subject's book for one year group. The teacher can edit it — that is the point of Studio — so the book follows the way they already teach instead of the other way round.",
       prW1a: "Runs on what the school already owns.",
@@ -2267,7 +2514,7 @@ body::after{
       prBulle: "Nothing on this page is a mock-up. I checked. Twice.",
       prDemo: "Open the demonstration textbook",
       prLib: "See the whole library",
-      skip: 'Skip to the books',
+      skip: 'Skip to the content',
       dark: 'Dark', light: 'Light',
       searchBtn: 'Search',
       eyebrow: 'Figures are computed, never drawn',
@@ -2284,7 +2531,7 @@ body::after{
                'Pull the curve. It does not bite.',
                'I do not draw the figures. I just watch them work it out.',
                'I can count to three. The rest is your job.'],
-      navHome: 'The library', navSims: 'See for yourself',
+      navHome: 'Home', navLib: 'The library', navSims: 'See for yourself',
       navNb: 'Le Jaguar', navProj: 'The project',
       navTrial: "The trial",
       rubanEyebrow: 'What is actually in them',
@@ -2708,7 +2955,7 @@ body::after{
 })();
 </script>
 
-<script src="chrome-pages.js?v=mue7a3c0"></script>
+<script src="chrome-pages.js?v=muejommc"></script>
 <script>
 /* ── LES DÉMOS : HUIT FIGURES, UNE PAGE, DEUX MODES ──
    Le rail est déjà dans la page — la construction l’a écrit. Ce script ne fait
