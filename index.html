@@ -1877,7 +1877,7 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 
    --u est une unite propre au livre (1/100 de la largeur de la double page),
    posee par le script : tout ce qui est imprime grandit avec le livre. */
-.recit{--ouvre:1;--axes:1;--p:1;--ombre:0;
+.recit{--ouvre:1;--axes:1;--p:1;--ombre:0;--gv:1;
   --rc-pap:#0e1620;--rc-pap2:#132030;--rc-enc:#e6eef5;--rc-dou:#a8bccb;--rc-gris:#8fa3b3;
   --rc-cyan:#4fb3d1;--rc-or:#e0a648;--rc-or2:#f0c452;--rc-ind:#7483ff;--rc-trait:rgba(180,215,235,.16);
   --rc-c30:#63aada;--rc-c60:#e2807e;--rc-c45:#e0a648;
@@ -1905,7 +1905,6 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 .rc-volume{--u:7.6px;position:relative;inline-size:min(100%,58rem,calc((100svh - 15rem) * 1.5));aspect-ratio:1.5;
   transform-style:preserve-3d;
   transform:translateX(calc((1 - var(--ouvre)) * -25%)) rotateX(calc(9deg + (1 - var(--ouvre)) * 13deg)) rotateZ(calc((1 - var(--ouvre)) * -4deg)) scale(calc(1 - var(--ombre) * .07))}
-[dir="rtl"] .rc-volume{transform:translateX(calc((1 - var(--ouvre)) * 25%)) rotateX(calc(9deg + (1 - var(--ouvre)) * 13deg)) rotateZ(calc((1 - var(--ouvre)) * 4deg)) scale(calc(1 - var(--ombre) * .07))}
 
 /* l'ombre sur la table : sous le livre ferme, puis sous la double page */
 .rc-sol{position:absolute;inset-block:8% -10%;inset-inline-end:-3%;inset-inline-start:calc(50% - var(--ouvre) * 53%);
@@ -1922,7 +1921,6 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 .rc-tranche{position:absolute;inset-block:calc(var(--u) * .3) calc(var(--u) * -.75);inset-inline-start:50%;inset-inline-end:calc(var(--u) * -.6);
   border-radius:0 calc(var(--u) * .4) calc(var(--u) * .4) 0;
   background:repeating-linear-gradient(to bottom,#223245 0 1px,#16222f 1px 2.5px);transform:translateZ(-3px)}
-[dir="rtl"] .rc-dos,[dir="rtl"] .rc-tranche{border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9)}
 
 /* les pages : papier du manuel, ombre de la reliure contre le dos */
 .rc-page{position:absolute;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;
@@ -1932,21 +1930,39 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 .rc-droite{inset-block:0;inset-inline-start:50%;inset-inline-end:0;border-radius:0 calc(var(--u) * .5) calc(var(--u) * .5) 0;
   background-image:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
     radial-gradient(120% 80% at 70% 20%,var(--rc-pap2),transparent 70%)}
-[dir="rtl"] .rc-droite{border-radius:calc(var(--u) * .5) 0 0 calc(var(--u) * .5);
-  background-image:linear-gradient(270deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
-    radial-gradient(120% 80% at 30% 20%,var(--rc-pap2),transparent 70%)}
 /* l'ombre que jette le plat en se levant */
 .rc-droite::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,.2) 45%,transparent 80%);opacity:calc(var(--ombre) * .85)}
-[dir="rtl"] .rc-droite::after{background:linear-gradient(270deg,rgba(0,0,0,.6),rgba(0,0,0,.2) 45%,transparent 80%)}
 
-/* LE PLAT DE COUVERTURE. Il pivote sur le dos ; son recto est la vraie
-   couverture, son verso porte la page de gauche. En arabe le livre s'ouvre
-   par l'autre bord — rotateY est physique, on le retourne a la main. */
-.rc-couv{position:absolute;inset-block:calc(var(--u) * -1.3);inset-inline-start:50%;inset-inline-end:calc(var(--u) * -1.3);
-  transform-style:preserve-3d;transform-origin:left center;
-  transform:translateZ(5px) rotateY(calc(var(--ouvre) * -180deg))}
-[dir="rtl"] .rc-couv{transform-origin:right center;transform:translateZ(5px) rotateY(calc(var(--ouvre) * 180deg))}
+/* LE PLAT DE COUVERTURE ET LA PAGE QUI TOURNE. Ce sont deux feuilles de la
+   mécanique commune (window.FableFeuille, les règles .cn-*) : le plat, en
+   carton, plie à peine ; la page de titre du chapitre plie comme du papier.
+   Le livre s'ouvre toujours par la droite, y compris en arabe : c'est un
+   manuel français, et sa mise en page se lit de gauche à droite. Le plat est
+   un peu plus grand que les pages, d'où sa feuille agrandie. */
+.rc-feuilles .rc-feuille-couv{inset-block:calc(var(--u) * -1.3);inline-size:calc(50% + var(--u) * 1.3)}
+.cn-face .rc-page{inset:0;opacity:1}
+.cn-face .rc-couv-dos{transform:none}
+.rc-plat-g{position:absolute;inset-block:calc(var(--u) * -1.3);inset-inline-start:calc(var(--u) * -1.3);inset-inline-end:50%;
+  background:linear-gradient(200deg,var(--rc-plat2),var(--rc-plat));border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9);transform:translateZ(-3px)}
+.rc-vivant .rc-plat-g{display:none}
+/* la garde : le papier collé au revers du plat */
+.rc-garde{position:absolute;inset-block:calc(var(--u) * 1.3);inset-inline-start:calc(var(--u) * 1.3);inset-inline-end:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u) * .8);
+  background-color:#0f2a36;background-image:repeating-linear-gradient(45deg,rgba(79,179,209,.07) 0 1px,transparent 1px calc(var(--u) * 1.4)),
+    repeating-linear-gradient(-45deg,rgba(79,179,209,.07) 0 1px,transparent 1px calc(var(--u) * 1.4))}
+.rc-garde p{margin:0;font:500 calc(var(--u) * 1.05)/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:rgba(168,188,203,.55)}
+.rc-garde p:first-child{font:800 calc(var(--u) * 2)/1 Inter,system-ui,sans-serif;letter-spacing:.02em;text-transform:none;color:rgba(230,238,245,.7)}
+/* la page de titre du chapitre */
+.rc-p111{inset-block:0;inset-inline-start:50%;inset-inline-end:0}
+.rc-o-num{margin:calc(var(--u) * 2) 0 0;font:800 calc(var(--u) * 13)/.9 Inter,system-ui,sans-serif;letter-spacing:-.05em;
+  color:transparent;-webkit-text-stroke:calc(var(--u) * .12) var(--rc-cyan)}
+.rc-o-titre{margin:calc(var(--u) * .6) 0 calc(var(--u) * 2.4);font-weight:800;font-size:calc(var(--u) * 3.3);line-height:1.05;letter-spacing:-.02em;color:var(--rc-enc)}
+.rc-o-parts{list-style:none;margin:0;padding:calc(var(--u) * 1.4) 0 0;border-block-start:1px solid var(--rc-trait);display:grid;gap:calc(var(--u) * .9)}
+.rc-o-parts li{display:flex;gap:calc(var(--u) * 1.2);align-items:baseline;font-size:calc(var(--u) * 1.3);color:var(--rc-dou)}
+.rc-o-parts b{font:600 calc(var(--u) * 1.05)/1 "IBM Plex Mono",ui-monospace,monospace;color:var(--rc-or)}
+.rc-o-arc{display:block;margin-block:auto calc(var(--u) * 1);inline-size:100%;block-size:calc(var(--u) * 6)}
+.rc-o-arc path{fill:none;stroke:var(--rc-or);stroke-width:1.4;stroke-dasharray:3 4;opacity:.55;vector-effect:non-scaling-stroke}
 .rc-couv-face,.rc-couv-dos{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
 .rc-couv-face{border-radius:0 calc(var(--u) * .9) calc(var(--u) * .9) 0;background:#0d2b36;
   box-shadow:0 calc(var(--u) * 2) calc(var(--u) * 4) calc(var(--u) * -1.5) rgba(0,0,0,.6)}
@@ -1960,17 +1976,11 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   background:linear-gradient(200deg,var(--rc-plat2),var(--rc-plat))}
 .rc-couv-dos::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(270deg,rgba(0,0,0,.4),transparent 60%);opacity:var(--ombre)}
-[dir="rtl"] .rc-couv-face{border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9)}
-[dir="rtl"] .rc-couv-face::before{background:linear-gradient(270deg,rgba(0,0,0,.45),rgba(0,0,0,.08) 3.5%,rgba(255,255,255,.07) 5%,transparent 9%)}
-[dir="rtl"] .rc-couv-dos{border-radius:0 calc(var(--u) * .9) calc(var(--u) * .9) 0}
 /* la page de gauche, collee au revers du plat, contre le dos */
-.rc-gauche{inset-block:calc(var(--u) * 1.3);inset-inline-start:calc(var(--u) * 1.3);inset-inline-end:0;
+.rc-gauche{inset-block:0;inset-inline-start:0;inset-inline-end:50%;opacity:var(--gv);
   border-radius:calc(var(--u) * .5) 0 0 calc(var(--u) * .5);
   background-image:linear-gradient(270deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
     radial-gradient(120% 80% at 30% 20%,var(--rc-pap2),transparent 70%)}
-[dir="rtl"] .rc-gauche{border-radius:0 calc(var(--u) * .5) calc(var(--u) * .5) 0;
-  background-image:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
-    radial-gradient(120% 80% at 70% 20%,var(--rc-pap2),transparent 70%)}
 
 /* ── ce qui est imprime ── */
 .rc-tete{display:flex;justify-content:space-between;gap:1em;margin:0 0 calc(var(--u) * 2.2);
@@ -2035,7 +2045,10 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   .rc-grille{grid-template-columns:1fr;gap:var(--s5)}
   .rc-volume,[dir="rtl"] .rc-volume{inline-size:min(20rem,74vw,calc((100svh - 25rem) * .75));aspect-ratio:.75;
     transform:rotateX(calc(6deg + (1 - var(--ouvre)) * 8deg))}
-  .rc-droite,.rc-dos,.rc-tranche,.rc-couv{inset-inline-start:0}
+  .rc-droite,.rc-dos,.rc-tranche,.rc-p111{inset-inline-start:0}
+  .rc-feuilles .cn-feuille,.rc-feuilles .cn-om-d{inset-inline-start:0;inline-size:100%}
+  .rc-feuilles .rc-feuille-couv{inline-size:calc(100% + var(--u) * 1.3)}
+  .rc-feuilles .cn-om-g,.rc-gauche,.rc-plat-g{display:none}
   .rc-droite{border-radius:calc(var(--u) * .5)}
   .rc-sol{inset-inline-start:-3%}
   .rc-eq{display:block}
@@ -2049,7 +2062,7 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   .rc-calcul li,.rc-point,.rc-portee{transition:none}
 }
 </style>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mudtuvw8";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mue7a3c0";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/accueil.jpg?v=db495b97e7">
@@ -2260,7 +2273,7 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
           <div class="rc-jauge" aria-hidden="true"><i></i></div>
         </div>
 
-        <div class="rc-livre" aria-hidden="true">
+        <div class="rc-livre" aria-hidden="true" dir="ltr">
           <div class="rc-volume">
             <div class="rc-sol"></div>
             <div class="rc-dos"></div>
@@ -2287,40 +2300,71 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
                   <span class="rc-l-pos">x = 0.0 m · y = 0.0 m</span>
                 </div>
               </div>
-              <p class="rc-legende" data-i18n="rcLeg">Three throws at 12.7 m/s, computed from the equations of motion — not drawn.</p>
+              <p class="rc-legende" data-i18n="rcLeg" dir="auto">Three throws at 12.7 m/s, computed from the equations of motion — not drawn.</p>
               <p class="rc-folio rc-fin">113</p>
             </div>
 
-            <div class="rc-couv">
-              <div class="rc-couv-face">
-                <img src="library/manuel-bac-demo/cover.jpg" alt="" width="600" height="800" loading="lazy" decoding="async">
+            <!-- Le revers de la couverture, pour une page sans script : le livre y
+                 est ouvert, et le plat repose à gauche. Avec le script, c'est la
+                 couverture elle-même — une feuille qui plie — qui vient s'y poser. -->
+            <div class="rc-plat-g"></div>
+
+            <!-- la page 112, posée à gauche ; elle se découvre quand la page de
+                 titre a tourné (et, pendant le tour, c'est sa copie qui passe) -->
+            <div class="rc-page rc-gauche">
+              <p class="rc-tete"><span>112</span><span>Physique — Chimie</span></p>
+              <p class="rc-kick" data-i18n="rcKick" dir="auto">Exact sciences</p>
+              <p class="rc-chap" data-i18n="rcCh" dir="auto">Chapter 4 · Motion in a field</p>
+              <p class="rc-titre" data-i18n="rcTitre" dir="auto">The furthest throw</p>
+              <div class="rc-exo">
+                <p class="rc-question" dir="auto"><b data-i18n="rcEx">Exercise 3.</b> <span data-i18n="rcQ">A ball leaves the ground at 12.7 m/s. At what angle does it land furthest?</span></p>
               </div>
-              <div class="rc-couv-dos">
-                <div class="rc-page rc-gauche">
-                  <p class="rc-tete"><span>112</span><span>Physique — Chimie</span></p>
-                  <p class="rc-kick" data-i18n="rcKick">Exact sciences</p>
-                  <p class="rc-chap" data-i18n="rcCh">Chapter 4 · Motion in a field</p>
-                  <p class="rc-titre" data-i18n="rcTitre">The furthest throw</p>
-                  <div class="rc-exo">
-                    <p class="rc-question"><b data-i18n="rcEx">Exercise 3.</b> <span data-i18n="rcQ">A ball leaves the ground at 12.7 m/s. At what angle does it land furthest?</span></p>
-                  </div>
-                  <ol class="rc-calcul">
-                    <li data-l="1"><span>x(t) = v₀ cos θ · t</span></li>
-                    <li data-l="1"><span>y(t) = v₀ sin θ · t − ½ g t²</span></li>
-                    <li data-l="2"><span>y = 0 ⇒ t = 2 v₀ sin θ / g</span></li>
-                    <li data-l="3"><span>R = v₀² · sin 2θ / g</span></li>
-                    <li data-l="4" class="rc-conclu"><span>sin 2θ max at 2θ = 90° ⇒ θ = 45°</span></li>
-                  </ol>
-                  <p class="rc-folio">112</p>
-                </div>
-              </div>
+              <ol class="rc-calcul">
+                <li data-l="1"><span>x(t) = v₀ cos θ · t</span></li>
+                <li data-l="1"><span>y(t) = v₀ sin θ · t − ½ g t²</span></li>
+                <li data-l="2"><span>y = 0 ⇒ t = 2 v₀ sin θ / g</span></li>
+                <li data-l="3"><span>R = v₀² · sin 2θ / g</span></li>
+                <li data-l="4" class="rc-conclu"><span>sin 2θ max at 2θ = 90° ⇒ θ = 45°</span></li>
+              </ol>
+              <p class="rc-folio">112</p>
             </div>
+
+            <!-- La page de titre du chapitre : le recto de la page qui tourne. Elle
+                 reste cachée ; le script la recopie dans les seize bandes de la
+                 feuille, traduite comme le reste de la page. -->
+            <div class="rc-page rc-p111" hidden>
+              <p class="rc-tete"><span>Manuel du Baccalauréat</span><span>111</span></p>
+              <p class="rc-o-num">4</p>
+              <p class="rc-kick" data-i18n="rcKick" dir="auto">Exact sciences</p>
+              <p class="rc-o-titre" data-i18n="rcOuvT" dir="auto">Motion in a field</p>
+              <ol class="rc-o-parts">
+                <li><b>4.1</b><span data-i18n="rcS1" dir="auto">The gravitational field</span></li>
+                <li><b>4.2</b><span data-i18n="rcS2" dir="auto">Free fall</span></li>
+                <li><b>4.3</b><span data-i18n="rcS3" dir="auto">The oblique throw</span></li>
+              </ol>
+              <svg class="rc-o-arc" viewBox="0 0 200 64" preserveAspectRatio="none"><path d="M6 60C60 -14 140 -14 194 60"/></svg>
+              <p class="rc-folio rc-fin">111</p>
+            </div>
+
+            <div class="cn-feuilles rc-feuilles"></div>
 
           </div>
         </div>
 
       </div>
     </div>
+
+    <!-- les deux faces du plat de couverture, recopiées par le script -->
+    <template id="rc-t-couv">
+      <div class="cn-contenu"><div class="rc-couv-face">
+        <img src="library/manuel-bac-demo/cover.jpg" alt="" width="600" height="800" decoding="async">
+      </div></div>
+    </template>
+    <template id="rc-t-garde">
+      <div class="cn-contenu"><div class="rc-couv-dos"><div class="rc-garde">
+        <p>Manuel du Baccalauréat</p><p>Physique — Chimie</p>
+      </div></div></div>
+    </template>
   </section>
 
   <!-- ── LE CARNET ─────────────────────────────────────────────────────────
@@ -4636,6 +4680,10 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
       rcH5: "45° تذهب أبعد. هذا هو الجواب.",
       rcP5: "كتاب مدرسي يُجري الرياضيات بينما تقرؤه. هذه هي الفكرة كلّها.",
       rcCta: "افتح هذا الكتاب",
+      rcOuvT: "الحركة في مجال",
+      rcS1: "مجال الثقالة",
+      rcS2: "السقوط الحر",
+      rcS3: "القذف المائل",
       cnEye: "ثم الدفتر",
       cnH0: "ثم ينتقل كل شيء إلى الدفتر.",
       cnP0: "Le Jaguar هو دفتر التلميذ، بجانب الكتاب مباشرة.",
@@ -4982,6 +5030,10 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
       rcH5: "45° va le plus loin. C’est la réponse.",
       rcP5: "Un manuel qui fait les mathématiques pendant qu’on le lit. Toute l’idée est là.",
       rcCta: "Ouvrir ce livre",
+      rcOuvT: "Mouvement dans un champ",
+      rcS1: "Le champ de pesanteur",
+      rcS2: "La chute libre",
+      rcS3: "Le lancer oblique",
       cnEye: 'Puis, le cahier',
       cnH0: 'Puis tout passe dans le cahier.',
       cnP0: 'Le Jaguar, c’est le cahier de l’élève, juste à côté du manuel.',
@@ -6560,11 +6612,11 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mudtuvw8). Non remplacée —
+  /* La version est posée par la construction (mue7a3c0). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mudtuvw8')
+  fetch('library/library.json?v=mue7a3c0')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -6575,7 +6627,7 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 </script>
 
 
-<script src="compte.js?v=mudtuvw8"></script>
+<script src="compte.js?v=mue7a3c0"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
@@ -6747,6 +6799,105 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
 })();
 </script>
 <script>
+/* LA FEUILLE QUI PLIE — une seule mécanique, pour le manuel du récit et
+   pour le cahier du carnet.
+
+   Une feuille est faite de seize bandes verticales, chacune accrochée au bord
+   droit de la précédente : faire tourner la première autour du dos, puis
+   chaque bande d'un petit angle par rapport à sa voisine, cintre la feuille.
+   Pendant le tour la courbure croît puis décroît (sin πt) et se concentre vers
+   le bord libre — c'est lui qui part devant, comme sous les doigts. La base
+   est retardée d'autant, pour que la feuille reste en moyenne à l'heure, et
+   bornée pour ne jamais passer sous la table. `courbe` dit combien la matière
+   plie : peu pour un carton de couverture, beaucoup pour une page.
+
+   Chaque bande est ombrée selon l'angle de sa face avec la lumière, et la
+   feuille porte sur ce qu'elle recouvre une ombre qui va du dos jusqu'à la
+   projection de son bord. Les faces sont des COPIES des vraies pages,
+   tranchées par translation : ce qui tourne est exactement ce qui sera posé.
+
+   Rien ne tourne ici tout seul : plier() pose un état, c'est l'horloge de
+   chaque récit (la position de la page) qui décide quand l'appeler. */
+window.FableFeuille = (function () {
+  'use strict';
+  var N = 16, POIDS = [0], tot = 0, moy = 0, cumul = 0, i;
+  for (i = 1; i < N; i++) { POIDS[i] = Math.pow(i / N, 1.5); tot += POIDS[i]; }
+  for (i = 1; i < N; i++) { cumul += POIDS[i] / tot; moy += cumul; }
+  moy /= N;
+  function doux(x) { return x * x * (3 - 2 * x); }
+  function face(nom, contenu) {
+    var f = document.createElement('div');
+    f.className = 'cn-face ' + nom;
+    f.appendChild(contenu.cloneNode(true));
+    return f;
+  }
+  /* o = { z: profondeur au repos, courbe: degrés de cintrage au plus fort, classe } */
+  function creer(hote, avant, arriere, o) {
+    var racine = document.createElement('div');
+    racine.className = 'cn-feuille' + (o.classe ? ' ' + o.classe : '');
+    var parent = racine, bandes = [];
+    for (var i = 0; i < N; i++) {
+      var b = document.createElement('div');
+      b.className = 'cn-bande' + (i ? '' : ' cn-b0');
+      b.style.setProperty('--i', i);
+      b.appendChild(face('cn-av', avant));
+      b.appendChild(face('cn-ar', arriere));
+      parent.appendChild(b);
+      bandes.push(b);
+      parent = b;
+    }
+    /* L'ombre portée vit dans deux plans, entre la feuille et ce qu'elle
+       recouvre. La rotation retourne la profondeur : posée à droite en +z,
+       une feuille tournée repose à gauche en −z — c'est ce qui range les
+       feuilles dans le bon ordre des deux côtés. */
+    var od = document.createElement('div'), og = document.createElement('div');
+    od.className = 'cn-om cn-om-d' + (o.classe ? ' ' + o.classe + '-om' : '');
+    og.className = 'cn-om cn-om-g' + (o.classe ? ' ' + o.classe + '-om' : '');
+    od.style.transform = 'translateZ(' + (o.z - .5) + 'px)';
+    og.style.transform = 'translateZ(' + (.5 - o.z) + 'px)';
+    hote.appendChild(od); hote.appendChild(og); hote.appendChild(racine);
+    var f = { racine: racine, bandes: bandes, z: o.z, courbe: o.courbe, od: od, og: og, t: -1 };
+    mesurer(f);
+    return f;
+  }
+  /* la largeur de la feuille, en pixels, pour tailler ses bandes au plus juste */
+  function mesurer(f) {
+    if (f.racine.offsetWidth) f.racine.style.setProperty('--W', f.racine.offsetWidth + 'px');
+    f.t = -1;
+  }
+  function detruire(f) {
+    [f.racine, f.od, f.og].forEach(function (e) { if (e.parentNode) e.parentNode.removeChild(e); });
+  }
+  function plier(f, t) {
+    if (t === f.t) return;
+    f.t = t;
+    var theta = 180 * doux(t);
+    var c = f.courbe * Math.pow(Math.sin(Math.PI * t), .85);
+    var a0 = Math.max(0, Math.min(180 - c, theta - c * moy));
+    var abs = 0, x = 0;
+    for (var i = 0; i < N; i++) {
+      var b = f.bandes[i], rel = i ? c * POIDS[i] / tot : a0;
+      abs += rel;
+      b.style.transform = i ? 'rotateY(' + (-rel).toFixed(3) + 'deg)'
+                            : 'rotateY(' + (-a0).toFixed(3) + 'deg) translateZ(' + f.z + 'px)';
+      var co = Math.cos(abs * Math.PI / 180);
+      b.style.setProperty('--sa', (.44 * (1 - co)).toFixed(3));
+      b.style.setProperty('--sb', (.44 * (1 + co)).toFixed(3));
+      x += co / N;
+    }
+    var a = t > 0 && t < 1 ? .32 * Math.sin(Math.PI * t) : 0;
+    f.od.style.opacity = x > 0 && a ? 1 : 0;
+    f.og.style.opacity = x < 0 && a ? 1 : 0;
+    f.od.style.setProperty('--oa', a.toFixed(3));
+    f.og.style.setProperty('--oa', a.toFixed(3));
+    f.od.style.setProperty('--ox', (Math.max(0, x) * 100).toFixed(1) + '%');
+    f.og.style.setProperty('--ox', (Math.max(0, -x) * 100).toFixed(1) + '%');
+  }
+  return { creer: creer, plier: plier, mesurer: mesurer, detruire: detruire };
+})();
+</script>
+
+<script>
 /* LE RECIT — la position de la page EST l'horloge. Un ecouteur de
    defilement passif note ou en est la section ; une trame rattrape cette
    position en douceur (un peu moins d un cinquieme du chemin par trame) et S'ARRETE des
@@ -6773,6 +6924,21 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   var lPos = s.querySelector('.rc-l-pos');
   var fig = s.querySelector('.rc-fig');
   var vol = s.querySelector('.rc-volume');
+  /* les deux feuilles qui tournent — le plat, puis la page de titre — bâties
+     par la mécanique commune, seulement quand l'histoire est vivante */
+  var FF = window.FableFeuille, couv = null, page = null;
+  function batir() {
+    if (couv) { FF.detruire(couv); FF.detruire(page); }
+    var hote = s.querySelector('.rc-feuilles');
+    var tpl = function (id) { return document.getElementById(id).content.firstElementChild; };
+    var enveloppe = function (el) {
+      var w = document.createElement('div'); w.className = 'cn-contenu';
+      var c = el.cloneNode(true); c.removeAttribute('hidden'); w.appendChild(c);
+      return w;
+    };
+    couv = FF.creer(hote, tpl('rc-t-couv'), tpl('rc-t-garde'), { z: 3, courbe: 14, classe: 'rc-feuille-couv' });
+    page = FF.creer(hote, enveloppe(s.querySelector('.rc-p111')), enveloppe(s.querySelector('.rc-gauche')), { z: 1.5, courbe: 100 });
+  }
 
   function el(nom, attrs, parent) {
     var e = document.createElementNS(NS, nom);
@@ -6785,7 +6951,11 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   /* L'UNITE DU LIVRE : 1/100 de la double page, lue sur la hauteur (la meme
      que la page soit seule, sur un telephone, ou en double page). Tout ce
      qui est imprime s'y mesure, et grandit donc avec le livre. */
-  function unite() { if (vol && vol.offsetHeight) vol.style.setProperty('--u', (vol.offsetHeight / 66.7).toFixed(2) + 'px'); }
+  function unite() {
+    if (vol && vol.offsetHeight) vol.style.setProperty('--u', (vol.offsetHeight / 66.7).toFixed(2) + 'px');
+    /* les bandes se taillent sur la largeur réelle des feuilles */
+    if (couv) { FF.mesurer(couv); FF.mesurer(page); var p0 = dernier; dernier = -1; if (p0 >= 0) poser(p0); }
+  }
   unite();
   if (window.ResizeObserver && vol) new ResizeObserver(unite).observe(vol);
   else window.addEventListener('resize', unite);
@@ -6842,13 +7012,20 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   function poser(p) {
     if (p === dernier) return;
     dernier = p;
-    var o = doux(seg(p, .06, .26));
+    var o = doux(seg(p, .04, .18));
     s.style.setProperty('--p', p.toFixed(4));
     s.style.setProperty('--ouvre', o.toFixed(4));
     /* la lumiere et l'ombre du plat culminent a mi-course, quand il est
        dresse face a nous */
     s.style.setProperty('--ombre', Math.sin(o * Math.PI).toFixed(4));
-    s.style.setProperty('--axes', seg(p, .26, .34).toFixed(4));
+    s.style.setProperty('--axes', seg(p, .27, .34).toFixed(4));
+    /* le plat s'ouvre, puis la page de titre tourne et découvre 112 | 113 */
+    if (couv) {
+      var tP = seg(p, .175, .27);
+      FF.plier(couv, seg(p, .04, .17));
+      FF.plier(page, tP);
+      s.style.setProperty('--gv', tP >= 1 ? 1 : 0);
+    }
 
     var e = 0;
     for (var i = 0; i < PAS.length; i++) if (p >= PAS[i]) e = i;
@@ -6881,6 +7058,12 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   if (calme) { poser(1); return; }
 
   document.documentElement.classList.add('rc-vivant');
+  batir();
+  /* Les faces sont des copies des pages : quand la langue change, les pages
+     sont retraduites, et les copies refaites pour dire la même chose. */
+  if (window.MutationObserver) new MutationObserver(function () {
+    batir(); var p0 = dernier; dernier = -1; if (p0 >= 0) poser(p0);
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   var cible = 0, montre = 0, trame = 0, lu = false;
   function viser() {
     var r = s.getBoundingClientRect();
@@ -6955,73 +7138,12 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
   function mesure() { if (vol.offsetWidth) vol.style.setProperty('--W', (vol.offsetWidth / 2).toFixed(2) + 'px'); }
   mesure();
 
-  function face(nom, contenu) {
-    var f = document.createElement('div');
-    f.className = 'cn-face ' + nom;
-    f.appendChild(contenu.cloneNode(true));
-    return f;
-  }
-  function feuille(avant, arriere, z, courbe) {
-    var racine = document.createElement('div');
-    racine.className = 'cn-feuille';
-    var parent = racine, bandes = [];
-    for (var i = 0; i < N; i++) {
-      var b = document.createElement('div');
-      b.className = 'cn-bande' + (i ? '' : ' cn-b0');
-      b.style.setProperty('--i', i);
-      b.appendChild(face('cn-av', avant));
-      b.appendChild(face('cn-ar', arriere));
-      parent.appendChild(b);
-      bandes.push(b);
-      parent = b;
-    }
-    /* L'ombre portée, dans deux plans : entre cette feuille et ce qu'elle
-       recouvre. La rotation retourne la profondeur : posée à droite en +z,
-       une feuille tournée repose à gauche en −z — c'est ce qui range les
-       feuilles dans le bon ordre des deux côtés. */
-    var od = document.createElement('div'), og = document.createElement('div');
-    od.className = 'cn-om cn-om-d'; od.style.transform = 'translateZ(' + (z - .5) + 'px)';
-    og.className = 'cn-om cn-om-g'; og.style.transform = 'translateZ(' + (.5 - z) + 'px)';
-    hote.appendChild(od); hote.appendChild(og); hote.appendChild(racine);
-    return { bandes: bandes, z: z, courbe: courbe, od: od, og: og, t: -1 };
-  }
+  /* les deux feuilles qui tournent, par la mécanique commune (FableFeuille) */
+  var FF = window.FableFeuille, plier = FF.plier;
   var tpl = function (id) { return document.getElementById(id).content.firstElementChild; };
   var p2 = s.querySelector('.cn-gauche .cn-contenu');
-  var couv = feuille(tpl('cn-t-couv'), tpl('cn-t-garde'), 2, 26);
-  var page1 = feuille(tpl('cn-t-p1'), p2, 1, 105);
-
-  /* la répartition de la courbure : nulle au dos, croissante vers le bord */
-  var POIDS = [0], tot = 0, i;
-  for (i = 1; i < N; i++) { POIDS[i] = Math.pow(i / N, 1.5); tot += POIDS[i]; }
-  var cumul = 0, moy = 0;
-  for (i = 1; i < N; i++) { cumul += POIDS[i] / tot; moy += cumul; }
-  moy /= N;
-
-  function plier(f, t) {
-    if (t === f.t) return;
-    f.t = t;
-    var theta = 180 * doux(t);
-    var c = f.courbe * Math.pow(Math.sin(Math.PI * t), .85);
-    var a0 = Math.max(0, Math.min(180 - c, theta - c * moy));
-    var abs = 0, x = 0;
-    for (var i = 0; i < N; i++) {
-      var b = f.bandes[i], rel = i ? c * POIDS[i] / tot : a0;
-      abs += rel;
-      b.style.transform = i ? 'rotateY(' + (-rel).toFixed(3) + 'deg)'
-                            : 'rotateY(' + (-a0).toFixed(3) + 'deg) translateZ(' + f.z + 'px)';
-      var co = Math.cos(abs * Math.PI / 180);
-      b.style.setProperty('--sa', (.44 * (1 - co)).toFixed(3));
-      b.style.setProperty('--sb', (.44 * (1 + co)).toFixed(3));
-      x += co / N;
-    }
-    var a = t > 0 && t < 1 ? .32 * Math.sin(Math.PI * t) : 0;
-    f.od.style.opacity = x > 0 && a ? 1 : 0;
-    f.og.style.opacity = x < 0 && a ? 1 : 0;
-    f.od.style.setProperty('--oa', a.toFixed(3));
-    f.og.style.setProperty('--oa', a.toFixed(3));
-    f.od.style.setProperty('--ox', (Math.max(0, x) * 100).toFixed(1) + '%');
-    f.og.style.setProperty('--ox', (Math.max(0, -x) * 100).toFixed(1) + '%');
-  }
+  var couv = FF.creer(hote, tpl('cn-t-couv'), tpl('cn-t-garde'), { z: 2, courbe: 26 });
+  var page1 = FF.creer(hote, tpl('cn-t-p1'), p2, { z: 1, courbe: 105 });
 
   var PAS = [0, .10, .26, .42, .58, .76];
   var dernier = -1;
@@ -7062,7 +7184,7 @@ path.cn-trait{fill:none;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:ro
     if (!lu) { lu = true; montre = cible; poser(montre); return; }
     if (!trame) trame = requestAnimationFrame(pas);
   }
-  function retailler() { mesure(); couv.t = page1.t = -1; dernier = -1; poser(montre); }
+  function retailler() { mesure(); FF.mesurer(couv); FF.mesurer(page1); dernier = -1; poser(montre); }
   if (window.ResizeObserver) new ResizeObserver(retailler).observe(vol);
   else window.addEventListener('resize', retailler);
   window.addEventListener('scroll', demander, { passive: true });
