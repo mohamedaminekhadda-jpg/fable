@@ -50,9 +50,23 @@ svg{display:block}
 .cover-label::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(1.5deg);width:92px;height:22px;background:rgba(255,255,255,.35);border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 5px rgba(0,0,0,.12)}
 .cover-label .row{display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid rgba(42,32,19,.30);padding:8px 0}
 .cover-label .row:last-child{border-bottom:0}
-.cover-label label{width:58px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8355}
+.cover-label label{flex:0 0 auto;min-width:58px;max-width:120px;overflow-wrap:anywhere;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9c8355}
 .cover-label input{flex:1;min-width:0;background:none;border:0;outline:none;font-family:'Fraunces',serif;font-size:18px;color:#2a2013}
 .cover-label input::placeholder{color:rgba(42,32,19,.28)}
+/* customising the label: a pencil on hover, then rename / remove / put back / add rows */
+.cover-label .etq-edit{position:absolute;top:5px;right:7px;width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:#9c8355;font-size:14px;line-height:26px;padding:0;cursor:pointer;opacity:0;transition:opacity .15s,background .15s}
+.cover-label:hover .etq-edit,.cover-label:focus-within .etq-edit{opacity:1}
+@media (hover:none){.cover-label .etq-edit{opacity:.75}}
+.cover-label .etq-edit:hover{background:rgba(156,131,85,.15)}
+.cover-label.edition .etq-edit{opacity:1;background:var(--gold);color:#fff}
+.cover-label .etq-row{align-items:center}
+.cover-label .etq-nom{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#2a2013;border-bottom:1px dashed rgba(156,131,85,.7);padding:2px 0}
+.cover-label .etq-x{border:0;background:none;color:#9c8355;font-size:19px;line-height:1;padding:0 4px;cursor:pointer}
+.cover-label .etq-x:disabled{opacity:.25;cursor:default}
+.cover-label .etq-actions{display:flex;flex-wrap:wrap;gap:6px;padding:10px 0 2px}
+.cover-label .etq-actions button{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px dashed rgba(156,131,85,.75);background:none;color:#7a6440;border-radius:999px;padding:4px 10px;cursor:pointer}
+.cover-label .etq-actions button:hover{background:rgba(156,131,85,.12)}
+.cover-label .etq-actions button:disabled{opacity:.35;cursor:default}
 /* top-right badges over the art */
 .badges{position:absolute;top:16px;right:16px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;z-index:3;max-width:44%}
 .mbadge{position:relative;line-height:0;filter:drop-shadow(0 3px 7px rgba(0,0,0,.4));transition:transform .16s ease}
@@ -897,11 +911,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 @media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudmn8h3"></script>
-<script src="sanitize.js?v=mudmn8h3"></script>
-<script src="jaguar-shim.js?v=mudmn8h3"></script>
-<script src="../compte.js?v=mudmn8h3"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudmn8h3";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudne5aq"></script>
+<script src="sanitize.js?v=mudne5aq"></script>
+<script src="jaguar-shim.js?v=mudne5aq"></script>
+<script src="../compte.js?v=mudne5aq"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudne5aq";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -925,11 +939,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 <!-- ══════════ COVER ══════════ -->
 <div id="cover">
   <iframe id="coverFrame" class="cover-frame" title="Couverture"></iframe>
-  <div class="cover-label">
-    <div class="row"><label>Nom</label><input id="pNom" placeholder="…"></div>
-    <div class="row"><label>Prénom</label><input id="pPrenom" placeholder="…"></div>
-    <div class="row"><label>Classe</label><input id="pClasse" placeholder="…"></div>
-  </div>
+  <div class="cover-label" id="coverLabel"></div>
   <div class="badges" id="badges"></div>
   <div class="cover-dock">
     <div class="dock-tools">
@@ -1170,12 +1180,48 @@ async function chargeMedaillons() {
     X.BADGES.forEach(function (b) { MEDAL_NAME[b.id] = b.name; });
   } catch (e) { /* la couverture s'affiche quand même, sans médaillons */ }
 }
+/* ═════ l'étiquette de la couverture ═════
+   Nom / Prénom / Classe par défaut ; l'élève peut renommer une ligne, la
+   retirer, la remettre, en ajouter. Les valeurs des trois lignes d'origine
+   restent dans nb.student (le bandeau, la barre du bas et les images
+   partagées les lisent) ; celles des lignes ajoutées vont dans
+   nb.student.extra. Une ligne d'origine retirée n'est que masquée : ce qui
+   y était écrit revient quand on la remet. */
+const ETQ_BASE=[{key:'nom',label:'Nom'},{key:'prenom',label:'Prénom'},{key:'classe',label:'Classe'}];
+const ETQ_ID={nom:'pNom',prenom:'pPrenom',classe:'pClasse'};
+const ETQ_MAX=6;
+let etqEdition=false;
+function lignesEtiquette(){
+  const L=Array.isArray(state.nb.coverLabel)?state.nb.coverLabel.filter(r=>r&&r.key):ETQ_BASE.map(r=>({...r}));
+  ETQ_BASE.forEach(b=>{ if(!L.some(r=>r.key===b.key)) L.push({...b,hidden:true}); });
+  return L;
+}
+function champVisible(k){ const r=lignesEtiquette().find(x=>x.key===k); return !!r&&!r.hidden; }
+function nomAffiche(){ const st=state.nb.student; return ((champVisible('prenom')?st.prenom||'':'')+' '+(champVisible('nom')?st.nom||'':'')).trim(); }
+const idEtq=r=>ETQ_ID[r.key]||('pEtq_'+r.key);
+function valeurEtq(r){ const st=state.nb.student; return ETQ_ID[r.key]?(st[r.key]||''):((st.extra||{})[r.key]||''); }
+function renderEtiquette(){
+  const L=lignesEtiquette(), vis=L.filter(r=>!r.hidden), box=$('#coverLabel');
+  box.classList.toggle('edition',etqEdition);
+  let h='<button class="etq-edit" id="etqEdit" title="'+(etqEdition?'Terminé':'Personnaliser l’étiquette')+'" aria-label="'+(etqEdition?'Terminé':'Personnaliser l’étiquette')+'">'+(etqEdition?'✓':'✎')+'</button>';
+  if(!etqEdition){
+    h+=vis.map(r=>'<div class="row"><label for="'+idEtq(r)+'">'+esc(r.label)+'</label><input id="'+idEtq(r)+'" data-k="'+esc(r.key)+'" placeholder="…" value="'+esc(valeurEtq(r))+'"></div>').join('');
+  } else {
+    h+=vis.map(r=>'<div class="row etq-row"><input class="etq-nom" data-k="'+esc(r.key)+'" value="'+esc(r.label)+'" maxlength="24" aria-label="Nom de la ligne"><button class="etq-x" data-k="'+esc(r.key)+'" title="Retirer cette ligne" aria-label="Retirer cette ligne"'+(vis.length<2?' disabled':'')+'>×</button></div>').join('');
+    h+='<div class="etq-actions"><button id="etqAdd"'+(vis.length>=ETQ_MAX?' disabled':'')+'>+ Ligne</button>'
+      +L.filter(r=>r.hidden).map(r=>'<button class="etq-remettre" data-k="'+esc(r.key)+'" title="Remettre cette ligne">↺ '+esc(r.label)+'</button>').join('')+'</div>';
+  }
+  box.innerHTML=h;
+}
+/* Toute modification passe par ici : la liste devient celle du cahier. */
+function changerEtiquette(f){ const L=lignesEtiquette(); f(L); state.nb.coverLabel=L; markDirty(); }
+
 async function renderCover(){
   await chargeMedaillons();
   const nb=state.nb;
   const st=(nb.settings)||{}; state.view=st.view||'flow'; state.textScale=st.textScale||1; state.mode=state.review?'read':'edit'; state.leftHidden=!!st.leftHidden;
   document.documentElement.style.setProperty('--gold', nb.brand.accent||'#c9a054');
-  $('#pNom').value=nb.student.nom||''; $('#pPrenom').value=nb.student.prenom||''; $('#pClasse').value=nb.student.classe||'';
+  etqEdition=false; renderEtiquette();
   // teacher-awarded merit badges (mirrored from the platform) — medallions, most recent first
   const awarded=(nb.awardedBadges||[]).slice().sort((a,b)=>(b.at||0)-(a.at||0));
   $('#badges').innerHTML=awarded.map(b=>{ const nm=MEDAL_NAME[b.badge]||b.badge;
@@ -1229,8 +1275,8 @@ function renderRails(){
   const nb=state.nb, subj=currentSubject();
   $('#navBrand').textContent=nb.brand.title||'Le Jaguar';
   $('#lhKicker').textContent=subj.name;
-  $('#lhName').textContent=(nb.student.prenom+' '+nb.student.nom).trim()||nb.nom||nb.brand.title;
-  $('#lhClass').textContent=nb.student.classe||'';
+  $('#lhName').textContent=nomAffiche()||nb.nom||nb.brand.title;
+  $('#lhClass').textContent=champVisible('classe')?nb.student.classe||'':'';
   // left: sections
   let railMat='<div class="rail-mat"><div class="sec-h"><span class="lbl">Matières</span><span class="rl"></span>'
     +'<button class="add" data-mat-add title="Nouvelle matière"><svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg></button></div>';
@@ -1260,8 +1306,8 @@ function renderRails(){
   html+='<div class="tab addtab" id="addSubj" title="Ajouter une matière personnelle" style="--i:'+i+'"><span class="tsym">+</span><span class="tnm">Matière</span></div>';
   $('#subjects').innerHTML=html;
   // taskbar
-  const st=nb.student, nm=(st.prenom+' '+st.nom).trim()||nb.nom||nb.brand.title;
-  $('#tbName').textContent=nm; $('#tbAv').textContent=(st.prenom||st.nom||nb.nom||'?').slice(0,1).toUpperCase();
+  const nm=nomAffiche()||nb.nom||nb.brand.title;
+  $('#tbName').textContent=nm; $('#tbAv').textContent=(nomAffiche()||nb.nom||'?').slice(0,1).toUpperCase();
   $('#tbSubject').textContent=subj.name;
   const pages=currentPages(), idx=pages.findIndex(p=>p.id===state.pageId);
   $('#tbPage').textContent='Page '+(idx<0?0:idx+1)+' / '+pages.length;
@@ -1867,7 +1913,31 @@ async function importerFichier(fichier){
 }
 
 /* ═════ cover events ═════ */
-['pNom','pPrenom','pClasse'].forEach(id=>$('#'+id).oninput=()=>{state.nb.student.nom=$('#pNom').value;state.nb.student.prenom=$('#pPrenom').value;state.nb.student.classe=$('#pClasse').value;markDirty();});
+$('#coverLabel').addEventListener('input',e=>{
+  const t=e.target, k=t.getAttribute('data-k'); if(!k) return;
+  if(t.classList.contains('etq-nom')){ changerEtiquette(L=>{ const r=L.find(x=>x.key===k); if(r) r.label=t.value; }); return; }
+  const st=state.nb.student;
+  if(ETQ_ID[k]) st[k]=t.value; else { st.extra=st.extra||{}; st.extra[k]=t.value; }
+  markDirty();
+});
+$('#coverLabel').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const k=b.getAttribute('data-k');
+  if(b.id==='etqEdit'){
+    if(etqEdition) changerEtiquette(L=>L.forEach(r=>{ // a name left empty gets its default back
+      if(!String(r.label||'').trim()) r.label=(ETQ_BASE.find(x=>x.key===r.key)||{label:'Ligne'}).label; }));
+    etqEdition=!etqEdition; renderEtiquette(); return;
+  }
+  if(b.classList.contains('etq-x')) changerEtiquette(L=>{ const i=L.findIndex(x=>x.key===k); if(i<0) return;
+    if(ETQ_ID[k]) L[i].hidden=true; else { L.splice(i,1); if(state.nb.student.extra) delete state.nb.student.extra[k]; } });
+  else if(b.classList.contains('etq-remettre')) changerEtiquette(L=>{ const r=L.find(x=>x.key===k); if(r) r.hidden=false; });
+  else if(b.id==='etqAdd'){
+    const nk='x'+Date.now().toString(36);
+    changerEtiquette(L=>L.push({key:nk,label:'Ligne'}));
+    renderEtiquette(); const n=$('#coverLabel .etq-nom[data-k="'+nk+'"]'); if(n){ n.focus(); n.select(); } return;
+  } else return;
+  renderEtiquette();
+});
 $('#mShelf').onclick=()=>{persist();ouvrirEtagere(false);};
 $('#shImporter').onclick=()=>$('#shFichier').click();
 $('#shFichier').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)importerFichier(f);};
@@ -2859,7 +2929,7 @@ function shareNote(n){ const S=1080, c=document.createElement('canvas'); c.width
   const words=n.excerpt.split(/\s+/), lines=[]; let ln='';
   words.forEach(w=>{ if(x.measureText(ln+' '+w).width>S-160){lines.push(ln);ln=w;}else ln=(ln?ln+' ':'')+w; }); if(ln)lines.push(ln);
   const shown=lines.slice(0,10); let y=S/2-shown.length*30; shown.forEach(l=>{x.fillText(l,80,y);y+=62;});
-  y+=30; x.fillStyle='#c9a054'; x.font='500 22px Spline Sans Mono, monospace'; x.fillText('— '+((state.nb.student.prenom+' '+state.nb.student.nom).trim()||state.nb.brand.title), 80, Math.min(y,S-90));
+  y+=30; x.fillStyle='#c9a054'; x.font='500 22px Spline Sans Mono, monospace'; x.fillText('— '+(nomAffiche()||state.nb.brand.title), 80, Math.min(y,S-90));
   x.fillStyle='rgba(244,241,234,.5)'; x.font='400 18px Spline Sans Mono, monospace'; x.fillText((state.nb.brand.title||'')+' · '+n.subj, 80, S-50);
   let m=$('.nbshare'); if(!m){m=document.createElement('div');m.className='nbshare';document.body.appendChild(m);}
   m.innerHTML='<div class="box"><canvas></canvas><div class="row"><button class="cl">Fermer</button><button class="dl">Télécharger</button></div></div>';
