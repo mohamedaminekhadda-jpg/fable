@@ -181,6 +181,15 @@ svg{display:block}
     linear-gradient(to bottom,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px));
   background-size:auto, 100% var(--gap), 100% calc(var(--gap)/4);
   background-repeat:no-repeat, repeat, repeat}
+/* French ruling: the full Séyès grid — the same paper plus the vertical fine lines at the same pitch */
+.tpl-french{padding-left:72px;
+  background-image:
+    linear-gradient(90deg,transparent 61px,rgba(198,86,110,.55) 61px,rgba(198,86,110,.55) 62px,transparent 62px),
+    linear-gradient(to bottom,transparent calc(var(--gap) - 1px),rgba(86,120,175,.5) calc(var(--gap) - 1px)),
+    linear-gradient(to bottom,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px)),
+    linear-gradient(to right,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px));
+  background-size:auto, 100% var(--gap), 100% calc(var(--gap)/4), calc(var(--gap)/4) 100%;
+  background-repeat:no-repeat, repeat, repeat, repeat}
 /* page-break overlay (paged view) */
 .paper-wrap{position:relative}
 .pagebreaks{display:none}
@@ -822,7 +831,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
   .rail-mat{display:block}
   .center{padding:14px 8px 40px}
   .paper{padding-right:16px}
-  .paper:not(.tpl-seyes):not(.tpl-cornell){padding-left:18px}
+  .paper:not(.tpl-seyes):not(.tpl-french):not(.tpl-cornell){padding-left:18px}
   .subjects{display:none}
   .pagehead{flex-wrap:wrap;gap:6px 12px}
   .task .zoom,#tbClock,.task .who #tbName{display:none}
@@ -888,11 +897,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 @media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudm88x6"></script>
-<script src="sanitize.js?v=mudm88x6"></script>
-<script src="jaguar-shim.js?v=mudm88x6"></script>
-<script src="../compte.js?v=mudm88x6"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudm88x6";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudmn8h3"></script>
+<script src="sanitize.js?v=mudmn8h3"></script>
+<script src="jaguar-shim.js?v=mudmn8h3"></script>
+<script src="../compte.js?v=mudmn8h3"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudmn8h3";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -978,7 +987,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
     </div>
     <div class="tgrp">
       <select class="nav-sel" id="tplSel" title="Modèle de page">
-        <option value="seyes">Séyès</option><option value="lined">Lignes</option><option value="dashed">Pointillés</option><option value="grid">Carreaux</option><option value="cornell">Cornell</option><option value="blank">Uni</option>
+        <option value="seyes">Séyès</option><option value="french">French ruling</option><option value="lined">Lignes</option><option value="dashed">Pointillés</option><option value="grid">Carreaux</option><option value="cornell">Cornell</option><option value="blank">Uni</option>
       </select>
       <select class="nav-sel" id="viewSel" title="Affichage">
         <option value="flow">Continu</option><option value="paged">Pages</option>
