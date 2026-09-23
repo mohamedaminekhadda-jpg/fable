@@ -4,9 +4,10 @@
 // just a walk of the sims/ folder. There is no state to get out of step with the
 // disk: reload the page and you are looking at what is actually there.
 
-import { vignette } from './vignettes.js?v=mudrhqec';
-import { BRAND, marque, blocMarque } from './brand.js?v=mudrhqec';
-import { LANG, T, champ, poserSelecteur } from './langue.js?v=mudrhqec';
+import { vignette } from './vignettes.js?v=mudtuvw8';
+import { BRAND, marque, blocMarque } from './brand.js?v=mudtuvw8';
+import { LANG, T, champ, poserSelecteur } from './langue.js?v=mudtuvw8';
+import { miroirHTML, animerMiroir } from './miroir.js?v=mudtuvw8';
 
 // L'enseigne est montée depuis brand.js, jamais recopiée dans index.html : une
 // marque écrite à deux endroits est une marque qui finit par différer.
@@ -50,7 +51,7 @@ const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0
 let DATA = { subjects: [], sims: [], counts: {}, problems: [], levels: [] };
 
 async function load() {
-  const r = await fetch('catalogue.json?v=mudrhqec');
+  const r = await fetch('catalogue.json?v=mudtuvw8');
   DATA = await r.json();
   cycleDuFoyer();
   render();
@@ -173,6 +174,7 @@ function home() {
       <p>${esc(T('lede'))}</p>
       <div class="tickrule"></div>
     </section>
+    ${miroirHTML()}
     <div class="shelf-h">${esc(T('matieres'))}</div>
     <div class="subjects">${DATA.subjects.map(subjectCard).join('')}</div>
     ${total ? `<div class="shelf-h">${esc(T('recentes'))}</div>
@@ -363,6 +365,9 @@ function apreteVue() {
         de dessin, et un motif ne doit pas avoir à s'en soucier. Il rend la même
         durée à tous les traits, quelle que soit leur longueur réelle. */
   view.querySelectorAll('.sim-vig *').forEach((e) => e.setAttribute('pathLength', '1'));
+
+  /* 1b. La preuve de l'accueil — le miroir qu'on tourne (voir miroir.js). */
+  animerMiroir(view);
 
   /* 2. L'arrivée des cartes, décalée — et plafonnée à dix, au-delà on attendrait. */
   const anime = doux() && animerArrivee;

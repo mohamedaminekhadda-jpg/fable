@@ -51,7 +51,7 @@ Chargées depuis Google Fonts (fonts.googleapis.com), non incluses dans les fich
 Fraunces, Spline Sans Mono, Bricolage Grotesque, Instrument Serif, Noto Naskh Arabic,
 Noto Sans Egyptian Hieroglyphs, Newsreader, Plus Jakarta Sans, IBM Plex Sans / Mono,
 Inter, EB Garamond, Courier Prime, Bitter, Space Mono, Spectral, Archivo, Amiri,
-Amiri Quran, Reem Kufi, JetBrains Mono, Nunito, Playfair Display, Lora, Cormorant
+Amiri Quran, Reem Kufi, JetBrains Mono, Nunito, Playfair Display, Lora, Caveat, Cormorant
 Garamond — SIL Open Font License 1.1 (https://openfontlicense.org), chacune © ses auteurs.
 
 

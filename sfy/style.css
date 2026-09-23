@@ -749,3 +749,60 @@ body.is-lab { display: block; }
   background:var(--card,transparent);border:1px solid var(--bord,currentColor);
   border-radius:100px;padding:5px 11px;opacity:.85}
 .compte-hote button:hover{opacity:1;color:var(--ink)}
+
+/* ── LA PREUVE : le miroir qu'on tourne (app/miroir.js) ──────────────────
+   Venue de la page d'accueil de Fable, où elle était une bande sombre. Ici
+   elle suit les règles du banc : papier et encre, une réglure, pas d'ombre
+   décorative. L'encre pour le miroir, --sub (la teinte du foyer) pour la
+   normale et les arcs, le vermillon --live pour les rayons — une mesure tourne. */
+.preuve {
+  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: 40px; align-items: center;
+  margin: 8px 0 44px; padding: 30px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.preuve-eye {
+  margin: 0; font: 600 11px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sub);
+}
+.preuve-h { margin: 10px 0 12px; font-family: var(--serif); font-size: clamp(26px, 3.4vw, 36px); line-height: 1.12; }
+.preuve-p { margin: 0; color: var(--ink-soft); font-size: 15.5px; line-height: 1.65; max-width: 34rem; }
+.preuve-fig {
+  margin: 0; background: var(--paper-2); border: 1px solid var(--rule-2); border-radius: 10px; overflow: hidden;
+}
+.optique { display: block; width: 100%; height: auto; touch-action: none; cursor: grab; }
+.optique:active { cursor: grabbing; }
+.m-regle { stroke: var(--rule); stroke-width: 1; }
+.m-rayon { stroke: var(--live); stroke-width: 2.2; fill: none; stroke-linecap: round; }
+.m-sortant { opacity: .92; }
+/* la bille dit le SENS de la lumière ; en CSS, pas en JavaScript : aucune
+   boucle permanente sur le fil principal */
+.m-bille { stroke: var(--ink); stroke-width: 3.4; fill: none; stroke-linecap: round;
+  stroke-dasharray: 3 97; animation: m-flux 2.6s linear infinite; }
+@keyframes m-flux { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+.m-miroir { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; }
+.m-dos { stroke: var(--ink-mute); stroke-width: 1; opacity: .6; }
+.m-normale { stroke: var(--sub); stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+.m-arc { stroke: var(--sub); stroke-width: 1.2; fill: none; }
+.m-lbl { font: 600 11px/1 var(--mono); fill: var(--ink-mute); letter-spacing: .06em; }
+.m-impact { fill: var(--live); }
+.m-poignee { fill: var(--paper); stroke: var(--live); stroke-width: 2; cursor: grab; }
+.m-poignee:hover, .m-poignee:focus-visible { fill: var(--paper-3); outline: none; }
+.m-pouls { fill: none; stroke: var(--live); stroke-width: 2; opacity: 0; pointer-events: none;
+  transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .preuve-fig.invite .m-pouls { animation: m-onde 1.9s ease-out 3; }
+}
+@media (prefers-reduced-motion: reduce) { .m-bille { animation: none; opacity: 0; } }
+@keyframes m-onde { 0% { transform: scale(1); opacity: .6; } 70% { opacity: 0; } 100% { transform: scale(2.9); opacity: 0; } }
+.preuve-cap {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline;
+  padding: 10px 16px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-mute);
+}
+.preuve-val { margin-inline-start: auto; display: flex; gap: 16px; flex-wrap: wrap; }
+.preuve-cap .mesure { display: flex; align-items: baseline; gap: .35rem; }
+.preuve-cap .mesure b { font: 500 13px var(--mono); color: var(--live); font-variant-numeric: tabular-nums; }
+.preuve-cap .mesure i { font-style: normal; font: 600 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+/* l'écart est le fait établi, pas la valeur vivante : il n'est pas vermillon */
+.preuve-cap .ecart b { color: var(--ink); }
+@media (max-width: 760px) {
+  .preuve { grid-template-columns: 1fr; gap: 22px; }
+}

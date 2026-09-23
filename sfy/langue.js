@@ -54,6 +54,12 @@ const TEXTES = {
     aVoir: 'Ce qu’il faut voir', plein: 'Plein écran',
     sim1: 'simulation', simN: 'simulations',
     aucuneSim: 'aucune simulation pour l’instant',
+    mirEye: 'La preuve, tout de suite',
+    mirH: 'Tournez le miroir.',
+    mirP: 'Le rayon réfléchi n’est pas dessiné. Il est résolu à chaque mouvement par r = i − 2(i·n)n — la même façon de faire que dans chaque expérience de ce banc. L’angle d’entrée vaut l’angle de sortie parce que la géométrie l’impose, et non parce que quelqu’un l’a dessiné pour que ça tombe juste.',
+    mirNote: 'Angle d’entrée, angle de sortie — mesurés sur les rayons eux-mêmes.',
+    mirIn: 'entrée', mirOut: 'sortie', mirGap: 'd’écart', mirPoignee: 'Angle du miroir',
+    mirTitre: 'Un rayon lumineux qui se réfléchit sur un miroir que l’on tourne',
   },
   en: {
     chercher: 'Search for an experiment…',
@@ -81,6 +87,12 @@ const TEXTES = {
     aVoir: 'What to look for', plein: 'Full screen',
     sim1: 'simulation', simN: 'simulations',
     aucuneSim: 'no simulations yet',
+    mirEye: 'The proof, right here',
+    mirH: 'Drag the mirror.',
+    mirP: 'The reflected ray is not drawn. It is solved on every movement by r = i − 2(i·n)n — the same way every experiment on this bench works. The angle in equals the angle out because the geometry says so, not because someone drew it to come out right.',
+    mirNote: 'Angle in, angle out — measured off the rays themselves.',
+    mirIn: 'in', mirOut: 'out', mirGap: 'apart', mirPoignee: 'Mirror angle',
+    mirTitre: 'A light ray reflecting off a mirror you can turn',
   },
 };
 
