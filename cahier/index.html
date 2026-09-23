@@ -171,16 +171,16 @@ svg{display:block}
 .tpl-dashed{background-image:radial-gradient(circle at 50% calc(100% - 2px),rgba(96,120,165,.62) 0,rgba(96,120,165,.62) 1.15px,transparent 1.7px);background-size:9px var(--gap)}
 .tpl-grid{background-image:linear-gradient(to bottom,var(--rule) 1px,transparent 1px),linear-gradient(to right,var(--rule) 1px,transparent 1px);background-size:100% var(--gap),var(--gap) 100%;background-repeat:repeat}
 .tpl-cornell{background-image:linear-gradient(to bottom,transparent calc(var(--gap) - 1px),var(--rule) calc(var(--gap) - 1px)),linear-gradient(90deg,transparent 140px,var(--accent-soft) 140px,var(--accent-soft) 141px,transparent 141px);background-size:100% var(--gap),auto;background-repeat:repeat,no-repeat;padding-left:164px}
-/* Séyès (French school paper): fine grid + bold writing line every band + red margin */
+/* Séyès (French school paper): fine horizontal lines + bold writing line every band + red margin.
+   Deliberately no vertical fine lines: horizontal ruling only. */
 /* tiled (finite background-size) so lines stay crisp & drift-free down long pages */
 .tpl-seyes{padding-left:72px;
   background-image:
     linear-gradient(90deg,transparent 61px,rgba(198,86,110,.55) 61px,rgba(198,86,110,.55) 62px,transparent 62px),
     linear-gradient(to bottom,transparent calc(var(--gap) - 1px),rgba(86,120,175,.5) calc(var(--gap) - 1px)),
-    linear-gradient(to bottom,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px)),
-    linear-gradient(to right,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px));
-  background-size:auto, 100% var(--gap), 100% calc(var(--gap)/4), calc(var(--gap)/4) 100%;
-  background-repeat:no-repeat, repeat, repeat, repeat}
+    linear-gradient(to bottom,transparent calc(var(--gap)/4 - 1px),rgba(120,150,195,.22) calc(var(--gap)/4 - 1px));
+  background-size:auto, 100% var(--gap), 100% calc(var(--gap)/4);
+  background-repeat:no-repeat, repeat, repeat}
 /* page-break overlay (paged view) */
 .paper-wrap{position:relative}
 .pagebreaks{display:none}
@@ -888,11 +888,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 @media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudckaid"></script>
-<script src="sanitize.js?v=mudckaid"></script>
-<script src="jaguar-shim.js?v=mudckaid"></script>
-<script src="../compte.js?v=mudckaid"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudckaid";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudm88x6"></script>
+<script src="sanitize.js?v=mudm88x6"></script>
+<script src="jaguar-shim.js?v=mudm88x6"></script>
+<script src="../compte.js?v=mudm88x6"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudm88x6";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 

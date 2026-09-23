@@ -648,6 +648,8 @@ body[dir="rtl"] .dlg-speaker{text-align:left}
 .book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
 .ch-canvas-main{margin:0;padding:0}
 .ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+/* the chapter's Notes, lifted out of the canvas into the reading column below it */
+.ch-canvas-main>.notes{max-width:var(--content-width,720px);margin:90px auto 0;padding:34px 28px 0}
 .ch-canvas{position:relative;transform-origin:top left}
 .layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
 /* Un element masque par l'auteur. Le livre construit ne le contient jamais —
@@ -843,7 +845,8 @@ html,body{margin:0;background:var(--paper)}</style></head>
 <p class="reveal">Men exist for the sake of one another. Teach them then or bear with them.</p>
 <p class="reveal">In one way an arrow moves, in another way the mind. The mind indeed, both when it exercises caution and when it is employed about inquiry, moves straight onward not the less, and to its object.</p>
 <p class="reveal">Enter into every man’s ruling faculty; and also let every other man enter into thine.<sup class="fn">9</sup></p>
-<div class="notes reveal"><div class="notes-title">Notes</div><div class="note"><div class="note-num">1</div><div><p>Caius is C. Julius Caesar, the dictator; and Pomeius is Cn. Pompeius, named Magnus.</p>
+
+</div></main><div class="ch-canvas-main"><div class="notes reveal"><div class="notes-title">Notes</div><div class="note"><div class="note-num">1</div><div><p>Caius is C. Julius Caesar, the dictator; and Pomeius is Cn. Pompeius, named Magnus.</p>
 </div></div><div class="note"><div class="note-num">2</div><div><p>Antoninus V, 16. Thucydides, III, 10; <em>ὲν γὰρ τῷ διαλλάσσοντι γνώμης καὶ αί διαφοραὶ τῶν έργων καθίστανται</em>.</p>
 </div></div><div class="note"><div class="note-num">3</div><div><p>The text has <em>αίτιον</em>, which in Antoninus means “form,” “formal.” Accordingly Schultz recommends either Valkenaer’s emendation <em>ἀγγεῖον</em>, “body,” or Corais’ <em>σωμάτιον</em>. Compare Book XII, ¶16; Book X, ¶42.</p>
 </div></div><div class="note"><div class="note-num">4</div><div><p>Areius (<em>Άρειος</em>) was a philosopher, who was intimate with Augustus; Sucton, Augustus, C, 89; Plutarch, Antoninus, 80; Dion Cassius, 51, C, 16.</p>
@@ -852,7 +855,6 @@ html,body{margin:0;background:var(--paper)}</style></head>
 </div></div><div class="note"><div class="note-num">7</div><div><p><em>όρεγομένη</em> in this passage seems to have a passive sense. It is difficult to find an apt expression for it and some of the other words. A comparison with Book XI, ¶17, will help to explain the meaning.</p>
 </div></div><div class="note"><div class="note-num">8</div><div><p>Extensions (<em>άκτϊνες</em>) because they are extended (<em>άπό τοϋ έκτείνεδθαι</em>): A piece of bad etymology.</p>
 </div></div><div class="note"><div class="note-num">9</div><div><p>Compare Epictetus, III, 9, 12.</p>
-</div></div></div>
-</div></main></div>
+</div></div></div></div></div>
 <script>window.__BOOK__={"geo":{},"lang":"en","dir":"ltr","i18n":{"chapTag":"Ch. ","chapter":"Chapter","contents":"Contents","myBook":"My book","backCover":"Back cover","loading":"Loading","close":"Close","gotIt":"Got it","bookmarks":"Bookmarks","bookmarkThis":"Bookmark this spot","bookmarked":"Bookmarked","bookmarkRemoved":"Bookmark removed","alreadyBookmarked":"Already bookmarked here","removeBookmark":"Remove bookmark — ","openChapterFirst":"Open a chapter to bookmark","findText":"Find text","smallerText":"Smaller text","largerText":"Larger text","twoPage":"Two-page view","toDark":"Switch to dark mode","toLight":"Switch to light mode","dictionary":"Dictionary","wikipedia":"Wikipedia","lookupLoading":"Looking up…","lookupInBook":"In this book","lookupNone":"Nothing found for","lookupOffline":"Offline, or the service is not responding.","lookupSearch":"Search","quote":"Quote","marginalia":"Marginalia","imageCopied":"Image copied to clipboard","exportMd":"Export .md","backupJson":"Backup .json","importNotes":"Import","notesInvalid":"That file is not valid notes JSON.","notesNone":"No notes found in that file.","answerKey":"Answer key","answerKeyTitle":"Show every answer in the book","notesTab":"Notes","hintContentsHtml":"<b>Click</b> any chapter to jump straight in — or <b>hover</b> a row to preview its summary.","hintNoteHtml":"<b>Select</b> any passage to highlight it — or attach a private <b>note</b>. They all collect in the Notes tab.","tocEyebrow":"Table of Contents","tocBy":"by","tocScroll":"Scroll ↓","notesTitle":"Notes & Highlights","endnotes":"Notes","amber":"Amber","rose":"Rose","mint":"Mint","sky":"Sky","check":"Check","show":"Show","clear":"Clear","reset":"Start again","next":"Next","prev":"Previous","answer":"Answer","showAnswer":"Show the answer","hide":"Hide","play":"Play","pause":"Pause","score":"Score","correct":"Correct","wrong":"Wrong","tryAgain":"Not quite — try again.","allMatched":"Perfect — every pair matched!","step":"Step","total":"Total","legend":"Legend","scratchToReveal":"Scratch to reveal","tapToVote":"Tap an option to vote.","thanksVoting":"Thanks for voting.","cannotRender":"This element could not be shown"}};</script>
 </body></html>
