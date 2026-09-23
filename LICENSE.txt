@@ -1,0 +1,78 @@
+FABLE — AVIS DE DROITS D'AUTEUR ET CONDITIONS D'UTILISATION
+===========================================================
+
+Copyright © 2026 Mohamed Amine Khadda. Tous droits réservés.
+
+1. Ce qui est protégé
+
+Fable et tout ce qui le compose — le moteur de livres, Studio, Le Classeur,
+la plateforme, le cahier Le Jaguar, See for yourself, le site public, les
+applications Windows et Android — ainsi que leur code source, leurs textes,
+leurs interfaces, leurs dessins, leurs logos (le corbeau de Fable, le jaguar
+du Jaguar), leurs animations, leur charte graphique et leur documentation,
+sont l'œuvre et la propriété exclusive de Mohamed Amine Khadda.
+
+Ils sont protégés par la loi marocaine n° 2-00 relative aux droits d'auteur
+et droits voisins (telle que modifiée) et par les conventions internationales
+auxquelles le Maroc est partie, notamment la Convention de Berne.
+
+2. Ce qui est interdit sans autorisation écrite préalable
+
+Toute reproduction, représentation, adaptation, traduction, modification,
+diffusion, revente, location ou exploitation, totale ou partielle, par quelque
+procédé que ce soit, de Fable ou de l'un de ses éléments.
+
+Le fait que le code soit visible — dans un navigateur, sur un site public ou
+dans un dépôt public — ne constitue PAS une licence et n'accorde aucun droit.
+
+3. Ce qui est permis
+
+Consulter le site public et utiliser les applications distribuées par
+l'auteur, pour son usage personnel ou scolaire, dans les conditions prévues
+par l'auteur. Les contenus créés par un élève ou un enseignant dans ses
+cahiers restent les siens.
+
+4. Ce qui n'appartient pas à l'auteur
+
+Les composants de tiers (bibliothèques logicielles, polices, données
+cartographiques, contenus consultés en ligne) restent sous leur propre
+licence : voir le fichier THIRD-PARTY-NOTICES.txt.
+
+Les œuvres du domaine public publiées dans la bibliothèque (romans et textes
+classiques, notamment issus de Standard Ebooks) restent du domaine public.
+Le présent avis ne couvre que ce que Fable y ajoute : mise en page,
+couvertures, éléments interactifs, aides à la lecture.
+
+5. Autorisations
+
+Toute demande d'autorisation doit être adressée par écrit à l'auteur.
+
+
+-----------------------------------------------------------------------------
+FABLE — COPYRIGHT NOTICE AND TERMS OF USE (English version)
+
+Copyright © 2026 Mohamed Amine Khadda. All rights reserved.
+
+Fable and everything it is made of — the book engine, Studio, Le Classeur,
+the platform, the Le Jaguar notebook, See for yourself, the public website,
+the Windows and Android applications — together with their source code,
+texts, interfaces, drawings, logos (the Fable crow, the Le Jaguar jaguar),
+animations, visual identity and documentation, are the work and exclusive
+property of Mohamed Amine Khadda, protected by Moroccan Law No. 2-00 on copyright
+and related rights (as amended) and by the international conventions to
+which Morocco is a party, including the Berne Convention.
+
+No part of Fable may be reproduced, adapted, modified, distributed, sold,
+rented or otherwise exploited, in whole or in part, without the author's
+prior written permission. Code being visible — in a browser, on a public
+website or in a public repository — is NOT a licence and grants no rights.
+
+Viewing the public website and using the applications distributed by the
+author, for personal or school use, is permitted. Content that a pupil or a
+teacher creates in their notebooks remains theirs.
+
+Third-party components keep their own licences (see THIRD-PARTY-NOTICES.txt).
+Public-domain works in the library remain in the public domain; this notice
+covers only what Fable adds to them.
+
+If the French and English versions differ, the French version prevails.

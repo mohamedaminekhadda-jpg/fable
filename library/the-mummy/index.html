@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Fable — © 2026 Mohamed Amine Khadda">
+<!-- Livre composé avec Fable. Le moteur, le lecteur et les éléments interactifs sont © 2026 Mohamed Amine Khadda,
+     tous droits réservés. Le texte et les images du livre appartiennent à leurs auteurs. -->
 <title>The Mummy! — Jane C. Loudon</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -659,6 +662,8 @@ body[dir="rtl"] .dlg-speaker{text-align:left}
 .book-chapter.canvas-chapter>.opener{max-width:var(--content-width,720px);margin:0 auto;padding:0 28px}
 .ch-canvas-main{margin:0;padding:0}
 .ch-canvas-fit{position:relative;width:100%;overflow:hidden}
+/* the chapter's Notes, lifted out of the canvas into the reading column below it */
+.ch-canvas-main>.notes{max-width:var(--content-width,720px);margin:90px auto 0;padding:34px 28px 0}
 .ch-canvas{position:relative;transform-origin:top left}
 .layout-item{position:absolute;box-sizing:border-box;overflow:visible;display:flex;flex-direction:column}
 /* Un element masque par l'auteur. Le livre construit ne le contient jamais —
@@ -789,7 +794,7 @@ body[dir="rtl"] .book-chapter th,body[dir="rtl"] .book-chapter td{text-align:rig
 
 </style>
 <script>(function(){try{var k="the-mummy_theme";var m=localStorage.getItem(k);if(!m){m="auto";if(m==='auto')m=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(m==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=mudplqdc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../../pilote.js?v=mudrhqec";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>.fable-vise{outline:3px solid #e4402a;outline-offset:6px;border-radius:4px;animation:fable-vise-arrive .5s ease-out}@keyframes fable-vise-arrive{from{outline-color:transparent;outline-offset:22px}}@media (prefers-reduced-motion:reduce){.fable-vise{animation:none}}</style><script>/* ALLER VOIR — ouvrir le livre exactement là où le rapport pointe.
  *
  * Ce fichier n'est jamais servi tel quel : la construction le RECOPIE dans le
@@ -6641,6 +6646,7 @@ if('IntersectionObserver' in window && _links.length){
       body.innerHTML='<div class="lookup-word">'+esc(d.title||mot)+'</div>'
         +(d.description?'<div class="lookup-phon">'+esc(d.description)+'</div>':'')+img
         +'<div class="lookup-extract">'+esc(d.extract||'')+'</div>'
+        +'<div style="font-size:11px;opacity:.6;margin-top:8px">Wikipedia · CC BY-SA 4.0</div>'
         +'<a class="lookup-link" href="'+esc(lien)+'" target="_blank" rel="noopener">'+esc(t('wikipedia','Wikipedia'))+' →</a>';
     }).catch(function(){
       /* Pas de reseau : si le livre glose le mot, on le montre quand meme. */

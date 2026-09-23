@@ -619,6 +619,8 @@ body.nb-op{cursor:grabbing;user-select:none}
 .nbjag .body a{color:var(--jb-deep)}
 .nbjag .body .more{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--jb-deep);text-decoration:none;border:1.5px solid #dcc58f;border-radius:999px;padding:7px 16px;transition:background .15s}
 .nbjag .body .more:hover{background:var(--jb-tint)}
+.nbjag .body .jb-src{margin:16px 0 0;font-family:var(--ui);font-size:12.5px;line-height:1.45;color:var(--jb-soft)}
+.nbjag .body .jb-src+.more{margin-top:8px}
 .nbjag .body .wiki-noh,.nbjag .body .wiki-more-h{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--jb-soft);margin:16px 0 10px}
 .nbjag .body .wiki-more-h{border-top:1px solid var(--jb-line);padding-top:16px}
 .nbjag .body .wiki-results{display:flex;flex-direction:column;gap:8px}
@@ -1021,11 +1023,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 @media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudplqdc"></script>
-<script src="sanitize.js?v=mudplqdc"></script>
-<script src="jaguar-shim.js?v=mudplqdc"></script>
-<script src="../compte.js?v=mudplqdc"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudplqdc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudrhqec"></script>
+<script src="sanitize.js?v=mudrhqec"></script>
+<script src="jaguar-shim.js?v=mudrhqec"></script>
+<script src="../compte.js?v=mudrhqec"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudrhqec";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -2063,7 +2065,7 @@ $('#mStart').onclick=()=>{persist();ensurePage();$('#cover').classList.add('hidd
 $('#goCover').onclick=()=>{persist();$('#work').classList.remove('on');$('#cover').classList.remove('hidden');renderCover();};
 $('#mQuit').onclick=()=>{persist();toast('Enregistré — tu peux fermer l’onglet.');};
 $('#mTextbook').onclick=openTextbook;
-$('#mInfo').onclick=()=>popup('À propos','', '<p>Ton cahier <b>'+esc(state.nb.brand.title)+'</b> est enregistré sur cet ordinateur. Écris librement, choisis un modèle de page, et importe des passages ou des figures depuis ton manuel avec le bouton <b>Manuel</b>.</p><p>Les pages verrouillées sont posées par l’école et en lecture seule.</p><div class="actions"><button onclick="closePopup()">Fermer</button><button class="primary" onclick="window.open(\'manual.html\',\'_blank\')">Ouvrir le guide</button></div>');
+$('#mInfo').onclick=()=>popup('À propos','', '<p>Ton cahier <b>'+esc(state.nb.brand.title)+'</b> est enregistré sur cet ordinateur. Écris librement, choisis un modèle de page, et importe des passages ou des figures depuis ton manuel avec le bouton <b>Manuel</b>.</p><p>Les pages verrouillées sont posées par l’école et en lecture seule.</p><p style="font-size:12.5px;line-height:1.5;opacity:.75;margin-top:14px">© 2026 Mohamed Amine Khadda — Le Jaguar fait partie de Fable. Tous droits réservés. Ce que tu écris dans ton cahier reste à toi.<br>Dictionnaire : Wiktionnaire ; encyclopédie : Wikipédia (textes sous licence CC BY-SA). Polices : Google Fonts (SIL OFL).</p><div class="actions"><button onclick="closePopup()">Fermer</button><button class="primary" onclick="window.open(\'manual.html\',\'_blank\')">Ouvrir le guide</button></div>');
 $('#mSettings').onclick=openSettings;
 function ensurePage(){ if(currentPage())return; const s=currentSubject(); for(const sec of SECTIONS){ if((s.sections[sec.key]||[]).length){state.section=sec.key;state.pageId=s.sections[sec.key][0].id;return;} } addPage('lecons'); }
 
@@ -3250,7 +3252,7 @@ async function fetchDico(word,body){ try{
   // stop at the noisy trailing sections
   ex=fr.split(/\n===?\s*(Traductions|Prononciation|Anagrammes|Voir aussi|Références|Vocabulaire|Dérivés|Apparentés|Synonymes|Homophones)/)[0];
   body.className='body'; body.innerHTML=dicoHtml(ex)||'<p class="loading">Aucune définition.</p>';
-  body.innerHTML+='<a class="more" href="https://fr.wiktionary.org/wiki/'+encodeURIComponent(word)+'" target="_blank">Voir sur le Wiktionnaire →</a>'; }
+  body.innerHTML+='<p class="jb-src">Source : Wiktionnaire — texte sous licence CC BY-SA 4.0</p><a class="more" href="https://fr.wiktionary.org/wiki/'+encodeURIComponent(word)+'" target="_blank">Voir sur le Wiktionnaire →</a>'; }
   catch(e){ if(reseauKO(e)) return horsLigne(body); body.className='body'; body.innerHTML='<p class="loading">Aucune définition trouvée pour « '+esc(word)+' ».</p>'; } }
 async function fetchConj(lemma,body){ try{
   // action=parse returns the real conjugation TABLES (prop=extracts strips them out)
@@ -3283,6 +3285,8 @@ function wikiArticleHtml(j){ let h='';
   if(img)h+='<div class="wiki-hero"><img src="'+img+'" alt=""></div>';
   if(j.description)h+='<div class="pos">'+esc(j.description)+'</div>';
   h+='<p>'+esc(j.extract||'')+'</p>';
+  // CC BY-SA asks for the source and the licence; the image keeps its own, stated on Wikimedia Commons
+  h+='<p class="jb-src">Source : Wikipédia — texte sous licence CC BY-SA 4.0'+(img?' ; image : voir sa licence sur l’article':'')+'</p>';
   if(j.content_urls&&j.content_urls.desktop)h+='<a class="more" href="'+j.content_urls.desktop.page+'" target="_blank">Lire sur Wikipédia →</a>';
   return h; }
 function wikiResultsHtml(list,q){ if(!list.length)return '<p class="loading">Aucun résultat pour « '+esc(q)+' ».</p>';
