@@ -1688,83 +1688,146 @@ body::after{
 
    Le defilement ne pilote que des transformations et des opacites ; les
    courbes, elles, sont recoupees par le script a chaque trame demandee.
-   Rien de tout cela n'est une animation : c'est l'etat que dicte la position
-   de la page, et il ne change que quand elle change. */
-.recit{--ouvre:1;--gauche:1;--axes:1;--p:1;position:relative;padding-block:var(--s7)}
-.rc-grille{inline-size:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:var(--s7);
-  align-items:center}
+   Le script LISSE la position (il la rattrape en quelques trames puis
+   s'arrete) : la molette avance par crans, le livre, lui, glisse.
+
+   LE LIVRE A SES PROPRES COULEURS, dans les deux themes du site : ce sont
+   celles du vrai Manuel du Baccalaureat (marine, cyan, or, sa typographie).
+   Un objet ne change pas de couleur quand on eteint la lumiere de la piece.
+
+   --u est une unite propre au livre (1/100 de la largeur de la double page),
+   posee par le script : tout ce qui est imprime grandit avec le livre. */
+.recit{--ouvre:1;--axes:1;--p:1;--ombre:0;
+  --rc-pap:#0e1620;--rc-pap2:#132030;--rc-enc:#e6eef5;--rc-dou:#a8bccb;--rc-gris:#8fa3b3;
+  --rc-cyan:#4fb3d1;--rc-or:#e0a648;--rc-or2:#f0c452;--rc-ind:#7483ff;--rc-trait:rgba(180,215,235,.16);
+  --rc-c30:#63aada;--rc-c60:#e2807e;--rc-c45:#e0a648;
+  --rc-plat:#0b2530;--rc-plat2:#0f3441;
+  position:relative;padding-block:var(--s7)}
+.rc-grille{inline-size:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr);
+  gap:var(--s6);align-items:center}
 
 /* ── le texte ── */
-.rc-texte{position:relative}
+.rc-texte{position:relative;z-index:2}
 .rc-texte .eyebrow{margin-block-end:var(--s4)}
 .rc-etapes{list-style:none;margin:0;padding:0;display:grid;gap:var(--s6)}
 .rc-etapes b{display:block;font-family:var(--font-display);font-size:.78rem;letter-spacing:.14em;
   color:var(--accent-ink);font-variant-numeric:lining-nums;margin-block-end:.5rem}
-.rc-etapes h3{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;
+.rc-etapes h3{font-family:var(--font-display);font-size:clamp(1.6rem,2.7vw,2.5rem);font-weight:700;
   letter-spacing:-.035em;line-height:1.08;margin:0 0 .7rem;font-variation-settings:"opsz" 60,"wdth" 96}
-.rc-etapes p{margin:0;color:var(--ink-2);font-size:1.05rem;line-height:1.6;max-inline-size:28rem}
+.rc-etapes p{margin:0;color:var(--ink-2);font-size:1.05rem;line-height:1.6;max-inline-size:26rem}
 .rc-eq{display:none;margin-block-start:.7rem;font-family:var(--font-mono);font-size:.78rem;color:var(--ink-2);
   direction:ltr;unicode-bidi:isolate}
 .rc-cta{margin-block-start:var(--s5)}
 .rc-jauge{display:none}
 
 /* ── le livre ── */
-.rc-livre{perspective:2200px;display:grid;place-items:center}
-.rc-volume{position:relative;inline-size:min(38rem,100%);aspect-ratio:1.5;
+.rc-livre{position:relative;perspective:3400px;perspective-origin:50% 30%;display:grid;place-items:center}
+.rc-volume{--u:7.6px;position:relative;inline-size:min(100%,58rem,calc((100svh - 15rem) * 1.5));aspect-ratio:1.5;
   transform-style:preserve-3d;
-  transform:translateX(calc((1 - var(--ouvre)) * -25%)) rotateX(calc((1 - var(--ouvre)) * 8deg));
-  transition:transform .08s linear}
-[dir="rtl"] .rc-volume{transform:translateX(calc((1 - var(--ouvre)) * 25%)) rotateX(calc((1 - var(--ouvre)) * 8deg))}
-.rc-page{position:absolute;inset-block:0;inline-size:50%;box-sizing:border-box;
-  padding:1.3rem 1.35rem 1.1rem;background:var(--card);color:var(--ink);
-  display:flex;flex-direction:column;overflow:hidden}
-.rc-gauche{inset-inline-start:0;border-radius:6px 0 0 6px;opacity:var(--gauche);
-  background-image:linear-gradient(90deg,transparent 78%,rgba(20,17,14,.07));
-  box-shadow:-18px 28px 50px -30px rgba(20,17,14,.45)}
-.rc-droite{inset-inline-end:0;border-radius:0 6px 6px 0;
-  background-image:linear-gradient(90deg,rgba(20,17,14,.08),transparent 22%);
-  box-shadow:18px 28px 50px -30px rgba(20,17,14,.45)}
-[dir="rtl"] .rc-gauche{border-radius:0 6px 6px 0;background-image:linear-gradient(270deg,transparent 78%,rgba(20,17,14,.07))}
-[dir="rtl"] .rc-droite{border-radius:6px 0 0 6px;background-image:linear-gradient(270deg,rgba(20,17,14,.08),transparent 22%)}
+  transform:translateX(calc((1 - var(--ouvre)) * -25%)) rotateX(calc(9deg + (1 - var(--ouvre)) * 13deg)) rotateZ(calc((1 - var(--ouvre)) * -4deg)) scale(calc(1 - var(--ombre) * .07))}
+[dir="rtl"] .rc-volume{transform:translateX(calc((1 - var(--ouvre)) * 25%)) rotateX(calc(9deg + (1 - var(--ouvre)) * 13deg)) rotateZ(calc((1 - var(--ouvre)) * 4deg)) scale(calc(1 - var(--ombre) * .07))}
 
-/* LA COUVERTURE pivote sur le dos du livre. Face cachee au-dela de 90° : ce
-   qui la remplace est la page de gauche, qui apparait a mesure. En arabe le
-   livre s'ouvre par l'autre bord — rotateY est physique, il faut donc le
-   retourner a la main (voir la note de l'etagere, meme piege). */
-.rc-couv{position:absolute;inset-block:0;inset-inline-end:0;inline-size:50%;
-  transform-origin:left center;transform:translateZ(1px) rotateY(calc(var(--ouvre) * -180deg));
-  backface-visibility:hidden;border-radius:0 6px 6px 0;overflow:hidden;
-  box-shadow:0 30px 60px -28px rgba(20,17,14,.55)}
-[dir="rtl"] .rc-couv{transform-origin:right center;transform:translateZ(1px) rotateY(calc(var(--ouvre) * 180deg));
-  border-radius:6px 0 0 6px}
-.rc-couv img{display:block;inline-size:100%;block-size:100%;object-fit:cover}
+/* l'ombre sur la table : sous le livre ferme, puis sous la double page */
+.rc-sol{position:absolute;inset-block:8% -10%;inset-inline-end:-3%;inset-inline-start:calc(50% - var(--ouvre) * 53%);
+  border-radius:50%;background:radial-gradient(closest-side,rgba(20,17,14,.62),rgba(20,17,14,.22) 60%,transparent);
+  filter:blur(calc(var(--u) * 2.2));transform:translateZ(-40px)}
 
-.rc-entete{margin:0 0 .9rem;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink-3)}
+/* le plat arriere, un peu plus grand que les pages, et la tranche entre les deux */
+.rc-dos{position:absolute;inset-block:calc(var(--u) * -1.3);inset-inline-start:calc(50% - var(--u) * 3 * var(--ouvre));inset-inline-end:calc(var(--u) * -1.3);
+  background:linear-gradient(160deg,var(--rc-plat2),var(--rc-plat));border-radius:0 calc(var(--u) * .9) calc(var(--u) * .9) 0;
+  box-shadow:0 calc(var(--u) * 2.4) calc(var(--u) * 5) calc(var(--u) * -2) rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.04);
+  transform:translateZ(-6px)}
+.rc-reliure{position:absolute;inset-block:0;inset-inline-start:calc(50% - var(--u) * 1.2);inline-size:calc(var(--u) * 2.4);
+  background:#050d14;transform:translateZ(-1px);opacity:var(--ouvre)}
+.rc-tranche{position:absolute;inset-block:calc(var(--u) * .3) calc(var(--u) * -.75);inset-inline-start:50%;inset-inline-end:calc(var(--u) * -.6);
+  border-radius:0 calc(var(--u) * .4) calc(var(--u) * .4) 0;
+  background:repeating-linear-gradient(to bottom,#223245 0 1px,#16222f 1px 2.5px);transform:translateZ(-3px)}
+[dir="rtl"] .rc-dos,[dir="rtl"] .rc-tranche{border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9)}
+
+/* les pages : papier du manuel, ombre de la reliure contre le dos */
+.rc-page{position:absolute;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;
+  padding:calc(var(--u) * 2.6) calc(var(--u) * 2.9) calc(var(--u) * 2);color:var(--rc-enc);
+  font:400 calc(var(--u) * 1.32)/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background-color:var(--rc-pap)}
+.rc-droite{inset-block:0;inset-inline-start:50%;inset-inline-end:0;border-radius:0 calc(var(--u) * .5) calc(var(--u) * .5) 0;
+  background-image:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
+    radial-gradient(120% 80% at 70% 20%,var(--rc-pap2),transparent 70%)}
+[dir="rtl"] .rc-droite{border-radius:calc(var(--u) * .5) 0 0 calc(var(--u) * .5);
+  background-image:linear-gradient(270deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
+    radial-gradient(120% 80% at 30% 20%,var(--rc-pap2),transparent 70%)}
+/* l'ombre que jette le plat en se levant */
+.rc-droite::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,.2) 45%,transparent 80%);opacity:calc(var(--ombre) * .85)}
+[dir="rtl"] .rc-droite::after{background:linear-gradient(270deg,rgba(0,0,0,.6),rgba(0,0,0,.2) 45%,transparent 80%)}
+
+/* LE PLAT DE COUVERTURE. Il pivote sur le dos ; son recto est la vraie
+   couverture, son verso porte la page de gauche. En arabe le livre s'ouvre
+   par l'autre bord — rotateY est physique, on le retourne a la main. */
+.rc-couv{position:absolute;inset-block:calc(var(--u) * -1.3);inset-inline-start:50%;inset-inline-end:calc(var(--u) * -1.3);
+  transform-style:preserve-3d;transform-origin:left center;
+  transform:translateZ(5px) rotateY(calc(var(--ouvre) * -180deg))}
+[dir="rtl"] .rc-couv{transform-origin:right center;transform:translateZ(5px) rotateY(calc(var(--ouvre) * 180deg))}
+.rc-couv-face,.rc-couv-dos{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.rc-couv-face{border-radius:0 calc(var(--u) * .9) calc(var(--u) * .9) 0;background:#0d2b36;
+  box-shadow:0 calc(var(--u) * 2) calc(var(--u) * 4) calc(var(--u) * -1.5) rgba(0,0,0,.6)}
+.rc-couv-face img{display:block;inline-size:100%;block-size:100%;object-fit:cover}
+/* le mors (le pli du dos) et la lumiere qui glisse sur le plat quand il tourne */
+.rc-couv-face::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.08) 3.5%,rgba(255,255,255,.07) 5%,transparent 9%)}
+.rc-couv-face::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(255,255,255,.28),rgba(255,255,255,.04) 40%,rgba(0,0,0,.35));opacity:var(--ombre)}
+.rc-couv-dos{transform:rotateY(180deg);border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9);
+  background:linear-gradient(200deg,var(--rc-plat2),var(--rc-plat))}
+.rc-couv-dos::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(270deg,rgba(0,0,0,.4),transparent 60%);opacity:var(--ombre)}
+[dir="rtl"] .rc-couv-face{border-radius:calc(var(--u) * .9) 0 0 calc(var(--u) * .9)}
+[dir="rtl"] .rc-couv-face::before{background:linear-gradient(270deg,rgba(0,0,0,.45),rgba(0,0,0,.08) 3.5%,rgba(255,255,255,.07) 5%,transparent 9%)}
+[dir="rtl"] .rc-couv-dos{border-radius:0 calc(var(--u) * .9) calc(var(--u) * .9) 0}
+/* la page de gauche, collee au revers du plat, contre le dos */
+.rc-gauche{inset-block:calc(var(--u) * 1.3);inset-inline-start:calc(var(--u) * 1.3);inset-inline-end:0;
+  border-radius:calc(var(--u) * .5) 0 0 calc(var(--u) * .5);
+  background-image:linear-gradient(270deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
+    radial-gradient(120% 80% at 30% 20%,var(--rc-pap2),transparent 70%)}
+[dir="rtl"] .rc-gauche{border-radius:0 calc(var(--u) * .5) calc(var(--u) * .5) 0;
+  background-image:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.14) 5%,rgba(255,255,255,.025) 13%,transparent 40%),
+    radial-gradient(120% 80% at 70% 20%,var(--rc-pap2),transparent 70%)}
+
+/* ── ce qui est imprime ── */
+.rc-tete{display:flex;justify-content:space-between;gap:1em;margin:0 0 calc(var(--u) * 2.2);
+  font:500 calc(var(--u) * .95)/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--rc-gris)}
+.rc-kick{margin:0;font:500 calc(var(--u) * 1)/1.2 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.24em;text-transform:uppercase;color:var(--rc-ind)}
+.rc-chap{margin:calc(var(--u) * .9) 0 0;font:400 calc(var(--u) * 1.15)/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--rc-gris)}
+.rc-titre{margin:calc(var(--u) * .6) 0 calc(var(--u) * 1.8);font-weight:800;font-size:calc(var(--u) * 3.1);line-height:1.02;letter-spacing:-.035em}
+.rc-exo{border:1px solid var(--rc-trait);border-radius:calc(var(--u) * .7);background:rgba(255,255,255,.025);
+  padding:calc(var(--u) * 1.2) calc(var(--u) * 1.4);margin:0 0 calc(var(--u) * 1.6)}
+.rc-question{margin:0;color:var(--rc-enc)}
+.rc-question b{color:var(--rc-or)}
+.rc-calcul{list-style:none;margin:0;padding:0;display:grid;gap:calc(var(--u) * .5);direction:ltr;unicode-bidi:isolate}
+.rc-calcul li{font:400 calc(var(--u) * 1.18)/1.4 "IBM Plex Mono",ui-monospace,monospace;color:var(--rc-dou);
+  padding:calc(var(--u) * .45) calc(var(--u) * .7);border-radius:calc(var(--u) * .45);border-inline-start:2px solid var(--rc-trait);
+  transition:opacity .45s ease,transform .45s ease}
+.rc-calcul .rc-conclu{color:var(--rc-or2);font-weight:600;background:rgba(224,166,72,.12);border-inline-start-color:var(--rc-or)}
+.rc-folio{margin:auto 0 0;font:500 calc(var(--u) * .95)/1 "IBM Plex Mono",ui-monospace,monospace;color:var(--rc-gris)}
 .rc-fin{text-align:end}
-.rc-question{margin:0 0 1rem;font-size:.82rem;line-height:1.5;color:var(--ink)}
-.rc-question b{color:var(--accent-ink)}
-.rc-calcul{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;direction:ltr;unicode-bidi:isolate}
-.rc-calcul li{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-2);padding:.3rem .45rem;
-  border-radius:6px;transition:opacity .45s ease,transform .45s ease,background-color .45s ease}
-.rc-calcul .rc-conclu{color:var(--accent-ink);font-weight:600;
-  background:color-mix(in oklab,var(--accent) 10%,transparent)}
-.rc-folio{margin:auto 0 0;font-size:.62rem;color:var(--ink-3);font-variant-numeric:lining-nums}
 
-.rc-fig{display:block;inline-size:100%;block-size:auto;direction:ltr}
-.rc-axes{opacity:var(--axes);transition:opacity .3s ease}
-.rc-axes line{stroke:var(--ink-3);stroke-width:1.2}
-.rc-axes text,.rc-graduations text{font-size:9.5px;fill:var(--ink-3)}
-.rc-graduations line{stroke:var(--ink-3);stroke-width:1}
-.rc-trajet{fill:none;stroke-width:2.6;stroke-linecap:round}
-.rc-point{transition:opacity .25s ease,transform .25s ease;transform-box:fill-box;transform-origin:center}
-.rc-portee line{stroke-width:1.4;stroke-dasharray:3 3}
-.rc-portee text{font-size:11px;font-weight:700;font-family:var(--font-display)}
-.rc-droite .rc-fig{margin-block-start:auto}
-.rc-portee circle:not([fill="none"]){stroke:var(--card);stroke-width:1.5}
-.rc-lecture{display:flex;justify-content:space-between;gap:.6rem;margin-block-start:.4rem;
-  font-family:var(--font-mono);font-size:.66rem;color:var(--ink-3);direction:ltr}
-.rc-lecture .rc-l-angle{font-weight:700;color:var(--ink)}
+.rc-cadre{margin-block:auto 0;border:1px solid var(--rc-trait);border-radius:calc(var(--u) * .7);
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));padding:calc(var(--u) * 1) calc(var(--u) * 1) calc(var(--u) * .8)}
+.rc-fig{display:block;inline-size:100%;block-size:auto;direction:ltr;overflow:visible}
+.rc-quadrillage line{stroke:rgba(180,215,235,.07);stroke-width:1}
+.rc-axes{opacity:var(--axes)}
+.rc-quadrillage{opacity:var(--axes)}
+.rc-axes line{stroke:rgba(180,215,235,.45);stroke-width:1.2}
+.rc-axes text,.rc-graduations text{font:500 9px "IBM Plex Mono",ui-monospace,monospace;fill:var(--rc-gris)}
+.rc-graduations line{stroke:rgba(180,215,235,.45);stroke-width:1}
+.rc-trajet{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.rc-point{transition:opacity .25s ease,transform .25s ease;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 0 4px currentColor)}
+.rc-portee text{font:600 10.5px "IBM Plex Mono",ui-monospace,monospace}
+.rc-portee circle:not([fill="none"]){stroke:var(--rc-pap);stroke-width:1.5}
+.rc-lecture{display:flex;justify-content:space-between;gap:.6em;margin-block-start:calc(var(--u) * .6);padding-block-start:calc(var(--u) * .6);
+  border-block-start:1px dashed var(--rc-trait);opacity:var(--axes);
+  font:500 calc(var(--u) * 1.05)/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--rc-gris);direction:ltr}
+.rc-lecture .rc-l-angle{color:var(--rc-cyan);font-weight:600}
+.rc-legende{margin:calc(var(--u) * 1) 0 calc(var(--u) * 1.4);font-style:italic;font-size:calc(var(--u) * 1.15);color:var(--rc-dou);opacity:var(--axes)}
 
 /* ── EPINGLE, quand le script est la ────────────────────────────────────── */
 .rc-vivant .recit{block-size:600vh;padding:0}
@@ -1785,13 +1848,16 @@ body::after{
 .rc-vivant .rc-portee:not(.vu){opacity:0}
 .rc-portee{transition:opacity .4s ease}
 
-/* ── un telephone : une page, pas une double page ── */
+/* ── un telephone : une page, pas une double page ──
+   Le livre ne montre plus que la page de droite, sous sa couverture ; le
+   plat part vers la gauche et sort du cadre en s'ouvrant. */
 @media (max-width:52rem){
   .rc-grille{grid-template-columns:1fr;gap:var(--s5)}
-  .rc-volume{inline-size:min(19rem,76vw,calc((100svh - 25rem) * .75));aspect-ratio:.75;transform:none}
-  [dir="rtl"] .rc-volume{transform:none}
-  .rc-gauche{display:none}
-  .rc-droite,.rc-couv{inline-size:100%;border-radius:6px}
+  .rc-volume,[dir="rtl"] .rc-volume{inline-size:min(20rem,74vw,calc((100svh - 25rem) * .75));aspect-ratio:.75;
+    transform:rotateX(calc(6deg + (1 - var(--ouvre)) * 8deg))}
+  .rc-droite,.rc-dos,.rc-tranche,.rc-couv{inset-inline-start:0}
+  .rc-droite{border-radius:calc(var(--u) * .5)}
+  .rc-sol{inset-inline-start:-3%}
   .rc-eq{display:block}
   .rc-vivant .rc-etapes{min-block-size:13.5rem}
   .rc-vivant .rc-scene{padding-block:6.8rem 1rem;align-content:start}
@@ -1800,10 +1866,10 @@ body::after{
   .rc-vivant .rc-jauge{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .rc-volume,.rc-calcul li,.rc-point,.rc-portee,.rc-axes{transition:none}
+  .rc-calcul li,.rc-point,.rc-portee{transition:none}
 }
 </style>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mudbqpcu";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="pilote.js?v=mudckaid";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <link rel="canonical" href="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:url" content="https://mohamedaminekhadda-jpg.github.io/fable/">
 <meta property="og:image" content="https://mohamedaminekhadda-jpg.github.io/fable/social/accueil.jpg?v=db495b97e7">
@@ -1977,9 +2043,14 @@ body::after{
        l'autre. Personne ne l'a dessine : les trois courbes sont calculees au
        chargement a partir des equations du mouvement.
 
+       LE LIVRE EST UN OBJET, PAS UNE CARTE. Un plat de couverture (la vraie
+       couverture du manuel) qui pivote sur le dos ; son revers PORTE la page
+       de gauche, comme dans un vrai livre relie ; un plat arriere et la
+       tranche des pages sous la page de droite. Les pages ont les couleurs
+       et la typographie du vrai Manuel du Baccalaureat.
+
        SANS JAVASCRIPT, OU AU CALME, on voit l'etat final — livre ouvert, trois
-       trajectoires, la reponse — et les etapes en liste. Le defilement
-       epingle n'existe que si le script l'a mis en place. -->
+       trajectoires, la reponse — et les etapes en liste. -->
   <section class="recit" id="recit" aria-labelledby="rc-h">
     <div class="rc-scene">
       <div class="rc-grille wrap">
@@ -2016,42 +2087,58 @@ body::after{
 
         <div class="rc-livre" aria-hidden="true">
           <div class="rc-volume">
-
-            <div class="rc-page rc-gauche">
-              <p class="rc-entete" data-i18n="rcCh">Chapter 4 · Motion in a field</p>
-              <p class="rc-question"><b data-i18n="rcEx">Exercise 3.</b> <span data-i18n="rcQ">A ball leaves the ground at 12.7 m/s. At what angle does it land furthest?</span></p>
-              <ol class="rc-calcul">
-                <li data-l="1"><span>x(t) = v₀ cos θ · t</span></li>
-                <li data-l="1"><span>y(t) = v₀ sin θ · t − ½ g t²</span></li>
-                <li data-l="2"><span>y = 0 ⇒ t = 2 v₀ sin θ / g</span></li>
-                <li data-l="3"><span>R = v₀² · sin 2θ / g</span></li>
-                <li data-l="4" class="rc-conclu"><span>sin 2θ max at 2θ = 90° ⇒ θ = 45°</span></li>
-              </ol>
-              <p class="rc-folio">112</p>
-            </div>
+            <div class="rc-sol"></div>
+            <div class="rc-dos"></div>
+            <div class="rc-tranche"></div>
+            <div class="rc-reliure"></div>
 
             <div class="rc-page rc-droite">
-              <p class="rc-entete rc-fin" data-i18n="rcFig">Figure 4.7</p>
-              <svg class="rc-fig" viewBox="0 0 320 214">
-                <g class="rc-axes">
-                  <line x1="20" y1="160" x2="306" y2="160"/>
-                  <line x1="20" y1="160" x2="20" y2="44"/>
-                  <text x="306" y="176" text-anchor="end">x (m)</text>
-                  <text x="26" y="48">y</text>
-                  <g class="rc-graduations"></g>
-                </g>
-                <g class="rc-trajets"></g>
-                <g class="rc-portees"></g>
-              </svg>
-              <div class="rc-lecture">
-                <span class="rc-l-angle">θ = 30°</span>
-                <span class="rc-l-pos">x = 0.0 m · y = 0.0 m</span>
+              <p class="rc-tete"><span>Manuel du Baccalauréat</span><span data-i18n="rcFig">Figure 4.7</span></p>
+              <div class="rc-cadre">
+                <svg class="rc-fig" viewBox="0 0 320 214">
+                  <g class="rc-quadrillage"></g>
+                  <g class="rc-axes">
+                    <line x1="20" y1="160" x2="306" y2="160"/>
+                    <line x1="20" y1="160" x2="20" y2="40"/>
+                    <text x="306" y="176" text-anchor="end">x (m)</text>
+                    <text x="26" y="44">y</text>
+                    <g class="rc-graduations"></g>
+                  </g>
+                  <g class="rc-trajets"></g>
+                  <g class="rc-portees"></g>
+                </svg>
+                <div class="rc-lecture">
+                  <span class="rc-l-angle">θ = 30°</span>
+                  <span class="rc-l-pos">x = 0.0 m · y = 0.0 m</span>
+                </div>
               </div>
+              <p class="rc-legende" data-i18n="rcLeg">Three throws at 12.7 m/s, computed from the equations of motion — not drawn.</p>
               <p class="rc-folio rc-fin">113</p>
             </div>
 
             <div class="rc-couv">
-              <img src="library/manuel-bac-demo/cover.jpg" alt="" width="600" height="800" loading="lazy" decoding="async">
+              <div class="rc-couv-face">
+                <img src="library/manuel-bac-demo/cover.jpg" alt="" width="600" height="800" loading="lazy" decoding="async">
+              </div>
+              <div class="rc-couv-dos">
+                <div class="rc-page rc-gauche">
+                  <p class="rc-tete"><span>112</span><span>Physique — Chimie</span></p>
+                  <p class="rc-kick" data-i18n="rcKick">Exact sciences</p>
+                  <p class="rc-chap" data-i18n="rcCh">Chapter 4 · Motion in a field</p>
+                  <p class="rc-titre" data-i18n="rcTitre">The furthest throw</p>
+                  <div class="rc-exo">
+                    <p class="rc-question"><b data-i18n="rcEx">Exercise 3.</b> <span data-i18n="rcQ">A ball leaves the ground at 12.7 m/s. At what angle does it land furthest?</span></p>
+                  </div>
+                  <ol class="rc-calcul">
+                    <li data-l="1"><span>x(t) = v₀ cos θ · t</span></li>
+                    <li data-l="1"><span>y(t) = v₀ sin θ · t − ½ g t²</span></li>
+                    <li data-l="2"><span>y = 0 ⇒ t = 2 v₀ sin θ / g</span></li>
+                    <li data-l="3"><span>R = v₀² · sin 2θ / g</span></li>
+                    <li data-l="4" class="rc-conclu"><span>sin 2θ max at 2θ = 90° ⇒ θ = 45°</span></li>
+                  </ol>
+                  <p class="rc-folio">112</p>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -4266,6 +4353,9 @@ body::after{
       rcFig: "الشكل 4.7",
       rcEx: "التمرين 3.",
       rcQ: "تغادر كرة الأرض بسرعة 12.7 م/ث. بأيّ زاوية تسقط أبعد ما يمكن؟",
+      rcKick: "العلوم الدقيقة",
+      rcTitre: "أبعد رمية",
+      rcLeg: "ثلاث رميات بسرعة 12.7 م/ث، محسوبة من معادلات الحركة — لا مرسومة.",
       /* la vitrine */
       vtH: "ما يفعله، في خمس خطوات",
       vtT0: "اقرأ",
@@ -4594,6 +4684,9 @@ body::after{
       rcFig: "Figure 4.7",
       rcEx: "Exercice 3.",
       rcQ: "Un ballon quitte le sol à 12,7 m/s. Sous quel angle retombe-t-il le plus loin ?",
+      rcKick: "Sciences exactes",
+      rcTitre: "Le lancer le plus long",
+      rcLeg: "Trois lancers à 12,7 m/s, calculés à partir des équations du mouvement — pas dessinés.",
       /* la vitrine */
       vtH: "Ce qu’il fait, en cinq gestes",
       vtT0: "Lire",
@@ -6300,11 +6393,11 @@ body::after{
   if(demo){ document.addEventListener('DOMContentLoaded',function(){
     start(window.__demo ? window.__demo(demo,seed) : seed);
   }); return; }
-  /* La version est posée par la construction (mudbqpcu). Non remplacée —
+  /* La version est posée par la construction (mudckaid). Non remplacée —
      la source ouverte telle quelle — l'adresse porte un nom de jeton, ce qui
      ne gêne personne : le fichier n'existe pas dans web/ de toute façon, et la
      graine prend le relais. */
-  fetch('library/library.json?v=mudbqpcu')
+  fetch('library/library.json?v=mudckaid')
     .then(function(r){ return r.ok ? r.json() : null; })
     /* library.json est { books: [...] } — la même forme que lit le cahier. Un
        tableau nu marcherait aussi ; on accepte les deux plutôt que d'imposer
@@ -6315,7 +6408,7 @@ body::after{
 </script>
 
 
-<script src="compte.js?v=mudbqpcu"></script>
+<script src="compte.js?v=mudckaid"></script>
 <script>
 /* Le même compte que le cahier et que les simulations : même fichier, même
    origine, donc même session. Il ne s'affiche que s'il est configuré. */
@@ -6488,11 +6581,12 @@ body::after{
 </script>
 <script>
 /* LE RECIT — la position de la page EST l'horloge. Un ecouteur de
-   defilement passif demande une trame, la trame lit ou en est la section et
-   pose l'etat qui correspond ; si personne ne defile, rien ne tourne.
+   defilement passif note ou en est la section ; une trame rattrape cette
+   position en douceur (un peu moins d un cinquieme du chemin par trame) et S'ARRETE des
+   qu'elle l'a atteinte. La molette avance par crans ; le livre, lui, glisse,
+   et rien ne tourne quand personne ne defile — la regle de la charte.
    animation-timeline ferait la meme chose sans script, mais Firefox ne le
-   connait pas et il reste actif en permanence — la note de l'accueil l'a
-   deja ecarte une fois.
+   connait pas et il reste actif en permanence.
 
    LES COURBES SONT CALCULEES, pas dessinees : x = v0 cos θ t, y = v0 sin θ t
    - g t^2 / 2, echantillonnees sur le temps de vol. Le trace coupe la courbe
@@ -6504,13 +6598,14 @@ body::after{
   if (!s) return;
   var NS = 'http://www.w3.org/2000/svg';
   var V0 = 12.7, G = 9.81, OX = 20, OY = 160, K = 16; /* 16 px par metre */
-  var N = 72;
+  var N = 90;
   var calme = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var etapes = [].slice.call(s.querySelectorAll('.rc-etapes li'));
   var lignes = [].slice.call(s.querySelectorAll('.rc-calcul li'));
   var lAngle = s.querySelector('.rc-l-angle');
   var lPos = s.querySelector('.rc-l-pos');
   var fig = s.querySelector('.rc-fig');
+  var vol = s.querySelector('.rc-volume');
 
   function el(nom, attrs, parent) {
     var e = document.createElementNS(NS, nom);
@@ -6520,18 +6615,29 @@ body::after{
   }
   function portee(deg) { return V0 * V0 * Math.sin(2 * deg * Math.PI / 180) / G; }
 
-  /* graduations tous les 2 m */
-  var grad = fig.querySelector('.rc-graduations');
+  /* L'UNITE DU LIVRE : 1/100 de la double page, lue sur la hauteur (la meme
+     que la page soit seule, sur un telephone, ou en double page). Tout ce
+     qui est imprime s'y mesure, et grandit donc avec le livre. */
+  function unite() { if (vol && vol.offsetHeight) vol.style.setProperty('--u', (vol.offsetHeight / 66.7).toFixed(2) + 'px'); }
+  unite();
+  if (window.ResizeObserver && vol) new ResizeObserver(unite).observe(vol);
+  else window.addEventListener('resize', unite);
+
+  /* le quadrillage et les graduations, tous les 2 m */
+  var quad = fig.querySelector('.rc-quadrillage'), grad = fig.querySelector('.rc-graduations');
   for (var m = 2; m <= 16; m += 2) {
+    el('line', { x1: OX + m * K, y1: 40, x2: OX + m * K, y2: OY }, quad);
     el('line', { x1: OX + m * K, y1: OY, x2: OX + m * K, y2: OY + 3 }, grad);
     el('text', { x: OX + m * K, y: OY + 12, 'text-anchor': 'middle' }, grad).textContent = m;
   }
+  for (var h = 2; h <= 6; h += 2) el('line', { x1: OX, y1: OY - h * K, x2: 306, y2: OY - h * K }, quad);
 
-  /* Trois trajectoires, dans l'ordre ou l'histoire les lance. */
+  /* Trois trajectoires, dans l'ordre ou l'histoire les lance — aux couleurs
+     du manuel : bleu ciel, rose, et l'or pour la reponse. */
   var TRAJ = [
-    { deg: 30, de: .36, a: .52, teinte: 'var(--ultra)' },
-    { deg: 60, de: .56, a: .72, teinte: 'var(--lilac)' },
-    { deg: 45, de: .78, a: .92, teinte: 'var(--accent)' }
+    { deg: 30, de: .36, a: .52, teinte: 'var(--rc-c30)' },
+    { deg: 60, de: .56, a: .72, teinte: 'var(--rc-c60)' },
+    { deg: 45, de: .78, a: .92, teinte: 'var(--rc-c45)' }
   ];
   var gT = fig.querySelector('.rc-trajets'), gP = fig.querySelector('.rc-portees');
   TRAJ.forEach(function (t) {
@@ -6544,7 +6650,7 @@ body::after{
     }
     t.R = portee(t.deg);
     t.path = el('path', { class: 'rc-trajet', stroke: t.teinte }, gT);
-    t.tete = el('circle', { class: 'rc-point', r: 4, fill: t.teinte }, gT);
+    t.tete = el('circle', { class: 'rc-point', r: 4.2, fill: t.teinte, style: 'color:' + t.teinte }, gT);
     var X = OX + t.R * K;
     t.marque = el('g', { class: 'rc-portee' }, gP);
     /* Les portees s'ecrivent SOUS l'axe, a l'abri des courbes : 14,2 m
@@ -6569,9 +6675,12 @@ body::after{
   function poser(p) {
     if (p === dernier) return;
     dernier = p;
+    var o = doux(seg(p, .06, .26));
     s.style.setProperty('--p', p.toFixed(4));
-    s.style.setProperty('--ouvre', doux(seg(p, .08, .24)).toFixed(4));
-    s.style.setProperty('--gauche', seg(p, .16, .26).toFixed(4));
+    s.style.setProperty('--ouvre', o.toFixed(4));
+    /* la lumiere et l'ombre du plat culminent a mi-course, quand il est
+       dresse face a nous */
+    s.style.setProperty('--ombre', Math.sin(o * Math.PI).toFixed(4));
     s.style.setProperty('--axes', seg(p, .26, .34).toFixed(4));
 
     var e = 0;
@@ -6605,14 +6714,26 @@ body::after{
   if (calme) { poser(1); return; }
 
   document.documentElement.classList.add('rc-vivant');
-  var attente = false;
-  function lire() {
-    attente = false;
+  var cible = 0, montre = 0, trame = 0, lu = false;
+  function viser() {
     var r = s.getBoundingClientRect();
     var course = r.height - window.innerHeight;
-    poser(course > 0 ? Math.min(1, Math.max(0, -r.top / course)) : 1);
+    return course > 0 ? Math.min(1, Math.max(0, -r.top / course)) : 1;
   }
-  function demander() { if (!attente) { attente = true; requestAnimationFrame(lire); } }
+  /* La trame du lissage. Elle se relance a chaque cran de molette et
+     s'eteint seule une fois arrivee : pas de boucle permanente. */
+  function pas() {
+    trame = 0;
+    var d = cible - montre;
+    montre = Math.abs(d) < 0.0006 ? cible : montre + d * 0.18;
+    poser(montre);
+    if (montre !== cible) trame = requestAnimationFrame(pas);
+  }
+  function demander() {
+    cible = viser();
+    if (!lu) { lu = true; montre = cible; poser(montre); return; }
+    if (!trame) trame = requestAnimationFrame(pas);
+  }
   window.addEventListener('scroll', demander, { passive: true });
   window.addEventListener('resize', demander);
   /* Le bouton de la derniere etape peut recevoir le focus au clavier avant
@@ -6621,7 +6742,7 @@ body::after{
   if (cta) cta.addEventListener('focus', function () {
     if (dernier < PAS[5]) window.scrollTo(0, s.getBoundingClientRect().top + pageYOffset + s.offsetHeight - window.innerHeight);
   });
-  lire();
+  demander();
 })();
 </script>
 </body>
