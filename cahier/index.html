@@ -245,7 +245,7 @@ body.nb-op{cursor:grabbing;user-select:none}
 .sp-h .ex-timer{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);background:rgba(140,47,42,.08);border:1px solid rgba(140,47,42,.25);border-radius:999px;padding:4px 12px}
 .sp-h .ex-timer .et-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
 .sp-h .ex-timer b{font-size:14px;color:#8c2f2a;font-variant-numeric:tabular-nums}
-.sp-h .ex-timer.urgent{background:#8c2f2a;border-color:#8c2f2a;animation:exPulse 1s ease-in-out infinite}
+.sp-h .ex-timer.urgent{background:#8c2f2a;border-color:#8c2f2a}
 .sp-h .ex-timer.urgent .et-lbl{color:rgba(255,255,255,.8)}.sp-h .ex-timer.urgent b{color:#fff}
 @keyframes exPulse{0%,100%{box-shadow:0 0 0 0 rgba(140,47,42,.5)}50%{box-shadow:0 0 0 6px rgba(140,47,42,0)}}
 .exam-lock{border-left-color:#c9a054}
@@ -314,7 +314,7 @@ body.nb-op{cursor:grabbing;user-select:none}
 .exam-bar .ex-timer{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:var(--mono);background:rgba(140,47,42,.08);border:1px solid rgba(140,47,42,.25);border-radius:999px;padding:4px 12px}
 .exam-bar .ex-timer .et-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate)}
 .exam-bar .ex-timer b{font-size:14px;color:#8c2f2a;font-variant-numeric:tabular-nums}
-.exam-bar .ex-timer.urgent{background:#8c2f2a;border-color:#8c2f2a;animation:exPulse 1s ease-in-out infinite}
+.exam-bar .ex-timer.urgent{background:#8c2f2a;border-color:#8c2f2a}
 .exam-bar .ex-timer.urgent .et-lbl{color:rgba(255,255,255,.8)}.exam-bar .ex-timer.urgent b{color:#fff}
 /* review shown to the student after grading */
 .xp-rev{margin-top:6px;font-size:.85em;color:#2f6c4f;background:rgba(47,138,122,.08);border-left:3px solid #2f8a7a;border-radius:0 8px 8px 0;padding:6px 11px}
@@ -683,6 +683,55 @@ body.nb-op{cursor:grabbing;user-select:none}
   @keyframes jbFade{from{opacity:0}to{opacity:1}}
   @keyframes jbFadeOut{to{opacity:0}}
 }
+/* the bubble has two modes: the dictionary (.jb-look) and a message (.jb-msg: tips, a badge, no connection) */
+.jb-look,.jb-msg{display:flex;flex-direction:column;min-height:0;flex:1}
+.nbjag[data-mode="msg"] .jb-look,.nbjag:not([data-mode="msg"]) .jb-msg{display:none}
+.jm-t{font-family:var(--serif);font-size:25px;font-weight:600;line-height:1.15;padding-right:44px;margin-top:-4px;color:var(--jb-ink)}
+.jm-body{padding:14px 22px 6px;font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--jb-ink);overflow-y:auto}
+.jm-body p{margin:0 0 10px}
+.jm-body kbd{font-family:var(--mono);font-size:.8em;background:#fff;border:1px solid var(--jb-line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+.jm-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 22px 18px}
+.jm-actions .jm-n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--jb-soft);margin-right:auto}
+.jm-actions button{font-family:var(--ui);font-size:14.5px;font-weight:600;border-radius:999px;padding:9px 18px;cursor:pointer;border:1.5px solid var(--jb-line);background:none;color:var(--jb-soft)}
+.jm-actions button:hover{border-color:#d6c59c;color:var(--jb-ink)}
+.jm-actions button.primaire{background:var(--gold);border-color:var(--gold);color:#241a0a}
+.jm-actions button.primaire:hover{filter:brightness(1.05);color:#241a0a}
+/* a badge: the medal big in the bubble, and a small one carried in the jaguar's mouth */
+.jm-medaille{display:flex;align-items:center;gap:16px;margin:2px 0 12px}
+.jm-medaille svg{width:84px;height:84px;flex-shrink:0;filter:drop-shadow(0 6px 10px rgba(20,14,6,.25))}
+.jm-medaille b{display:block;font-size:20px;line-height:1.2}
+.jm-medaille q{display:block;margin-top:6px;font-style:italic;font-size:15.5px;color:var(--jb-soft)}
+.jb-cat{position:relative}
+.jb-medal{position:absolute;left:-14px;top:22%;width:44px;height:44px;display:none;transform:rotate(-12deg);filter:drop-shadow(0 3px 4px rgba(20,14,6,.3))}
+.jb-medal svg{width:100%;height:100%}
+.nbjag.jb-badge .jb-medal{display:block}
+/* no connection: the jaguar's eye half shut */
+.nbjag.hors .jg-eye{transform:scaleY(.35)}
+.jm-hors{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+/* a tip points at the thing it talks about: a cream / dark / gold ring, visible on any background
+   (a gold tab, the dark top bar, the paper); it beats three times, then stays */
+#work .jg-montre{box-shadow:0 0 0 3px #fbf7ec,0 0 0 6px #2a2013,0 0 0 9px var(--gold);border-radius:8px;animation:jgMontre .9s ease-in-out 3}
+@keyframes jgMontre{50%{box-shadow:0 0 0 3px #fbf7ec,0 0 0 6px #2a2013,0 0 0 14px rgba(201,160,84,.25)}}
+/* an empty section: a sleeping jaguar and the way to fill it */
+.pages .jg-vide{display:flex;align-items:center;gap:10px;padding:2px 22px 10px 24px;cursor:default}
+.jg-vide .jg-dort{width:34px;height:auto;flex-shrink:0;opacity:.9}
+.jg-vide .jv-t{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.jg-vide .jv-z{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--slate)}
+.jg-vide .jv-z i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--gold);margin-left:4px;display:inline-block;animation:jvZ 2.4s ease-in-out 3}
+@keyframes jvZ{0%,100%{transform:none;opacity:.5}50%{transform:translate(2px,-3px);opacity:1}}
+.jg-vide .jv-add{font-family:var(--ui);font-size:12.5px;font-weight:600;color:var(--accent);background:none;border:1px dashed currentColor;border-radius:999px;padding:3px 11px;cursor:pointer;white-space:nowrap}
+.jg-vide .jv-add:hover{background:rgba(140,47,42,.07)}
+/* exam: one leap across the screen at the last minute and at time's up, instead of a blinking chip */
+.jg-trav{position:fixed;left:0;top:34%;z-index:630;pointer-events:none;animation:jgTrav 2.4s linear both}
+.jg-trav .jg{display:block;width:170px;height:auto;animation:jgBonds 2.4s ease-in-out both;filter:drop-shadow(0 8px 10px rgba(20,14,6,.3))}
+.jg-trav .jt-dit{position:absolute;left:-6px;bottom:100%;margin-bottom:84px;white-space:nowrap;background:#8c2f2a;color:#fff;font-family:var(--ui);font-weight:700;font-size:17px;border-radius:12px;padding:8px 14px;box-shadow:0 10px 24px -8px rgba(0,0,0,.45)}
+@keyframes jgTrav{from{transform:translateX(100vw)}to{transform:translateX(-240px)}}
+@keyframes jgBonds{0%,33.3%,66.6%,100%{transform:none}16%,50%,83%{transform:translateY(-70px) rotate(-6deg)}}
+@media (prefers-reduced-motion:reduce){
+  #work .jg-montre,.jg-vide .jv-z i{animation:none}
+  .jg-trav{animation:jbFadeOut 2.4s ease-in both;transform:translateX(calc(50vw - 85px))}
+  .jg-trav .jg{animation:none}
+}
 /* share card modal */
 .nbshare{position:fixed;inset:0;z-index:700;background:rgba(13,16,23,.8);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:.2s}
 .nbshare.show{opacity:1;pointer-events:auto}
@@ -972,11 +1021,11 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 @media (max-width:760px){ .me-syms{grid-template-columns:repeat(6,1fr)} }
 </style>
 
-<script src="model.js?v=mudov4e9"></script>
-<script src="sanitize.js?v=mudov4e9"></script>
-<script src="jaguar-shim.js?v=mudov4e9"></script>
-<script src="../compte.js?v=mudov4e9"></script>
-<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudov4e9";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
+<script src="model.js?v=mudplqdc"></script>
+<script src="sanitize.js?v=mudplqdc"></script>
+<script src="jaguar-shim.js?v=mudplqdc"></script>
+<script src="../compte.js?v=mudplqdc"></script>
+<script>(function(){try{var c=null,v=0;try{c=localStorage.getItem("fable-pilote-code");v=localStorage.getItem("fable-compte-vu")==="1"&&sessionStorage.getItem("fable-pilote-invite")!=="non"}catch(e){}if(!c&&!v&&location.search.indexOf("pilote=")<0)return;var s=document.createElement("script");s.src="../pilote.js?v=mudplqdc";s.async=true;(document.head||document.documentElement).appendChild(s)}catch(e){}})();</script>
 <style>:root{--fb-pap:#f7f4ed;--fb-enc:#211d19;--fb-dou:#6b6058;--fb-tr:rgba(33,29,25,.16);--fb-acc:#8c2f2a}@media (prefers-color-scheme:dark){:root{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}}html.dark{--fb-pap:#1c1920;--fb-enc:#ece7e1;--fb-dou:#8e847b;--fb-tr:rgba(236,231,225,.16)}.fb-marque{inline-size:1.05rem;block-size:1.05rem;display:block;flex:none}.fb-retour{position:fixed;inset-block-end:12px;inset-inline-start:12px;z-index:2147481000;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;font:600 11px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.02em;padding:6px 10px 6px 7px;border-radius:999px;background:var(--fb-pap);color:var(--fb-dou);border:1px solid var(--fb-tr);box-shadow:0 2px 10px rgba(20,17,14,.16);transition:color .15s,border-color .15s,transform .15s}.fb-retour:hover{color:var(--fb-enc);border-color:var(--fb-dou);transform:translateY(-1px)}.fb-retour:focus-visible{outline:2px solid var(--fb-acc);outline-offset:2px}@media print{.fb-retour{display:none}}@media (prefers-reduced-motion:reduce){.fb-retour{transition:none}}</style></head>
 <body>
 
@@ -1287,6 +1336,7 @@ async function renderCover(){
   const awarded=(nb.awardedBadges||[]).slice().sort((a,b)=>(b.at||0)-(a.at||0));
   $('#badges').innerHTML=awarded.map(b=>{ const nm=MEDAL_NAME[b.badge]||b.badge;
     return '<div class="mbadge">'+medalSVG(b.badge,48)+'<span class="tip"><b>'+esc(nm)+'</b>'+(b.comment?'<span>« '+esc(b.comment)+' »</span>':'')+'</span></div>'; }).join('');
+  celebrerBadge(awarded);
   /* La couverture choisie voyage dans l'URL : l'iframe ne se recharge que si
      elle change vraiment, sinon l'animation repartirait de zéro à chaque
      redessin de la page. */
@@ -1353,7 +1403,8 @@ function renderRails(){
       +(p.origin==='official'?svg(ICON.lock,'lk'):'')
       +'<span class="nm">'+esc(p.title||'Sans titre')+'</span>'
       +'<span class="del" data-del="'+p.id+'" title="Supprimer"><svg class="ico" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></span></li>').join('')
-      : '<div class="empty">vide</div>';
+      : '<li class="jg-vide">'+JAG_DORT+'<span class="jv-t"><span class="jv-z">Rien ici pour l’instant<i>z z</i></span>'
+        +'<button type="button" class="jv-add" data-add="'+sec.key+'">+ '+esc(PAGE_DEFAULTS[sec.key]||'Nouvelle page')+'</button></span></li>';
     return '<div class="sec"><div class="sec-h"><span class="lbl">'+sec.label+'</span><span class="rl"></span>'
       +'<button class="add" data-add="'+sec.key+'" title="Nouvelle page"><svg class="ico" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg></button></div>'
       +'<ul class="pages">'+items+'</ul></div>';
@@ -1614,6 +1665,9 @@ function examBar(p,sp){
       const grace=now>=w.end;
       if(el)el.textContent=fmtDur((grace?w.hardEnd:w.end)-now);
       if(lbl)lbl.textContent=grace?'Remise auto dans':'Temps restant';
+      sp._vu=sp._vu||{};
+      if(grace&&!sp._vu[p.id+'g']){ sp._vu[p.id+'g']=1; jaguarTraverse('Temps écoulé !'); }
+      else if(!grace&&(w.end-now)<60000&&!sp._vu[p.id+'m']){ sp._vu[p.id+'m']=1; jaguarTraverse('Plus qu’une minute !'); }
       if(box)box.classList.toggle('urgent',grace||(w.end-now)<60000); },1000);
   }
 }
@@ -2002,7 +2056,10 @@ $('#coverLabel').addEventListener('click',e=>{
 $('#mShelf').onclick=()=>{persist();ouvrirEtagere(false);};
 $('#shImporter').onclick=()=>$('#shFichier').click();
 $('#shFichier').onchange=e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(f)importerFichier(f);};
-$('#mStart').onclick=()=>{persist();ensurePage();$('#cover').classList.add('hidden');$('#work').classList.add('on');renderRails();loadPage();};
+$('#mStart').onclick=()=>{persist();ensurePage();$('#cover').classList.add('hidden');$('#work').classList.add('on');renderRails();loadPage();
+  if(lookEl&&lookEl.dataset.mode==='msg') closeLookup('remplace');
+  if(!state.review&&!(state.nb.settings&&state.nb.settings.astucesVues)) setTimeout(()=>{ if($('#work').classList.contains('on')&&!(lookEl&&lookEl.classList.contains('show'))) astucesJaguar(0); },1100);
+};
 $('#goCover').onclick=()=>{persist();$('#work').classList.remove('on');$('#cover').classList.remove('hidden');renderCover();};
 $('#mQuit').onclick=()=>{persist();toast('Enregistré — tu peux fermer l’onglet.');};
 $('#mTextbook').onclick=openTextbook;
@@ -3003,18 +3060,23 @@ function shareNote(n){ const S=1080, c=document.createElement('canvas'); c.width
 // Le contenu est celui d'avant (trois onglets, la recherche) ; un clic sur le jaguar replie la bulle
 // pour qu'on voie sa page, un second la rend. Toutes les animations ont une fin (la charte).
 const JAG_SVG='<svg class="jg" viewBox="0 0 607.77 363.18" aria-hidden="true" focusable="false"><path class="jg-body" d="M570.47,210.57h-115.04l-36.92-36.91h-39.26l-38.28-38.29-37.72,39.57-.17-39.57-37.93-37.92h-36.68l-40.09-40.09h-35.56l39.66,39.36-39.56-.22-.1-39.14-18.68-18.68V12.15l-6.28-10.28h-15.64l-19.9,17.18h-5.89L64.39,0h-15.94v19.05h-4.03L6.44,57.03v50.83l8.52,8.52v10l7.23,7.23h34.12l9.65-9.64,9.64,9.64,37.72,37.72h39.5l-39.39,39.4v37.67H37.51L0,285.91v40.75h38.04l38.6-38.61h112.18l-39.56-39.56,39.56-.17v39.73l38.08-38.09h37.43v-39.56l77.17,77.17-.18-39.51h39.74l-39.53,39.54,38.91,38.91h36.39s39.54-39.52,39.54-39.52l.17,39.56h-39.68l38.57,36.63h114.78v-37.05h-39.13l-37.57-37.56v-39.13h76.7l37.56-37.57v-38.6l-37.3,37.3ZM229.95,174.05l-39.57-39.56,39.57-.18v39.74ZM418.21,243.05l-39.56-39.56,39.56-.17v39.73Z"/><polygon class="jg-spot" style="--i:0" points="152.82 171.33 113.43 210.73 113.26 210.9 113.08 171.33 152.82 171.33"/><polygon class="jg-spot" style="--i:1" points="188.82 248.32 188.82 288.05 149.26 248.49 188.82 248.32"/><polygon class="jg-spot" style="--i:2" points="192.48 96.72 152.92 96.5 152.82 57.36 192.48 96.72"/><polygon class="jg-spot" style="--i:3" points="229.95 134.31 229.95 174.05 190.38 134.49 229.95 134.31"/><polygon class="jg-spot" style="--i:4" points="303.89 249.96 264.33 249.96 264.33 210.23 303.89 249.96"/><polygon class="jg-spot" style="--i:5" points="340.97 135.37 303.25 174.94 303.08 135.37 340.97 135.37"/><polygon class="jg-spot" style="--i:6" points="381.06 248.06 341.53 287.6 341.5 287.62 341.5 287.57 341.32 248.06 381.06 248.06"/><polygon class="jg-spot" style="--i:7" points="418.21 203.32 418.21 243.05 378.65 203.49 418.21 203.32"/><polygon class="jg-spot" style="--i:8" points="456.54 326.55 416.8 326.55 416.83 326.52 456.37 286.99 456.54 326.55"/><polygon class="jg-spot" style="--i:9" points="533.1 249.44 493.51 249.44 532.93 210.57 533.1 249.44"/><polygon class="jg-eye" points="67.47 42.66 67.47 47.99 62.02 53.44 46.02 53.44 49.08 42.66 67.47 42.66"/><polygon class="jg-muz" points="6.38 82.5 36.38 82.5 36.38 87.27 23.86 97.09 23.86 107.58 35.51 116.36 14.96 116.38 20.69 107.6 20.69 97.3 6.38 87.18"/></svg>';
+const JAG_DORT='<svg class="jg-dort" viewBox="-4 -6 157 160" aria-hidden="true" focusable="false"><path fill="#daa528" d="M570.47,210.57h-115.04l-36.92-36.91h-39.26l-38.28-38.29-37.72,39.57-.17-39.57-37.93-37.92h-36.68l-40.09-40.09h-35.56l39.66,39.36-39.56-.22-.1-39.14-18.68-18.68V12.15l-6.28-10.28h-15.64l-19.9,17.18h-5.89L64.39,0h-15.94v19.05h-4.03L6.44,57.03v50.83l8.52,8.52v10l7.23,7.23h34.12l9.65-9.64,9.64,9.64,37.72,37.72h39.5l-39.39,39.4v37.67H37.51L0,285.91v40.75h38.04l38.6-38.61h112.18l-39.56-39.56,39.56-.17v39.73l38.08-38.09h37.43v-39.56l77.17,77.17-.18-39.51h39.74l-39.53,39.54,38.91,38.91h36.39s39.54-39.52,39.54-39.52l.17,39.56h-39.68l38.57,36.63h114.78v-37.05h-39.13l-37.57-37.56v-39.13h76.7l37.56-37.57v-38.6l-37.3,37.3ZM229.95,174.05l-39.57-39.56,39.57-.18v39.74ZM418.21,243.05l-39.56-39.56,39.56-.17v39.73Z"/><g fill="#553010"><polygon points="192.48 96.72 152.92 96.5 152.82 57.36 192.48 96.72"/><polygon points="6.38 82.5 36.38 82.5 36.38 87.27 23.86 97.09 23.86 107.58 35.51 116.36 14.96 116.38 20.69 107.6 20.69 97.3 6.38 87.18"/><polygon points="45 50.5 68 50.5 66 54.5 47 54.5"/></g></svg>';
 let lookEl=null, lookTimer=0;
 function lookBuild(){
   lookEl=document.createElement('div'); lookEl.className='nbjag';
   lookEl.setAttribute('role','dialog'); lookEl.setAttribute('aria-label','Le Jaguar : dictionnaire et Wikipédia');
-  lookEl.innerHTML='<div class="jb-bubble"><div class="jb-head"><div class="jb-kick">Le Jaguar a cherché</div><div class="w"></div>'
+  lookEl.innerHTML='<div class="jb-bubble"><div class="jb-look"><div class="jb-head"><div class="jb-kick">Le Jaguar a cherché</div><div class="w"></div>'
     +'<div class="jb-btns"><button class="jb-big" type="button" title="Agrandir la bulle" aria-label="Agrandir la bulle">⤢</button><button class="x" type="button" title="Fermer" aria-label="Fermer">×</button></div>'
     +'<form class="hd-search"><input type="text" placeholder="Chercher un mot ou une expression…" aria-label="Chercher un mot ou une expression"><button type="submit" title="Chercher" aria-label="Chercher">→</button></form></div>'
     +'<div class="tabs" role="tablist"><button type="button" role="tab" data-t="dico">Dictionnaire</button><button type="button" role="tab" data-t="conj" style="display:none">Conjugaison</button><button type="button" role="tab" data-t="wiki">Wikipédia</button></div>'
     +'<div class="body"></div></div>'
-    +'<button class="jb-cat" type="button" title="Replier ou déplier la bulle" aria-label="Le Jaguar : replier ou déplier la bulle">'+JAG_SVG+'</button>';
+    +'<div class="jb-msg" aria-live="polite"><div class="jb-head"><div class="jb-kick jm-kick"></div><div class="jm-t"></div>'
+    +'<div class="jb-btns"><button class="jm-x" type="button" title="Fermer" aria-label="Fermer">×</button></div></div>'
+    +'<div class="jm-body"></div><div class="jm-actions"></div></div></div>'
+    +'<button class="jb-cat" type="button" title="Replier ou déplier la bulle" aria-label="Le Jaguar : replier ou déplier la bulle"><span class="jb-medal"></span>'+JAG_SVG+'</button>';
   document.body.appendChild(lookEl);
   lookEl.querySelector('.x').onclick=closeLookup;
+  lookEl.querySelector('.jm-x').onclick=closeLookup;
   lookEl.querySelector('.jb-big').onclick=()=>{ const big=!lookEl.classList.contains('big'); lookEl.classList.toggle('big',big);
     if(state.nb){ state.nb.settings=state.nb.settings||{}; state.nb.settings.lookBig=big; saveSettings(); } };
   lookEl.querySelector('.jb-cat').onclick=()=>{ lookEl.classList.add('vite'); lookEl.classList.toggle('tuck'); };
@@ -3031,7 +3093,7 @@ function lookTab(t){
   // a fresh body per request: an answer that arrives late lands in a detached node, not over the tab chosen since
   const old=lookEl.querySelector('.body'), body=document.createElement('div'); body.className='body loading';
   body.innerHTML='<span class="jb-wait">Le jaguar cherche<i>.</i><i>.</i><i>.</i></span>'; old.replaceWith(body);
-  lookEl.classList.remove('found'); lookEl.classList.add('busy');
+  lookEl.classList.remove('found','hors'); lookEl.classList.add('busy');
   const p=t==='dico'?fetchDico(term,body):t==='wiki'?fetchWiki(term,body):fetchConj(lookEl.dataset.lemma||term,body);
   Promise.resolve(p).catch(()=>{}).then(()=>{ if(!body.isConnected)return; lookEl.classList.remove('busy'); relance('found'); });
 }
@@ -3042,19 +3104,113 @@ async function openLookup(text,which){
   const term=(words.length>1 && words.length<=8) ? text : (words[0]||'').replace(/[^\p{L}\p{N}\-'’]/gu,'');
   if(!term){toast('Sélectionne un mot ou une expression.');return;}
   if(!lookEl) lookBuild();
-  clearTimeout(lookTimer);
+  jaguarMode('dico');
   lookEl.dataset.term=term; lookEl.dataset.lemma=''; lookEl.dataset.raw=text;
   const w=lookEl.querySelector('.w'); w.textContent=term; w.classList.toggle('long',term.length>22);
   lookEl.querySelector('[data-t="conj"]').style.display='none';
   lookEl.classList.toggle('big',!!(state.nb&&state.nb.settings&&state.nb.settings.lookBig));
-  if(lookEl.classList.contains('show')&&!lookEl.classList.contains('leave')){ lookEl.classList.add('vite'); lookEl.classList.remove('tuck'); relance('hop'); }
-  else { lookEl.classList.remove('leave','tuck','vite','hop','found'); lookEl.classList.add('show'); }
+  montrerJaguar();
   lookTab(which||'dico');
 }
-function closeLookup(){
+// bring the jaguar on with its leap — or, if it is already here, a little hop
+function montrerJaguar(){
+  clearTimeout(lookTimer);
+  if(lookEl.classList.contains('show')&&!lookEl.classList.contains('leave')){ lookEl.classList.add('vite'); lookEl.classList.remove('tuck'); relance('hop'); }
+  else { lookEl.classList.remove('leave','tuck','vite','hop','found'); lookEl.classList.add('show'); }
+}
+// switch the bubble's mode; the message it replaces is told why it ended ('remplace')
+function jaguarMode(m){
+  if(m==='dico'&&lookEl.dataset.mode!=='msg'){ lookEl.dataset.mode='dico'; return; }
+  const fin=lookEl._fin; lookEl._fin=null; if(fin) fin('remplace');
+  lookEl.dataset.mode=m; lookEl.classList.remove('jb-badge','hors'); lookEl.style.bottom='';
+  lookEl.querySelector('.jb-medal').innerHTML='';
+  document.querySelectorAll('.jg-montre').forEach(e=>e.classList.remove('jg-montre'));
+}
+/* The jaguar says something that is not a lookup: a tip, a badge, a notice.
+   o = { kick, titre, html, boutons:[{t, primaire, fn}], classe, medaille (svg carried in its mouth),
+         dessus (an element to land above, e.g. the cover's dock), calme (no blink), fin(raison) }
+   fin is called once, with 'ferme' (× or Échap), 'fait' (a button that closes) or 'remplace'. */
+function jaguarDit(o){
+  if(!lookEl) lookBuild();
+  jaguarMode('msg');
+  if(o.classe) lookEl.classList.add(o.classe);
+  lookEl.querySelector('.jm-kick').textContent=o.kick||'Le Jaguar';
+  lookEl.querySelector('.jm-t').textContent=o.titre||'';
+  lookEl.querySelector('.jm-body').innerHTML=o.html||'';
+  lookEl.querySelector('.jb-medal').innerHTML=o.medaille||'';
+  const act=lookEl.querySelector('.jm-actions'); act.innerHTML='';
+  (o.boutons||[]).forEach(b=>{ const x=document.createElement('button'); x.type='button'; x.textContent=b.t; if(b.primaire)x.className='primaire'; x.onclick=()=>{ if(b.fn)b.fn(); }; act.appendChild(x); });
+  if(o.dessus){ const r=o.dessus.getBoundingClientRect(); lookEl.style.bottom=Math.max(8,Math.round(innerHeight-r.top+10))+'px'; }
+  lookEl._fin=o.fin||null;
+  montrerJaguar();
+  if(!o.calme) relance('found');
+}
+function closeLookup(raison){
   if(!lookEl||!lookEl.classList.contains('show')||lookEl.classList.contains('leave'))return;
+  const fin=lookEl._fin; lookEl._fin=null; if(fin) fin(typeof raison==='string'?raison:'ferme');
+  document.querySelectorAll('.jg-montre').forEach(e=>e.classList.remove('jg-montre'));
   lookEl.classList.add('leave'); clearTimeout(lookTimer);
-  lookTimer=setTimeout(()=>{ lookEl.classList.remove('show','leave','busy','found','tuck','vite','hop'); },520);
+  lookTimer=setTimeout(()=>{ lookEl.classList.remove('show','leave','busy','found','tuck','vite','hop','jb-badge','hors'); lookEl.style.bottom=''; },520);
+}
+/* ── 5. no connection: the jaguar says so, instead of « aucune définition » ── */
+const reseauKO=e=>navigator.onLine===false||e instanceof TypeError;
+function horsLigne(body){
+  body.className='body';
+  body.innerHTML='<div class="jm-hors"><p><b>Je n’arrive pas à joindre internet.</b></p>'
+    +'<p>Le dictionnaire et Wikipédia viennent d’internet : vérifie ta connexion, puis réessaie.</p>'
+    +'<button type="button" class="more jb-retry">Réessayer</button></div>';
+  if(lookEl) lookEl.classList.add('hors');
+}
+function ongletActif(){ const b=lookEl&&lookEl.querySelector('.tabs button.on'); return b?b.getAttribute('data-t'):'dico'; }
+document.addEventListener('click',e=>{ if(e.target.closest('.nbjag .jb-retry')) lookTab(ongletActif()); });
+// the connection comes back while the jaguar is saying it is gone: try again by itself
+window.addEventListener('online',()=>{ if(lookEl&&lookEl.classList.contains('show')&&lookEl.classList.contains('hors')&&lookEl.dataset.mode!=='msg') lookTab(ongletActif()); });
+
+/* ── 1. first visit: the jaguar gives the tips, pointing at what each one is about ── */
+const ASTUCES=[
+  {titre:'Bonjour, je suis le Jaguar', html:'<p>Je vis dans ton cahier. <b>Sélectionne un mot</b> dans ta page, puis <b>Dico</b> ou <b>Wiki</b> : je bondis ici pour t’expliquer.</p>'},
+  {cible:'#subjects .tab:not(.addtab)', titre:'Tes matières', html:'<p>Ce sont les onglets à droite de la page. <b>+ Matière</b> en ajoute une ; un double-clic sur un onglet le modifie.</p>'},
+  {cible:'#tplSel', titre:'Ton papier', html:'<p>Ce menu change le papier de la page : Séyès, French ruling, lignes, carreaux…</p>'},
+  {cible:'#saveDot', titre:'Rien ne se perd', html:'<p>Tout s’enregistre tout seul, sur cet appareil. Le mot « enregistré », en haut, te le confirme.</p>'},
+  {titre:'Et moi ?', html:'<p>Clique sur moi pour replier une bulle, <kbd>Échap</kbd> pour me renvoyer. Bon travail !</p>'}
+];
+function astucesJaguar(i){
+  i=i||0; const a=ASTUCES[i]; if(!a) return;
+  const vues=()=>{ if(state.nb){ state.nb.settings=state.nb.settings||{}; state.nb.settings.astucesVues=true; saveSettings(); } };
+  const dernier=i===ASTUCES.length-1;
+  jaguarDit({kick:'Astuce '+(i+1)+' sur '+ASTUCES.length, titre:a.titre, html:a.html, calme:i>0,
+    boutons:dernier?[{t:'C’est parti !',primaire:true,fn:()=>closeLookup('fait')}]
+      :[{t:'Passer',fn:()=>closeLookup('ferme')},{t:'Suivant →',primaire:true,fn:()=>astucesJaguar(i+1)}],
+    // skipping or finishing counts; being replaced (a lookup, the next tip) does not
+    fin:r=>{ if(r!=='remplace') vues(); }});
+  const c=a.cible&&document.querySelector(a.cible);
+  if(c&&c.getClientRects().length&&getComputedStyle(c).visibility!=='hidden') c.classList.add('jg-montre');
+}
+
+/* ── 3. a badge the teacher has just awarded: the jaguar brings it onto the cover ── */
+function celebrerBadge(awarded){
+  const nb=state.nb; if(!nb) return; nb.settings=nb.settings||{};
+  const cle=b=>b.badge+'@'+(b.at||0);
+  // the first time this runs, the badges already there are not news
+  if(!Array.isArray(nb.settings.badgesVus)){ nb.settings.badgesVus=awarded.map(cle); return; }
+  const neufs=awarded.filter(b=>!nb.settings.badgesVus.includes(cle(b)));
+  if(!neufs.length||state.review) return;
+  const b=neufs[0], nm=MEDAL_NAME[b.badge]||b.badge, autres=neufs.length-1;
+  setTimeout(()=>{ if($('#cover').classList.contains('hidden')) return;
+    jaguarDit({kick:'Nouveau badge', titre:'Bravo !', classe:'jb-badge', medaille:medalSVG(b.badge,44), dessus:$('.cover-dock'),
+      html:'<div class="jm-medaille">'+medalSVG(b.badge,84)+'<div><b>'+esc(nm)+'</b>'+(b.comment?'<q>'+esc(b.comment)+'</q>':'')+'</div></div>'
+        +(autres?'<p>… et '+autres+' autre'+(autres>1?'s':'')+', en haut à droite de ta couverture.</p>':'<p>Ton professeur vient de te le décerner. Il t’attend en haut à droite de ta couverture.</p>'),
+      boutons:[{t:'Merci !',primaire:true,fn:()=>closeLookup('fait')}],
+      fin:()=>{ neufs.forEach(x=>{ if(!nb.settings.badgesVus.includes(cle(x))) nb.settings.badgesVus.push(cle(x)); }); persist(); }});
+  },900);
+}
+
+/* ── 4. exam: one leap across the screen, at the last minute and at time's up ── */
+function jaguarTraverse(dit){
+  const t=document.createElement('div'); t.className='jg-trav'; t.setAttribute('role','status');
+  t.innerHTML='<span class="jt-dit">'+esc(dit)+'</span>'+JAG_SVG; document.body.appendChild(t);
+  t.addEventListener('animationend',e=>{ if(e.target===t) t.remove(); });
+  setTimeout(()=>t.remove(),3200);
 }
 // the Wiktionary extract, laid out to be read: meanings first and numbered, each citation under
 // its meaning, the etymology last (a pupil looks a word up for what it means)
@@ -3095,7 +3251,7 @@ async function fetchDico(word,body){ try{
   ex=fr.split(/\n===?\s*(Traductions|Prononciation|Anagrammes|Voir aussi|Références|Vocabulaire|Dérivés|Apparentés|Synonymes|Homophones)/)[0];
   body.className='body'; body.innerHTML=dicoHtml(ex)||'<p class="loading">Aucune définition.</p>';
   body.innerHTML+='<a class="more" href="https://fr.wiktionary.org/wiki/'+encodeURIComponent(word)+'" target="_blank">Voir sur le Wiktionnaire →</a>'; }
-  catch(_){ body.className='body'; body.innerHTML='<p class="loading">Aucune définition trouvée pour « '+esc(word)+' ».</p>'; } }
+  catch(e){ if(reseauKO(e)) return horsLigne(body); body.className='body'; body.innerHTML='<p class="loading">Aucune définition trouvée pour « '+esc(word)+' ».</p>'; } }
 async function fetchConj(lemma,body){ try{
   // action=parse returns the real conjugation TABLES (prop=extracts strips them out)
   const u='https://fr.wiktionary.org/w/api.php?action=parse&page='+encodeURIComponent('Conjugaison:français/'+lemma)+'&prop=text&format=json&formatversion=2&origin=*&disableeditsection=1';
@@ -3117,7 +3273,7 @@ async function fetchConj(lemma,body){ try{
   });
   if(!started) throw 0;
   body.className='body'; body.innerHTML='<div class="conjtables">'+h+'<a class="more conj-more" target="_blank" href="https://fr.wiktionary.org/wiki/Conjugaison:fran%C3%A7ais/'+encodeURIComponent(lemma)+'">Conjugaison complète →</a></div>'; }
-  catch(_){ body.className='body'; body.innerHTML='<p class="loading">Conjugaison indisponible pour « '+esc(lemma)+' » (essaie l’infinitif).</p>'; } }
+  catch(e){ if(reseauKO(e)) return horsLigne(body); body.className='body'; body.innerHTML='<p class="loading">Conjugaison indisponible pour « '+esc(lemma)+' » (essaie l’infinitif).</p>'; } }
 // fetch an exact article summary (throws on missing/disambiguation)
 async function wikiSummary(title){ const r=await fetch('https://fr.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title)); if(!r.ok)throw 0; const j=await r.json(); if(j.type==='disambiguation'||!(j.extract||'').trim())throw 0; return j; }
 // full-text search (behaves like the Wikipédia search box)
@@ -3146,8 +3302,9 @@ async function loadWiki(title,body){ body.className='body loading'; body.textCon
 // the Wiki tab: try an exact article on the cleaned word, else (and always) show search on the raw selection
 async function fetchWiki(word,body){
   const raw=(lookEl&&lookEl.dataset.raw)||word;
-  let art=null; try{ art=await wikiSummary(word); }catch(_){}
+  let art=null, ko=false; try{ art=await wikiSummary(word); }catch(e){ ko=reseauKO(e); }
   const list=await wikiSearch(raw||word);
+  if(!art&&!list.length&&(ko||navigator.onLine===false)) return horsLigne(body);
   let h='';
   if(art){ h+=wikiArticleHtml(art); const o=list.filter(r=>r.title!==art.title).slice(0,6); if(o.length)h+='<div class="wiki-more-h">Autres résultats de recherche</div>'+wikiResultsHtml(o,raw||word); }
   else if(list.length){ h+='<div class="wiki-noh">Aucun article exact pour « '+esc(raw||word)+' » — résultats de recherche :</div>'+wikiResultsHtml(list,raw||word); }
